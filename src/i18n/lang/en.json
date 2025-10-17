@@ -19,7 +19,14 @@
   },
   "lang": {
     "usage": "Usage: /lang ru|en|he",
-    "set": "Language set to: {lang}."
+    "choose": "Choose your language:",
+    "current": "Current language: {lang}",
+    "set": "Language set to: {lang}.",
+    "names": {
+      "ru": "Russian",
+      "en": "English",
+      "he": "Hebrew"
+    }
   },
   "group": {
     "openPm": "Calendar can be used only in private chat. Click to continue with the bot:"
