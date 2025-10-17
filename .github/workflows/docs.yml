@@ -1,0 +1,34 @@
+name: Generate Docs (CODEMAP & ALL_CODE_INDEX)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Generate CODEMAP.md and ALL_CODE_INDEX.md
+        run: npm run docs
+
+      - name: Auto-commit generated docs if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(docs): update CODEMAP & ALL_CODE_INDEX [ci skip]"
+          file_pattern: "CODEMAP.md ALL_CODE_INDEX.md"
