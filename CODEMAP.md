@@ -1,15 +1,15 @@
 # CODEMAP
 
-**Generated:** 2025-10-17T20:24:15.604Z
+**Generated:** 2025-10-17T20:27:51.252Z
 **Root:** `.`
 
 - Files: **90**
 - Dirs: **32**
-- Size: **23.7 MB**
+- Size: **25.4 MB**
 
 ## Tree
 
-**./** (13 items, 23.7 MB)
+**./** (13 items, 25.4 MB)
 ├── **.github/** (1 items, 2.1 KB)
 │   └── **workflows/** (2 items, 2.1 KB)
 │       ├── `codemap.yml` (1.4 KB) — Дай воркфлоу право писать в репо
@@ -125,8 +125,8 @@
 │   │   └── `prisma.ts` (88 B)
 │   └── `server.ts` (1.1 KB) — 1) Сначала поднимем HTTP — чтобы /health работал в любом случае
 ├── `.gitignore` (96 B)
-├── `ALL_CODE_INDEX.md` (1.7 KB) — ALL_CODE_INDEX
-├── `CODEMAP.md` (6.3 KB) — CODEMAP (auto-generated)
+├── `ALL_CODE_INDEX.md` (1.7 MB) — branch: ${{ github.ref_name }} ``` --- ### `.github/workflows/docs.yml` - Size: 771 B - Modified: 2025-10-17T20:24:03.861Z ``` name: Generate Docs (CODEMAP & ALL_CODE_INDEX) on: push: branches: [ "main" ] workflow_dispatch: permissions: co…
+├── `CODEMAP.md` (9.0 KB) — CODEMAP
 ├── `package-lock.json` (100.1 KB)
 ├── `package.json` (1.2 KB)
 ├── `README.md` (250 B) — Appointments Bot
