@@ -1,5 +1,122 @@
 # ALL_CODE_INDEX
 
+**Generated:** 2025-10-17T20:50:39.340Z
+**Root:** `.`
+**Excerpt lines per file:** 200
+
+> This index is for deep analysis: metadata + head excerpts of each file.
+> For structure overview, see `CODEMAP.md` (auto-generated).
+
+---
+### `.github/workflows/codemap.yml`
+- Size: 1.4 KB  
+- Modified: 2025-10-17T20:50:21.269Z
+
+```
+name: Generate CODEMAP
+
+on:
+  push:
+    branches: [ main, master, dev, develop ]
+  pull_request:
+    branches: [ main, master, dev, develop ]
+  workflow_dispatch: {}
+
+# Дай воркфлоу право писать в репо
+permissions:
+  contents: write
+
+jobs:
+  codemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          # оставляем креды, чтобы авто-коммит мог пушнуть
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: |
+          npm install
+          npm install -D ts-node typescript fast-glob @types/node
+
+      - name: Generate CODEMAP.md
+        run: npx ts-node scripts/generate-codemap.ts
+
+      - name: Snapshot ALL code → docs/code + ALL_CODE_INDEX.md
+        run: npx ts-node scripts/snapshot-all.ts
+
+      # Вместо ручного git push используем стабильный экшен
+      - name: Commit generated docs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update CODEMAP + snapshot"
+          file_pattern: |
+            CODEMAP.md
+            ALL_CODE_INDEX.md
+            docs/code/**
+          branch: ${{ github.ref_name }}
+
+```
+
+---
+### `.github/workflows/docs.yml`
+- Size: 771 B  
+- Modified: 2025-10-17T20:50:21.269Z
+
+```
+name: Generate Docs (CODEMAP & ALL_CODE_INDEX)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Generate CODEMAP.md and ALL_CODE_INDEX.md
+        run: npm run docs
+
+      - name: Auto-commit generated docs if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(docs): update CODEMAP & ALL_CODE_INDEX [ci skip]"
+          file_pattern: "CODEMAP.md ALL_CODE_INDEX.md"
+
+```
+
+---
+### `ALL_CODE_INDEX.md`
+- Size: 1.7 MB  
+- Modified: 2025-10-17T20:50:21.277Z
+
+```
+# ALL_CODE_INDEX
+
 **Generated:** 2025-10-17T20:27:52.795Z
 **Root:** `.`
 **Excerpt lines per file:** 200
@@ -198,138 +315,21 @@ on:
 
 permissions:
   contents: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Generate CODEMAP.md and ALL_CODE_INDEX.md
-        run: npm run docs
-
-      - name: Auto-commit generated docs if changed
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(docs): update CODEMAP & ALL_CODE_INDEX [ci skip]"
-          file_pattern: "CODEMAP.md ALL_CODE_INDEX.md"
-
-```
-
----
-### `ALL_CODE_INDEX.md`
-- Size: 1.7 KB  
-- Modified: 2025-10-17T20:24:03.861Z
-
-```
-# ALL_CODE_INDEX
-
-- [.github/workflows/codemap.yml](docs/code/.github/workflows/codemap.yml.md)
-- [README.md](docs/code/README.md.md)
-- [package.json](docs/code/package.json.md)
-- [prisma/schema.prisma](docs/code/prisma/schema.prisma.md)
-- [scripts/generate-codemap.ts](docs/code/scripts/generate-codemap.ts.md)
-- [scripts/generateSlots.ts](docs/code/scripts/generateSlots.ts.md)
-- [scripts/seed.ts](docs/code/scripts/seed.ts.md)
-- [scripts/snapshot-all.ts](docs/code/scripts/snapshot-all.ts.md)
-- [src/api/index.ts](docs/code/src/api/index.ts.md)
-- [src/api/routes/appointments.ts](docs/code/src/api/routes/appointments.ts.md)
-- [src/api/routes/services.ts](docs/code/src/api/routes/services.ts.md)
-- [src/api/routes/slots.ts](docs/code/src/api/routes/slots.ts.md)
-- [src/api/routes/webapp.ts](docs/code/src/api/routes/webapp.ts.md)
-- [src/bot/handlers/booking.ts](docs/code/src/bot/handlers/booking.ts.md)
-- [src/bot/handlers/bookingInline.ts](docs/code/src/bot/handlers/bookingInline.ts.md)
-- [src/bot/handlers/my.ts](docs/code/src/bot/handlers/my.ts.md)
-- [src/bot/handlers/start.ts](docs/code/src/bot/handlers/start.ts.md)
-- [src/bot/handlers/webappData.ts](docs/code/src/bot/handlers/webappData.ts.md)
-- [src/bot/index.ts](docs/code/src/bot/index.ts.md)
-- [src/bot/mw/i18n.ts](docs/code/src/bot/mw/i18n.ts.md)
-- [src/i18n/index.ts](docs/code/src/i18n/index.ts.md)
-- [src/i18n/lang/en.json](docs/code/src/i18n/lang/en.json.md)
-- [src/i18n/lang/he.json](docs/code/src/i18n/lang/he.json.md)
-- [src/i18n/lang/ru.json](docs/code/src/i18n/lang/ru.json.md)
-- [src/lib/env.ts](docs/code/src/lib/env.ts.md)
-- [src/lib/prisma.ts](docs/code/src/lib/prisma.ts.md)
-- [src/server.ts](docs/code/src/server.ts.md)
-- [tsconfig.json](docs/code/tsconfig.json.md)
-
 ```
 
 ---
 ### `CODEMAP.md`
-- Size: 9.0 KB  
-- Modified: 2025-10-17T20:24:15.604Z
+- Size: 9.3 KB  
+- Modified: 2025-10-17T20:50:37.794Z
 
 ```
 # CODEMAP
 
-**Generated:** 2025-10-17T20:24:15.604Z
+**Generated:** 2025-10-17T20:50:37.793Z
 **Root:** `.`
 
-- Files: **90**
-- Dirs: **32**
-- Size: **23.7 MB**
-
-## Tree
-
-**./** (13 items, 23.7 MB)
-├── **.github/** (1 items, 2.1 KB)
-│   └── **workflows/** (2 items, 2.1 KB)
-│       ├── `codemap.yml` (1.4 KB) — Дай воркфлоу право писать в репо
-│       └── `docs.yml` (771 B)
-├── **docs/** (1 items, 39.6 KB)
-│   └── **code/** (7 items, 39.6 KB)
-│       ├── **.github/** (1 items, 1.4 KB)
-│       │   └── **workflows/** (1 items, 1.4 KB)
-│       │       └── `codemap.yml.md` (1.4 KB) — .github/workflows/codemap.yml
-│       ├── **prisma/** (1 items, 1.0 KB)
-│       │   └── `schema.prisma.md` (1.0 KB) — prisma/schema.prisma
-│       ├── **scripts/** (4 items, 9.7 KB)
-│       │   ├── `generate-codemap.ts.md` (3.2 KB) — /*.ts", "src/*
-│       │   ├── `generateSlots.ts.md` (4.2 KB) — Генератор слотов. По умолчанию: 31 день вперёд, Пн–Пт, 09:00–17:00, шаг 30 минут, capacity=1. Параметры можно переопределять аргументами CLI: tsx scripts/generateSlots.ts --days=31 --start=9 --end=17 --step=30 --cap=1 --weekends
-│       │   ├── `seed.ts.md` (886 B) — scripts/seed.ts
-│       │   └── `snapshot-all.ts.md` (1.5 KB) — /*.prisma", "scripts/*
-│       ├── **src/** (5 items, 25.9 KB)
-│       │   ├── **api/** (2 items, 5.9 KB)
-│       │   │   ├── **routes/** (4 items, 5.4 KB)
-│       │   │   │   ├── `appointments.ts.md` (834 B) — src/api/routes/appointments.ts
-│       │   │   │   ├── `services.ts.md` (459 B) — src/api/routes/services.ts
-│       │   │   │   ├── `slots.ts.md` (1.2 KB) — src/api/routes/slots.ts
-│       │   │   │   └── `webapp.ts.md` (2.9 KB) — src/api/routes/webapp.ts
-│       │   │   └── `index.ts.md` (519 B) — src/api/index.ts
-│       │   ├── **bot/** (3 items, 12.8 KB)
-│       │   │   ├── **handlers/** (5 items, 11.2 KB)
-│       │   │   │   ├── `booking.ts.md` (488 B) — src/bot/handlers/booking.ts
-│       │   │   │   ├── `bookingInline.ts.md` (5.1 KB) — src/bot/handlers/bookingInline.ts
-│       │   │   │   ├── `my.ts.md` (2.5 KB) — /my — показать ближайшие записи пользователя
-│       │   │   │   ├── `start.ts.md` (1.2 KB) — src/bot/handlers/start.ts
-│       │   │   │   └── `webappData.ts.md` (1.9 KB) — src/bot/handlers/webappData.ts
-│       │   │   ├── **mw/** (1 items, 489 B)
-```
-
----
-### `CODEMAP.md`
-- Size: 9.2 KB  
-- Modified: 2025-10-17T20:27:51.253Z
-
-```
-# CODEMAP
-
-**Generated:** 2025-10-17T20:27:51.252Z
-**Root:** `.`
-
-- Files: **90**
-- Dirs: **32**
+- Files: **91**
+- Dirs: **33**
 - Size: **25.4 MB**
 
 ## Tree
@@ -421,7 +421,7 @@ jobs:
 │   ├── `generate-codemap.ts` (5.1 KB) — ...
 │   ├── `generateSlots.ts` (4.2 KB) — Генератор слотов. По умолчанию: 31 день вперёд, Пн–Пт, 09:00–17:00, шаг 30 минут, capacity=1. Параметры можно переопределять аргументами CLI: tsx scripts/generateSlots.ts --days=31 --start=9 --end=17 --step=30 --cap=1 --weekends
 │   └── `seed.ts` (856 B) — Очистим таблицы
-├── **src/** (5 items, 25.2 KB)
+├── **src/** (6 items, 27.9 KB)
 │   ├── **api/** (2 items, 5.7 KB)
 │   │   ├── **routes/** (4 items, 5.2 KB)
 │   │   │   ├── `appointments.ts` (789 B)
@@ -429,29 +429,31 @@ jobs:
 │   │   │   ├── `slots.ts` (1.1 KB)
 │   │   │   └── `webapp.ts` (2.9 KB) — status{margin-top:8px; font-size:13px; color:#999}
 │   │   └── `index.ts` (488 B)
-│   ├── **bot/** (3 items, 12.5 KB)
-│   │   ├── **handlers/** (5 items, 11.0 KB)
+│   ├── **bot/** (3 items, 14.5 KB)
+│   │   ├── **handlers/** (5 items, 12.7 KB)
 │   │   │   ├── `booking.ts` (446 B)
 │   │   │   ├── `bookingInline.ts` (5.0 KB) — форматирование
 │   │   │   ├── `my.ts` (2.5 KB) — /my — показать ближайшие записи пользователя
-│   │   │   ├── `start.ts` (1.2 KB) — deep link: /start book_{serviceId} → сразу открыть календарь
+│   │   │   ├── `start.ts` (2.9 KB) — deep link: /start book_{serviceId} → сразу открыть календарь
 │   │   │   └── `webappData.ts` (1.8 KB)
-│   │   ├── **mw/** (1 items, 456 B)
-│   │   │   └── `i18n.ts` (456 B)
-│   │   └── `index.ts` (1.1 KB) — Логгер (полезно оставлять)
-│   ├── **i18n/** (2 items, 4.9 KB)
-│   │   ├── **lang/** (3 items, 4.2 KB)
-│   │   │   ├── `en.json` (1.2 KB)
-│   │   │   ├── `he.json` (1.3 KB)
-│   │   │   └── `ru.json` (1.7 KB)
+│   │   ├── **mw/** (1 items, 628 B)
+│   │   │   └── `i18n.ts` (628 B)
+│   │   └── `index.ts` (1.2 KB) — Логгер (полезно оставлять)
+│   ├── **i18n/** (2 items, 5.4 KB)
+│   │   ├── **lang/** (3 items, 4.8 KB)
+│   │   │   ├── `en.json` (1.4 KB)
+│   │   │   ├── `he.json` (1.5 KB)
+│   │   │   └── `ru.json` (1.9 KB)
 │   │   └── `index.ts` (694 B)
 │   ├── **lib/** (2 items, 975 B)
 │   │   ├── `env.ts` (887 B) — sanitize
 │   │   └── `prisma.ts` (88 B)
+│   ├── **types/** (1 items, 187 B)
+│   │   └── `telegraf.d.ts` (187 B)
 │   └── `server.ts` (1.1 KB) — 1) Сначала поднимем HTTP — чтобы /health работал в любом случае
 ├── `.gitignore` (96 B)
-├── `ALL_CODE_INDEX.md` (1.7 MB) — branch: ${{ github.ref_name }} ``` --- ### `.github/workflows/docs.yml` - Size: 771 B - Modified: 2025-10-17T20:24:03.861Z ``` name: Generate Docs (CODEMAP & ALL_CODE_INDEX) on: push: branches: [ "main" ] workflow_dispatch: permissions: co…
-├── `CODEMAP.md` (9.0 KB) — CODEMAP
+├── `ALL_CODE_INDEX.md` (1.7 MB) — branch: ${{ github.ref_name }} ``` --- ### `.github/workflows/docs.yml` - Size: 771 B - Modified: 2025-10-17T20:27:40.391Z ``` name: Generate Docs (CODEMAP & ALL_CODE_INDEX) on: push: branches: [ "main" ] workflow_dispatch: permissions: co…
+├── `CODEMAP.md` (9.2 KB) — CODEMAP
 ├── `package-lock.json` (100.1 KB)
 ├── `package.json` (1.2 KB)
 ├── `README.md` (250 B) — Appointments Bot
@@ -463,7 +465,7 @@ jobs:
 ---
 ### `docs/code/.github/workflows/codemap.yml.md`
 - Size: 1.4 KB  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # .github/workflows/codemap.yml
@@ -527,7 +529,7 @@ jobs:
 ---
 ### `docs/code/package.json.md`
 - Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # package.json
@@ -583,7 +585,7 @@ jobs:
 ---
 ### `docs/code/prisma/schema.prisma.md`
 - Size: 1.0 KB  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # prisma/schema.prisma
@@ -644,7 +646,7 @@ model Appointment {
 ---
 ### `docs/code/README.md.md`
 - Size: 43 B  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # README.md
@@ -659,7 +661,7 @@ model Appointment {
 ---
 ### `docs/code/scripts/generate-codemap.ts.md`
 - Size: 3.2 KB  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # scripts/generate-codemap.ts
@@ -771,7 +773,7 @@ ${inlineDump}
 ---
 ### `docs/code/scripts/generateSlots.ts.md`
 - Size: 4.2 KB  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # scripts/generateSlots.ts
@@ -900,7 +902,7 @@ main()
 ---
 ### `docs/code/scripts/seed.ts.md`
 - Size: 886 B  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # scripts/seed.ts
@@ -942,7 +944,7 @@ main().finally(() => process.exit(0));
 ---
 ### `docs/code/scripts/snapshot-all.ts.md`
 - Size: 1.5 KB  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # scripts/snapshot-all.ts
@@ -1013,7 +1015,7 @@ function ensureDir(p: string) {
 ---
 ### `docs/code/src/api/index.ts.md`
 - Size: 519 B  
-- Modified: 2025-10-17T20:27:40.399Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/api/index.ts
@@ -1047,7 +1049,7 @@ return app;
 ---
 ### `docs/code/src/api/routes/appointments.ts.md`
 - Size: 834 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/api/routes/appointments.ts
@@ -1084,7 +1086,7 @@ export default r;
 ---
 ### `docs/code/src/api/routes/services.ts.md`
 - Size: 459 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/api/routes/services.ts
@@ -1116,7 +1118,7 @@ export default r;
 ---
 ### `docs/code/src/api/routes/slots.ts.md`
 - Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/api/routes/slots.ts
@@ -1165,7 +1167,7 @@ export default r;
 ---
 ### `docs/code/src/api/routes/webapp.ts.md`
 - Size: 2.9 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/api/routes/webapp.ts
@@ -1253,7 +1255,7 @@ export default r;
 ---
 ### `docs/code/src/bot/handlers/booking.ts.md`
 - Size: 488 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/bot/handlers/booking.ts
@@ -1275,7 +1277,7 @@ return ctx.reply("Выберите услугу:", Markup.keyboard(services.map(
 ---
 ### `docs/code/src/bot/handlers/bookingInline.ts.md`
 - Size: 5.1 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/bot/handlers/bookingInline.ts
@@ -1416,7 +1418,7 @@ export function registerBookingCallbacks(bot: Telegraf, botUsername: string) {
 ---
 ### `docs/code/src/bot/handlers/my.ts.md`
 - Size: 2.5 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/bot/handlers/my.ts
@@ -1505,7 +1507,7 @@ export function registerMyCallbacks(bot: Telegraf) {
 ---
 ### `docs/code/src/bot/handlers/start.ts.md`
 - Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/bot/handlers/start.ts
@@ -1549,7 +1551,7 @@ export const handleLang = () => async (ctx: Context) => {
 ---
 ### `docs/code/src/bot/handlers/webappData.ts.md`
 - Size: 1.9 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/bot/handlers/webappData.ts
@@ -1612,7 +1614,7 @@ export function registerWebappDataHandler(bot: Telegraf) {
 ---
 ### `docs/code/src/bot/index.ts.md`
 - Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/bot/index.ts
@@ -1664,7 +1666,7 @@ export function createBot() {
 ---
 ### `docs/code/src/bot/mw/i18n.ts.md`
 - Size: 489 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/bot/mw/i18n.ts
@@ -1694,7 +1696,7 @@ export const i18nMw: MiddlewareFn<Context> = async (ctx, next) => {
 ---
 ### `docs/code/src/i18n/index.ts.md`
 - Size: 726 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/i18n/index.ts
@@ -1728,7 +1730,7 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 ---
 ### `docs/code/src/i18n/lang/en.json.md`
 - Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/i18n/lang/en.json
@@ -1780,7 +1782,7 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 ---
 ### `docs/code/src/i18n/lang/he.json.md`
 - Size: 1.4 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/i18n/lang/he.json
@@ -1832,7 +1834,7 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 ---
 ### `docs/code/src/i18n/lang/ru.json.md`
 - Size: 1.7 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/i18n/lang/ru.json
@@ -1886,7 +1888,7 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 ---
 ### `docs/code/src/lib/env.ts.md`
 - Size: 916 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/lib/env.ts
@@ -1925,7 +1927,7 @@ export const ENV = {
 ---
 ### `docs/code/src/lib/prisma.ts.md`
 - Size: 120 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/lib/prisma.ts
@@ -1940,7 +1942,7 @@ export const prisma = new PrismaClient();
 ---
 ### `docs/code/src/server.ts.md`
 - Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # src/server.ts
@@ -1992,7 +1994,7 @@ main().catch((e) => {
 ---
 ### `docs/code/tsconfig.json.md`
 - Size: 313 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 # tsconfig.json
@@ -2019,7 +2021,7 @@ main().catch((e) => {
 ---
 ### `generated/prisma/client.d.ts`
 - Size: 23 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.278Z
 
 ```
 export * from "./index"
@@ -2028,7 +2030,7 @@ export * from "./index"
 ---
 ### `generated/prisma/client.js`
 - Size: 125 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 
@@ -2040,7 +2042,7 @@ module.exports = { ...require('.') }
 ---
 ### `generated/prisma/default.d.ts`
 - Size: 23 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 export * from "./index"
@@ -2049,7 +2051,7 @@ export * from "./index"
 ---
 ### `generated/prisma/default.js`
 - Size: 141 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 
@@ -2061,7 +2063,7 @@ module.exports = { ...require('#main-entry-point') }
 ---
 ### `generated/prisma/edge.d.ts`
 - Size: 25 B  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 export * from "./default"
@@ -2070,7 +2072,7 @@ export * from "./default"
 ---
 ### `generated/prisma/edge.js`
 - Size: 4.3 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 
@@ -2246,7 +2248,7 @@ Object.assign(exports, Prisma)
 ---
 ### `generated/prisma/index-browser.js`
 - Size: 5.8 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 
@@ -2409,7 +2411,7 @@ Object.assign(exports, Prisma)
 ---
 ### `generated/prisma/index.d.ts`
 - Size: 21.8 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 
@@ -2617,7 +2619,7 @@ export namespace Prisma {
 ---
 ### `generated/prisma/index.js`
 - Size: 4.9 KB  
-- Modified: 2025-10-17T20:27:40.400Z
+- Modified: 2025-10-17T20:50:21.279Z
 
 ```
 
@@ -2814,7 +2816,7 @@ path.join(process.cwd(), "generated/prisma/schema.prisma")
 ---
 ### `generated/prisma/libquery_engine-darwin.dylib.node`
 - Size: 20.1 MB  
-- Modified: 2025-10-17T20:27:40.497Z
+- Modified: 2025-10-17T20:50:21.377Z
 
 ```
 ����           
@@ -3022,7 +3024,7 @@ H�RH�VH���������b
 ---
 ### `generated/prisma/package.json`
 - Size: 5.2 KB  
-- Modified: 2025-10-17T20:27:40.498Z
+- Modified: 2025-10-17T20:50:21.377Z
 
 ```
 {
@@ -3213,7 +3215,7 @@ H�RH�VH���������b
 ---
 ### `generated/prisma/query_engine_bg.js`
 - Size: 15.4 KB  
-- Modified: 2025-10-17T20:27:40.498Z
+- Modified: 2025-10-17T20:50:21.377Z
 
 ```
 "use strict";var S=Object.defineProperty;var k=Object.getOwnPropertyDescriptor;var D=Object.getOwnPropertyNames;var R=Object.prototype.hasOwnProperty;var B=(e,t)=>{for(var n in t)S(e,n,{get:t[n],enumerable:!0})},U=(e,t,n,o)=>{if(t&&typeof t=="object"||typeof t=="function")for(let _ of D(t))!R.call(e,_)&&_!==n&&S(e,_,{get:()=>t[_],enumerable:!(o=k(t,_))||o.enumerable});return e};var L=e=>U(S({},"__esModule",{value:!0}),e);var Et={};B(Et,{QueryEngine:()=>Q,__wbg_String_8f0eb39a4a4c2f66:()=>H,__wbg_buffer_609cc3eee51ed158:()=>J,__wbg_call_672a4d21634d4a24:()=>K,__wbg_call_7cccdd69e0791ae2:()=>X,__wbg_crypto_805be4ce92f1e370:()=>Y,__wbg_done_769e5ede4b31c67b:()=>Z,__wbg_entries_3265d4158b33e5dc:()=>ee,__wbg_getRandomValues_f6a868620c8bab49:()=>te,__wbg_getTime_46267b1c24877e30:()=>ne,__wbg_get_67b2ba62fc30de12:()=>re,__wbg_get_b9b93047fe3cf45b:()=>oe,__wbg_get_ece95cf6585650d9:()=>_e,__wbg_getwithrefkey_1dc361bd10053bfe:()=>ce,__wbg_has_a5ea9117f258a0ec:()=>ie,__wbg_instanceof_ArrayBuffer_e14585432e3737fc:()=>ue,__wbg_instanceof_Map_f3469ce2244d2430:()=>se,__wbg_instanceof_Promise_935168b8f4b49db3:()=>fe,__wbg_instanceof_Uint8Array_17156bcf118086a9:()=>ae,__wbg_isArray_a1eab7e0d067391b:()=>be,__wbg_isSafeInteger_343e2beeeece1bb0:()=>le,__wbg_iterator_9a24c88df860dc65:()=>ge,__wbg_keys_5c77a08ddc2fb8a6:()=>de,__wbg_length_a446193dc22c12f8:()=>we,__wbg_length_e2d2a49132c1b256:()=>pe,__wbg_msCrypto_2ac4d17c4748234a:()=>xe,__wbg_new0_f788a2397c7ca929:()=>ye,__wbg_new_23a2665fac83c611:()=>me,__wbg_new_405e22f390576ce2:()=>he,__wbg_new_5e0be73521bc8c17:()=>Te,__wbg_new_78feb108b6472713:()=>qe,__wbg_new_a12002a7f91c75be:()=>Se,__wbg_newnoargs_105ed471475aaf50:()=>Ae,__wbg_newwithbyteoffsetandlength_d97e637ebe145a9a:()=>Ie,__wbg_newwithlength_a381634e90c276d4:()=>Ee,__wbg_next_25feadfc0913fea9:()=>Oe,__wbg_next_6574e1a8a62d1055:()=>Fe,__wbg_node_ecc8306b9857f33d:()=>Me,__wbg_now_7fd00a794a07d388:()=>je,__wbg_now_807e54c39636c349:()=>ke,__wbg_now_b3f7572f6ef3d3a9:()=>De,__wbg_process_5cff2739921be718:()=>Re,__wbg_push_737cfc8c1432c2c6:()=>Be,__wbg_queueMicrotask_5a8a9131f3f0b37b:()=>Ue,__wbg_queueMicrotask_6d79674585219521:()=>Le,__wbg_randomFillSync_d3c85af7e31cf1f8:()=>ve,__wbg_require_0c566c6f2eef6c79:()=>Ne,__wbg_resolve_4851785c9c5f573d:()=>$e,__wbg_setTimeout_5d6a1d4fc51ea450:()=>Ce,__wbg_set_37837023f3d740e8:()=>Ve,__wbg_set_3f1d0b984ed272ed:()=>ze,__wbg_set_65595bdd868b3009:()=>We,__wbg_set_8fc6bf8a5b1071d1:()=>Pe,__wbg_set_bb8cecf6a62b9f46:()=>Ge,__wbg_set_wasm:()=>v,__wbg_static_accessor_GLOBAL_88a902d13a557d07:()=>Qe,__wbg_static_accessor_GLOBAL_THIS_56578be7e9f832b0:()=>He,__wbg_static_accessor_SELF_37c5d418e4bf5819:()=>Je,__wbg_static_accessor_WINDOW_5de37043a91a9c40:()=>Ke,__wbg_subarray_aa9065fa9dc5df96:()=>Xe,__wbg_then_44b73946d2fb3e7d:()=>Ye,__wbg_then_48b406749878a531:()=>Ze,__wbg_valueOf_7392193dd78c6b97:()=>et,__wbg_value_cd1ffa7b1ab794f1:()=>tt,__wbg_versions_a8e5a362e1f16442:()=>nt,__wbindgen_as_number:()=>rt,__wbindgen_bigint_from_i64:()=>ot,__wbindgen_bigint_from_u64:()=>_t,__wbindgen_bigint_get_as_i64:()=>ct,__wbindgen_boolean_get:()=>it,__wbindgen_cb_drop:()=>ut,__wbindgen_closure_wrapper7397:()=>st,__wbindgen_debug_string:()=>ft,__wbindgen_error_new:()=>at,__wbindgen_in:()=>bt,__wbindgen_init_externref_table:()=>lt,__wbindgen_is_bigint:()=>gt,__wbindgen_is_function:()=>dt,__wbindgen_is_object:()=>wt,__wbindgen_is_string:()=>pt,__wbindgen_is_undefined:()=>xt,__wbindgen_jsval_eq:()=>yt,__wbindgen_jsval_loose_eq:()=>mt,__wbindgen_memory:()=>ht,__wbindgen_number_get:()=>Tt,__wbindgen_number_new:()=>qt,__wbindgen_string_get:()=>St,__wbindgen_string_new:()=>At,__wbindgen_throw:()=>It,debug_panic:()=>z,getBuildTimeInfo:()=>W});module.exports=L(Et);var y=()=>{};y.prototype=y;let r;function v(e){r=e}let s=0,m=null;function h(){return(m===null||m.byteLength===0)&&(m=new Uint8Array(r.memory.buffer)),m}const N=typeof TextEncoder>"u"?(0,module.require)("util").TextEncoder:TextEncoder;let T=new N("utf-8");const $=typeof T.encodeInto=="function"?function(e,t){return T.encodeInto(e,t)}:function(e,t){const n=T.encode(e);return t.set(n),{read:e.length,written:n.length}};function f(e,t,n){if(n===void 0){const u=T.encode(e),a=t(u.length,1)>>>0;return h().subarray(a,a+u.length).set(u),s=u.length,a}let o=e.length,_=t(o,1)>>>0;const i=h();let c=0;for(;c<o;c++){const u=e.charCodeAt(c);if(u>127)break;i[_+c]=u}if(c!==o){c!==0&&(e=e.slice(c)),_=n(_,o,o=c+e.length*3,1)>>>0;const u=h().subarray(_+c,_+o),a=$(e,u);c+=a.written,_=n(_,o,c,1)>>>0}return s=c,_}let w=null;function g(){return(w===null||w.buffer.detached===!0||w.buffer.detached===void 0&&w.buffer!==r.memory.buffer)&&(w=new DataView(r.memory.buffer)),w}function p(e){const t=r.__externref_table_alloc();return r.__wbindgen_export_4.set(t,e),t}function b(e,t){try{return e.apply(this,t)}catch(n){const o=p(n);r.__wbindgen_exn_store(o)}}const C=typeof TextDecoder>"u"?(0,module.require)("util").TextDecoder:TextDecoder;let I=new C("utf-8",{ignoreBOM:!0,fatal:!0});I.decode();function q(e,t){return e=e>>>0,I.decode(h().subarray(e,e+t))}function l(e){return e==null}const E=typeof FinalizationRegistry>"u"?{register:()=>{},unregister:()=>{}}:new FinalizationRegistry(e=>{r.__wbindgen_export_5.get(e.dtor)(e.a,e.b)});function V(e,t,n,o){const _={a:e,b:t,cnt:1,dtor:n},i=(...c)=>{_.cnt++;const u=_.a;_.a=0;try{return o(u,_.b,...c)}finally{--_.cnt===0?(r.__wbindgen_export_5.get(_.dtor)(u,_.b),E.unregister(_)):_.a=u}};return i.original=_,E.register(i,_,_),i}function A(e){const t=typeof e;if(t=="number"||t=="boolean"||e==null)return`${e}`;if(t=="string")return`"${e}"`;if(t=="symbol"){const _=e.description;return _==null?"Symbol":`Symbol(${_})`}if(t=="function"){const _=e.name;return typeof _=="string"&&_.length>0?`Function(${_})`:"Function"}if(Array.isArray(e)){const _=e.length;let i="[";_>0&&(i+=A(e[0]));for(let c=1;c<_;c++)i+=", "+A(e[c]);return i+="]",i}const n=/\[object ([^\]]+)\]/.exec(toString.call(e));let o;if(n&&n.length>1)o=n[1];else return toString.call(e);if(o=="Object")try{return"Object("+JSON.stringify(e)+")"}catch{return"Object"}return e instanceof Error?`${e.name}: ${e.message}
@@ -3224,7 +3226,7 @@ ${e.stack}`:o}function O(e){const t=r.__wbindgen_export_4.get(e);return r.__exte
 ---
 ### `generated/prisma/query_engine_bg.wasm`
 - Size: 2.1 MB  
-- Modified: 2025-10-17T20:27:40.508Z
+- Modified: 2025-10-17T20:50:21.387Z
 
 ```
  asm   �w` ` ` ``` `` ` ``~ ` ` `~`~`| `` `o`~ `oo`~`~~ `~`~~~` o`  `~`~ `~~~`~ `~ `~ `o `ooo`oo``~`| `o`	 `~~ `~~ `~`o|` |`oooo`o``~`~|`~}`~ `~~`o`~o`oo`oo `}`|`~~~~`~ `} `~ `} `| `~~` ~`~~`~`|`o` ` `ooo `|o`oo `o`oo `ooo`oo`o|`o `
@@ -3432,7 +3434,7 @@ AF	 
 ---
 ### `generated/prisma/runtime/edge-esm.js`
 - Size: 166.2 KB  
-- Modified: 2025-10-17T20:27:40.509Z
+- Modified: 2025-10-17T20:50:21.388Z
 
 ```
 
@@ -3475,7 +3477,7 @@ ${n}`}f();u();c();p();m();function aa(e){return e.length===0?Promise.resolve([])
 ---
 ### `generated/prisma/runtime/edge.js`
 - Size: 166.7 KB  
-- Modified: 2025-10-17T20:27:40.510Z
+- Modified: 2025-10-17T20:50:21.389Z
 
 ```
 
@@ -3518,7 +3520,7 @@ ${n}`}f();u();c();p();m();function da(e){return e.length===0?Promise.resolve([])
 ---
 ### `generated/prisma/runtime/index-browser.d.ts`
 - Size: 11.6 KB  
-- Modified: 2025-10-17T20:27:40.510Z
+- Modified: 2025-10-17T20:50:21.389Z
 
 ```
 declare class AnyNull extends NullTypesEnumValue {
@@ -3726,7 +3728,7 @@ export declare class Decimal {
 ---
 ### `generated/prisma/runtime/index-browser.js`
 - Size: 34.6 KB  
-- Modified: 2025-10-17T20:27:40.510Z
+- Modified: 2025-10-17T20:50:21.390Z
 
 ```
 
@@ -3751,7 +3753,7 @@ decimal.js/decimal.mjs:
 ---
 ### `generated/prisma/runtime/library.d.ts`
 - Size: 126.5 KB  
-- Modified: 2025-10-17T20:27:40.510Z
+- Modified: 2025-10-17T20:50:21.390Z
 
 ```
 /**
@@ -3959,7 +3961,7 @@ declare type ColumnType = (typeof ColumnTypeEnum)[keyof typeof ColumnTypeEnum];
 ---
 ### `generated/prisma/runtime/library.js`
 - Size: 197.9 KB  
-- Modified: 2025-10-17T20:27:40.511Z
+- Modified: 2025-10-17T20:50:21.391Z
 
 ```
 
@@ -4114,7 +4116,7 @@ decimal.js/decimal.mjs:
 ---
 ### `generated/prisma/runtime/react-native.js`
 - Size: 178.3 KB  
-- Modified: 2025-10-17T20:27:40.512Z
+- Modified: 2025-10-17T20:50:21.391Z
 
 ```
 
@@ -4206,7 +4208,7 @@ ${n}`}m();c();p();d();f();function ca(e){return e.length===0?Promise.resolve([])
 ---
 ### `generated/prisma/runtime/wasm-compiler-edge.js`
 - Size: 201.7 KB  
-- Modified: 2025-10-17T20:27:40.513Z
+- Modified: 2025-10-17T20:50:21.392Z
 
 ```
 
@@ -4299,7 +4301,7 @@ ${n}`}c();u();p();m();d();l();function Yc(e){return e.length===0?Promise.resolve
 ---
 ### `generated/prisma/runtime/wasm-engine-edge.js`
 - Size: 128.9 KB  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.393Z
 
 ```
 
@@ -4344,7 +4346,7 @@ ${n}`}u();c();m();p();d();l();function jo(t){return t.length===0?Promise.resolve
 ---
 ### `generated/prisma/schema.prisma`
 - Size: 267 B  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.393Z
 
 ```
 // This is your Prisma schema file,
@@ -4365,7 +4367,7 @@ datasource db {
 ---
 ### `generated/prisma/wasm-edge-light-loader.mjs`
 - Size: 143 B  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.393Z
 
 ```
 
@@ -4377,7 +4379,7 @@ export default import('./query_engine_bg.wasm?module')
 ---
 ### `generated/prisma/wasm-worker-loader.mjs`
 - Size: 136 B  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.393Z
 
 ```
 
@@ -4389,7 +4391,7 @@ export default import('./query_engine_bg.wasm')
 ---
 ### `generated/prisma/wasm.d.ts`
 - Size: 25 B  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.393Z
 
 ```
 export * from "./default"
@@ -4398,7 +4400,7 @@ export * from "./default"
 ---
 ### `generated/prisma/wasm.js`
 - Size: 4.5 KB  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.393Z
 
 ```
 
@@ -4581,7 +4583,7 @@ Object.assign(exports, Prisma)
 ---
 ### `package-lock.json`
 - Size: 100.1 KB  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 {
@@ -4789,7 +4791,7 @@ Object.assign(exports, Prisma)
 ---
 ### `package.json`
 - Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.514Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 {
@@ -4841,7 +4843,7 @@ Object.assign(exports, Prisma)
 ---
 ### `prisma/dev.db`
 - Size: 44.0 KB  
-- Modified: 2025-10-17T20:27:40.515Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 SQLite format 3   @     2                                                               2 .zp   
@@ -5004,7 +5006,7 @@ B
 ---
 ### `prisma/schema.prisma`
 - Size: 1.0 KB  
-- Modified: 2025-10-17T20:27:40.515Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 generator client {
@@ -5060,7 +5062,7 @@ model Appointment {
 ---
 ### `prisma/seed.ts`
 - Size: 719 B  
-- Modified: 2025-10-17T20:27:40.515Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 // backend/prisma/seed.ts
@@ -5094,7 +5096,7 @@ export default async function seed() {
 ---
 ### `README.md`
 - Size: 250 B  
-- Modified: 2025-10-17T20:27:40.398Z
+- Modified: 2025-10-17T20:50:21.277Z
 
 ```
 # Appointments Bot
@@ -5113,7 +5115,7 @@ npm run docs
 ---
 ### `scripts/generate-all-code-index.ts`
 - Size: 3.3 KB  
-- Modified: 2025-10-17T20:27:40.515Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 /* scripts/generate-all-code-index.ts
@@ -5227,7 +5229,7 @@ main();
 ---
 ### `scripts/generate-codemap.ts`
 - Size: 5.1 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 /* scripts/generate-codemap.ts
@@ -5382,7 +5384,7 @@ main();
 ---
 ### `scripts/generateSlots.ts`
 - Size: 4.2 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 // backend/scripts/generateSlots.ts
@@ -5506,7 +5508,7 @@ main()
 ---
 ### `scripts/seed.ts`
 - Size: 856 B  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 import { prisma } from "../src/lib/prisma";
@@ -5543,7 +5545,7 @@ main().finally(() => process.exit(0));
 ---
 ### `src/api/index.ts`
 - Size: 488 B  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 import express from "express";
@@ -5572,7 +5574,7 @@ return app;
 ---
 ### `src/api/routes/appointments.ts`
 - Size: 789 B  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 import { Router } from "express";
@@ -5604,7 +5606,7 @@ export default r;
 ---
 ### `src/api/routes/services.ts`
 - Size: 418 B  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 import { Router } from "express";
@@ -5631,7 +5633,7 @@ export default r;
 ---
 ### `src/api/routes/slots.ts`
 - Size: 1.1 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 import { Router } from "express";
@@ -5675,7 +5677,7 @@ export default r;
 ---
 ### `src/api/routes/webapp.ts`
 - Size: 2.9 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.394Z
 
 ```
 import { Router } from "express";
@@ -5758,7 +5760,7 @@ export default r;
 ---
 ### `src/bot/handlers/booking.ts`
 - Size: 446 B  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { Context, Markup } from "telegraf";
@@ -5775,7 +5777,7 @@ return ctx.reply("Выберите услугу:", Markup.keyboard(services.map(
 ---
 ### `src/bot/handlers/bookingInline.ts`
 - Size: 5.0 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { Markup, Context, Telegraf } from "telegraf";
@@ -5911,7 +5913,7 @@ export function registerBookingCallbacks(bot: Telegraf, botUsername: string) {
 ---
 ### `src/bot/handlers/my.ts`
 - Size: 2.5 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { Context, Markup, Telegraf } from "telegraf";
@@ -5994,12 +5996,32 @@ export function registerMyCallbacks(bot: Telegraf) {
 
 ---
 ### `src/bot/handlers/start.ts`
-- Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Size: 2.9 KB  
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
-import { Context, Markup } from "telegraf";
+import { Context, Markup, Telegraf } from "telegraf";
+import { Lang } from "../../i18n";
 import { ENV } from "../../lib/env";
+
+const SUPPORTED_LANGS: Lang[] = ["ru", "en", "he"];
+const LANG_FLAGS: Record<Lang, string> = {
+  ru: "🇷🇺",
+  en: "🇬🇧",
+  he: "🇮🇱"
+};
+
+const ensureSession = (ctx: Context) => ctx.session ?? ((ctx as any).session = {});
+
+const buildLanguageKeyboard = (ctx: Context, active: Lang) =>
+  Markup.inlineKeyboard(
+    SUPPORTED_LANGS.map((code) => [
+      Markup.button.callback(
+        `${code === active ? "✅ " : ""}${LANG_FLAGS[code]} ${ctx.tt(`lang.names.${code}`)}`,
+        `lang:${code}`
+      )
+    ])
+  );
 
 export const handleStart = () => async (ctx: Context) => {
   await ctx.reply(ctx.tt("start.welcome"));
@@ -6022,11 +6044,52 @@ export const handleStart = () => async (ctx: Context) => {
 export const handleLang = () => async (ctx: Context) => {
   const text = ctx.message && "text" in ctx.message ? ctx.message.text : "";
   const arg = String(text || "").split(/\s+/)[1]?.toLowerCase();
-  if (!arg || !["ru", "en", "he"].includes(arg)) {
-    return ctx.reply(ctx.tt("lang.usage"));
+  const currentLang = (ctx.session?.lang as Lang | undefined) ?? ctx.lang;
+
+  if (arg && SUPPORTED_LANGS.includes(arg as Lang)) {
+    const session = ensureSession(ctx);
+    const lang = arg as Lang;
+    session.lang = lang;
+    ctx.lang = lang; // применяем сразу для ответа
+
+    await ctx.reply(
+      ctx.tt("lang.set", { lang: ctx.tt(`lang.names.${lang}`) })
+    );
+    return;
   }
-  (ctx as any).lang = arg; // для текущего апдейта
-  await ctx.reply(ctx.tt("lang.set", { lang: arg }));
+
+  if (arg && !SUPPORTED_LANGS.includes(arg as Lang)) {
+    await ctx.reply(
+      ctx.tt("lang.choose"),
+      buildLanguageKeyboard(ctx, currentLang)
+    );
+    return;
+  }
+
+  await ctx.reply(
+    `${ctx.tt("lang.current", { lang: ctx.tt(`lang.names.${currentLang}`) })}\n${ctx.tt("lang.choose")}`,
+    buildLanguageKeyboard(ctx, currentLang)
+  );
+};
+
+export const registerLangCallbacks = (bot: Telegraf) => {
+  bot.action(/^lang:(ru|en|he)$/, async (ctx) => {
+    const lang = ctx.match[1] as Lang;
+    const session = ensureSession(ctx);
+    session.lang = lang;
+    ctx.lang = lang;
+
+    await ctx.answerCbQuery(ctx.tt("lang.set", { lang: ctx.tt(`lang.names.${lang}`) }));
+
+    const keyboard = buildLanguageKeyboard(ctx, lang);
+    const message = ctx.tt("lang.current", { lang: ctx.tt(`lang.names.${lang}`) });
+
+    try {
+      await ctx.editMessageText(`${message}\n${ctx.tt("lang.choose")}`, keyboard);
+    } catch {
+      await ctx.reply(`${message}\n${ctx.tt("lang.choose")}`, keyboard);
+    }
+  });
 };
 
 ```
@@ -6034,7 +6097,7 @@ export const handleLang = () => async (ctx: Context) => {
 ---
 ### `src/bot/handlers/webappData.ts`
 - Size: 1.8 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { Markup, Telegraf } from "telegraf";
@@ -6091,15 +6154,15 @@ export function registerWebappDataHandler(bot: Telegraf) {
 
 ---
 ### `src/bot/index.ts`
-- Size: 1.1 KB  
-- Modified: 2025-10-17T20:27:40.516Z
+- Size: 1.2 KB  
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { Telegraf, session } from "telegraf";
 import { ENV } from "../lib/env";
 import { i18nMw } from "./mw/i18n";
 
-import { handleStart, handleLang } from "./handlers/start";
+import { handleStart, handleLang, registerLangCallbacks } from "./handlers/start";
 import { handleBookingFlow, registerBookingCallbacks } from "./handlers/bookingInline";
 import { handleMy, registerMyCallbacks } from "./handlers/my";
 import { registerWebappDataHandler } from "./handlers/webappData";
@@ -6124,6 +6187,7 @@ export function createBot() {
 
   // inline и webapp
   registerMyCallbacks(bot);
+  registerLangCallbacks(bot);
   registerWebappDataHandler(bot);
 
   // узнаём username бота → для диплинка из групп
@@ -6138,8 +6202,8 @@ export function createBot() {
 
 ---
 ### `src/bot/mw/i18n.ts`
-- Size: 456 B  
-- Modified: 2025-10-17T20:27:40.516Z
+- Size: 628 B  
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { Context, MiddlewareFn } from "telegraf";
@@ -6153,8 +6217,13 @@ declare module "telegraf" {
 }
 
 export const i18nMw: MiddlewareFn<Context> = async (ctx, next) => {
-  const code = ctx.from?.language_code;
-  ctx.lang = detectLang(code);
+  const session = ctx.session ?? ((ctx as any).session = {});
+  const storedLang = session.lang;
+  const detectedLang = detectLang(ctx.from?.language_code);
+  const lang = storedLang ?? detectedLang;
+
+  session.lang = lang;
+  ctx.lang = lang;
   ctx.tt = (key, params) => t(ctx.lang, key, params ?? {});
   return next();
 };
@@ -6164,7 +6233,7 @@ export const i18nMw: MiddlewareFn<Context> = async (ctx, next) => {
 ---
 ### `src/i18n/index.ts`
 - Size: 694 B  
-- Modified: 2025-10-17T20:27:40.516Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import ru from "./lang/ru.json";
@@ -6192,8 +6261,8 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 
 ---
 ### `src/i18n/lang/en.json`
-- Size: 1.2 KB  
-- Modified: 2025-10-17T20:27:40.517Z
+- Size: 1.4 KB  
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 {
@@ -6217,7 +6286,14 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
   },
   "lang": {
     "usage": "Usage: /lang ru|en|he",
-    "set": "Language set to: {lang}."
+    "choose": "Choose your language:",
+    "current": "Current language: {lang}",
+    "set": "Language set to: {lang}.",
+    "names": {
+      "ru": "Russian",
+      "en": "English",
+      "he": "Hebrew"
+    }
   },
   "group": {
     "openPm": "Calendar can be used only in private chat. Click to continue with the bot:"
@@ -6239,8 +6315,8 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 
 ---
 ### `src/i18n/lang/he.json`
-- Size: 1.3 KB  
-- Modified: 2025-10-17T20:27:40.517Z
+- Size: 1.5 KB  
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 {
@@ -6264,7 +6340,14 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
   },
   "lang": {
     "usage": "שימוש: /lang ru|en|he",
-    "set": "השפה הוגדרה: {lang}."
+    "choose": "בחר שפה:",
+    "current": "שפה נוכחית: {lang}",
+    "set": "השפה הוגדרה: {lang}.",
+    "names": {
+      "ru": "רוסית",
+      "en": "אנגלית",
+      "he": "עברית"
+    }
   },
   "group": {
     "openPm": "ניתן להשתמש בלוח השנה רק בצ׳אט פרטי. לחצו להמשיך עם הבוט:"
@@ -6286,8 +6369,8 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 
 ---
 ### `src/i18n/lang/ru.json`
-- Size: 1.7 KB  
-- Modified: 2025-10-17T20:27:40.517Z
+- Size: 1.9 KB  
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 {
@@ -6313,7 +6396,14 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
   },
   "lang": {
     "usage": "Использование: /lang ru|en|he",
-    "set": "Язык установлен: {lang}."
+    "choose": "Выберите язык:",
+    "current": "Текущий язык: {lang}",
+    "set": "Язык установлен: {lang}.",
+    "names": {
+      "ru": "Русский",
+      "en": "Английский",
+      "he": "Иврит"
+    }
   },
   "group": {
     "openPm": "Календарь доступен только в личном чате. Нажмите кнопку, чтобы продолжить в диалоге со мной:"
@@ -6336,7 +6426,7 @@ export function t(lang: Lang, key: string, params: Record<string, any> = {}) {
 ---
 ### `src/lib/env.ts`
 - Size: 887 B  
-- Modified: 2025-10-17T20:27:40.517Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import * as dotenv from 'dotenv';
@@ -6370,7 +6460,7 @@ export const ENV = {
 ---
 ### `src/lib/prisma.ts`
 - Size: 88 B  
-- Modified: 2025-10-17T20:27:40.517Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { PrismaClient } from "@prisma/client";
@@ -6380,7 +6470,7 @@ export const prisma = new PrismaClient();
 ---
 ### `src/server.ts`
 - Size: 1.1 KB  
-- Modified: 2025-10-17T20:27:40.517Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 import { ENV } from "./lib/env";
@@ -6425,9 +6515,31 @@ main().catch((e) => {
 ```
 
 ---
+### `src/types/telegraf.d.ts`
+- Size: 187 B  
+- Modified: 2025-10-17T20:50:21.395Z
+
+```
+import "telegraf";
+
+import type { Lang } from "../i18n";
+
+declare module "telegraf" {
+  interface Context {
+    session?: {
+      lang?: Lang;
+      [key: string]: unknown;
+    };
+  }
+}
+
+
+```
+
+---
 ### `tsconfig.json`
 - Size: 283 B  
-- Modified: 2025-10-17T20:27:40.517Z
+- Modified: 2025-10-17T20:50:21.395Z
 
 ```
 {

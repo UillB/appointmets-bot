@@ -27,6 +27,25 @@ const buildLanguageKeyboard = (ctx: Context, active: Lang) =>
     ])
   );
 
+const SUPPORTED_LANGS: Lang[] = ["ru", "en", "he"];
+const LANG_FLAGS: Record<Lang, string> = {
+  ru: "🇷🇺",
+  en: "🇬🇧",
+  he: "🇮🇱"
+};
+
+const ensureSession = (ctx: Context) => ctx.session ?? ((ctx as any).session = {});
+
+const buildLanguageKeyboard = (ctx: Context, active: Lang) =>
+  Markup.inlineKeyboard(
+    SUPPORTED_LANGS.map((code) => [
+      Markup.button.callback(
+        `${code === active ? "✅ " : ""}${LANG_FLAGS[code]} ${ctx.tt(`lang.names.${code}`)}`,
+        `lang:${code}`
+      )
+    ])
+  );
+
 export const handleStart = () => async (ctx: Context) => {
   await ctx.reply(ctx.tt("start.welcome"));
 
