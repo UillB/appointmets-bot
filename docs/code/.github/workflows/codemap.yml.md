@@ -1,0 +1,48 @@
+# .github/workflows/codemap.yml
+
+```yml
+name: Generate CODEMAP
+
+on:
+  push:
+    branches: [ main, master, dev, develop ]
+  pull_request:
+    branches: [ main, master, dev, develop ]
+  workflow_dispatch: {}
+
+jobs:
+  codemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: |
+          npm install
+          npm install -D ts-node typescript fast-glob @types/node
+
+      - name: Generate CODEMAP.md
+        run: npx ts-node scripts/generate-codemap.ts
+
+      - name: Snapshot ALL code → docs/code + ALL_CODE_INDEX.md
+        run: npx ts-node scripts/snapshot-all.ts
+
+      - name: Commit generated docs
+        run: |
+          if [[ -n "$(git status --porcelain CODEMAP.md ALL_CODE_INDEX.md docs/code)" ]]; then
+            git config user.name "codemap-bot"
+            git config user.email "codemap-bot@users.noreply.github.com"
+            git add CODEMAP.md ALL_CODE_INDEX.md docs/code
+            git commit -m "chore: update CODEMAP + snapshot"
+            git push
+          else
+            echo "Nothing to commit"
+          fi
+
+```

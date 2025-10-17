@@ -2,8 +2,8 @@
 
 Эта карта создаётся автоматически при каждом push. Она нужна, чтобы ассистент мог **быстро понять весь проект** без расспросов.
 
-- Ветка: `local`
-- Сгенерировано: 2025-10-17T18:26:24.710Z
+- Ветка: `refs/heads/main`
+- Сгенерировано: 2025-10-17T21:09:21.912Z
 
 ## Обзор структуры (файловое дерево)
 - README.md
@@ -12,6 +12,7 @@
 - scripts/generate-codemap.ts
 - scripts/generateSlots.ts
 - scripts/seed.ts
+- scripts/snapshot-all.ts
 - src/api/index.ts
 - src/api/routes/appointments.ts
 - src/api/routes/services.ts
@@ -81,6 +82,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "codemap": "ts-node scripts/generate-codemap.ts",
+    "snapshot": "ts-node scripts/snapshot-all.ts",
     "slots:month": "tsx scripts/generateSlots.ts --days=31",
     "slots:weekends": "tsx scripts/generateSlots.ts --days=31 --weekends",
     "slots:custom": "tsx scripts/generateSlots.ts --days=31 --start=10 --end=18 --step=20 --cap=2",
