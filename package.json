@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "codemap": "ts-node scripts/generate-codemap.ts",
+    "snapshot": "ts-node scripts/snapshot-all.ts",
     "slots:month": "tsx scripts/generateSlots.ts --days=31",
     "slots:weekends": "tsx scripts/generateSlots.ts --days=31 --weekends",
     "slots:custom": "tsx scripts/generateSlots.ts --days=31 --start=10 --end=18 --step=20 --cap=2",
@@ -19,8 +21,11 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/node": "^24.8.0",
+    "@types/node": "^24.8.1",
+    "fast-glob": "^3.3.3",
+    "globby": "^15.0.0",
     "prisma": "^6.17.1",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
