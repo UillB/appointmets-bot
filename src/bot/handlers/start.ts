@@ -1,5 +1,25 @@
-import { Context, Markup } from "telegraf";
+import { Context, Markup, Telegraf } from "telegraf";
+import { Lang } from "../../i18n";
 import { ENV } from "../../lib/env";
+
+const SUPPORTED_LANGS: Lang[] = ["ru", "en", "he"];
+const LANG_FLAGS: Record<Lang, string> = {
+  ru: "🇷🇺",
+  en: "🇬🇧",
+  he: "🇮🇱"
+};
+
+const ensureSession = (ctx: Context) => ctx.session ?? ((ctx as any).session = {});
+
+const buildLanguageKeyboard = (ctx: Context, active: Lang) =>
+  Markup.inlineKeyboard(
+    SUPPORTED_LANGS.map((code) => [
+      Markup.button.callback(
+        `${code === active ? "✅ " : ""}${LANG_FLAGS[code]} ${ctx.tt(`lang.names.${code}`)}`,
+        `lang:${code}`
+      )
+    ])
+  );
 
 export const handleStart = () => async (ctx: Context) => {
   await ctx.reply(ctx.tt("start.welcome"));
@@ -22,9 +42,50 @@ export const handleStart = () => async (ctx: Context) => {
 export const handleLang = () => async (ctx: Context) => {
   const text = ctx.message && "text" in ctx.message ? ctx.message.text : "";
   const arg = String(text || "").split(/\s+/)[1]?.toLowerCase();
-  if (!arg || !["ru", "en", "he"].includes(arg)) {
-    return ctx.reply(ctx.tt("lang.usage"));
+  const currentLang = (ctx.session?.lang as Lang | undefined) ?? ctx.lang;
+
+  if (arg && SUPPORTED_LANGS.includes(arg as Lang)) {
+    const session = ensureSession(ctx);
+    const lang = arg as Lang;
+    session.lang = lang;
+    ctx.lang = lang; // применяем сразу для ответа
+
+    await ctx.reply(
+      ctx.tt("lang.set", { lang: ctx.tt(`lang.names.${lang}`) })
+    );
+    return;
   }
-  (ctx as any).lang = arg; // для текущего апдейта
-  await ctx.reply(ctx.tt("lang.set", { lang: arg }));
+
+  if (arg && !SUPPORTED_LANGS.includes(arg as Lang)) {
+    await ctx.reply(
+      ctx.tt("lang.choose"),
+      buildLanguageKeyboard(ctx, currentLang)
+    );
+    return;
+  }
+
+  await ctx.reply(
+    `${ctx.tt("lang.current", { lang: ctx.tt(`lang.names.${currentLang}`) })}\n${ctx.tt("lang.choose")}`,
+    buildLanguageKeyboard(ctx, currentLang)
+  );
+};
+
+export const registerLangCallbacks = (bot: Telegraf) => {
+  bot.action(/^lang:(ru|en|he)$/, async (ctx) => {
+    const lang = ctx.match[1] as Lang;
+    const session = ensureSession(ctx);
+    session.lang = lang;
+    ctx.lang = lang;
+
+    await ctx.answerCbQuery(ctx.tt("lang.set", { lang: ctx.tt(`lang.names.${lang}`) }));
+
+    const keyboard = buildLanguageKeyboard(ctx, lang);
+    const message = ctx.tt("lang.current", { lang: ctx.tt(`lang.names.${lang}`) });
+
+    try {
+      await ctx.editMessageText(`${message}\n${ctx.tt("lang.choose")}`, keyboard);
+    } catch {
+      await ctx.reply(`${message}\n${ctx.tt("lang.choose")}`, keyboard);
+    }
+  });
 };

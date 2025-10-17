@@ -9,8 +9,13 @@ declare module "telegraf" {
 }
 
 export const i18nMw: MiddlewareFn<Context> = async (ctx, next) => {
-  const code = ctx.from?.language_code;
-  ctx.lang = detectLang(code);
+  const session = ctx.session ?? ((ctx as any).session = {});
+  const storedLang = session.lang;
+  const detectedLang = detectLang(ctx.from?.language_code);
+  const lang = storedLang ?? detectedLang;
+
+  session.lang = lang;
+  ctx.lang = lang;
   ctx.tt = (key, params) => t(ctx.lang, key, params ?? {});
   return next();
 };

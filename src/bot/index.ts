@@ -2,7 +2,7 @@ import { Telegraf, session } from "telegraf";
 import { ENV } from "../lib/env";
 import { i18nMw } from "./mw/i18n";
 
-import { handleStart, handleLang } from "./handlers/start";
+import { handleStart, handleLang, registerLangCallbacks } from "./handlers/start";
 import { handleBookingFlow, registerBookingCallbacks } from "./handlers/bookingInline";
 import { handleMy, registerMyCallbacks } from "./handlers/my";
 import { registerWebappDataHandler } from "./handlers/webappData";
@@ -27,6 +27,7 @@ export function createBot() {
 
   // inline и webapp
   registerMyCallbacks(bot);
+  registerLangCallbacks(bot);
   registerWebappDataHandler(bot);
 
   // узнаём username бота → для диплинка из групп
