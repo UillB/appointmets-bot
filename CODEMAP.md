@@ -1,10 +1,10 @@
 # CODEMAP
 
-**Generated:** 2025-10-17T20:27:51.252Z
+**Generated:** 2025-10-17T20:50:37.793Z
 **Root:** `.`
 
-- Files: **90**
-- Dirs: **32**
+- Files: **91**
+- Dirs: **33**
 - Size: **25.4 MB**
 
 ## Tree
@@ -96,7 +96,7 @@
 │   ├── `generate-codemap.ts` (5.1 KB) — ...
 │   ├── `generateSlots.ts` (4.2 KB) — Генератор слотов. По умолчанию: 31 день вперёд, Пн–Пт, 09:00–17:00, шаг 30 минут, capacity=1. Параметры можно переопределять аргументами CLI: tsx scripts/generateSlots.ts --days=31 --start=9 --end=17 --step=30 --cap=1 --weekends
 │   └── `seed.ts` (856 B) — Очистим таблицы
-├── **src/** (5 items, 25.2 KB)
+├── **src/** (6 items, 27.9 KB)
 │   ├── **api/** (2 items, 5.7 KB)
 │   │   ├── **routes/** (4 items, 5.2 KB)
 │   │   │   ├── `appointments.ts` (789 B)
@@ -104,29 +104,31 @@
 │   │   │   ├── `slots.ts` (1.1 KB)
 │   │   │   └── `webapp.ts` (2.9 KB) — status{margin-top:8px; font-size:13px; color:#999}
 │   │   └── `index.ts` (488 B)
-│   ├── **bot/** (3 items, 12.5 KB)
-│   │   ├── **handlers/** (5 items, 11.0 KB)
+│   ├── **bot/** (3 items, 14.5 KB)
+│   │   ├── **handlers/** (5 items, 12.7 KB)
 │   │   │   ├── `booking.ts` (446 B)
 │   │   │   ├── `bookingInline.ts` (5.0 KB) — форматирование
 │   │   │   ├── `my.ts` (2.5 KB) — /my — показать ближайшие записи пользователя
-│   │   │   ├── `start.ts` (1.2 KB) — deep link: /start book_{serviceId} → сразу открыть календарь
+│   │   │   ├── `start.ts` (2.9 KB) — deep link: /start book_{serviceId} → сразу открыть календарь
 │   │   │   └── `webappData.ts` (1.8 KB)
-│   │   ├── **mw/** (1 items, 456 B)
-│   │   │   └── `i18n.ts` (456 B)
-│   │   └── `index.ts` (1.1 KB) — Логгер (полезно оставлять)
-│   ├── **i18n/** (2 items, 4.9 KB)
-│   │   ├── **lang/** (3 items, 4.2 KB)
-│   │   │   ├── `en.json` (1.2 KB)
-│   │   │   ├── `he.json` (1.3 KB)
-│   │   │   └── `ru.json` (1.7 KB)
+│   │   ├── **mw/** (1 items, 628 B)
+│   │   │   └── `i18n.ts` (628 B)
+│   │   └── `index.ts` (1.2 KB) — Логгер (полезно оставлять)
+│   ├── **i18n/** (2 items, 5.4 KB)
+│   │   ├── **lang/** (3 items, 4.8 KB)
+│   │   │   ├── `en.json` (1.4 KB)
+│   │   │   ├── `he.json` (1.5 KB)
+│   │   │   └── `ru.json` (1.9 KB)
 │   │   └── `index.ts` (694 B)
 │   ├── **lib/** (2 items, 975 B)
 │   │   ├── `env.ts` (887 B) — sanitize
 │   │   └── `prisma.ts` (88 B)
+│   ├── **types/** (1 items, 187 B)
+│   │   └── `telegraf.d.ts` (187 B)
 │   └── `server.ts` (1.1 KB) — 1) Сначала поднимем HTTP — чтобы /health работал в любом случае
 ├── `.gitignore` (96 B)
-├── `ALL_CODE_INDEX.md` (1.7 MB) — branch: ${{ github.ref_name }} ``` --- ### `.github/workflows/docs.yml` - Size: 771 B - Modified: 2025-10-17T20:24:03.861Z ``` name: Generate Docs (CODEMAP & ALL_CODE_INDEX) on: push: branches: [ "main" ] workflow_dispatch: permissions: co…
-├── `CODEMAP.md` (9.0 KB) — CODEMAP
+├── `ALL_CODE_INDEX.md` (1.7 MB) — branch: ${{ github.ref_name }} ``` --- ### `.github/workflows/docs.yml` - Size: 771 B - Modified: 2025-10-17T20:27:40.391Z ``` name: Generate Docs (CODEMAP & ALL_CODE_INDEX) on: push: branches: [ "main" ] workflow_dispatch: permissions: co…
+├── `CODEMAP.md` (9.2 KB) — CODEMAP
 ├── `package-lock.json` (100.1 KB)
 ├── `package.json` (1.2 KB)
 ├── `README.md` (250 B) — Appointments Bot
