@@ -1,5 +1,11 @@
-node_modules
-# Keep environment variables out of version control
+# Node
+node_modules/
+npm-debug.log
 .env
 
-/generated/prisma
+# Prisma / SQLite
+*.db
+*.db-journal
+
+# MacOS
+.DS_Store
