@@ -1,0 +1,55 @@
+# .github/workflows/codemap.yml
+
+```yml
+name: Generate CODEMAP
+
+on:
+  push:
+    branches: [ main, master, dev, develop ]
+  pull_request:
+    branches: [ main, master, dev, develop ]
+  workflow_dispatch: {}
+
+# Дай воркфлоу право писать в репо
+permissions:
+  contents: write
+
+jobs:
+  codemap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          # оставляем креды, чтобы авто-коммит мог пушнуть
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: |
+          npm install
+          npm install -D ts-node typescript fast-glob @types/node
+
+      - name: Generate CODEMAP.md
+        run: npx ts-node scripts/generate-codemap.ts
+
+      - name: Snapshot ALL code → docs/code + ALL_CODE_INDEX.md
+        run: npx ts-node scripts/snapshot-all.ts
+
+      # Вместо ручного git push используем стабильный экшен
+      - name: Commit generated docs
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update CODEMAP + snapshot"
+          file_pattern: |
+            CODEMAP.md
+            ALL_CODE_INDEX.md
+            docs/code/**
+          branch: ${{ github.ref_name }}
+
+```

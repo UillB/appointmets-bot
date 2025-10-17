@@ -1,3 +1,6 @@
+# scripts/snapshot-all.ts
+
+```ts
 #!/usr/bin/env ts-node
 
 import fg from "fast-glob";
@@ -55,3 +58,5 @@ function ensureDir(p: string) {
   fs.writeFileSync(INDEX_MD, `# ALL_CODE_INDEX\n\n${index}\n`);
   console.log(`✅ Snapshot done: ${files.length} files → ${OUT_DIR}`);
 })();
+
+```
