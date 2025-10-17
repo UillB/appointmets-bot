@@ -1,0 +1,38 @@
+{
+  "start": { "welcome": "היי! אני עוזר לקבוע תור. כתבו /book." },
+  "book": {
+    "chooseService": "בחרו שירות:",
+    "openCalendar": "פתחו את לוח השנה:",
+    "chooseTime": "📅 תאריך: {date}\nבחרו שעה:",
+    "noSlotsDay": "אין זמינות בתאריך {date}."
+  },
+  "confirm": {
+    "ok": "✅ התור נקבע!",
+    "details": "שירות: {service}\nשעה: {when}"
+  },
+  "errors": {
+    "generic": "⚠️ אירעה שגיאה. נסו שוב.",
+    "webappDate": "⚠️ לא ניתן לקבל תאריך מהאפליקציה.",
+    "webappService": "⚠️ serviceId חסר.",
+    "slotTaken": "❌ השעה כבר תפוסה, בחרו שעה אחרת.",
+    "slotNotFound": "לא נמצא זמן או שאינו זמין."
+  },
+  "lang": {
+    "usage": "שימוש: /lang ru|en|he",
+    "set": "השפה הוגדרה: {lang}."
+  },
+  "group": {
+    "openPm": "ניתן להשתמש בלוח השנה רק בצ׳אט פרטי. לחצו להמשיך עם הבוט:"
+  },
+  "admin": {
+    "notifyHeader": "🔔 תור חדש",
+    "notifyGroupHeader": "👥 תור חדש",
+    "user": "משתמש",
+    "service": "שירות",
+    "time": "זמן"
+  },
+  "progress": {
+    "confirming": "⏳ מאשר את התור…",
+    "dateReceived": "✅ התאריך התקבל. מחפש זמינות…"
+  }
+}
