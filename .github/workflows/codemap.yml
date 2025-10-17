@@ -20,10 +20,12 @@ jobs:
           node-version: '20'
 
       - name: Install deps
-        run: npm ci || npm i
+        run: |
+          npm install
+          npm install -D ts-node typescript fast-glob @types/node
 
       - name: Generate CODEMAP.md
-        run: npm run codemap
+        run: npx ts-node scripts/generate-codemap.ts
 
       - name: Commit CODEMAP.md
         run: |
