@@ -63,9 +63,9 @@ import { SystemSettingsComponent } from './system-settings/system-settings.compo
   `,
   styles: [`
     .settings-container {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       padding: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
     .settings-header {

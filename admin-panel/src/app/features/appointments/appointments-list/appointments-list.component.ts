@@ -64,7 +64,7 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
           <div class="filters-row">
             <mat-form-field appearance="outline" class="filter-field">
               <mat-label>{{ 'appointments.filters.status' | translate }}</mat-label>
-              <mat-select [(ngModel)]="filters.status" (selectionChange)="applyFilters()">
+              <mat-select [(ngModel)]="filters.status" (selectionChange)="onStatusChange()">
                 <mat-option value="">{{ 'common.all' | translate }}</mat-option>
                 <mat-option value="confirmed">{{ 'appointments.status.confirmed' | translate }}</mat-option>
                 <mat-option value="pending">{{ 'appointments.status.pending' | translate }}</mat-option>
@@ -74,7 +74,7 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
 
             <mat-form-field appearance="outline" class="filter-field">
               <mat-label>{{ 'appointments.filters.service' | translate }}</mat-label>
-              <mat-select [(ngModel)]="filters.serviceId" (selectionChange)="applyFilters()">
+              <mat-select [(ngModel)]="filters.serviceId" (selectionChange)="onServiceChange()">
                 <mat-option value="">{{ 'common.all' | translate }}</mat-option>
                 <mat-option *ngFor="let service of services" [value]="service.id">
                   {{ getServiceName(service) }}
@@ -84,7 +84,7 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
 
             <mat-form-field appearance="outline" class="filter-field">
               <mat-label>{{ 'appointments.filters.date' | translate }}</mat-label>
-              <input matInput [matDatepicker]="datePicker" [(ngModel)]="filters.date" (dateChange)="applyFilters()">
+              <input matInput [matDatepicker]="datePicker" [(ngModel)]="filters.date" (dateChange)="onDateChange()">
               <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
               <mat-datepicker #datePicker></mat-datepicker>
             </mat-form-field>
@@ -116,11 +116,6 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
 
           <div class="table-container" *ngIf="!loading && appointments.length > 0">
             <table mat-table [dataSource]="appointments" class="appointments-table">
-              <!-- ID Column -->
-              <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef>{{ 'appointments.table.id' | translate }}</th>
-                <td mat-cell *matCellDef="let appointment">{{ appointment.id }}</td>
-              </ng-container>
 
               <!-- Service Column -->
               <ng-container matColumnDef="service">
@@ -159,9 +154,12 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef>{{ 'appointments.table.status' | translate }}</th>
                 <td mat-cell *matCellDef="let appointment">
-                  <mat-chip [class]="'status-' + appointment.status">
-                    {{ getStatusText(appointment.status) }}
-                  </mat-chip>
+                  <div class="status-container">
+                    <div class="status-indicator" [class]="'status-' + appointment.status">
+                      <mat-icon class="status-icon">{{ getStatusIcon(appointment.status) }}</mat-icon>
+                    </div>
+                    <span class="status-text">{{ getStatusText(appointment.status) }}</span>
+                  </div>
                 </td>
               </ng-container>
 
@@ -303,64 +301,193 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
 
     .table-container {
       overflow-x: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      background: white;
     }
 
     .appointments-table {
       width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      
+      ::ng-deep {
+        .mat-mdc-header-cell {
+          background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+          color: #495057;
+          font-weight: 600;
+          font-size: 14px;
+          padding: 16px 20px;
+          border: none;
+          border-bottom: 2px solid #e9ecef;
+        }
+        
+        .mat-mdc-cell {
+          padding: 16px 20px;
+          border: none;
+          border-bottom: 1px solid #f1f3f4;
+          vertical-align: middle;
+          
+          &:last-child {
+            border-right: none;
+          }
+        }
+        
+        .mat-mdc-row {
+          transition: all 0.2s ease;
+          
+          &:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          }
+          
+          &:last-child .mat-mdc-cell {
+            border-bottom: none;
+          }
+        }
+      }
     }
 
     .service-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
 
     .service-icon {
       color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .datetime-info {
       display: flex;
       flex-direction: column;
+      gap: 4px;
     }
 
     .date {
-      font-weight: 500;
-      color: #333;
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 14px;
     }
 
     .time {
-      font-size: 12px;
-      color: #666;
+      font-size: 13px;
+      color: #7f8c8d;
+      background: rgba(127, 140, 141, 0.1);
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      width: fit-content;
     }
 
     .client-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
     }
 
     .client-icon {
-      color: #999;
+      color: #95a5a6;
+      background: rgba(149, 165, 166, 0.1);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .status-confirmed {
-      background-color: #4caf50;
-      color: white;
+    .status-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .status-pending {
-      background-color: #ff9800;
-      color: white;
+    .status-indicator {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      
+      .status-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+      
+      &.status-confirmed {
+        background: linear-gradient(135deg, #4caf50, #45a049);
+        color: white;
+        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+        
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+        }
+      }
+      
+      &.status-pending {
+        background: linear-gradient(135deg, #ff9800, #f57c00);
+        color: white;
+        box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+        
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+        }
+      }
+      
+      &.status-cancelled {
+        background: linear-gradient(135deg, #f44336, #d32f2f);
+        color: white;
+        box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+        
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+        }
+      }
     }
 
-    .status-cancelled {
-      background-color: #f44336;
-      color: white;
+    .status-text {
+      font-weight: 500;
+      font-size: 14px;
+      color: #495057;
     }
 
     .delete-action {
       color: #f44336;
+    }
+
+    // Actions button styling
+    ::ng-deep {
+      .mat-mdc-icon-button {
+        color: #6c757d;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          background-color: rgba(108, 117, 125, 0.1);
+          color: #495057;
+          transform: scale(1.1);
+        }
+      }
     }
 
     @media (max-width: 768px) {
@@ -397,7 +524,7 @@ export class AppointmentsListComponent implements OnInit {
   pageSize = 25;
   currentPage = 0;
 
-  displayedColumns: string[] = ['id', 'service', 'datetime', 'client', 'status', 'actions'];
+  displayedColumns: string[] = ['service', 'datetime', 'client', 'status', 'actions'];
 
   filters = {
     status: '',
@@ -414,6 +541,8 @@ export class AppointmentsListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('🔥 AppointmentsListComponent ngOnInit() called');
+    console.log('🔥 Initial filters:', this.filters);
     this.loadAppointments();
     this.loadServices();
   }
@@ -422,29 +551,36 @@ export class AppointmentsListComponent implements OnInit {
     this.loading = true;
     
     const filters: AppointmentsFilters = {
-      page: this.currentPage,
+      page: this.currentPage + 1, // Backend expects 1-based page numbers
       limit: this.pageSize
     };
 
     // Add filters if they are set
-    if (this.filters.status) {
+    if (this.filters.status && this.filters.status !== '') {
       filters.status = this.filters.status;
     }
-    if (this.filters.serviceId) {
+    if (this.filters.serviceId && this.filters.serviceId !== '') {
       filters.serviceId = parseInt(this.filters.serviceId);
     }
     if (this.filters.date) {
       filters.date = this.filters.date;
     }
 
+    console.log('🔍 Current filters object:', this.filters);
+    console.log('🔍 Built filters for API:', filters);
+    console.log('🔍 API request will be made with these parameters');
+
     this.appointmentsService.getAppointments(filters).subscribe({
       next: (response) => {
+        console.log('✅ Appointments response received:', response);
+        console.log('✅ Total appointments in response:', response.appointments.length);
+        console.log('✅ Total count:', response.total);
         this.appointments = response.appointments;
         this.totalCount = response.total;
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading appointments:', error);
+        console.error('❌ Error loading appointments:', error);
         this.loading = false;
       }
     });
@@ -462,16 +598,35 @@ export class AppointmentsListComponent implements OnInit {
   }
 
   applyFilters() {
+    console.log('🔥 applyFilters() called');
+    console.log('🔥 Current filters before reset:', this.filters);
     this.currentPage = 0; // Reset to first page when applying filters
+    console.log('🔥 About to call loadAppointments()');
     this.loadAppointments();
   }
 
   clearFilters() {
+    console.log('🔥 clearFilters() called');
     this.filters = {
       status: '',
       serviceId: '',
       date: null
     };
+    this.applyFilters();
+  }
+
+  onStatusChange() {
+    console.log('🔥 Status filter changed to:', this.filters.status);
+    this.applyFilters();
+  }
+
+  onServiceChange() {
+    console.log('🔥 Service filter changed to:', this.filters.serviceId);
+    this.applyFilters();
+  }
+
+  onDateChange() {
+    console.log('🔥 Date filter changed to:', this.filters.date);
     this.applyFilters();
   }
 
@@ -526,6 +681,15 @@ export class AppointmentsListComponent implements OnInit {
 
   getStatusText(status: string): string {
     return this.i18nService.translate(`appointments.status.${status}`);
+  }
+
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'confirmed': return 'check_circle';
+      case 'pending': return 'schedule';
+      case 'cancelled': return 'cancel';
+      default: return 'help';
+    }
   }
 
   formatDate(dateString: string): string {

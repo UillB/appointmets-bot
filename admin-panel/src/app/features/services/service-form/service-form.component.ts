@@ -105,7 +105,7 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
                   <div class="form-row">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>{{ 'services.nameRu' | translate }}</mat-label>
-                      <input matInput formControlName="nameRu" placeholder="Название услуги на русском">
+                      <input matInput formControlName="nameRu" [placeholder]="'services.nameRu' | translate">
                     </mat-form-field>
                   </div>
 
@@ -131,7 +131,7 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
                   <div class="form-row">
                     <mat-form-field appearance="outline" class="full-width">
                       <mat-label>{{ 'services.descriptionRu' | translate }}</mat-label>
-                      <textarea matInput formControlName="descriptionRu" rows="3" placeholder="Описание услуги на русском"></textarea>
+                      <textarea matInput formControlName="descriptionRu" rows="3" [placeholder]="'services.descriptionRu' | translate"></textarea>
                     </mat-form-field>
                   </div>
 

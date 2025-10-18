@@ -45,6 +45,7 @@ export class I18nService {
       'actions.viewSlots': 'View Slots',
       'actions.manageServices': 'Manage Services',
       'actions.settings': 'Settings',
+      'actions.quickActions': 'Quick Actions',
       
       // Status
       'status.confirmed': 'Confirmed',
@@ -66,6 +67,9 @@ export class I18nService {
       'common.create': 'Create',
       'common.update': 'Update',
       'common.minutes': 'minutes',
+      'common.online': 'Online',
+      'common.all': 'All',
+      'common.actions': 'Actions',
       
       // User
       'user.profile': 'Profile',
@@ -244,6 +248,7 @@ export class I18nService {
       'actions.viewSlots': 'Посмотреть слоты',
       'actions.manageServices': 'Управление услугами',
       'actions.settings': 'Настройки',
+      'actions.quickActions': 'Быстрые действия',
       
       // Status
       'status.confirmed': 'Подтверждено',
@@ -265,6 +270,9 @@ export class I18nService {
       'common.create': 'Создать',
       'common.update': 'Обновить',
       'common.minutes': 'минут',
+      'common.online': 'Онлайн',
+      'common.all': 'Все',
+      'common.actions': 'Действия',
       
       // User
       'user.profile': 'Профиль',
@@ -443,6 +451,7 @@ export class I18nService {
       'actions.viewSlots': 'צפייה בזמינות',
       'actions.manageServices': 'ניהול שירותים',
       'actions.settings': 'הגדרות',
+      'actions.quickActions': 'פעולות מהירות',
       
       // Status
       'status.confirmed': 'אושר',
@@ -464,6 +473,9 @@ export class I18nService {
       'common.create': 'צור',
       'common.update': 'עדכן',
       'common.minutes': 'דקות',
+      'common.online': 'מחובר',
+      'common.all': 'הכל',
+      'common.actions': 'פעולות',
       
       // User
       'user.profile': 'פרופיל',

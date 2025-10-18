@@ -8,13 +8,20 @@
   <span class="spacer"></span>
   
   <!-- Language Selector -->
-  <mat-form-field appearance="outline" class="language-selector">
-    <mat-select [value]="currentLanguage" (selectionChange)="onLanguageChange($event.value)">
-      <mat-option *ngFor="let lang of availableLanguages" [value]="lang.code">
-        {{ lang.flag }} {{ lang.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <div class="language-menu">
+    <button mat-button [matMenuTriggerFor]="languageMenu" class="language-button">
+      <span class="flag-emoji">{{ getCurrentLanguageFlag() }}</span>
+      <span class="language-name">{{ getCurrentLanguageName() }}</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    
+    <mat-menu #languageMenu="matMenu">
+      <button mat-menu-item *ngFor="let lang of availableLanguages" (click)="onLanguageChange(lang.code)">
+        <span class="flag-emoji">{{ lang.flag }}</span>
+        <span>{{ lang.name }}</span>
+      </button>
+    </mat-menu>
+  </div>
   
   <!-- Theme Toggle -->
   <button mat-icon-button (click)="onToggleTheme()" class="theme-button" [attr.aria-label]="'theme.toggle' | translate">

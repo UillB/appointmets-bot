@@ -44,6 +44,9 @@ export class AppointmentsService {
       params.limit = filters.limit.toString();
     }
 
+    console.log('🚀 AppointmentsService: Making request with params:', params);
+    console.log('🚀 AppointmentsService: Original filters:', filters);
+
     return this.api.get<AppointmentsResponse>('/appointments', { params });
   }
 

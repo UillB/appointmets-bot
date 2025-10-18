@@ -47,21 +47,37 @@ export class ApiService {
     return headers;
   }
 
-  get<T>(endpoint: string, params?: any): Observable<T> {
+  get<T>(endpoint: string, options?: any): Observable<T> {
     let httpParams = new HttpParams();
+    
+    // Check if params are passed in options object
+    const params = options?.params || options;
     
     if (params) {
       Object.keys(params).forEach(key => {
-        if (params[key] !== null && params[key] !== undefined) {
-          httpParams = httpParams.set(key, params[key].toString());
+        const value = params[key];
+        if (value !== null && value !== undefined && value !== '') {
+          httpParams = httpParams.set(key, value.toString());
         }
       });
     }
 
-    return this.http.get<T>(`${this.baseUrl}${endpoint}`, {
+    const finalUrl = `${this.baseUrl}${endpoint}`;
+    const queryString = httpParams.toString();
+
+    console.log('🌐 ApiService: Making GET request');
+    console.log('🌐   URL:', finalUrl);
+    console.log('🌐   Params object:', params);
+    console.log('🌐   HttpParams string:', queryString);
+    console.log('🌐   Full URL:', queryString ? `${finalUrl}?${queryString}` : finalUrl);
+
+    return this.http.get<T>(finalUrl, {
       headers: this.getHeaders(),
       params: httpParams
     }).pipe(
+      tap(response => {
+        console.log('🌐 ApiService: GET response received:', response);
+      }),
       catchError(this.handleError.bind(this))
     );
   }

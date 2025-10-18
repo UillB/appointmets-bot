@@ -86,7 +86,7 @@
         <mat-card-header>
           <mat-card-title>
             <mat-icon>calendar_month</mat-icon>
-            Календарь записей
+            {{ 'calendar.appointments' | translate }}
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
@@ -103,26 +103,26 @@
         <mat-card-header>
           <mat-card-title>
             <mat-icon>flash_on</mat-icon>
-            Быстрые действия
+            {{ 'actions.quickActions' | translate }}
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div class="action-buttons">
             <button mat-raised-button color="primary" (click)="navigateTo('/appointments')">
               <mat-icon>event</mat-icon>
-              Записи
+              {{ 'nav.appointments' | translate }}
             </button>
             <button mat-raised-button color="accent" (click)="navigateTo('/services')">
               <mat-icon>build</mat-icon>
-              Услуги
+              {{ 'nav.services' | translate }}
             </button>
             <button mat-raised-button (click)="navigateTo('/organizations')">
               <mat-icon>business</mat-icon>
-              Организация
+              {{ 'nav.organizations' | translate }}
             </button>
             <button mat-raised-button (click)="navigateTo('/settings')">
               <mat-icon>settings</mat-icon>
-              Настройки
+              {{ 'nav.settings' | translate }}
             </button>
           </div>
         </mat-card-content>
@@ -145,7 +145,7 @@
               class="appointment-item"
               [ngClass]="getAppointmentStatusClass(appointment.status)">
               <div class="appointment-time">{{ formatAppointmentTime(appointment) }}</div>
-              <div class="appointment-service">{{ appointment.service?.name || 'Услуга' }}</div>
+              <div class="appointment-service">{{ getServiceName(appointment.service) || ('services.title' | translate) }}</div>
               <div class="appointment-chat">ID: {{ appointment.chatId }}</div>
             </div>
           </div>
@@ -167,20 +167,22 @@
           <mat-list *ngIf="recentAppointments.length > 0; else noRecentAppointments">
             <mat-list-item *ngFor="let appointment of recentAppointments" class="appointment-list-item">
               <mat-icon matListItemIcon>event</mat-icon>
-              <div matListItemTitle>{{ appointment.service?.name || 'Услуга' }}</div>
+              <div matListItemTitle>{{ getServiceName(appointment.service) || ('services.title' | translate) }}</div>
               <div matListItemLine>
-                {{ formatAppointmentTime(appointment) }} • ID: {{ appointment.chatId }}
+                <span class="appointment-date">{{ formatAppointmentDate(appointment) }}</span>
+                <span class="appointment-time">{{ formatAppointmentTime(appointment) }}</span>
+                <span class="appointment-id">ID: {{ appointment.chatId }}</span>
               </div>
               <mat-chip 
                 matListItemMeta 
                 [ngClass]="getAppointmentStatusClass(appointment.status)"
                 class="status-chip">
-                {{ appointment.status || 'Новая' }}
+                {{ getStatusText(appointment.status) }}
               </mat-chip>
             </mat-list-item>
           </mat-list>
           <ng-template #noRecentAppointments>
-            <p class="no-appointments">Нет записей</p>
+            <p class="no-appointments">{{ 'appointments.noData.message' | translate }}</p>
           </ng-template>
         </mat-card-content>
       </mat-card>

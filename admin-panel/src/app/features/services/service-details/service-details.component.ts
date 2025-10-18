@@ -165,25 +165,42 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
                     <p>{{ service.slots.length }} slots available</p>
                   </div>
                   
-                  <div class="slots-grid">
-                    <mat-card *ngFor="let slot of service.slots" class="slot-card">
-                      <mat-card-content>
-                        <div class="slot-info">
-                          <div class="slot-time">
-                            <mat-icon>schedule</mat-icon>
-                            <span>{{ formatSlotTime(slot.startAt) }} - {{ formatSlotTime(slot.endAt) }}</span>
-                          </div>
-                          <div class="slot-capacity">
-                            <mat-icon>people</mat-icon>
-                            <span>Capacity: {{ slot.capacity }}</span>
-                          </div>
-                          <div class="slot-bookings" *ngIf="slot._count?.bookings">
-                            <mat-icon>event</mat-icon>
-                            <span>Bookings: {{ slot._count?.bookings || 0 }}</span>
-                          </div>
-                        </div>
-                      </mat-card-content>
-                    </mat-card>
+                  <div class="slots-by-date">
+                    <div *ngFor="let dateGroup of getSlotsByDate()" class="date-group">
+                      <div class="date-header">
+                        <h4>{{ formatSlotDate(dateGroup.date) }}</h4>
+                        <span class="date-count">{{ dateGroup.slots.length }} slots</span>
+                      </div>
+                      
+                      <div class="slots-grid">
+                        <mat-card 
+                          *ngFor="let slot of dateGroup.slots" 
+                          class="slot-card"
+                          [ngClass]="getSlotStatusClass(slot)">
+                          <mat-card-content>
+                            <div class="slot-info">
+                              <div class="slot-time">
+                                <mat-icon>schedule</mat-icon>
+                                <span>{{ formatSlotTime(slot.startAt) }} - {{ formatSlotTime(slot.endAt) }}</span>
+                              </div>
+                              <div class="slot-capacity">
+                                <mat-icon>people</mat-icon>
+                                <span>Capacity: {{ slot.capacity }}</span>
+                              </div>
+                              <div class="slot-bookings" *ngIf="slot._count?.bookings">
+                                <mat-icon>event</mat-icon>
+                                <span>Bookings: {{ slot._count?.bookings || 0 }}</span>
+                              </div>
+                              <div class="slot-status">
+                                <mat-chip [ngClass]="getSlotStatusChipClass(slot)">
+                                  {{ getSlotStatusText(slot) }}
+                                </mat-chip>
+                              </div>
+                            </div>
+                          </mat-card-content>
+                        </mat-card>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 
@@ -371,19 +388,73 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
       color: var(--text-secondary);
     }
 
+    .slots-by-date {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .date-group {
+      border: 1px solid var(--divider-color);
+      border-radius: 12px;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .date-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--primary-color);
+    }
+
+    .date-header h4 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .date-count {
+      background: var(--primary-color);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
     .slots-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
     }
 
     .slot-card {
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-left: 4px solid transparent;
     }
 
     .slot-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .slot-card.slot-available {
+      border-left-color: #4caf50;
+      background: rgba(76, 175, 80, 0.05);
+    }
+
+    .slot-card.slot-booked {
+      border-left-color: #ff9800;
+      background: rgba(255, 152, 0, 0.05);
+    }
+
+    .slot-card.slot-full {
+      border-left-color: #f44336;
+      background: rgba(244, 67, 54, 0.05);
     }
 
     .slot-info {
@@ -394,7 +465,8 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 
     .slot-time,
     .slot-capacity,
-    .slot-bookings {
+    .slot-bookings,
+    .slot-status {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -408,6 +480,35 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
       width: 16px;
       height: 16px;
       color: var(--text-secondary);
+    }
+
+    .slot-status {
+      margin-top: 8px;
+      justify-content: center;
+    }
+
+    .slot-status mat-chip {
+      font-size: 0.75rem;
+      height: 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .slot-status .status-available {
+      background: #4caf50;
+      color: white;
+    }
+
+    .slot-status .status-booked {
+      background: #ff9800;
+      color: white;
+    }
+
+    .slot-status .status-full {
+      background: #f44336;
+      color: white;
     }
 
     .empty-state,
@@ -538,6 +639,60 @@ export class ServiceDetailsComponent implements OnInit, OnDestroy {
       minute: '2-digit',
       hour12: false
     });
+  }
+
+  formatSlotDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  getSlotsByDate(): { date: string; slots: any[] }[] {
+    if (!this.service?.slots) return [];
+    
+    const slotsByDate = new Map<string, any[]>();
+    
+    this.service.slots.forEach(slot => {
+      const date = new Date(slot.startAt).toDateString();
+      if (!slotsByDate.has(date)) {
+        slotsByDate.set(date, []);
+      }
+      slotsByDate.get(date)!.push(slot);
+    });
+    
+    return Array.from(slotsByDate.entries())
+      .map(([date, slots]) => ({ date, slots }))
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }
+
+  getSlotStatusClass(slot: any): string {
+    const bookings = slot._count?.bookings || 0;
+    const capacity = slot.capacity || 1;
+    
+    if (bookings === 0) return 'slot-available';
+    if (bookings < capacity) return 'slot-booked';
+    return 'slot-full';
+  }
+
+  getSlotStatusChipClass(slot: any): string {
+    const bookings = slot._count?.bookings || 0;
+    const capacity = slot.capacity || 1;
+    
+    if (bookings === 0) return 'status-available';
+    if (bookings < capacity) return 'status-booked';
+    return 'status-full';
+  }
+
+  getSlotStatusText(slot: any): string {
+    const bookings = slot._count?.bookings || 0;
+    const capacity = slot.capacity || 1;
+    
+    if (bookings === 0) return 'Available';
+    if (bookings < capacity) return 'Booked';
+    return 'Full';
   }
 
   deleteService(): void {

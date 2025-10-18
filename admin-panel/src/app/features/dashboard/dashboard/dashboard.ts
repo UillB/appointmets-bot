@@ -15,6 +15,7 @@ import { Subject, takeUntil, interval } from 'rxjs';
 
 import { AuthService, User } from '../../../core/services/auth';
 import { DashboardService, DashboardStats } from '../../../core/services/dashboard.service';
+import { I18nService } from '../../../core/services/i18n.service';
 import { Appointment } from '../../../shared/models/api.models';
 import { ApiTestComponent } from '../api-test/api-test.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
@@ -62,6 +63,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private dashboardService: DashboardService,
+    private i18nService: I18nService,
     private router: Router
   ) {}
 
@@ -163,11 +165,52 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  formatAppointmentDate(appointment: Appointment): string {
+    const date = new Date(appointment.slot?.startAt || appointment.createdAt || '');
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    // Проверяем, если это сегодня
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    }
+    
+    // Проверяем, если это вчера
+    if (date.toDateString() === yesterday.toDateString()) {
+      return 'Yesterday';
+    }
+    
+    // Для остальных дат показываем день недели и дату
+    return date.toLocaleDateString('en-US', {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric'
+    });
+  }
+
   navigateTo(route: string): void {
     this.router.navigate([route]);
   }
 
   refreshData(): void {
     this.loadDashboardData();
+  }
+
+  getServiceName(service: any): string {
+    if (!service) return '';
+    
+    const currentLang = this.i18nService.getCurrentLanguage();
+    switch (currentLang) {
+      case 'ru': return service.nameRu || service.name;
+      case 'he': return service.nameHe || service.name;
+      case 'en': return service.nameEn || service.name;
+      default: return service.name;
+    }
+  }
+
+  getStatusText(status: string | undefined): string {
+    if (!status) return this.i18nService.translate('appointments.status.pending');
+    return this.i18nService.translate(`appointments.status.${status.toLowerCase()}`);
   }
 }

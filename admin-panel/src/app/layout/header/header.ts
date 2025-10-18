@@ -5,8 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSelectModule } from '@angular/material/select';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { Subscription } from 'rxjs';
 
 import { AuthService, User } from '../../core/services/auth';
@@ -23,8 +21,6 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
     MatButtonModule,
     MatMenuModule,
     MatDividerModule,
-    MatSelectModule,
-    MatFormFieldModule,
     TranslatePipe
   ],
   templateUrl: './header.html',
@@ -91,6 +87,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLanguageChange(language: Language): void {
     this.i18nService.setLanguage(language);
+  }
+
+  getCurrentLanguageFlag(): string {
+    const currentLang = this.availableLanguages.find(lang => lang.code === this.currentLanguage);
+    return currentLang?.flag || '🇺🇸';
+  }
+
+  getCurrentLanguageName(): string {
+    const currentLang = this.availableLanguages.find(lang => lang.code === this.currentLanguage);
+    return currentLang?.name || 'English';
   }
 
   onLogout(): void {

@@ -6,15 +6,20 @@ const r = Router();
 r.get("/", async (req, res) => {
   const { status, serviceId, date, page = 1, limit = 25 } = req.query;
   
+  console.log('🔥 Backend: Received query params:', req.query);
+  console.log('🔥 Backend: Parsed params - status:', status, 'serviceId:', serviceId, 'date:', date, 'page:', page, 'limit:', limit);
+  
   // Build where clause for filtering
   const where: any = {};
   
   if (status) {
     where.status = status;
+    console.log('🔥 Backend: Added status filter:', status);
   }
   
   if (serviceId) {
     where.serviceId = Number(serviceId);
+    console.log('🔥 Backend: Added serviceId filter:', serviceId);
   }
   
   if (date) {
@@ -30,7 +35,10 @@ r.get("/", async (req, res) => {
         lte: endOfDay
       }
     };
+    console.log('🔥 Backend: Added date filter:', date, 'from', startOfDay, 'to', endOfDay);
   }
+  
+  console.log('🔥 Backend: Final where clause:', JSON.stringify(where, null, 2));
   
   // Calculate pagination
   const pageNum = Number(page);
