@@ -4,6 +4,9 @@ Welcome to the comprehensive documentation for the Appointments Bot project. Thi
 
 ## 🎯 Quick Navigation
 
+### 🚨 [Critical Features Roadmap](./CRITICAL_FEATURES_ROADMAP.md)
+**КРИТИЧЕСКИ ВАЖНО** - Список функций для MVP с приоритетами и ссылками на документацию.
+
 ### 📊 [Project Status](./PROJECT_CHECKPOINT_2025.md)
 Current project status, achievements, and next steps.
 

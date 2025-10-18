@@ -193,6 +193,7 @@ cd backend && npm run check-slots
 ## 📚 Документация
 
 Дополнительная документация находится в папке `docs/`:
+- [🚨 **Critical Features Roadmap**](docs/CRITICAL_FEATURES_ROADMAP.md) - **КРИТИЧЕСКИ ВАЖНО** - функции для MVP
 - [📊 Project Status](docs/PROJECT_CHECKPOINT_2025.md) - текущий статус проекта
 - [💼 Business Documentation](docs/business/) - бизнес-планы и стратегия
 - [🔧 Development Guides](docs/development/) - руководства по разработке
