@@ -74,6 +74,17 @@ This directory contains comprehensive architecture documentation for the Appoint
 
 ### Core Entities
 ```sql
+-- Multi-tenant Organizations
+Organization {
+  id: Int (Primary Key)
+  name: String
+  avatar: String (Optional) - URL to avatar image
+  createdAt: DateTime
+  updatedAt: DateTime
+  users: User[] (One-to-Many)
+  services: Service[] (One-to-Many)
+}
+
 -- Users and Authentication
 User {
   id: Int (Primary Key)
@@ -81,20 +92,8 @@ User {
   password: String (Hashed)
   name: String
   role: UserRole (SUPER_ADMIN | OWNER | MANAGER)
-  organizationId: Int (Foreign Key)
-  telegramId: String (Optional)
-  isActive: Boolean
-  createdAt: DateTime
-  updatedAt: DateTime
-}
-
--- Multi-tenant Organizations
-Organization {
-  id: Int (Primary Key)
-  name: String
-  type: String
-  avatar: String (Optional)
-  ownerId: Int (Foreign Key)
+  organizationId: Int (Foreign Key to Organization)
+  organization: Organization (Many-to-One)
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -102,13 +101,19 @@ Organization {
 -- Services offered by organizations
 Service {
   id: Int (Primary Key)
-  name: String
-  nameEn: String
-  nameHe: String
-  description: String
-  durationMin: Int
-  price: Decimal
-  organizationId: Int (Foreign Key)
+  name: String (fallback name)
+  nameRu: String (Optional) - Russian name
+  nameEn: String (Optional) - English name
+  nameHe: String (Optional) - Hebrew name
+  description: String (Optional)
+  descriptionRu: String (Optional) - Russian description
+  descriptionEn: String (Optional) - English description
+  descriptionHe: String (Optional) - Hebrew description
+  durationMin: Int (duration in minutes)
+  organizationId: Int (Foreign Key to Organization)
+  organization: Organization (Many-to-One)
+  slots: Slot[] (One-to-Many)
+  appointments: Appointment[] (One-to-Many)
   createdAt: DateTime
   updatedAt: DateTime
 }
@@ -116,23 +121,26 @@ Service {
 -- Time slots for booking
 Slot {
   id: Int (Primary Key)
+  serviceId: Int (Foreign Key to Service)
+  service: Service (Many-to-One)
   startAt: DateTime
   endAt: DateTime
-  capacity: Int
-  serviceId: Int (Foreign Key)
-  createdAt: DateTime
-  updatedAt: DateTime
+  capacity: Int (default: 1)
+  bookings: Appointment[] (One-to-Many)
+  @@unique([serviceId, startAt]) - Prevents duplicate slot generation
 }
 
 -- Appointments/Bookings
 Appointment {
   id: Int (Primary Key)
-  chatId: String
-  status: AppointmentStatus (pending | confirmed | cancelled)
-  serviceId: Int (Foreign Key)
-  slotId: Int (Foreign Key)
+  chatId: String (Telegram chat ID)
+  serviceId: Int (Foreign Key to Service)
+  service: Service (Many-to-One)
+  slotId: Int (Foreign Key to Slot)
+  slot: Slot (Many-to-One)
+  status: String (default: "confirmed")
   createdAt: DateTime
-  updatedAt: DateTime
+  @@unique([slotId]) - One appointment per slot
 }
 ```
 

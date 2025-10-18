@@ -193,10 +193,13 @@ cd backend && npm run check-slots
 ## 📚 Документация
 
 Дополнительная документация находится в папке `docs/`:
-- [AUTH_IMPLEMENTATION.md](docs/AUTH_IMPLEMENTATION.md) - реализация аутентификации
-- [DASHBOARD_SETUP.md](docs/DASHBOARD_SETUP.md) - настройка дашборда
-- [TESTING_GUIDE.md](docs/TESTING_GUIDE.md) - руководство по тестированию
-- [PROJECT_STATUS.md](docs/PROJECT_STATUS.md) - текущий статус проекта
+- [📊 Project Status](docs/PROJECT_CHECKPOINT_2025.md) - текущий статус проекта
+- [💼 Business Documentation](docs/business/) - бизнес-планы и стратегия
+- [🔧 Development Guides](docs/development/) - руководства по разработке
+- [🚀 Deployment Guide](docs/deployment/) - инструкции по развертыванию
+- [🏗️ Architecture](docs/architecture/) - архитектура системы
+- [🔌 API Documentation](docs/api/) - документация API
+- [🤖 Agent Prompts](docs/agent-prompts/) - промпты для AI агентов
 
 ## 🤝 Вклад в проект
 

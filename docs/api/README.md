@@ -272,38 +272,40 @@ Get available time slots.
 
 **Query Parameters:**
 - `serviceId` - Filter by service
-- `date` - Filter by date
-- `available` - Show only available slots
+- `from` - Start date filter (ISO string)
+- `to` - End date filter (ISO string)
 
 **Response:**
 ```json
-{
-  "slots": [
-    {
-      "id": 1,
-      "startAt": "2025-01-20T09:00:00Z",
-      "endAt": "2025-01-20T10:00:00Z",
-      "capacity": 1,
-      "available": true,
-      "service": {
-        "id": 1,
-        "name": "Консультация"
-      }
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "serviceId": 1,
+    "startAt": "2025-01-20T09:00:00Z",
+    "endAt": "2025-01-20T10:00:00Z",
+    "capacity": 1
+  }
+]
 ```
 
-### POST /slots
-Create new time slots.
+### POST /slots/generate
+Generate new time slots for a service.
 
 **Request:**
 ```json
 {
   "serviceId": 1,
-  "startAt": "2025-01-20T09:00:00Z",
-  "endAt": "2025-01-20T10:00:00Z",
-  "capacity": 1
+  "date": "2025-01-20",
+  "startHour": 9,
+  "endHour": 17
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Slots generated successfully",
+  "count": 16
 }
 ```
 
