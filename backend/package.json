@@ -1,0 +1,50 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "codemap": "ts-node scripts/generate-codemap.ts",
+    "snapshot": "ts-node scripts/snapshot-all.ts",
+    "slots:month": "tsx scripts/generateSlots.ts --days=31",
+    "slots:weekends": "tsx scripts/generateSlots.ts --days=31 --weekends",
+    "slots:custom": "tsx scripts/generateSlots.ts --days=31 --start=10 --end=18 --step=20 --cap=2",
+    "slots:refresh": "tsx scripts/refreshSlots.ts",
+    "bot:commands": "tsx scripts/setBotCommands.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:push": "prisma db push",
+    "prisma:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^24.8.1",
+    "fast-glob": "^3.3.3",
+    "globby": "^15.0.0",
+    "prisma": "^6.17.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.17.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "telegraf": "^4.16.3",
+    "zod": "^4.1.12"
+  }
+}

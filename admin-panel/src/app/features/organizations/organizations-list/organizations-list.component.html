@@ -1,0 +1,90 @@
+<div class="organizations-container">
+  <div class="organizations-header">
+    <div class="header-content">
+      <h1>{{ 'organizations.title' | translate }}</h1>
+      <p class="subtitle">{{ 'organizations.subtitle' | translate }}</p>
+    </div>
+    
+    <button 
+      *ngIf="isSuperAdmin" 
+      mat-raised-button 
+      color="primary" 
+      (click)="onCreateOrganization()"
+      class="create-button">
+      <mat-icon>add</mat-icon>
+      {{ 'organizations.create' | translate }}
+    </button>
+  </div>
+
+  <div class="organizations-content">
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>{{ 'common.loading' | translate }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && organizations.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">business</mat-icon>
+      <h3>{{ 'organizations.empty.title' | translate }}</h3>
+      <p>{{ 'organizations.empty.message' | translate }}</p>
+      <button 
+        *ngIf="isSuperAdmin" 
+        mat-raised-button 
+        color="primary" 
+        (click)="onCreateOrganization()">
+        <mat-icon>add</mat-icon>
+        {{ 'organizations.create' | translate }}
+      </button>
+    </div>
+
+    <div *ngIf="!isLoading && organizations.length > 0" class="organizations-grid">
+      <mat-card *ngFor="let organization of organizations" class="organization-card">
+        <mat-card-header>
+          <div mat-card-avatar class="organization-avatar">
+            <img [src]="getAvatarUrl(organization)" [alt]="organization.name">
+          </div>
+          <mat-card-title>{{ organization.name }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ organization._count?.users || 0 }} {{ 'organizations.users' | translate }} • 
+            {{ organization._count?.services || 0 }} {{ 'organizations.services' | translate }}
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="organization-stats">
+            <div class="stat-item">
+              <mat-icon>people</mat-icon>
+              <span>{{ organization._count?.users || 0 }}</span>
+            </div>
+            <div class="stat-item">
+              <mat-icon>business_center</mat-icon>
+              <span>{{ organization._count?.services || 0 }}</span>
+            </div>
+            <div class="stat-item">
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ formatDate(organization.createdAt) }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-button (click)="onViewOrganization(organization)">
+            <mat-icon>visibility</mat-icon>
+            {{ 'common.view' | translate }}
+          </button>
+          <button mat-button (click)="onEditOrganization(organization)">
+            <mat-icon>edit</mat-icon>
+            {{ 'common.edit' | translate }}
+          </button>
+          <button 
+            *ngIf="isSuperAdmin" 
+            mat-button 
+            color="warn" 
+            (click)="onDeleteOrganization(organization)">
+            <mat-icon>delete</mat-icon>
+            {{ 'common.delete' | translate }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

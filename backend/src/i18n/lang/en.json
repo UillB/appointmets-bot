@@ -1,0 +1,72 @@
+{
+  "start": { "welcome": "👋 Welcome!\n\nI can help you book an appointment. Choose the function you need:" },
+  "book": {
+    "chooseService": "Choose a service:",
+    "openCalendar": "Open the calendar:",
+    "chooseTime": "📅 Date: {date}\nPick a time:",
+    "noSlotsDay": "No available slots on {date}.",
+    "chooseSlot": "📅 Choose available time slot:",
+    "noSlotsAvailable": "❌ No available slots for this service."
+  },
+  "confirm": {
+    "ok": "✅ Booking confirmed!",
+    "details": "Service: {service}\nTime: {when}"
+  },
+  "errors": {
+    "generic": "⚠️ Something went wrong. Please try again.",
+    "webappDate": "⚠️ Could not get date from the web app.",
+    "webappService": "⚠️ serviceId is missing.",
+    "slotTaken": "❌ This slot is already taken, choose another one.",
+    "slotNotFound": "Slot not found or no longer available."
+  },
+  "lang": {
+    "usage": "Usage: /lang ru|en|he",
+    "choose": "🌐 Choose language:",
+    "set": "Language set to: {lang}."
+  },
+  "group": {
+    "openPm": "Calendar can be used only in private chat. Click to continue with the bot:"
+  },
+  "admin": {
+    "notifyHeader": "🔔 New booking",
+    "notifyGroupHeader": "👥 New booking",
+    "cancelHeader": "❌ Booking cancelled",
+    "user": "User",
+    "service": "Service",
+    "time": "Time"
+  },
+  "progress": {
+    "confirming": "⏳ Confirming booking…",
+    "dateReceived": "✅ Date received. Searching slots…"
+  },
+  "my": {
+    "noAppointments": "You have no active appointments.",
+    "time": "Time",
+    "cancel": "Cancel",
+    "appointmentNotFound": "This appointment was not found or does not belong to you.",
+    "cancelled": "❎ Appointment cancelled:"
+  },
+  "slots": {
+    "noServices": "No services available.",
+    "chooseService": "Choose a service to view slots:",
+    "choosePeriod": "Choose period:",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "week": "Week",
+    "noSlotsDay": "No slots available on {date}.",
+    "noSlotsWeek": "No slots available this week.",
+    "weekView": "Week overview:",
+    "available": "available",
+    "occupied": "occupied",
+    "bookNow": "Book now"
+  },
+  "menu": {
+    "book": "Book appointment",
+    "viewSlots": "View slots",
+    "myAppointments": "My appointments",
+    "language": "Language"
+  },
+  "help": {
+    "text": "📖 Command help:\n\n📅 /book - Book an appointment\n👀 /slots - View available slots\n📋 /my - My appointments\n🌐 /lang - Change language\n❓ /help - Show this help\n\nOr use the buttons below:"
+  }
+}

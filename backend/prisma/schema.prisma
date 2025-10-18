@@ -1,0 +1,85 @@
+generator client {
+provider = "prisma-client-js"
+}
+
+
+datasource db {
+provider = "sqlite"
+url = env("DATABASE_URL")
+}
+
+
+model Organization {
+  id          Int      @id @default(autoincrement())
+  name        String
+  avatar      String?  // URL to avatar image
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+  services    Service[]
+}
+
+model User {
+  id             Int          @id @default(autoincrement())
+  email          String       @unique
+  password       String
+  name           String
+  role           UserRole     @default(MANAGER)
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  OWNER
+  MANAGER
+}
+
+model Service {
+  id             Int      @id @default(autoincrement())
+  name           String   // fallback name
+  nameRu         String?  // русское название
+  nameEn         String?  // английское название  
+  nameHe         String?  // название на иврите
+  description    String?
+  descriptionRu  String?
+  descriptionEn  String?
+  descriptionHe  String?
+  durationMin    Int      // e.g., 30
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  slots          Slot[]
+  appointments   Appointment[]
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+
+model Slot {
+  id         Int      @id @default(autoincrement())
+  serviceId  Int
+  service    Service  @relation(fields: [serviceId], references: [id])
+  startAt    DateTime
+  endAt      DateTime
+  capacity   Int      @default(1)
+  bookings   Appointment[]
+
+  @@unique([serviceId, startAt]) // ← защищает от повторной генерации
+}
+
+
+
+model Appointment {
+  id         Int      @id @default(autoincrement())
+  chatId     String
+  serviceId  Int
+  service    Service  @relation(fields: [serviceId], references: [id])
+  slotId     Int
+  slot       Slot     @relation(fields: [slotId], references: [id])
+  createdAt  DateTime @default(now())
+  status     String   @default("confirmed")
+
+  @@unique([slotId]) // <— добавили
+}

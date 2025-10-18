@@ -1,0 +1,50 @@
+<mat-toolbar color="primary" class="header-toolbar">
+  <button mat-icon-button (click)="onToggleSidenav()" class="menu-button">
+    <mat-icon>menu</mat-icon>
+  </button>
+  
+  <span class="app-title">{{ 'nav.dashboard' | translate }}</span>
+  
+  <span class="spacer"></span>
+  
+  <!-- Language Selector -->
+  <mat-form-field appearance="outline" class="language-selector">
+    <mat-select [value]="currentLanguage" (selectionChange)="onLanguageChange($event.value)">
+      <mat-option *ngFor="let lang of availableLanguages" [value]="lang.code">
+        {{ lang.flag }} {{ lang.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <!-- Theme Toggle -->
+  <button mat-icon-button (click)="onToggleTheme()" class="theme-button" [attr.aria-label]="'theme.toggle' | translate">
+    <mat-icon>{{ getThemeIcon() }}</mat-icon>
+  </button>
+  
+  <div class="user-menu">
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+      <mat-icon>account_circle</mat-icon>
+      <div class="user-info">
+        <span class="user-name">{{ currentUser?.name || 'User' }}</span>
+        <span class="user-org" *ngIf="currentUser?.organization">{{ currentUser?.organization?.name }}</span>
+      </div>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>person</mat-icon>
+        <span>{{ 'user.profile' | translate }}</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>{{ 'nav.settings' | translate }}</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+        <span>{{ 'user.logout' | translate }}</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

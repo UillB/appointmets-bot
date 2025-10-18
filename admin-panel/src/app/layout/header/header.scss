@@ -1,0 +1,138 @@
+.header-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.menu-button {
+  margin-right: 0;
+}
+
+.app-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.language-selector {
+  min-width: 120px;
+  
+  ::ng-deep {
+    .mat-mdc-form-field {
+      .mat-mdc-text-field-wrapper {
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 4px;
+      }
+      
+      .mat-mdc-form-field-outline {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      
+      .mat-mdc-select-value {
+        color: white;
+      }
+      
+      .mat-mdc-select-arrow {
+        color: white;
+      }
+    }
+  }
+}
+
+.theme-button {
+  color: white !important;
+  margin-left: 8px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  mat-icon {
+    color: white !important;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white !important;
+  min-width: auto;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  mat-icon {
+    color: white !important;
+  }
+  
+  .user-name,
+  .user-org {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: white !important;
+}
+
+.user-org {
+  font-size: 12px;
+  opacity: 0.8;
+  line-height: 1.2;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  .user-name,
+  .user-org {
+    display: none;
+  }
+  
+  .app-title {
+    font-size: 18px;
+  }
+  
+  .language-selector {
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-selector {
+    display: none;
+  }
+}

@@ -1,0 +1,142 @@
+<div class="organization-details">
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>{{ 'common.loading' | translate }}</p>
+  </div>
+
+  <div *ngIf="!isLoading && organization" class="details-content">
+    <!-- Header -->
+    <div class="details-header">
+      <button mat-icon-button (click)="onBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      
+      <div class="header-info">
+        <div class="organization-avatar">
+          <img [src]="getAvatarUrl(organization)" [alt]="organization.name">
+        </div>
+        <div class="organization-info">
+          <h1>{{ organization.name }}</h1>
+          <p class="organization-meta">
+            {{ 'organizations.created' | translate }}: {{ formatDate(organization.createdAt) }}
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button mat-button (click)="onEdit()">
+          <mat-icon>edit</mat-icon>
+          {{ 'common.edit' | translate }}
+        </button>
+        <button 
+          *ngIf="isSuperAdmin" 
+          mat-button 
+          color="warn" 
+          (click)="onDelete()">
+          <mat-icon>delete</mat-icon>
+          {{ 'common.delete' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">people</mat-icon>
+            <div class="stat-info">
+              <h3>{{ organization._count?.users || 0 }}</h3>
+              <p>{{ 'organizations.users' | translate }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">business_center</mat-icon>
+            <div class="stat-info">
+              <h3>{{ organization._count?.services || 0 }}</h3>
+              <p>{{ 'organizations.services' | translate }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <div class="stat-content">
+            <mat-icon class="stat-icon">calendar_today</mat-icon>
+            <div class="stat-info">
+              <h3>{{ formatDate(organization.createdAt) }}</h3>
+              <p>{{ 'organizations.created' | translate }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Users Section -->
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>people</mat-icon>
+          {{ 'organizations.users' | translate }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="organization.users && organization.users.length > 0" class="users-list">
+          <div *ngFor="let user of organization.users" class="user-item">
+            <div class="user-avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="user-info">
+              <h4>{{ user.name }}</h4>
+              <p>{{ user.email }}</p>
+            </div>
+            <div class="user-role">
+              <span class="role-badge" [class]="getUserRoleBadgeClass(user.role)">
+                {{ user.role }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!organization.users || organization.users.length === 0" class="empty-section">
+          <mat-icon>people_outline</mat-icon>
+          <p>{{ 'organizations.noUsers' | translate }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Services Section -->
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>business_center</mat-icon>
+          {{ 'organizations.services' | translate }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="organization.services && organization.services.length > 0" class="services-list">
+          <div *ngFor="let service of organization.services" class="service-item">
+            <div class="service-info">
+              <h4>{{ service.name }}</h4>
+              <p>{{ service.durationMin }} {{ 'common.minutes' | translate }}</p>
+            </div>
+            <div class="service-languages">
+              <span *ngIf="service.nameRu" class="language-tag">RU</span>
+              <span *ngIf="service.nameEn" class="language-tag">EN</span>
+              <span *ngIf="service.nameHe" class="language-tag">HE</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!organization.services || organization.services.length === 0" class="empty-section">
+          <mat-icon>business_center</mat-icon>
+          <p>{{ 'organizations.noServices' | translate }}</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

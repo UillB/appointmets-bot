@@ -1,0 +1,196 @@
+<div class="dashboard-container">
+  <div class="welcome-section">
+    <div class="welcome-header">
+      <div>
+        <h1>{{ 'dashboard.welcome' | translate }}, {{ currentUser?.name }}!</h1>
+        <p>{{ 'nav.dashboard' | translate }}</p>
+      </div>
+      <button mat-raised-button color="primary" (click)="refreshData()" [disabled]="loading">
+        <mat-icon>refresh</mat-icon>
+        {{ 'dashboard.refresh' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-section" *ngIf="!loading; else loadingTemplate">
+    <mat-grid-list cols="4" rowHeight="120px" gutterSize="16px">
+      <mat-grid-tile>
+        <mat-card class="stat-card stat-primary">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon class="stat-icon">event</mat-icon>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.totalAppointments }}</div>
+                <div class="stat-label">{{ 'dashboard.stats.totalAppointments' | translate }}</div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-card class="stat-card stat-success">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon class="stat-icon">today</mat-icon>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.todayAppointments }}</div>
+                <div class="stat-label">{{ 'dashboard.stats.todayAppointments' | translate }}</div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-card class="stat-card stat-warning">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon class="stat-icon">schedule</mat-icon>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.pendingAppointments }}</div>
+                <div class="stat-label">{{ 'dashboard.stats.pendingAppointments' | translate }}</div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+
+      <mat-grid-tile>
+        <mat-card class="stat-card stat-info">
+          <mat-card-content>
+            <div class="stat-content">
+              <mat-icon class="stat-icon">build</mat-icon>
+              <div class="stat-info">
+                <div class="stat-number">{{ stats.totalServices }}</div>
+                <div class="stat-label">{{ 'dashboard.stats.totalServices' | translate }}</div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-section">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>{{ 'common.loading' | translate }}</p>
+    </div>
+  </ng-template>
+
+  <div class="main-content">
+    <div class="left-column">
+      <!-- Календарь -->
+      <mat-card class="calendar-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>calendar_month</mat-icon>
+            Календарь записей
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-calendar 
+            [selected]="selectedDate"
+            (selectedChange)="onDateSelected($event)"
+            class="appointment-calendar">
+          </mat-calendar>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Быстрые действия - закреплены -->
+      <mat-card class="actions-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>flash_on</mat-icon>
+            Быстрые действия
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" (click)="navigateTo('/appointments')">
+              <mat-icon>event</mat-icon>
+              Записи
+            </button>
+            <button mat-raised-button color="accent" (click)="navigateTo('/services')">
+              <mat-icon>build</mat-icon>
+              Услуги
+            </button>
+            <button mat-raised-button (click)="navigateTo('/organizations')">
+              <mat-icon>business</mat-icon>
+              Организация
+            </button>
+            <button mat-raised-button (click)="navigateTo('/settings')">
+              <mat-icon>settings</mat-icon>
+              Настройки
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="right-column">
+      <!-- Записи на выбранную дату -->
+      <mat-card class="selected-date-card" *ngIf="selectedDate">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>event</mat-icon>
+            {{ 'calendar.appointments' | translate }} - {{ selectedDate | date:'dd.MM.yyyy' }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="appointments-list" *ngIf="getAppointmentsForDate(selectedDate).length > 0; else noAppointments">
+            <div 
+              *ngFor="let appointment of getAppointmentsForDate(selectedDate)" 
+              class="appointment-item"
+              [ngClass]="getAppointmentStatusClass(appointment.status)">
+              <div class="appointment-time">{{ formatAppointmentTime(appointment) }}</div>
+              <div class="appointment-service">{{ appointment.service?.name || 'Услуга' }}</div>
+              <div class="appointment-chat">ID: {{ appointment.chatId }}</div>
+            </div>
+          </div>
+          <ng-template #noAppointments>
+            <p class="no-appointments">{{ 'calendar.noAppointments' | translate }}</p>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Последние записи -->
+      <mat-card class="recent-appointments-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>history</mat-icon>
+            {{ 'calendar.recentAppointments' | translate }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list *ngIf="recentAppointments.length > 0; else noRecentAppointments">
+            <mat-list-item *ngFor="let appointment of recentAppointments" class="appointment-list-item">
+              <mat-icon matListItemIcon>event</mat-icon>
+              <div matListItemTitle>{{ appointment.service?.name || 'Услуга' }}</div>
+              <div matListItemLine>
+                {{ formatAppointmentTime(appointment) }} • ID: {{ appointment.chatId }}
+              </div>
+              <mat-chip 
+                matListItemMeta 
+                [ngClass]="getAppointmentStatusClass(appointment.status)"
+                class="status-chip">
+                {{ appointment.status || 'Новая' }}
+              </mat-chip>
+            </mat-list-item>
+          </mat-list>
+          <ng-template #noRecentAppointments>
+            <p class="no-appointments">Нет записей</p>
+          </ng-template>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </div>
+
+  <!-- API тестирование (скрыто по умолчанию) -->
+  <div class="api-test-section" style="display: none;">
+    <h2>Тестирование API</h2>
+    <app-api-test></app-api-test>
+  </div>
+</div>

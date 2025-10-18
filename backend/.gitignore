@@ -1,0 +1,11 @@
+# Node
+node_modules/
+npm-debug.log
+.env
+
+# Prisma / SQLite
+*.db
+*.db-journal
+
+# MacOS
+.DS_Store

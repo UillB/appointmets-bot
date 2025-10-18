@@ -1,0 +1,144 @@
+.sidebar-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .logo-icon {
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+      color: white;
+    }
+    
+    h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: white;
+    }
+  }
+}
+
+.nav-list {
+  flex: 1;
+  padding: 12px 8px;
+}
+
+.nav-item {
+  margin: 4px 8px;
+  border-radius: 0 !important;
+  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.8);
+  position: relative;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateX(4px);
+  }
+  
+  &.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 24px;
+      background-color: white;
+      border-radius: 0 4px 4px 0;
+    }
+    
+    mat-icon {
+      color: white;
+    }
+  }
+  
+  mat-icon {
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.3s ease;
+  }
+  
+  .badge {
+    mat-icon {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .footer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    
+    .version {
+      margin: 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+    }
+    
+    .status {
+      margin: 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      
+      .status-icon {
+        font-size: 8px;
+        width: 8px;
+        height: 8px;
+        color: #4caf50;
+      }
+    }
+  }
+}
+
+// Responsive дизайн
+@media (max-width: 768px) {
+  .sidebar-container {
+    .logo h2 {
+      font-size: 16px;
+    }
+    
+    .logo-icon {
+      font-size: 24px !important;
+      width: 24px !important;
+      height: 24px !important;
+    }
+  }
+  
+  .nav-item {
+    margin: 2px 4px;
+    padding: 8px 12px;
+    
+    &:hover {
+      transform: none;
+    }
+  }
+}

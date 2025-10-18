@@ -1,0 +1,78 @@
+version: '3.8'
+
+services:
+  # Backend API and Telegram Bot
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:./prisma/prod.db
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - WEBAPP_URL=${WEBAPP_URL:-http://localhost:4200}
+    volumes:
+      - ./backend/prisma:/app/prisma
+      - backend_data:/app/data
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - appointments-network
+
+  # Frontend Admin Panel
+  frontend:
+    build:
+      context: ./admin-panel
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    environment:
+      - API_URL=http://backend:4000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - appointments-network
+
+  # Database (SQLite in production, but can be changed to PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=appointments
+      - POSTGRES_USER=appointments
+      - POSTGRES_PASSWORD=appointments_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - appointments-network
+
+  # Nginx Reverse Proxy (optional)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
+    networks:
+      - appointments-network
+
+volumes:
+  backend_data:
+  postgres_data:
+
+networks:
+  appointments-network:
+    driver: bridge
