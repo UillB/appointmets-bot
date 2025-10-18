@@ -31,11 +31,10 @@ API endpoints, authentication, and integration guides.
 
 ### 🏢 Business & Strategy
 - **[Strategic Development Plan](./business/STRATEGIC_DEVELOPMENT_PLAN.md)** - Long-term roadmap and business strategy
-- **[Critical Bot Creation Flow](./business/CRITICAL_BOT_CREATION_FLOW.md)** - Multi-tenant bot creation strategy
+- **[Critical Bot Creation Flow](./business/CRITICAL_BOT_CREATION_FLOW.md)** - Manual bot creation flow with multi-tenant support
 
 ### 🔧 Development & Technical
 - **[Telegram Web App Integration](./development/TELEGRAM_WEBAPP_INTEGRATION_GUIDE.md)** - Complete implementation guide
-- **[Multi-tenant Implementation](./development/MULTI_TENANT_IMPLEMENTATION_GUIDE.md)** - Technical architecture guide
 
 ### 🚀 Deployment & Operations
 - **[Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md)** - Production deployment instructions
