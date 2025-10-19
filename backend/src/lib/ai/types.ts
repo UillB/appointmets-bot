@@ -51,6 +51,7 @@ export interface AIConfig {
   temperature?: number;
   systemPrompt?: string;
   enabled: boolean;
+  baseUrl?: string;
 }
 
 export interface OrganizationAIConfig extends AIConfig {
