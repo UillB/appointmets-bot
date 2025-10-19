@@ -45,6 +45,10 @@ const aiConfigSchema = z.object({
   maxTokens: z.number().int().min(1).max(4000).optional(),
   temperature: z.number().min(0).max(2).optional(),
   systemPrompt: z.string().optional(),
+  baseSystemPrompt: z.string().optional(),
+  contextInstructions: z.string().optional(),
+  behaviorInstructions: z.string().optional(),
+  fallbackPrompt: z.string().optional(),
   customPrompts: z.object({
     greeting: z.string().optional(),
     bookingHelp: z.string().optional(),
@@ -52,6 +56,33 @@ const aiConfigSchema = z.object({
     general: z.string().optional()
   }).optional(),
   enabled: z.boolean().default(false)
+});
+
+// GET /ai-config/:organizationId - Get AI configuration for specific organization
+router.get('/:organizationId', verifyToken, async (req: any, res: Response) => {
+  try {
+    const organizationId = parseInt(req.params.organizationId);
+    
+    if (isNaN(organizationId)) {
+      return res.status(400).json({ error: 'Invalid organization ID' });
+    }
+
+    // Проверяем права доступа
+    if (req.user.role !== 'SUPER_ADMIN' && req.user.organizationId !== organizationId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const config = await aiService.getOrganizationAIConfig(organizationId);
+    
+    if (!config) {
+      return res.status(404).json({ error: 'AI configuration not found' });
+    }
+
+    res.json(config);
+  } catch (error) {
+    console.error('Error getting AI config:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // GET /ai-config - Get AI configuration for organization
@@ -192,6 +223,30 @@ router.post('/test', verifyToken, async (req: any, res: Response) => {
       error: 'Failed to test AI configuration', 
       details: error instanceof Error ? error.message : 'Unknown error'
     });
+  }
+});
+
+// GET /ai-config/:organizationId/stats - Get AI usage statistics for organization
+router.get('/:organizationId/stats', verifyToken, async (req: any, res: Response) => {
+  try {
+    const organizationId = parseInt(req.params.organizationId);
+    
+    if (isNaN(organizationId)) {
+      return res.status(400).json({ error: 'Invalid organization ID' });
+    }
+
+    // Проверяем права доступа
+    if (req.user.role !== 'SUPER_ADMIN' && req.user.organizationId !== organizationId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const { days = 30 } = req.query;
+    const stats = await aiService.getAIUsageStats(organizationId, parseInt(days as string));
+
+    res.json(stats);
+  } catch (error) {
+    console.error('Get AI usage stats error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

@@ -13,7 +13,7 @@
        [class]="'nav-item ' + getRouteClass(item.route)"
        class="nav-item">
       <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-      <span matListItemTitle>{{ item.title | translate }}</span>
+      <span matListItemTitle>{{ item.title }}</span>
       <span matListItemMeta *ngIf="item.badge" class="badge">
         <mat-icon [matBadge]="item.badge" matBadgeColor="warn" matBadgeSize="small">
           notifications
@@ -29,7 +29,7 @@
       <p class="version">v1.0.0</p>
       <p class="status">
         <mat-icon class="status-icon">circle</mat-icon>
-        {{ 'common.online' | translate }}
+        Online
       </p>
     </div>
   </div>

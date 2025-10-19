@@ -31,6 +31,7 @@ app.use("/api/slots", slots);
 app.use("/api/organizations", organizations);
 app.use("/api/bot", botManagement);
 app.use("/api/ai-config", aiConfig);
+console.log("✅ AI Config routes registered at /api/ai-config");
 app.use("/webapp", webapp);
 
 

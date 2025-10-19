@@ -7,7 +7,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatBadgeModule } from '@angular/material/badge';
 import { Subject, takeUntil, filter } from 'rxjs';
 
-import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,8 +16,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
     MatListModule,
     MatIconModule,
     MatDividerModule,
-    MatBadgeModule,
-    TranslatePipe
+    MatBadgeModule
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss'
@@ -29,43 +27,49 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   menuItems = [
     {
-      title: 'nav.dashboard',
+      title: 'Dashboard',
       icon: 'dashboard',
       route: '/dashboard',
       badge: null
     },
     {
-      title: 'nav.appointments',
+      title: 'Appointments',
       icon: 'event',
       route: '/appointments',
       badge: null
     },
     {
-      title: 'nav.services',
+      title: 'Services',
       icon: 'build',
       route: '/services',
       badge: null
     },
     {
-      title: 'nav.organizations',
+      title: 'Organizations',
       icon: 'business',
       route: '/organizations',
       badge: null
     },
     {
-      title: 'nav.botManagement',
+      title: 'Bot Management',
       icon: 'smart_toy',
       route: '/bot-management',
       badge: null
     },
     {
-      title: 'nav.slots',
+      title: 'Slots',
       icon: 'schedule',
       route: '/slots',
       badge: null
     },
     {
-      title: 'nav.settings',
+      title: 'AI Assistant',
+      icon: 'psychology',
+      route: '/ai-config',
+      badge: null
+    },
+    {
+      title: 'Settings',
       icon: 'settings',
       route: '/settings',
       badge: null

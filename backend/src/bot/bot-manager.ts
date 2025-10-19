@@ -6,11 +6,13 @@ import { handleBookingFlow, registerBookingCallbacks } from "./handlers/bookingI
 import { handleMy, registerMyCallbacks } from "./handlers/my";
 import { handleSlots, registerSlotsCallbacks } from "./handlers/slots";
 import { registerWebappDataHandler } from "./handlers/webappData";
+import { AIChatHandler } from "./handlers/ai-chat";
 
 const prisma = new PrismaClient();
 
 class BotManager {
   private bots: Map<string, Telegraf> = new Map();
+  private aiHandlers: Map<number, AIChatHandler> = new Map();
   private isInitialized = false;
 
   async initialize() {
@@ -55,6 +57,10 @@ class BotManager {
         return next();
       });
 
+      // Создаем AI хендлер для организации
+      const aiHandler = new AIChatHandler();
+      this.aiHandlers.set(organizationId, aiHandler);
+
       // Настраиваем бота
       this.setupBot(bot, organizationId);
 
@@ -86,6 +92,15 @@ class BotManager {
       try {
         await bot.stop();
         this.bots.delete(token);
+        
+        // Удаляем AI хендлер для этой организации
+        const org = await prisma.organization.findFirst({
+          where: { botToken: token }
+        });
+        if (org) {
+          this.aiHandlers.delete(org.id);
+        }
+        
         console.log(`🤖 Bot with token ${token.slice(0, 10)}... stopped`);
       } catch (error) {
         console.error('❌ Error stopping bot:', error);
@@ -117,6 +132,33 @@ class BotManager {
     bot.command("book", handleBookingFlow(organizationId));
     bot.command("slots", handleSlots(organizationId));
     bot.command("my", handleMy(organizationId));
+    
+    // AI команды
+    bot.command("ai", async (ctx) => {
+      const aiHandler = this.aiHandlers.get(organizationId);
+      if (aiHandler) {
+        await aiHandler.handleAICommand(ctx, organizationId);
+      }
+    });
+
+    // AI обработчик сообщений (для не-командных сообщений)
+    bot.on('text', async (ctx) => {
+      const aiHandler = this.aiHandlers.get(organizationId);
+      if (aiHandler && ctx.message && 'text' in ctx.message) {
+        const messageText = ctx.message.text;
+        
+        // Проверяем, не является ли это командой
+        if (messageText.startsWith('/')) {
+          return; // Пропускаем команды
+        }
+        
+        // Проверяем, активирован ли AI для этой организации
+        const isAIActivated = await aiHandler.isAIActivated(organizationId);
+        if (isAIActivated) {
+          await aiHandler.handleAIMessage(ctx, organizationId, messageText);
+        }
+      }
+    });
 
     // Callbacks
     registerMyCallbacks(bot, organizationId);
@@ -183,6 +225,29 @@ class BotManager {
       activeBotsCount: this.bots.size,
       activeTokens: this.getActiveTokens().map(token => `${token.slice(0, 10)}...`)
     };
+  }
+
+  // Получить AI хендлер для организации
+  getAIHandler(organizationId: number): AIChatHandler | null {
+    return this.aiHandlers.get(organizationId) || null;
+  }
+
+  // Проверить, активирован ли AI для организации
+  async isAIActivated(organizationId: number): Promise<boolean> {
+    const aiHandler = this.aiHandlers.get(organizationId);
+    if (aiHandler) {
+      return await aiHandler.isAIActivated(organizationId);
+    }
+    return false;
+  }
+
+  // Получить статистику AI для организации
+  async getAIUsageStats(organizationId: number, days: number = 7): Promise<any> {
+    const aiHandler = this.aiHandlers.get(organizationId);
+    if (aiHandler) {
+      return await aiHandler.getUsageStats(organizationId, days);
+    }
+    return null;
   }
 }
 

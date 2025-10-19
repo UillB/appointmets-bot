@@ -1,0 +1,261 @@
+<div class="ai-config-container">
+  <div class="header">
+    <h1>🤖 Настройка AI Ассистента</h1>
+    <p>Настройте AI ассистента для автоматических ответов клиентам в Telegram боте</p>
+  </div>
+
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Загрузка конфигурации AI...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="config-content">
+    <mat-tab-group>
+      <!-- Основные настройки -->
+      <mat-tab label="⚙️ Основные настройки">
+        <div class="tab-content">
+          <mat-card class="config-card">
+            <mat-card-header>
+              <mat-card-title>Конфигурация AI</mat-card-title>
+              <mat-card-subtitle>Настройте провайдера и основные параметры</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <form [formGroup]="aiConfigForm" class="config-form">
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Провайдер AI</mat-label>
+                    <mat-select formControlName="provider" (selectionChange)="onProviderChange()">
+                      <mat-option *ngFor="let provider of providers" [value]="provider.value">
+                        {{ provider.icon }} {{ provider.label }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>API Ключ</mat-label>
+                    <input matInput formControlName="apiKey" type="password" placeholder="sk-...">
+                    <mat-hint>Ваш API ключ от выбранного провайдера</mat-hint>
+                  </mat-form-field>
+                  <button mat-stroked-button 
+                          type="button" 
+                          (click)="validateApiKey()" 
+                          [disabled]="isValidatingApiKey || !aiConfigForm.get('apiKey')?.value">
+                    <mat-spinner *ngIf="isValidatingApiKey" diameter="20"></mat-spinner>
+                    <mat-icon *ngIf="!isValidatingApiKey">check_circle</mat-icon>
+                    Проверить ключ
+                  </button>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Модель</mat-label>
+                    <mat-select formControlName="model">
+                      <mat-option *ngFor="let model of availableModels" [value]="model.id">
+                        {{ model.name }}
+                        <span *ngIf="model.description" class="model-description"> - {{ model.description }}</span>
+                      </mat-option>
+                    </mat-select>
+                    <mat-hint>Выберите модель для использования</mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Максимум токенов</mat-label>
+                    <input matInput formControlName="maxTokens" type="number" min="100" max="4000">
+                    <mat-hint>Максимальная длина ответа</mat-hint>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Температура</mat-label>
+                    <input matInput formControlName="temperature" type="number" min="0" max="2" step="0.1">
+                    <mat-hint>Креативность ответов (0-2)</mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Системный промпт</mat-label>
+                    <textarea matInput 
+                              formControlName="systemPrompt" 
+                              rows="4"
+                              placeholder="Дополнительные инструкции для AI ассистента..."></textarea>
+                    <mat-hint>Дополнительные инструкции для AI (необязательно)</mat-hint>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-slide-toggle formControlName="enabled" color="primary">
+                    Включить AI ассистента
+                  </mat-slide-toggle>
+                </div>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Кастомные промпты -->
+      <mat-tab label="💬 Кастомные промпты">
+        <div class="tab-content">
+          <mat-card class="config-card">
+            <mat-card-header>
+              <mat-card-title>Промпты для разных сценариев</mat-card-title>
+              <mat-card-subtitle>Настройте специальные ответы для разных ситуаций</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <form [formGroup]="customPromptsForm" class="prompts-form">
+                <mat-expansion-panel *ngFor="let scenario of scenarios" class="prompt-panel">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{ getScenarioIcon(scenario.key) }} {{ scenario.label }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Промпт для {{ scenario.label.toLowerCase() }}</mat-label>
+                    <textarea matInput 
+                              [formControlName]="scenario.key"
+                              [placeholder]="scenario.placeholder"
+                              rows="5"></textarea>
+                    <mat-hint>Оставьте пустым для использования стандартного промпта</mat-hint>
+                  </mat-form-field>
+                </mat-expansion-panel>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Расширенные промпты -->
+      <mat-tab label="⚙️ Расширенные промпты">
+        <div class="tab-content">
+          <mat-card class="config-card">
+            <mat-card-header>
+              <mat-card-title>Расширенные настройки AI</mat-card-title>
+              <mat-card-subtitle>Настройте базовые промпты и инструкции для AI ассистента</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <form [formGroup]="advancedPromptsForm" class="advanced-prompts-form">
+                
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Базовый системный промпт</mat-label>
+                  <textarea matInput 
+                            formControlName="baseSystemPrompt"
+                            placeholder="Ты - AI ассистент для организации. Твоя задача - помогать клиентам с записью на услуги и отвечать на вопросы."
+                            rows="6"></textarea>
+                  <mat-hint>Основной промпт, который определяет роль и поведение AI ассистента</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Инструкции по работе с контекстом</mat-label>
+                  <textarea matInput 
+                            formControlName="contextInstructions"
+                            placeholder="Всегда используй актуальную информацию о свободных слотах. Если клиент спрашивает о записи, покажи ближайшие доступные слоты."
+                            rows="5"></textarea>
+                  <mat-hint>Как AI должен использовать информацию об организации, услугах и слотах</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Инструкции по поведению</mat-label>
+                  <textarea matInput 
+                            formControlName="behaviorInstructions"
+                            placeholder="Будь вежливым, профессиональным и полезным. Отвечай кратко, но информативно. Если не знаешь ответа, предложи связаться по телефону."
+                            rows="5"></textarea>
+                  <mat-hint>Как AI должен вести себя при общении с клиентами</mat-hint>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Промпт для неизвестных вопросов</mat-label>
+                  <textarea matInput 
+                            formControlName="fallbackPrompt"
+                            placeholder="Спасибо за ваш вопрос! Я помогу вам с записью на услуги или отвечу на вопросы о нашем салоне. Можете также связаться с нами напрямую."
+                            rows="4"></textarea>
+                  <mat-hint>Ответ, который AI даст, если не знает, как ответить на вопрос</mat-hint>
+                </mat-form-field>
+
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Статистика -->
+      <mat-tab label="📊 Статистика">
+        <div class="tab-content">
+          <mat-card class="config-card">
+            <mat-card-header>
+              <mat-card-title>Статистика использования AI</mat-card-title>
+              <mat-card-subtitle>За последние 30 дней</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <div *ngIf="isLoadingStats" class="loading-stats">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Загрузка статистики...</p>
+              </div>
+              
+              <div *ngIf="!isLoadingStats && usageStats" class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-value">{{ usageStats.totalRequests || 0 }}</div>
+                  <div class="stat-label">Всего запросов</div>
+                </div>
+                
+                <div class="stat-item">
+                  <div class="stat-value">{{ formatTokens(usageStats.totalTokens) }}</div>
+                  <div class="stat-label">Токенов использовано</div>
+                </div>
+                
+                <div class="stat-item">
+                  <div class="stat-value">{{ (usageStats.averageTokensPerRequest || 0) | number:'1.0-0' }}</div>
+                  <div class="stat-label">Среднее токенов/запрос</div>
+                </div>
+              </div>
+
+              <div *ngIf="!isLoadingStats && usageStats?.requestsByScenario && getScenarioKeys().length > 0" class="scenario-stats">
+                <h3>Запросы по сценариям:</h3>
+                <div class="scenario-chips">
+                  <mat-chip-set>
+                    <mat-chip *ngFor="let scenario of getScenarioKeys()">
+                      {{ getScenarioIcon(scenario) }} {{ scenario }}: {{ usageStats?.requestsByScenario?.[scenario] }}
+                    </mat-chip>
+                  </mat-chip-set>
+                </div>
+              </div>
+
+              <div *ngIf="!isLoadingStats && !usageStats" class="no-stats">
+                <p>Статистика пока недоступна. Начните использовать AI ассистента для получения данных.</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <!-- Кнопки действий -->
+    <div class="action-buttons">
+      <button mat-raised-button 
+              color="accent" 
+              (click)="testAI()" 
+              [disabled]="isTestingAI || aiConfigForm.invalid">
+        <mat-spinner *ngIf="isTestingAI" diameter="20"></mat-spinner>
+        <mat-icon *ngIf="!isTestingAI">play_arrow</mat-icon>
+        Протестировать AI
+      </button>
+
+      <button mat-raised-button 
+              color="primary" 
+              (click)="saveConfig()" 
+              [disabled]="isSaving || aiConfigForm.invalid">
+        <mat-spinner *ngIf="isSaving" diameter="20"></mat-spinner>
+        <mat-icon *ngIf="!isSaving">save</mat-icon>
+        Сохранить конфигурацию
+      </button>
+    </div>
+  </div>
+</div>

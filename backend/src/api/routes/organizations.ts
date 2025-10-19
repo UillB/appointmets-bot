@@ -24,11 +24,21 @@ interface AuthenticatedRequest extends Request {
 // Validation schemas
 const createOrganizationSchema = z.object({
   name: z.string().min(2).max(100),
+  description: z.string().max(500).optional(),
+  address: z.string().max(200).optional(),
+  workingHours: z.string().max(100).optional(),
+  phone: z.string().max(20).optional(),
+  email: z.string().email().optional(),
   avatar: z.string().url().optional()
 });
 
 const updateOrganizationSchema = z.object({
   name: z.string().min(2).max(100).optional(),
+  description: z.string().max(500).optional(),
+  address: z.string().max(200).optional(),
+  workingHours: z.string().max(100).optional(),
+  phone: z.string().max(20).optional(),
+  email: z.string().email().optional(),
   avatar: z.string().url().optional()
 });
 
@@ -185,7 +195,7 @@ router.get('/:id', verifyToken, async (req: any, res: Response) => {
 router.post('/', verifyToken, requireSuperAdmin, async (req: any, res: Response) => {
   try {
     const validatedData = createOrganizationSchema.parse(req.body);
-    const { name, avatar } = validatedData;
+    const { name, description, address, workingHours, phone, email, avatar } = validatedData;
 
     // Check if organization with this name already exists
     const existingOrg = await prisma.organization.findFirst({
@@ -199,6 +209,11 @@ router.post('/', verifyToken, requireSuperAdmin, async (req: any, res: Response)
     const organization = await prisma.organization.create({
       data: {
         name,
+        ...(description && { description }),
+        ...(address && { address }),
+        ...(workingHours && { workingHours }),
+        ...(phone && { phone }),
+        ...(email && { email }),
         ...(avatar && { avatar })
       },
       include: {
@@ -262,10 +277,7 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
 
     const organization = await prisma.organization.update({
       where: { id: parseInt(id) },
-      data: {
-        ...validatedData,
-        ...(validatedData.avatar && { avatar: validatedData.avatar })
-      },
+      data: validatedData,
       include: {
         users: {
           select: {

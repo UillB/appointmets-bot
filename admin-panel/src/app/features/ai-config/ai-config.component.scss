@@ -1,0 +1,334 @@
+.ai-config-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  
+  h1 {
+    color: #1976d2;
+    margin-bottom: 8px;
+    font-size: 2.5rem;
+    font-weight: 300;
+  }
+  
+  p {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+.config-content {
+  .tab-content {
+    padding: 24px 0;
+  }
+}
+
+.config-card {
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  
+  mat-card-header {
+    margin-bottom: 24px;
+    
+    mat-card-title {
+      color: #1976d2;
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+    
+    mat-card-subtitle {
+      color: #666;
+      font-size: 1rem;
+    }
+  }
+}
+
+.config-form {
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: flex-start;
+    
+    &.form-row:last-child {
+      margin-bottom: 0;
+    }
+    
+    .full-width {
+      flex: 1;
+    }
+    
+    .half-width {
+      flex: 1;
+    }
+    
+    button {
+      margin-top: 8px;
+      height: 56px;
+      min-width: 140px;
+      
+      mat-spinner {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+.prompts-form {
+  .prompt-panel {
+    margin-bottom: 16px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    
+    mat-expansion-panel-header {
+      padding: 16px 24px;
+      
+      mat-panel-title {
+        font-weight: 500;
+        color: #333;
+      }
+    }
+    
+    mat-form-field {
+      margin: 16px 24px 24px;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+  
+  .stat-item {
+    text-align: center;
+    padding: 24px;
+    background: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 8px;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+.scenario-stats {
+  h3 {
+    color: #333;
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+  }
+  
+  .scenario-chips {
+    mat-chip-set {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      
+      mat-chip {
+        background: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.action-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e0e0e0;
+  
+  button {
+    min-width: 200px;
+    height: 48px;
+    font-size: 1rem;
+    font-weight: 500;
+    
+    mat-spinner {
+      margin-right: 8px;
+    }
+    
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+.model-description {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.loading-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  
+  p {
+    margin-top: 16px;
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.no-stats {
+  text-align: center;
+  padding: 48px;
+  color: #666;
+  font-style: italic;
+  
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .ai-config-container {
+    padding: 16px;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .config-form .form-row {
+    flex-direction: column;
+    gap: 8px;
+    
+    button {
+      width: 100%;
+      margin-top: 0;
+    }
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    
+    button {
+      width: 100%;
+    }
+  }
+}
+
+// Dark theme support - отключено для принудительной светлой темы
+// @media (prefers-color-scheme: dark) {
+//   .config-card {
+//     background: #424242;
+//     color: #fff;
+//     
+//     mat-card-title {
+//       color: #64b5f6;
+//     }
+//     
+//     mat-card-subtitle {
+//       color: #b0b0b0;
+//     }
+//   }
+//   
+//   .stat-item {
+//     background: #616161;
+//     border-color: #757575;
+//     
+//     .stat-value {
+//       color: #64b5f6;
+//     }
+//     
+//     .stat-label {
+//       color: #b0b0b0;
+//     }
+//   }
+//   
+//   .scenario-stats h3 {
+//     color: #fff;
+//   }
+//   
+//   .action-buttons {
+//     border-top-color: #616161;
+//   }
+// }
+
+// Принудительная светлая тема
+.ai-config-container {
+  background: #ffffff;
+  color: #333333;
+}
+
+.config-card {
+  background: #ffffff !important;
+  color: #333333 !important;
+  
+  mat-card-title {
+    color: #1976d2 !important;
+  }
+  
+  mat-card-subtitle {
+    color: #666666 !important;
+  }
+}
+
+.stat-item {
+  background: #f8f9fa !important;
+  border-color: #e9ecef !important;
+  
+  .stat-value {
+    color: #1976d2 !important;
+  }
+  
+  .stat-label {
+    color: #666666 !important;
+  }
+}
+
+.scenario-stats h3 {
+  color: #333333 !important;
+}
+
+.action-buttons {
+  border-top-color: #e0e0e0 !important;
+}

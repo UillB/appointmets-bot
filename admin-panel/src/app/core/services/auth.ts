@@ -78,7 +78,8 @@ export class AuthService {
             }
           });
         }
-      } catch {
+      } catch (error) {
+        console.error('AuthService: checkStoredAuth error:', error);
         this.clearTokens();
       }
     }
@@ -86,28 +87,51 @@ export class AuthService {
 
   private getUserFromToken(token: string): User | null {
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return {
-        id: payload.userId,
-        email: payload.email,
-        name: payload.name || 'User', // Fallback name
-        role: payload.role,
-        organizationId: payload.organizationId,
-        organization: payload.organization ? {
-          id: payload.organization.id,
-          name: payload.organization.name
+      // Split token and get payload part
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        throw new Error('Invalid JWT token format');
+      }
+      
+      // Decode base64url (JWT uses base64url, not standard base64)
+      const payload = parts[1];
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+      const decodedPayload = JSON.parse(atob(padded));
+      
+      const user = {
+        id: decodedPayload.userId,
+        email: decodedPayload.email,
+        name: decodedPayload.name || 'User', // Fallback name
+        role: decodedPayload.role,
+        organizationId: decodedPayload.organizationId,
+        organization: decodedPayload.organization ? {
+          id: decodedPayload.organization.id,
+          name: decodedPayload.organization.name
         } : undefined
       };
-    } catch {
+      return user;
+    } catch (error) {
+      console.error('AuthService: getUserFromToken - error:', error);
       return null;
     }
   }
 
   private isTokenValid(token: string): boolean {
     try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        return false;
+      }
+      
+      // Decode base64url (JWT uses base64url, not standard base64)
+      const payload = parts[1];
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+      const decodedPayload = JSON.parse(atob(padded));
+      
       const currentTime = Date.now() / 1000;
-      return payload.exp > currentTime;
+      return decodedPayload.exp > currentTime;
     } catch {
       return false;
     }
@@ -123,7 +147,6 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<AuthResponse> {
     return this.apiService.post<AuthResponse>('/auth/login', credentials).pipe(
       tap(response => {
-        console.log('AuthService: Login successful, setting user:', response.user);
         this.setTokens(response.accessToken, response.refreshToken);
         this.currentUserSubject.next(response.user);
       }),
@@ -192,12 +215,26 @@ export class AuthService {
     const user = this.getUserFromToken(accessToken);
     if (user) {
       this.currentUserSubject.next(user);
+    } else {
+      console.error('AuthService: setTokens - failed to extract user from token');
     }
   }
 
   isAuthenticated(): boolean {
     const accessToken = localStorage.getItem('access_token');
-    return !!accessToken && !!this.currentUserSubject.value && this.isTokenValid(accessToken);
+    if (!accessToken || !this.isTokenValid(accessToken)) {
+      return false;
+    }
+    
+    // If we have a valid token but no user in subject, try to restore user from token
+    if (!this.currentUserSubject.value) {
+      const user = this.getUserFromToken(accessToken);
+      if (user) {
+        this.currentUserSubject.next(user);
+      }
+    }
+    
+    return !!this.currentUserSubject.value;
   }
 
   getCurrentUser(): User | null {
@@ -218,9 +255,19 @@ export class AuthService {
     if (!accessToken) return false;
 
     try {
-      const payload = JSON.parse(atob(accessToken.split('.')[1]));
+      const parts = accessToken.split('.');
+      if (parts.length !== 3) {
+        return true;
+      }
+      
+      // Decode base64url (JWT uses base64url, not standard base64)
+      const payload = parts[1];
+      const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64 + '='.repeat((4 - base64.length % 4) % 4);
+      const decodedPayload = JSON.parse(atob(padded));
+      
       const currentTime = Date.now() / 1000;
-      const timeUntilExpiry = payload.exp - currentTime;
+      const timeUntilExpiry = decodedPayload.exp - currentTime;
       return timeUntilExpiry < 300; // 5 minutes
     } catch {
       return true;

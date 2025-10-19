@@ -50,6 +50,10 @@ export interface AIConfig {
   maxTokens?: number;
   temperature?: number;
   systemPrompt?: string;
+  baseSystemPrompt?: string;
+  contextInstructions?: string;
+  behaviorInstructions?: string;
+  fallbackPrompt?: string;
   enabled: boolean;
   baseUrl?: string;
 }
@@ -71,7 +75,9 @@ export type AIScenario =
   | 'service_info'
   | 'general_chat'
   | 'appointment_reminder'
-  | 'cancellation_help';
+  | 'cancellation_help'
+  | 'support'
+  | 'general';
 
 export interface AIScenarioConfig {
   scenario: AIScenario;

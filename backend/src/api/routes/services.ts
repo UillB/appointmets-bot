@@ -32,6 +32,8 @@ const createServiceSchema = z.object({
   descriptionEn: z.string().max(500).optional(),
   descriptionHe: z.string().max(500).optional(),
   durationMin: z.number().int().min(5).max(480), // 5 minutes to 8 hours
+  price: z.number().positive().optional(), // Опциональная стоимость
+  currency: z.string().length(3).optional(), // Опциональная валюта (RUB, USD, EUR)
   organizationId: z.number().int().positive().optional()
 });
 
@@ -44,7 +46,9 @@ const updateServiceSchema = z.object({
   descriptionRu: z.string().max(500).optional(),
   descriptionEn: z.string().max(500).optional(),
   descriptionHe: z.string().max(500).optional(),
-  durationMin: z.number().int().min(5).max(480).optional()
+  durationMin: z.number().int().min(5).max(480).optional(),
+  price: z.number().positive().optional(), // Опциональная стоимость
+  currency: z.string().length(3).optional() // Опциональная валюта
 });
 
 // Middleware to verify JWT token
@@ -100,7 +104,7 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
         }
       },
       orderBy: {
-        id: 'desc'
+        createdAt: 'desc'
       }
     });
 
@@ -218,6 +222,8 @@ router.post('/', verifyToken, async (req: any, res: Response) => {
         descriptionEn: validatedData.descriptionEn,
         descriptionHe: validatedData.descriptionHe,
         durationMin: validatedData.durationMin,
+        price: validatedData.price,
+        currency: validatedData.currency,
         organizationId: targetOrganizationId
       },
       include: {
