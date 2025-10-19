@@ -13,6 +13,8 @@ model Organization {
   id          Int      @id @default(autoincrement())
   name        String
   avatar      String?  // URL to avatar image
+  botToken    String?  // Telegram bot token
+  botUsername String?  // Telegram bot username
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   users       User[]
@@ -26,6 +28,7 @@ model User {
   name           String
   role           UserRole     @default(MANAGER)
   organizationId Int
+  telegramId     String?      @unique // Telegram user ID for Web App auth
   organization   Organization @relation(fields: [organizationId], references: [id])
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt

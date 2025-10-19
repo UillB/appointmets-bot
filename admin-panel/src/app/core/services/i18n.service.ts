@@ -21,6 +21,8 @@ export class I18nService {
       'nav.appointments': 'Appointments',
       'nav.services': 'Services',
       'nav.organizations': 'Organizations',
+      'nav.botManagement': 'Bot Management',
+      'nav.slots': 'Slots',
       'nav.settings': 'Settings',
       
       // Dashboard
@@ -224,6 +226,8 @@ export class I18nService {
       'nav.appointments': 'Записи',
       'nav.services': 'Услуги',
       'nav.organizations': 'Организации',
+      'nav.botManagement': 'Управление ботом',
+      'nav.slots': 'Слоты',
       'nav.settings': 'Настройки',
       
       // Dashboard
@@ -427,6 +431,8 @@ export class I18nService {
       'nav.appointments': 'תורים',
       'nav.services': 'שירותים',
       'nav.organizations': 'ארגונים',
+      'nav.botManagement': 'ניהול בוט',
+      'nav.slots': 'חלונות זמן',
       'nav.settings': 'הגדרות',
       
       // Dashboard

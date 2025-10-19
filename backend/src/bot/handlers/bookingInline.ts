@@ -10,9 +10,12 @@ const fmtFull = (d: Date) => new Date(d).toLocaleString("ru-RU", {
 });
 
 // /book — показать услуги
-export function handleBookingFlow() {
+export function handleBookingFlow(organizationId?: number) {
   return async (ctx: Context) => {
-    const services = await prisma.service.findMany({ take: 10 });
+    const services = await prisma.service.findMany({ 
+      where: organizationId ? { organizationId } : undefined,
+      take: 10 
+    });
     if (!services.length) return ctx.reply(ctx.tt("book.noSlotsDay", { date: "—" }));
     const buttons = services.map(s => [Markup.button.callback(getLocalizedServiceName(s, ctx.lang), `service_${s.id}`)]);
     await ctx.reply(ctx.tt("book.chooseService"), Markup.inlineKeyboard(buttons));
@@ -20,7 +23,7 @@ export function handleBookingFlow() {
 }
 
 // регистрация action'ов; botUsername нужен для диплинка из групп
-export function registerBookingCallbacks(bot: Telegraf, botUsername: string) {
+export function registerBookingCallbacks(bot: Telegraf, botUsername: string, organizationId?: number) {
   // выбор услуги → в личке открываем WebApp, в группе даём диплинк
   bot.action(/^service_(\d+)$/, async (ctx) => {
     await ctx.answerCbQuery();
@@ -78,6 +81,36 @@ export function registerBookingCallbacks(bot: Telegraf, botUsername: string) {
       const result = await prisma.$transaction(async (tx) => {
         const slot = await tx.slot.findUnique({ where: { id: slotId }, include: { service: true } });
         if (!slot) throw new Error("SLOT_NOT_FOUND");
+        
+        // Проверяем, не пересекается ли время с существующими записями
+        const slotStart = new Date(slot.startAt);
+        const slotEnd = new Date(slot.endAt);
+
+        // Находим все существующие записи в организации, которые могут конфликтовать
+        const existingAppointments = await tx.appointment.findMany({
+          where: {
+            service: {
+              organizationId: slot.service.organizationId
+            },
+            status: { not: 'cancelled' } // не учитываем отмененные записи
+          },
+          include: {
+            slot: true,
+            service: true
+          }
+        });
+
+        // Проверяем конфликты
+        for (const appointment of existingAppointments) {
+          const appointmentStart = new Date(appointment.slot.startAt);
+          const appointmentEnd = new Date(appointment.slot.endAt);
+          
+          // Проверяем пересечение времени
+          if (slotStart < appointmentEnd && slotEnd > appointmentStart) {
+            throw new Error("TIME_CONFLICT");
+          }
+        }
+        
         const appt = await tx.appointment.create({
           data: { chatId, serviceId: slot.serviceId, slotId: slot.id, status: "confirmed" },
         });
@@ -113,6 +146,10 @@ export function registerBookingCallbacks(bot: Telegraf, botUsername: string) {
       }
       if (e?.message === "SLOT_NOT_FOUND") {
         try { await ctx.editMessageText(ctx.tt("errors.slotNotFound")); } catch {}
+        return;
+      }
+      if (e?.message === "TIME_CONFLICT") {
+        try { await ctx.editMessageText("❌ Это время уже занято другой услугой. Пожалуйста, выберите другое время."); } catch {}
         return;
       }
       console.error(e);

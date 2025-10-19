@@ -1,0 +1,89 @@
+<div class="service-guide-container">
+  <div class="guide-header">
+    <h2>📋 Создание услуг</h2>
+    <p class="subtitle">Научимся правильно создавать услуги для вашего бота</p>
+  </div>
+
+  <div class="guide-content">
+    <mat-stepper 
+      [linear]="false" 
+      [selectedIndex]="currentStep"
+      class="guide-stepper">
+      
+      <mat-step 
+        *ngFor="let step of steps; let i = index" 
+        [completed]="step.completed"
+        [editable]="i <= currentStep">
+        
+        <ng-template matStepLabel>
+          <div class="step-label">
+            <mat-icon>{{ getStepIcon(i) }}</mat-icon>
+            <span>{{ step.title }}</span>
+            <mat-icon *ngIf="step.completed" class="completed-icon">check_circle</mat-icon>
+          </div>
+        </ng-template>
+
+        <div class="step-content" *ngIf="i === currentStep">
+          <mat-card class="step-card">
+            <mat-card-header>
+              <mat-card-title>{{ step.title }}</mat-card-title>
+              <mat-card-subtitle>{{ step.description }}</mat-card-subtitle>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <div class="step-image" *ngIf="step.image">
+                <img [src]="step.image" [alt]="step.title" class="guide-image">
+              </div>
+              
+              <div class="instructions">
+                <h4>Инструкции:</h4>
+                <ul class="instruction-list">
+                  <li *ngFor="let instruction of step.instructions">
+                    <mat-icon class="instruction-icon">check_circle_outline</mat-icon>
+                    {{ instruction }}
+                  </li>
+                </ul>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-step>
+    </mat-stepper>
+
+    <div class="guide-navigation">
+      <div class="navigation-buttons">
+        <button 
+          mat-stroked-button 
+          (click)="previousStep()"
+          [disabled]="isFirstStep()"
+          class="nav-button">
+          <mat-icon>arrow_back</mat-icon>
+          Назад
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="primary"
+          (click)="isLastStep() ? completeGuide() : nextStep()"
+          class="nav-button">
+          <span *ngIf="!isLastStep()">Далее</span>
+          <span *ngIf="isLastStep()">Создать услугу</span>
+          <mat-icon *ngIf="!isLastStep()">arrow_forward</mat-icon>
+          <mat-icon *ngIf="isLastStep()">add</mat-icon>
+        </button>
+      </div>
+
+      <div class="skip-section">
+        <p class="skip-text">Уже знаете как создавать услуги?</p>
+        <button 
+          mat-button 
+          color="accent"
+          (click)="skipToServices()"
+          class="skip-button">
+          <mat-icon>skip_next</mat-icon>
+          Перейти к созданию услуг
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+.qr-code-generator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+
+  .loading-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 40px;
+
+    p {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  .error-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 40px;
+    text-align: center;
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+    }
+
+    p {
+      margin: 0;
+      color: #f44336;
+      font-size: 14px;
+    }
+  }
+
+  .qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    .qr-container {
+      padding: 16px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e0e0e0;
+
+      .qr-image {
+        display: block;
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .fullscreen-button,
+      .download-button,
+      .share-button {
+        min-width: 120px;
+      }
+    }
+  }
+
+  .placeholder-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 40px;
+    text-align: center;
+    color: #666;
+
+    mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .qr-code-generator {
+    padding: 16px;
+
+    .qr-section {
+      .action-buttons {
+        flex-direction: column;
+        width: 100%;
+
+        .fullscreen-button,
+        .download-button,
+        .share-button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// Material Design overrides
+::ng-deep {
+  .success-snackbar {
+    background-color: #4caf50 !important;
+    color: white !important;
+  }
+
+  .error-snackbar {
+    background-color: #f44336 !important;
+    color: white !important;
+  }
+}

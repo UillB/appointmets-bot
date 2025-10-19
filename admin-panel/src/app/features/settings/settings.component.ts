@@ -121,7 +121,7 @@ import { SystemSettingsComponent } from './system-settings/system-settings.compo
       ::ng-deep {
         .mat-mdc-tab-group {
           .mat-mdc-tab-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #667eea;
             border-radius: 0;
           }
 

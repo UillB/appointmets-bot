@@ -1,0 +1,132 @@
+<div class="bot-management-container">
+  <div class="header">
+    <h1>🤖 Управление ботом</h1>
+    <p class="subtitle">Создайте и настройте Telegram бота для вашей организации</p>
+  </div>
+
+  <div class="content">
+    <!-- Гайд после создания бота -->
+    <div *ngIf="showPostCreationGuide" class="post-creation-guide">
+      <app-post-bot-creation-guide
+        [organizationId]="organizationId"
+        [botUsername]="activatedBotUsername"
+        (guideCompleted)="onPostCreationGuideCompleted()"
+        (skipGuide)="onPostCreationGuideSkipped()">
+      </app-post-bot-creation-guide>
+    </div>
+
+    <!-- Основные вкладки управления ботом -->
+    <mat-tab-group 
+      *ngIf="!showPostCreationGuide"
+      [(selectedIndex)]="selectedTabIndex" 
+      class="bot-tabs">
+      
+      <!-- Вкладка 1: Инструкция по созданию -->
+      <mat-tab [disabled]="!isTabEnabled(0)">
+        <ng-template mat-tab-label>
+          <div class="tab-label" [ngClass]="getTabStatus(0)">
+            <mat-icon>{{ getTabIcon(0) }}</mat-icon>
+            <span>{{ getTabTitle(0) }}</span>
+            <mat-icon *ngIf="getTabStatus(0) === 'completed'" class="status-icon">check_circle</mat-icon>
+          </div>
+        </ng-template>
+        
+        <div class="tab-content">
+          <app-bot-creation-guide></app-bot-creation-guide>
+          
+          <div class="tab-navigation">
+            <button 
+              mat-raised-button 
+              color="primary" 
+              (click)="goToNextStep()"
+              class="next-button">
+              Перейти к активации
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Вкладка 2: Активация бота -->
+      <mat-tab [disabled]="!isTabEnabled(1)">
+        <ng-template mat-tab-label>
+          <div class="tab-label" [ngClass]="getTabStatus(1)">
+            <mat-icon>{{ getTabIcon(1) }}</mat-icon>
+            <span>{{ getTabTitle(1) }}</span>
+            <mat-icon *ngIf="getTabStatus(1) === 'completed'" class="status-icon">check_circle</mat-icon>
+          </div>
+        </ng-template>
+        
+        <div class="tab-content">
+          <app-bot-token-input 
+            [organizationId]="organizationId"
+            (botActivated)="onBotActivated($event)">
+          </app-bot-token-input>
+          
+          <div class="tab-navigation">
+            <button 
+              mat-stroked-button 
+              (click)="goToPreviousStep()"
+              class="back-button">
+              <mat-icon>arrow_back</mat-icon>
+              Назад к инструкции
+            </button>
+            
+            <button 
+              mat-raised-button 
+              color="primary" 
+              (click)="goToNextStep()"
+              [disabled]="!botActivated"
+              class="next-button">
+              Перейти к настройкам
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Вкладка 3: Настройки бота -->
+      <mat-tab [disabled]="!isTabEnabled(2)">
+        <ng-template mat-tab-label>
+          <div class="tab-label" [ngClass]="getTabStatus(2)">
+            <mat-icon>{{ getTabIcon(2) }}</mat-icon>
+            <span>{{ getTabTitle(2) }}</span>
+            <mat-icon *ngIf="getTabStatus(2) === 'completed'" class="status-icon">check_circle</mat-icon>
+          </div>
+        </ng-template>
+        
+        <div class="tab-content">
+          <app-bot-settings 
+            [organizationId]="organizationId"
+            (settingsUpdated)="onSettingsUpdated()">
+          </app-bot-settings>
+          
+          <div class="tab-navigation">
+            <button 
+              mat-stroked-button 
+              (click)="goToPreviousStep()"
+              class="back-button">
+              <mat-icon>arrow_back</mat-icon>
+              Назад к активации
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+
+  <!-- Статус бота -->
+  <div class="bot-status" *ngIf="botActivated">
+    <mat-card class="status-card success">
+      <mat-card-content>
+        <div class="status-content">
+          <mat-icon>check_circle</mat-icon>
+          <div class="status-text">
+            <h3>Бот активирован!</h3>
+            <p>Ваш Telegram бот готов к работе. Клиенты могут записываться через бота.</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

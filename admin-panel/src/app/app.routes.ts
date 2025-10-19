@@ -37,6 +37,16 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'bot-management',
+    loadChildren: () => import('./features/bot-creation/bot-creation-module').then(m => m.BotCreationModule),
+    canActivate: [authGuard]
+  },
+  {
+    path: 'slots',
+    loadChildren: () => import('./features/slots/slots-module').then(m => m.SlotsModule),
+    canActivate: [authGuard]
+  },
+  {
     path: '**',
     redirectTo: '/dashboard'
   }

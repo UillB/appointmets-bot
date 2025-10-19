@@ -6,6 +6,7 @@ import slots from "./routes/slots";
 import webapp from "./routes/webapp";
 import auth from "./routes/auth";
 import organizations from "./routes/organizations";
+import botManagement from "./routes/bot-management";
 
 
 export function createApi() {
@@ -27,6 +28,7 @@ app.use("/api/appointments", appointments);
 app.use("/api/services", services);
 app.use("/api/slots", slots);
 app.use("/api/organizations", organizations);
+app.use("/api/bot", botManagement);
 app.use("/webapp", webapp);
 
 

@@ -14,6 +14,7 @@ import { ServicesService, Service } from '../../../core/services/services.servic
 import { OrganizationsService } from '../../../core/services/organizations.service';
 import { I18nService } from '../../../core/services/i18n.service';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-services-list',
@@ -329,19 +330,35 @@ export class ServicesListComponent implements OnInit, OnDestroy {
   }
 
   deleteService(service: Service): void {
-    if (confirm(`Are you sure you want to delete "${this.getLocalizedName(service)}"?`)) {
-      this.servicesService.deleteService(service.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.snackBar.open('Service deleted successfully', 'Close', { duration: 3000 });
-            this.loadServices(); // Reload to get updated data
-          },
-          error: (error) => {
-            console.error('Error deleting service:', error);
-            this.snackBar.open('Error deleting service', 'Close', { duration: 3000 });
-          }
-        });
-    }
+    const dialogData: ConfirmationDialogData = {
+      title: 'Удаление услуги',
+      message: `Вы уверены, что хотите удалить услугу "${this.getLocalizedName(service)}"?`,
+      confirmText: 'Удалить',
+      cancelText: 'Отмена',
+      confirmColor: 'warn',
+      icon: 'delete'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.servicesService.deleteService(service.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.snackBar.open('Service deleted successfully', 'Close', { duration: 3000 });
+              this.loadServices(); // Reload to get updated data
+            },
+            error: (error) => {
+              console.error('Error deleting service:', error);
+              this.snackBar.open('Error deleting service', 'Close', { duration: 3000 });
+            }
+          });
+      }
+    });
   }
 }

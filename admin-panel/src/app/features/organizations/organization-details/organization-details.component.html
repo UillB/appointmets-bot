@@ -110,6 +110,47 @@
       </mat-card-content>
     </mat-card>
 
+    <!-- Bot Section -->
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>smart_toy</mat-icon>
+          {{ 'organizations.bot' | translate }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="organization.botToken && organization.botUsername" class="bot-info">
+          <div class="bot-status">
+            <div class="bot-avatar">
+              <mat-icon>smart_toy</mat-icon>
+            </div>
+            <div class="bot-details">
+              <h4>@{{ organization.botUsername }}</h4>
+              <p>{{ 'organizations.botActive' | translate }}</p>
+              <a [href]="'https://t.me/' + organization.botUsername" target="_blank" class="bot-link">
+                <mat-icon>open_in_new</mat-icon>
+                {{ 'organizations.openBot' | translate }}
+              </a>
+            </div>
+            <div class="bot-actions">
+              <button mat-button (click)="onManageBot()">
+                <mat-icon>settings</mat-icon>
+                {{ 'organizations.manageBot' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!organization.botToken" class="empty-section">
+          <mat-icon>smart_toy</mat-icon>
+          <p>{{ 'organizations.noBot' | translate }}</p>
+          <button mat-raised-button color="primary" (click)="onCreateBot()">
+            <mat-icon>add</mat-icon>
+            {{ 'organizations.createBot' | translate }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
     <!-- Services Section -->
     <mat-card class="section-card">
       <mat-card-header>
@@ -135,6 +176,10 @@
         <div *ngIf="!organization.services || organization.services.length === 0" class="empty-section">
           <mat-icon>business_center</mat-icon>
           <p>{{ 'organizations.noServices' | translate }}</p>
+          <button mat-raised-button color="primary" (click)="onCreateService()">
+            <mat-icon>add</mat-icon>
+            {{ 'organizations.createService' | translate }}
+          </button>
         </div>
       </mat-card-content>
     </mat-card>

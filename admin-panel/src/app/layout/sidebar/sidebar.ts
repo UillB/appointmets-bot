@@ -53,6 +53,18 @@ export class SidebarComponent implements OnInit, OnDestroy {
       badge: null
     },
     {
+      title: 'nav.botManagement',
+      icon: 'smart_toy',
+      route: '/bot-management',
+      badge: null
+    },
+    {
+      title: 'nav.slots',
+      icon: 'schedule',
+      route: '/slots',
+      badge: null
+    },
+    {
       title: 'nav.settings',
       icon: 'settings',
       route: '/settings',

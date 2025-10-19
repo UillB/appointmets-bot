@@ -1,11 +1,26 @@
 import { Context, Markup, Telegraf } from "telegraf";
 import { ENV } from "../../lib/env";
+import { prisma } from "../../lib/prisma";
 
-export const handleStart = () => async (ctx: Context) => {
+export const handleStart = (organizationId?: number) => async (ctx: Context) => {
   // deep link: /start book_{serviceId} → сразу открыть календарь
   const payload = (ctx as any).startPayload as string | undefined;
   if (payload && /^book_(\d+)$/.test(payload)) {
     const serviceId = Number(payload.match(/^book_(\d+)$/)![1]);
+    
+    // Проверяем, что услуга принадлежит правильной организации
+    if (organizationId) {
+      const service = await prisma.service.findUnique({
+        where: { id: serviceId },
+        select: { organizationId: true }
+      });
+      
+      if (!service || service.organizationId !== organizationId) {
+        await ctx.reply(ctx.tt("errors.serviceNotFound"));
+        return;
+      }
+    }
+    
     const url = `${ENV.PUBLIC_BASE_URL}/webapp/calendar?serviceId=${serviceId}&cutoffMin=${ENV.BOOKING_CUTOFF_MIN}&lang=${ctx.lang}`;
     await ctx.reply(
       ctx.tt("book.openCalendar"),
@@ -28,7 +43,7 @@ export const handleStart = () => async (ctx: Context) => {
 };
 
 // /lang - показать кнопки выбора языка
-export const handleLang = () => async (ctx: Context) => {
+export const handleLang = (organizationId?: number) => async (ctx: Context) => {
   const text = ctx.message && "text" in ctx.message ? ctx.message.text : "";
   const arg = String(text || "").split(/\s+/)[1]?.toLowerCase();
   
@@ -54,7 +69,7 @@ export const handleLang = () => async (ctx: Context) => {
 };
 
 // /help - показать справку
-export const handleHelp = () => async (ctx: Context) => {
+export const handleHelp = (organizationId?: number) => async (ctx: Context) => {
   const helpText = ctx.tt("help.text");
   const keyboard = Markup.inlineKeyboard([
     [Markup.button.callback("📅 " + ctx.tt("menu.book"), "main_book")],
@@ -67,13 +82,13 @@ export const handleHelp = () => async (ctx: Context) => {
 };
 
 // Регистрация callback обработчиков для главного меню и языка
-export function registerLangCallbacks(bot: Telegraf) {
+export function registerLangCallbacks(bot: Telegraf, organizationId?: number) {
   // Главное меню - записаться
   bot.action("main_book", async (ctx) => {
     await ctx.answerCbQuery();
     // Импортируем обработчик записи
     const { handleBookingFlow } = await import("./bookingInline");
-    await handleBookingFlow()(ctx);
+    await handleBookingFlow(organizationId)(ctx);
   });
 
   // Главное меню - посмотреть слоты
@@ -81,7 +96,7 @@ export function registerLangCallbacks(bot: Telegraf) {
     await ctx.answerCbQuery();
     // Импортируем обработчик слотов
     const { handleSlots } = await import("./slots");
-    await handleSlots()(ctx);
+    await handleSlots(organizationId)(ctx);
   });
 
   // Главное меню - мои записи
@@ -89,7 +104,7 @@ export function registerLangCallbacks(bot: Telegraf) {
     await ctx.answerCbQuery();
     // Импортируем обработчик моих записей
     const { handleMy } = await import("./my");
-    await handleMy()(ctx);
+    await handleMy(organizationId)(ctx);
   });
   // Показать меню выбора языка
   bot.action("lang_menu", async (ctx) => {

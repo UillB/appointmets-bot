@@ -37,6 +37,16 @@ r.get("/calendar/availability", async (req, res) => {
     return res.status(400).json({ error: "serviceId is required" });
   }
   
+  // CRITICAL: Verify that the service exists and get organization info
+  const service = await prisma.service.findUnique({
+    where: { id: Number(serviceId) },
+    include: { organization: true }
+  });
+  
+  if (!service) {
+    return res.status(404).json({ error: "Service not found" });
+  }
+  
   // Используем более простой подход - ищем все слоты для услуги
   const allSlots = await prisma.slot.findMany({
     where: { serviceId: Number(serviceId) },

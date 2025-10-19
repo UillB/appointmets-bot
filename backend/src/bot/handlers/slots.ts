@@ -8,9 +8,12 @@ const fmtTime = (d: Date) => new Date(d).toLocaleTimeString("ru-RU", { hour: "2-
 const fmtDate = (d: Date) => new Date(d).toLocaleDateString("ru-RU");
 
 // /slots — показать доступность слотов
-export function handleSlots() {
+export function handleSlots(organizationId?: number) {
   return async (ctx: Context) => {
-    const services = await prisma.service.findMany({ take: 10 });
+    const services = await prisma.service.findMany({ 
+      where: organizationId ? { organizationId } : undefined,
+      take: 10 
+    });
     if (!services.length) return ctx.reply(ctx.tt("slots.noServices"));
     
     const buttons = services.map(s => [Markup.button.callback(getLocalizedServiceName(s, ctx.lang), `slots_service_${s.id}`)]);
@@ -19,7 +22,7 @@ export function handleSlots() {
 }
 
 // Регистрация callback обработчиков для просмотра слотов
-export function registerSlotsCallbacks(bot: Telegraf) {
+export function registerSlotsCallbacks(bot: Telegraf, organizationId?: number) {
   // Выбор услуги для просмотра слотов
   bot.action(/^slots_service_(\d+)$/, async (ctx) => {
     await ctx.answerCbQuery();

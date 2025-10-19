@@ -1,0 +1,388 @@
+.bot-token-input-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .token-card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+
+    mat-card-header {
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1976d2;
+
+        mat-icon {
+          font-size: 28px;
+        }
+      }
+
+      mat-card-subtitle {
+        font-size: 1rem;
+        color: #666;
+        margin-top: 8px;
+      }
+    }
+
+    mat-card-content {
+      padding-top: 24px;
+
+      .token-form {
+        .token-field {
+          width: 100%;
+          margin-bottom: 16px;
+
+          input {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+          }
+        }
+
+        .token-info {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          background: #f8f9fa;
+          padding: 16px;
+          border-radius: 8px;
+          margin-bottom: 24px;
+          border-left: 4px solid #1976d2;
+
+          mat-icon {
+            color: #1976d2;
+            margin-top: 2px;
+          }
+
+          p {
+            margin: 0;
+            color: #555;
+            line-height: 1.5;
+
+            code {
+              background: #e3f2fd;
+              padding: 2px 6px;
+              border-radius: 4px;
+              font-family: 'Courier New', monospace;
+              font-size: 0.9em;
+              color: #1976d2;
+            }
+          }
+        }
+
+        .action-buttons {
+          display: flex;
+          gap: 16px;
+          justify-content: flex-start;
+
+          .validate-button {
+            min-width: 160px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .clear-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+        }
+      }
+
+      .validation-result {
+        margin-top: 24px;
+
+        .result-card {
+          border-radius: 8px;
+          border: 2px solid;
+
+          &.success {
+            border-color: #4caf50;
+            background: #f1f8e9;
+          }
+
+          &.error {
+            border-color: #f44336;
+            background: #ffebee;
+          }
+
+          .result-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+
+            mat-icon {
+              font-size: 32px;
+              margin-top: 4px;
+            }
+
+            .result-text {
+              flex: 1;
+
+              h3 {
+                margin: 0 0 12px 0;
+                font-size: 1.2rem;
+                font-weight: 600;
+              }
+
+              p {
+                margin: 0 0 8px 0;
+                line-height: 1.5;
+              }
+
+              .bot-info {
+                margin-top: 16px;
+
+                p {
+                  margin: 0 0 8px 0;
+                  font-size: 0.95rem;
+
+                  strong {
+                    color: #333;
+                  }
+                }
+
+                .bot-capabilities {
+                  margin-top: 16px;
+
+                  mat-chip-listbox {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .activation-section {
+        margin-top: 24px;
+
+        .activation-card {
+          background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+          border: 2px solid #4caf50;
+          border-radius: 12px;
+
+          mat-card-header {
+            mat-card-title {
+              color: #2e7d32;
+
+              mat-icon {
+                color: #4caf50;
+              }
+            }
+
+            mat-card-subtitle {
+              color: #555;
+            }
+          }
+
+          mat-card-content {
+            .activation-info {
+              margin-bottom: 24px;
+
+              p {
+                margin: 0 0 12px 0;
+                font-weight: 500;
+                color: #2e7d32;
+              }
+
+              ul {
+                margin: 0;
+                padding-left: 20px;
+
+                li {
+                  margin-bottom: 8px;
+                  color: #555;
+                  line-height: 1.5;
+                }
+              }
+            }
+
+            .activate-button {
+              min-width: 200px;
+              height: 48px;
+              font-size: 1.1rem;
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              background: linear-gradient(45deg, #4caf50, #66bb6a);
+              color: white;
+              box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+
+              &:hover {
+                background: linear-gradient(45deg, #43a047, #5cb85c);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+              }
+
+              &:disabled {
+                background: #ccc;
+                transform: none;
+                box-shadow: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .help-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+
+    mat-card-header {
+      mat-card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: #666;
+
+        mat-icon {
+          color: #1976d2;
+        }
+      }
+    }
+
+    mat-card-content {
+      .help-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .help-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+
+          mat-icon {
+            color: #1976d2;
+            margin-top: 4px;
+          }
+
+          div {
+            flex: 1;
+
+            h4 {
+              margin: 0 0 8px 0;
+              font-size: 1rem;
+              font-weight: 600;
+              color: #333;
+            }
+
+            p {
+              margin: 0;
+              color: #666;
+              line-height: 1.5;
+              font-size: 0.9rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .bot-token-input-container {
+    padding: 16px;
+
+    .token-card {
+      mat-card-content {
+        .token-form {
+          .action-buttons {
+            flex-direction: column;
+            align-items: stretch;
+
+            .validate-button,
+            .clear-button {
+              width: 100%;
+              justify-content: center;
+            }
+          }
+        }
+
+        .validation-result {
+          .result-card {
+            .result-content {
+              flex-direction: column;
+              text-align: center;
+
+              mat-icon {
+                align-self: center;
+              }
+            }
+          }
+        }
+
+        .activation-section {
+          .activation-card {
+            mat-card-content {
+              .activate-button {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .help-card {
+      mat-card-content {
+        .help-content {
+          .help-item {
+            flex-direction: column;
+            text-align: center;
+
+            mat-icon {
+              align-self: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Анимации
+.validation-result {
+  animation: slideIn 0.3s ease-out;
+}
+
+.activation-section {
+  animation: slideIn 0.3s ease-out 0.1s both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Стили для snackbar
+::ng-deep .success-snackbar {
+  background: #4caf50 !important;
+  color: white !important;
+}
+
+::ng-deep .error-snackbar {
+  background: #f44336 !important;
+  color: white !important;
+}

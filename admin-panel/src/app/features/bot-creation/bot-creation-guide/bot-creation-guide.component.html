@@ -1,0 +1,173 @@
+<div class="bot-creation-guide-container">
+  <div class="header">
+    <h1>🤖 Создание Telegram бота</h1>
+    <p class="subtitle">Пошаговое руководство по созданию бота для вашей организации</p>
+    
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+      </div>
+      <span class="progress-text">{{ getProgressPercentage() }}% завершено</span>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Stepper для навигации -->
+    <mat-stepper #stepper [selectedIndex]="currentStep" class="stepper">
+      <mat-step *ngFor="let step of steps; let i = index" [completed]="isStepCompleted(i)">
+        <ng-template matStepLabel>
+          <div class="step-label">
+            <mat-icon [color]="getStepColor(i)">{{ getStepIcon(i) }}</mat-icon>
+            <span>{{ step.title }}</span>
+          </div>
+        </ng-template>
+        
+        <div class="step-content" *ngIf="i === currentStep">
+          <div class="step-header">
+            <h2>{{ step.title }}</h2>
+            <p class="step-description">{{ step.description }}</p>
+          </div>
+
+          <div class="step-body">
+            <!-- Изображение шага -->
+            <div class="step-image">
+              <img [src]="step.image" [alt]="step.title" class="guide-image">
+              <div class="image-placeholder" *ngIf="!step.image">
+                <mat-icon>image</mat-icon>
+                <p>Изображение будет добавлено</p>
+              </div>
+            </div>
+
+            <!-- Инструкции -->
+            <div class="instructions">
+              <h3>Инструкции:</h3>
+              <ol class="instruction-list">
+                <li *ngFor="let instruction of step.instructions" class="instruction-item">
+                  {{ instruction }}
+                </li>
+              </ol>
+            </div>
+
+            <!-- Дополнительная информация для каждого шага -->
+            <div class="step-details" [ngSwitch]="step.id">
+              <!-- Шаг 1: Поиск BotFather -->
+              <div *ngSwitchCase="'find-botfather'" class="step-info">
+                <mat-card class="info-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>info</mat-icon>
+                      Важно знать
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <p>BotFather - это официальный бот от Telegram для создания и управления ботами. Он всегда имеет синюю галочку верификации.</p>
+                    <ul>
+                      <li>Никогда не используйте поддельные аккаунты BotFather</li>
+                      <li>BotFather никогда не просит ваш пароль</li>
+                      <li>Всегда проверяйте username: @BotFather</li>
+                    </ul>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+
+              <!-- Шаг 2: Создание бота -->
+              <div *ngSwitchCase="'create-bot'" class="step-info">
+                <mat-card class="info-card">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>lightbulb</mat-icon>
+                      Советы по созданию
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <p>При создании бота учитывайте следующие рекомендации:</p>
+                    <ul>
+                      <li><strong>Название:</strong> Используйте понятное название вашей организации</li>
+                      <li><strong>Username:</strong> Должен быть уникальным и содержать только латинские буквы, цифры и подчеркивания</li>
+                      <li><strong>Username должен заканчиваться на "bot"</strong></li>
+                    </ul>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+
+              <!-- Шаг 3: Копирование токена -->
+              <div *ngSwitchCase="'copy-token'" class="step-info">
+                <mat-card class="info-card warning">
+                  <mat-card-header>
+                    <mat-card-title>
+                      <mat-icon>warning</mat-icon>
+                      Безопасность токена
+                    </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    <p><strong>Токен бота - это ключ к управлению вашим ботом!</strong></p>
+                    <ul>
+                      <li>Никогда не делитесь токеном с посторонними</li>
+                      <li>Не публикуйте токен в открытом доступе</li>
+                      <li>Если токен скомпрометирован, немедленно создайте новый</li>
+                      <li>Токен имеет формат: <code>123456789:ABCdefGHIjklMNOpqrsTUVwxyz</code></li>
+                    </ul>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+    </mat-stepper>
+
+    <!-- Навигационные кнопки -->
+    <div class="navigation">
+      <div class="nav-buttons">
+        <button 
+          mat-stroked-button 
+          (click)="previousStep()" 
+          [disabled]="!canGoBack()"
+          class="nav-button">
+          <mat-icon>arrow_back</mat-icon>
+          Назад
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="markStepCompleted(currentStep)"
+          *ngIf="!isStepCompleted(currentStep)"
+          class="nav-button">
+          <mat-icon>check</mat-icon>
+          Выполнено
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="nextStep()" 
+          [disabled]="!canProceedToNext()"
+          *ngIf="isStepCompleted(currentStep) && canProceedToNext()"
+          class="nav-button">
+          Далее
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+
+        <button 
+          mat-raised-button 
+          color="accent" 
+          *ngIf="currentStep === steps.length - 1 && isStepCompleted(currentStep)"
+          class="nav-button">
+          <mat-icon>send</mat-icon>
+          Перейти к активации
+        </button>
+      </div>
+
+      <div class="additional-actions">
+        <button 
+          mat-button 
+          (click)="resetProgress()"
+          class="reset-button">
+          <mat-icon>refresh</mat-icon>
+          Начать заново
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

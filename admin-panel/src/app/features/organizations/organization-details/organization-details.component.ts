@@ -13,8 +13,10 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { OrganizationsService, Organization } from '../../../core/services/organizations.service';
 import { AuthService } from '../../../core/services/auth';
+import { BotManagementService } from '../../../core/services/bot-management.service';
 import { OrganizationFormComponent } from '../organization-form/organization-form.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-organization-details',
@@ -45,6 +47,7 @@ export class OrganizationDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private organizationsService: OrganizationsService,
     private authService: AuthService,
+    private botManagementService: BotManagementService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {}
@@ -126,18 +129,34 @@ export class OrganizationDetailsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (confirm(`Are you sure you want to delete "${this.organization.name}"? This action cannot be undone.`)) {
-      this.organizationsService.deleteOrganization(this.organization.id).subscribe({
-        next: () => {
-          this.snackBar.open('Organization deleted successfully', 'Close', { duration: 3000 });
-          this.router.navigate(['/organizations']);
-        },
-        error: (error) => {
-          console.error('Error deleting organization:', error);
-          this.snackBar.open('Error deleting organization', 'Close', { duration: 3000 });
-        }
-      });
-    }
+    const dialogData: ConfirmationDialogData = {
+      title: 'Удаление организации',
+      message: `Вы уверены, что хотите удалить организацию "${this.organization.name}"? Это действие нельзя отменить.`,
+      confirmText: 'Удалить',
+      cancelText: 'Отмена',
+      confirmColor: 'warn',
+      icon: 'delete'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+      width: '450px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.organizationsService.deleteOrganization(this.organization!.id).subscribe({
+          next: () => {
+            this.snackBar.open('Organization deleted successfully', 'Close', { duration: 3000 });
+            this.router.navigate(['/organizations']);
+          },
+          error: (error) => {
+            console.error('Error deleting organization:', error);
+            this.snackBar.open('Error deleting organization', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   onBack(): void {
@@ -183,5 +202,35 @@ export class OrganizationDetailsComponent implements OnInit, OnDestroy {
       default:
         return 'role-default';
     }
+  }
+
+  onCreateBot(): void {
+    if (!this.organization) return;
+    
+    // Navigate to bot creation page
+    this.router.navigate(['/bot-creation'], { 
+      queryParams: { organizationId: this.organization.id } 
+    });
+  }
+
+  onManageBot(): void {
+    if (!this.organization) return;
+    
+    // Navigate to bot management page
+    this.router.navigate(['/bot-creation'], { 
+      queryParams: { 
+        organizationId: this.organization.id,
+        mode: 'manage'
+      } 
+    });
+  }
+
+  onCreateService(): void {
+    if (!this.organization) return;
+    
+    // Navigate to services page
+    this.router.navigate(['/services'], { 
+      queryParams: { organizationId: this.organization.id } 
+    });
   }
 }

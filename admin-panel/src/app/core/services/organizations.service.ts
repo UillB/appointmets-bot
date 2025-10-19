@@ -7,6 +7,8 @@ export interface Organization {
   id: number;
   name: string;
   avatar?: string;
+  botToken?: string;
+  botUsername?: string;
   createdAt: string;
   updatedAt: string;
   users?: User[];

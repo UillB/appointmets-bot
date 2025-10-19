@@ -13,6 +13,7 @@ import { OrganizationsService, Organization } from '../../../core/services/organ
 import { AuthService } from '../../../core/services/auth';
 import { OrganizationFormComponent } from '../organization-form/organization-form.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-organizations-list',
@@ -129,17 +130,33 @@ export class OrganizationsListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (confirm(`Are you sure you want to delete "${organization.name}"? This action cannot be undone.`)) {
-      this.organizationsService.deleteOrganization(organization.id).subscribe({
-        next: () => {
-          this.snackBar.open('Organization deleted successfully', 'Close', { duration: 3000 });
-        },
-        error: (error) => {
-          console.error('Error deleting organization:', error);
-          this.snackBar.open('Error deleting organization', 'Close', { duration: 3000 });
-        }
-      });
-    }
+    const dialogData: ConfirmationDialogData = {
+      title: 'Удаление организации',
+      message: `Вы уверены, что хотите удалить организацию "${organization.name}"? Это действие нельзя отменить.`,
+      confirmText: 'Удалить',
+      cancelText: 'Отмена',
+      confirmColor: 'warn',
+      icon: 'delete'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+      width: '450px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.organizationsService.deleteOrganization(organization.id).subscribe({
+          next: () => {
+            this.snackBar.open('Organization deleted successfully', 'Close', { duration: 3000 });
+          },
+          error: (error) => {
+            console.error('Error deleting organization:', error);
+            this.snackBar.open('Error deleting organization', 'Close', { duration: 3000 });
+          }
+        });
+      }
+    });
   }
 
   getAvatarUrl(organization: Organization): string {

@@ -167,7 +167,8 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
                 [disabled]="serviceForm.invalid || loading">
                 <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
                 <mat-icon *ngIf="!loading">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
-                {{ isEditMode ? ('common.update' | translate) : ('common.create' | translate) }}
+                <span *ngIf="!loading">{{ isEditMode ? ('common.update' | translate) : ('common.create' | translate) }}</span>
+                <span *ngIf="loading">{{ isEditMode ? 'Обновление...' : 'Создание...' }}</span>
               </button>
             </div>
           </form>

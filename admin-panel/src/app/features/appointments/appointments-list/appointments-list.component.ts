@@ -14,6 +14,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
@@ -21,8 +22,10 @@ import { I18nService } from '../../../core/services/i18n.service';
 
 import { AppointmentsService, AppointmentsFilters } from '../../../core/services/appointments.service';
 import { ServicesService } from '../../../core/services/services.service';
+import { ApiService } from '../../../core/services/api';
 import { Appointment } from '../../../shared/models/api.models';
 import { AppointmentDetailsComponent } from '../appointment-details/appointment-details.component';
+import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-appointments-list',
@@ -42,6 +45,7 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
     MatDatepickerModule,
     MatNativeDateModule,
     MatMenuModule,
+    MatSnackBarModule,
     FormsModule,
     TranslatePipe
   ],
@@ -315,7 +319,7 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
       
       ::ng-deep {
         .mat-mdc-header-cell {
-          background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+          background: #f8f9fa;
           color: #495057;
           font-weight: 600;
           font-size: 14px;
@@ -514,6 +518,31 @@ import { AppointmentDetailsComponent } from '../appointment-details/appointment-
         margin-top: 8px;
       }
     }
+
+    // Стили для тостеров
+    ::ng-deep {
+      .success-snackbar {
+        background-color: #4caf50 !important;
+        color: white !important;
+        border-left: 4px solid #2e7d32 !important;
+        
+        .mat-mdc-snack-bar-action {
+          color: white !important;
+          font-weight: 500;
+        }
+      }
+
+      .error-snackbar {
+        background-color: #f44336 !important;
+        color: white !important;
+        border-left: 4px solid #c62828 !important;
+        
+        .mat-mdc-snack-bar-action {
+          color: white !important;
+          font-weight: 500;
+        }
+      }
+    }
   `]
 })
 export class AppointmentsListComponent implements OnInit {
@@ -535,9 +564,11 @@ export class AppointmentsListComponent implements OnInit {
   constructor(
     private appointmentsService: AppointmentsService,
     private servicesService: ServicesService,
+    private apiService: ApiService,
     private dialog: MatDialog,
     private router: Router,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -657,14 +688,77 @@ export class AppointmentsListComponent implements OnInit {
 
   onCancelAppointment(event: Event, appointment: Appointment) {
     event.stopPropagation();
-    // TODO: Implement cancel appointment logic
-    console.log('Cancel appointment:', appointment);
+    
+    const reason = prompt('Причина отмены (необязательно):');
+    if (reason === null) return; // User cancelled
+    
+    this.apiService.put(`/appointments/${appointment.id}/cancel`, { reason })
+      .subscribe({
+        next: (response: any) => {
+          console.log('Appointment cancelled:', response);
+          this.loadAppointments(); // Reload the list
+          this.showSuccessMessage('Запись успешно отменена. Пользователь получит уведомление в Telegram.');
+        },
+        error: (error: any) => {
+          console.error('Error cancelling appointment:', error);
+          let errorMessage = 'Ошибка при отмене записи';
+          
+          if (error.status === 404) {
+            errorMessage = 'Запись не найдена';
+          } else if (error.status === 400 && error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.error?.message) {
+            errorMessage = error.error.message;
+          }
+          
+          this.showErrorMessage(errorMessage);
+        }
+      });
   }
 
   onDeleteAppointment(event: Event, appointment: Appointment) {
     event.stopPropagation();
-    // TODO: Implement delete appointment logic
-    console.log('Delete appointment:', appointment);
+    
+    const dialogData: ConfirmationDialogData = {
+      title: 'Удаление записи',
+      message: `Вы уверены, что хотите удалить эту запись?\n\nУслуга: ${this.getServiceName(appointment.service)}\nДата: ${this.formatDate(appointment.slot?.startAt || '')}\nВремя: ${this.formatTime(appointment.slot?.startAt || '')} - ${this.formatTime(appointment.slot?.endAt || '')}\n\nПользователь получит уведомление в Telegram.`,
+      confirmText: 'Удалить',
+      cancelText: 'Отмена',
+      confirmColor: 'warn',
+      icon: 'delete'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.apiService.delete(`/appointments/${appointment.id}`)
+          .subscribe({
+            next: (response: any) => {
+              console.log('Appointment deleted:', response);
+              this.loadAppointments(); // Reload the list
+              this.showSuccessMessage('Запись успешно удалена. Пользователь получил уведомление в Telegram.');
+            },
+            error: (error: any) => {
+              console.error('Error deleting appointment:', error);
+              let errorMessage = 'Ошибка при удалении записи';
+              
+              if (error.status === 404) {
+                errorMessage = 'Запись не найдена';
+              } else if (error.status === 403) {
+                errorMessage = 'У вас нет прав для удаления этой записи';
+              } else if (error.error?.message) {
+                errorMessage = error.error.message;
+              }
+              
+              this.showErrorMessage(errorMessage);
+            }
+          });
+      }
+    });
   }
 
   getServiceName(service: any): string {
@@ -702,5 +796,23 @@ export class AppointmentsListComponent implements OnInit {
     if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  private showSuccessMessage(message: string, action: string = 'Закрыть'): void {
+    this.snackBar.open(message, action, { 
+      duration: 4000,
+      panelClass: ['success-snackbar'],
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom'
+    });
+  }
+
+  private showErrorMessage(message: string, action: string = 'Закрыть'): void {
+    this.snackBar.open(message, action, { 
+      duration: 6000,
+      panelClass: ['error-snackbar'],
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom'
+    });
   }
 }

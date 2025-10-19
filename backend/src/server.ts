@@ -1,6 +1,7 @@
 import { ENV } from "./lib/env";
 import { createApi } from "./api";
 import { createBot } from "./bot";
+import { botManager } from "./bot/bot-manager";
 
 async function main() {
   const app = createApi();
@@ -10,14 +11,23 @@ async function main() {
     console.log(`API on http://127.0.0.1:${ENV.PORT}`);
   });
 
-  // 2) Потом пытаемся запустить бота, но без падения процесса
-  if (ENV.BOT_MODE !== "disabled") {
+  // 2) Инициализируем менеджер ботов
+  try {
+    await botManager.initialize();
+    console.log("🤖 Bot Manager initialized successfully");
+  } catch (e) {
+    console.error("❌ Bot Manager initialization failed:", e);
+  }
+
+  // 3) Потом пытаемся запустить основной бота (если есть токен в env), но без падения процесса
+  // ОТКЛЮЧЕНО: используем только BotManager для управления ботами
+  if (false && ENV.BOT_MODE !== "disabled" && ENV.TELEGRAM_BOT_TOKEN) {
     try {
       const bot = createBot();
 
       if (ENV.BOT_MODE === "polling") {
         await bot.launch();
-        console.log("Bot launched in polling mode");
+        console.log("Main bot launched in polling mode");
       } else {
         const path = "/bot/webhook";
         app.use(bot.webhookCallback(path));
@@ -25,15 +35,15 @@ async function main() {
           console.warn("PUBLIC_BASE_URL is empty — webhook won't be set.");
         } else {
           await bot.telegram.setWebhook(`${ENV.PUBLIC_BASE_URL}${path}`);
-          console.log(`Bot webhook set to ${ENV.PUBLIC_BASE_URL}${path}`);
+          console.log(`Main bot webhook set to ${ENV.PUBLIC_BASE_URL}${path}`);
         }
       }
     } catch (e) {
-      console.error("Bot init failed — API keeps running.", e);
+      console.error("Main bot init failed — API keeps running.", e);
       // Don't exit the process, just log the error
     }
   } else {
-    console.log("Bot mode is disabled — API only mode");
+    console.log("Main bot mode is disabled — using Bot Manager only");
   }
 }
 

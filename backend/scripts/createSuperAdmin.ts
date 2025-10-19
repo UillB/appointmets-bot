@@ -5,48 +5,50 @@ const prisma = new PrismaClient();
 
 async function createSuperAdmin() {
   try {
-    // Check if super admin already exists
-    const existingSuperAdmin = await prisma.user.findFirst({
-      where: { role: 'SUPER_ADMIN' }
-    });
+    console.log('🔧 Creating Super Admin organization and user...');
 
-    if (existingSuperAdmin) {
-      console.log('Super admin already exists:', existingSuperAdmin.email);
-      return;
-    }
-
-    // Create a default organization for super admin
-    const organization = await prisma.organization.create({
+    // 1. Создаем супер-админ организацию
+    const superAdminOrg = await prisma.organization.create({
       data: {
-        name: 'System Administration'
+        name: 'Super Admin Organization',
+        avatar: null,
+        botToken: null,
+        botUsername: null,
       }
     });
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash('admin123', 12);
+    console.log(`✅ Super Admin Organization created with ID: ${superAdminOrg.id}`);
 
-    // Create super admin user
-    const superAdmin = await prisma.user.create({
+    // 2. Создаем супер-админ пользователя
+    const hashedPassword = await bcrypt.hash('admin123', 10);
+    
+    const superAdminUser = await prisma.user.create({
       data: {
-        email: 'admin@system.com',
+        email: 'admin@superadmin.com',
         password: hashedPassword,
-        name: 'System Administrator',
+        name: 'Super Administrator',
         role: 'SUPER_ADMIN',
-        organizationId: organization.id
-      },
-      include: {
-        organization: true
+        organizationId: superAdminOrg.id,
+        telegramId: null,
       }
     });
 
-    console.log('Super admin created successfully:');
-    console.log('Email:', superAdmin.email);
-    console.log('Password: admin123');
-    console.log('Role:', superAdmin.role);
-    console.log('Organization:', superAdmin.organization.name);
+    console.log(`✅ Super Admin User created with ID: ${superAdminUser.id}`);
+    console.log(`📧 Email: admin@superadmin.com`);
+    console.log(`🔑 Password: admin123`);
+    console.log(`🏢 Organization ID: ${superAdminOrg.id}`);
+
+    // 3. Проверяем что все создалось
+    const org = await prisma.organization.findUnique({
+      where: { id: superAdminOrg.id },
+      include: { users: true }
+    });
+
+    console.log('\n📊 Super Admin Organization Details:');
+    console.log(JSON.stringify(org, null, 2));
 
   } catch (error) {
-    console.error('Error creating super admin:', error);
+    console.error('❌ Error creating Super Admin:', error);
   } finally {
     await prisma.$disconnect();
   }

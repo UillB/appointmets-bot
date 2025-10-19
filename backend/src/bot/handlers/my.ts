@@ -13,13 +13,17 @@ function fmt(dt: Date) {
 }
 
 /** /my — показать ближайшие записи пользователя */
-export function handleMy() {
+export function handleMy(organizationId?: number) {
   return async (ctx: Context) => {
     const chatId = String(ctx.chat?.id);
     const now = new Date();
 
     const appts = await prisma.appointment.findMany({
-      where: { chatId, status: "confirmed" },
+      where: { 
+        chatId, 
+        status: "confirmed",
+        ...(organizationId && { service: { organizationId } })
+      },
       include: { service: true, slot: true },
       orderBy: { slot: { startAt: "asc" } },
       take: 10,
@@ -42,20 +46,25 @@ export function handleMy() {
 }
 
 /** Регистрация колбэков отмены */
-export function registerMyCallbacks(bot: Telegraf) {
+export function registerMyCallbacks(bot: Telegraf, organizationId?: number) {
   bot.action(/^cancel_(\d+)$/, async (ctx) => {
     await ctx.answerCbQuery();
 
     const id = Number(ctx.match[1]);
     const chatId = String(ctx.chat?.id);
 
-    // Проверяем, что запись принадлежит текущему пользователю
+    // Проверяем, что запись принадлежит текущему пользователю и правильной организации
     const appt = await prisma.appointment.findUnique({
       where: { id },
       include: { slot: true, service: true },
     });
 
     if (!appt || appt.chatId !== chatId) {
+      return ctx.reply(ctx.tt("my.appointmentNotFound"));
+    }
+
+    // Проверяем, что услуга принадлежит правильной организации
+    if (organizationId && appt.service.organizationId !== organizationId) {
       return ctx.reply(ctx.tt("my.appointmentNotFound"));
     }
 

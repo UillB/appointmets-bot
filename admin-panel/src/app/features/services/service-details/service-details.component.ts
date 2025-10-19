@@ -10,10 +10,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ServicesService, Service } from '../../../core/services/services.service';
 import { I18nService } from '../../../core/services/i18n.service';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-service-details',
@@ -587,7 +589,8 @@ export class ServiceDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private servicesService: ServicesService,
     private i18nService: I18nService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -698,19 +701,35 @@ export class ServiceDetailsComponent implements OnInit, OnDestroy {
   deleteService(): void {
     if (!this.service) return;
 
-    if (confirm(`Are you sure you want to delete "${this.getLocalizedName(this.service)}"?`)) {
-      this.servicesService.deleteService(this.service.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            this.snackBar.open('Service deleted successfully', 'Close', { duration: 3000 });
-            this.router.navigate(['/services']);
-          },
-          error: (error) => {
-            console.error('Error deleting service:', error);
-            this.snackBar.open('Error deleting service', 'Close', { duration: 3000 });
-          }
-        });
-    }
+    const dialogData: ConfirmationDialogData = {
+      title: 'Удаление услуги',
+      message: `Вы уверены, что хотите удалить услугу "${this.getLocalizedName(this.service)}"?`,
+      confirmText: 'Удалить',
+      cancelText: 'Отмена',
+      confirmColor: 'warn',
+      icon: 'delete'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.servicesService.deleteService(this.service!.id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe({
+            next: () => {
+              this.snackBar.open('Service deleted successfully', 'Close', { duration: 3000 });
+              this.router.navigate(['/services']);
+            },
+            error: (error) => {
+              console.error('Error deleting service:', error);
+              this.snackBar.open('Error deleting service', 'Close', { duration: 3000 });
+            }
+          });
+      }
+    });
   }
 }

@@ -42,7 +42,7 @@ const generateTokens = (userId: number, email: string, name: string, role: strin
 };
 
 // POST /auth/register
-router.post('/register', async (req, res) => {
+router.post('/register', async (req: Request, res: Response) => {
   try {
     const validatedData = registerSchema.parse(req.body);
     const { email, password, name, organizationName } = validatedData;
@@ -110,7 +110,7 @@ router.post('/register', async (req, res) => {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Validation error', details: error.errors });
+      return res.status(400).json({ error: 'Validation error', details: error.issues });
     }
     
     console.error('Registration error:', error);
@@ -119,7 +119,7 @@ router.post('/register', async (req, res) => {
 });
 
 // POST /auth/login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req: Request, res: Response) => {
   try {
     const validatedData = loginSchema.parse(req.body);
     const { email, password } = validatedData;
@@ -167,7 +167,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Validation error', details: error.errors });
+      return res.status(400).json({ error: 'Validation error', details: error.issues });
     }
     
     console.error('Login error:', error);
@@ -176,7 +176,7 @@ router.post('/login', async (req, res) => {
 });
 
 // POST /auth/refresh
-router.post('/refresh', async (req, res) => {
+router.post('/refresh', async (req: Request, res: Response) => {
   try {
     const { refreshToken } = req.body;
 
@@ -219,8 +219,86 @@ router.post('/refresh', async (req, res) => {
   }
 });
 
+// POST /auth/telegram-login - Аутентификация через Telegram Web App
+router.post('/telegram-login', async (req: Request, res: Response) => {
+  try {
+    const { telegramId, firstName, lastName, username, languageCode } = req.body;
+
+    if (!telegramId) {
+      return res.status(400).json({ error: 'Telegram ID is required' });
+    }
+
+    // Ищем пользователя по Telegram ID
+    let user = await prisma.user.findFirst({
+      where: { telegramId: telegramId.toString() },
+      include: { organization: true }
+    });
+
+    // Если пользователь не найден, создаем нового (только для админов)
+    if (!user) {
+      // Проверяем, является ли пользователь админом
+      const isAdmin = await checkIfTelegramUserIsAdmin(telegramId, username);
+      
+      if (!isAdmin) {
+        return res.status(403).json({ error: 'Access denied. Admin privileges required.' });
+      }
+
+      // Создаем нового админа
+      user = await prisma.user.create({
+        data: {
+          telegramId: telegramId.toString(),
+          name: `${firstName} ${lastName || ''}`.trim(),
+          email: `${telegramId}@telegram.local`, // Временный email
+          password: '', // Пустой пароль для Telegram пользователей
+          role: 'SUPER_ADMIN', // Или другая роль
+          organizationId: 1, // Или создать организацию
+        },
+        include: { organization: true }
+      });
+    }
+
+    // Генерируем токены
+    const { accessToken, refreshToken } = generateTokens(
+      user.id,
+      user.email,
+      user.name,
+      user.role,
+      user.organizationId,
+      user.organization.name
+    );
+
+    res.json({
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        organizationId: user.organizationId,
+        organization: user.organization
+      },
+      accessToken,
+      refreshToken
+    });
+  } catch (error) {
+    console.error('Telegram login error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Функция для проверки, является ли пользователь админом
+async function checkIfTelegramUserIsAdmin(telegramId: number, username?: string): Promise<boolean> {
+  // Здесь можно добавить логику проверки
+  // Например, проверка по списку разрешенных Telegram ID или username
+  const adminTelegramIds = [123456789, 987654321]; // Добавить реальные ID админов
+  const adminUsernames = ['admin_username']; // Добавить реальные username админов
+  
+  return adminTelegramIds.includes(telegramId) || 
+         (username && adminUsernames.includes(username));
+}
+
 // POST /auth/logout
-router.post('/logout', (req, res) => {
+router.post('/logout', (req: Request, res: Response) => {
   // In a stateless JWT implementation, logout is handled client-side
   // by removing the token from storage
   res.json({ message: 'Logout successful' });

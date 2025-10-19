@@ -10,7 +10,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSliderModule } from '@angular/material/slider';
 import { Subscription } from 'rxjs';
 
 import { I18nService, Language } from '../../../core/services/i18n.service';
@@ -32,7 +31,6 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
     MatSnackBarModule,
     MatProgressSpinnerModule,
     MatSlideToggleModule,
-    MatSliderModule,
     TranslatePipe
   ],
   template: `
@@ -162,26 +160,18 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
                 </mat-form-field>
               </div>
 
-              <div class="slider-row">
-                <div class="slider-content">
-                  <mat-icon class="slider-icon">refresh</mat-icon>
-                  <div class="slider-text">
-                    <span class="slider-label">{{ 'settings.system.autoRefresh' | translate }}</span>
-                    <span class="slider-description">{{ 'settings.system.refreshInterval' | translate }}</span>
-                  </div>
-                </div>
-                <div class="slider-control">
-                  <mat-slider 
-                    formControlName="refreshInterval"
-                    min="30"
-                    max="300"
-                    step="30"
-                    discrete
-                    [displayWith]="formatRefreshInterval">
-                    <input matSliderThumb>
-                  </mat-slider>
-                  <span class="slider-value">{{ formatRefreshInterval(systemForm.get('refreshInterval')?.value) }}</span>
-                </div>
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>{{ 'settings.system.refreshInterval' | translate }}</mat-label>
+                  <mat-select formControlName="refreshInterval">
+                    <mat-option value="30">30 {{ 'common.seconds' | translate }}</mat-option>
+                    <mat-option value="60">1 {{ 'common.minute' | translate }}</mat-option>
+                    <mat-option value="120">2 {{ 'common.minutes' | translate }}</mat-option>
+                    <mat-option value="180">3 {{ 'common.minutes' | translate }}</mat-option>
+                    <mat-option value="300">5 {{ 'common.minutes' | translate }}</mat-option>
+                  </mat-select>
+                  <mat-icon matSuffix>refresh</mat-icon>
+                </mat-form-field>
               </div>
             </div>
 
@@ -305,60 +295,6 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
       color: #718096;
     }
 
-    .slider-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px;
-      background: #f8fafc;
-      border-radius: 8px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .slider-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .slider-icon {
-      color: #667eea;
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-    }
-
-    .slider-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .slider-label {
-      font-size: 16px;
-      font-weight: 500;
-      color: #2d3748;
-    }
-
-    .slider-description {
-      font-size: 14px;
-      color: #718096;
-    }
-
-    .slider-control {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 200px;
-    }
-
-    .slider-value {
-      font-size: 14px;
-      font-weight: 500;
-      color: #667eea;
-      min-width: 40px;
-      text-align: right;
-    }
 
     .form-actions {
       display: flex;
@@ -414,16 +350,10 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
         gap: 12px;
       }
 
-      .toggle-item,
-      .slider-row {
+      .toggle-item {
         flex-direction: column;
         align-items: flex-start;
         gap: 12px;
-      }
-
-      .slider-control {
-        width: 100%;
-        min-width: auto;
       }
 
       .form-actions {
@@ -489,14 +419,6 @@ export class SystemSettingsComponent implements OnInit, OnDestroy {
     this.themeService.setTheme(theme);
   }
 
-  formatRefreshInterval(value: number): string {
-    if (value < 60) {
-      return `${value}s`;
-    } else {
-      const minutes = Math.floor(value / 60);
-      return `${minutes}m`;
-    }
-  }
 
   onSaveSettings(): void {
     this.isSavingSettings = true;
