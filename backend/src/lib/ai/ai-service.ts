@@ -17,6 +17,60 @@ export class AIService {
     this.initializeProviders();
   }
 
+  // Базовые промпты для основных функций бота
+  private getDefaultSystemPrompts() {
+    return {
+      baseSystemPrompt: `You are an AI assistant for a service organization. Your main task is to help clients with service bookings and answer their questions.
+
+MAIN FUNCTIONS:
+1. 📋 Service Information - provide details about prices, duration, service descriptions
+2. 🏢 Organization Information - answer questions about name, working hours, address, contacts
+3. 📅 Availability Check - show available time slots by dates
+4. ✅ Booking Confirmation - help clients book services
+5. 📝 View Appointments - show client's existing appointments
+6. ❌ Cancel Appointments - help cancel appointments when requested
+
+BEHAVIOR RULES:
+- Be polite, professional and helpful
+- Answer briefly but informatively
+- Always use current information about available slots
+- If you don't know the answer, suggest contacting by phone
+- IMPORTANT: Always respond in the same language the client is using (Russian, English, Hebrew, etc.)
+- Use emojis for better perception
+- Always confirm booking details before final confirmation
+- Be patient with clients who ask many questions
+
+CONTEXT USAGE:
+- Always use current information about available slots
+- When client asks about booking, show nearest available slots
+- Consider organization working hours when suggesting slots
+- Check time conflicts between slots of different services
+- Provide accurate information about prices and service duration`,
+
+      contextInstructions: `ORGANIZATION CONTEXT:
+- Always use current information about available slots
+- When client asks about booking, show nearest available slots
+- Consider organization working hours when suggesting slots
+- Check time conflicts between slots of different services
+- Provide accurate information about prices and service duration`,
+
+      behaviorInstructions: `BEHAVIOR RULES:
+- Be polite, professional and helpful
+- Answer briefly but informatively
+- Use emojis for better perception
+- If you don't know the answer, suggest contacting by phone
+- Always confirm booking details before final confirmation
+- Be patient with clients who ask many questions
+- IMPORTANT: Always respond in the same language the client is using`,
+
+      fallbackPrompt: `Thank you for your question! I can help you with service bookings or answer questions about our organization.
+
+If I don't have a precise answer to your question, I recommend contacting us directly by phone or visiting us in person.
+
+How else can I help you?`
+    };
+  }
+
   private initializeProviders() {
     // Регистрируем OpenAI провайдер
     this.providers.set('openai', new OpenAIProvider({} as AIConfig));
@@ -59,36 +113,48 @@ export class AIService {
   // Сохранить конфигурацию AI для организации
   async saveOrganizationAIConfig(config: OrganizationAIConfig): Promise<void> {
     try {
+      // Получаем базовые промпты по умолчанию
+      const defaultPrompts = this.getDefaultSystemPrompts();
+      
+      // Если пользователь не указал кастомные промпты, используем базовые
+      const finalConfig = {
+        ...config,
+        baseSystemPrompt: (config as any).baseSystemPrompt || defaultPrompts.baseSystemPrompt,
+        contextInstructions: (config as any).contextInstructions || defaultPrompts.contextInstructions,
+        behaviorInstructions: (config as any).behaviorInstructions || defaultPrompts.behaviorInstructions,
+        fallbackPrompt: (config as any).fallbackPrompt || defaultPrompts.fallbackPrompt
+      };
+
       await (prisma as any).organizationAIConfig.upsert({
         where: { organizationId: config.organizationId },
         update: {
-          provider: config.provider,
-          apiKey: config.apiKey,
-          model: config.model,
-          maxTokens: config.maxTokens,
-          temperature: config.temperature,
-          systemPrompt: config.systemPrompt,
-          baseSystemPrompt: (config as any).baseSystemPrompt,
-          contextInstructions: (config as any).contextInstructions,
-          behaviorInstructions: (config as any).behaviorInstructions,
-          fallbackPrompt: (config as any).fallbackPrompt,
-          enabled: config.enabled,
-          customPrompts: config.customPrompts ? JSON.stringify(config.customPrompts) : null
+          provider: finalConfig.provider,
+          apiKey: finalConfig.apiKey,
+          model: finalConfig.model,
+          maxTokens: finalConfig.maxTokens,
+          temperature: finalConfig.temperature,
+          systemPrompt: finalConfig.systemPrompt,
+          baseSystemPrompt: finalConfig.baseSystemPrompt,
+          contextInstructions: finalConfig.contextInstructions,
+          behaviorInstructions: finalConfig.behaviorInstructions,
+          fallbackPrompt: finalConfig.fallbackPrompt,
+          enabled: finalConfig.enabled,
+          customPrompts: finalConfig.customPrompts ? JSON.stringify(finalConfig.customPrompts) : null
         },
         create: {
-          organizationId: config.organizationId,
-          provider: config.provider,
-          apiKey: config.apiKey,
-          model: config.model,
-          maxTokens: config.maxTokens,
-          temperature: config.temperature,
-          systemPrompt: config.systemPrompt,
-          baseSystemPrompt: (config as any).baseSystemPrompt,
-          contextInstructions: (config as any).contextInstructions,
-          behaviorInstructions: (config as any).behaviorInstructions,
-          fallbackPrompt: (config as any).fallbackPrompt,
-          enabled: config.enabled,
-          customPrompts: config.customPrompts ? JSON.stringify(config.customPrompts) : null
+          organizationId: finalConfig.organizationId,
+          provider: finalConfig.provider,
+          apiKey: finalConfig.apiKey,
+          model: finalConfig.model,
+          maxTokens: finalConfig.maxTokens,
+          temperature: finalConfig.temperature,
+          systemPrompt: finalConfig.systemPrompt,
+          baseSystemPrompt: finalConfig.baseSystemPrompt,
+          contextInstructions: finalConfig.contextInstructions,
+          behaviorInstructions: finalConfig.behaviorInstructions,
+          fallbackPrompt: finalConfig.fallbackPrompt,
+          enabled: finalConfig.enabled,
+          customPrompts: finalConfig.customPrompts ? JSON.stringify(finalConfig.customPrompts) : null
         }
       });
     } catch (error) {
@@ -282,6 +348,7 @@ export class AIService {
   // Получить контекст организации для AI
   private async getOrganizationContext(organizationId: number): Promise<any> {
     try {
+      console.log(`🔄 Getting organization context for orgId: ${organizationId} at ${new Date().toISOString()}`);
       const organization = await prisma.organization.findUnique({
         where: { id: organizationId },
         include: {
@@ -316,14 +383,19 @@ export class AIService {
         throw new Error('Organization not found');
       }
 
-      // Собираем все слоты для проверки пересечений
-      const allSlots = organization.services.flatMap(service => 
-        service.slots.map(slot => ({
-          ...slot,
-          serviceName: service.nameRu || service.name,
-          serviceId: service.id
-        }))
-      );
+      // Получаем все активные записи в организации для проверки конфликтов (как в bookingInline.ts)
+      const activeAppointments = await prisma.appointment.findMany({
+        where: {
+          service: {
+            organizationId: organizationId
+          },
+          status: { not: 'cancelled' } // не учитываем отмененные записи
+        },
+        include: {
+          slot: true,
+          service: true
+        }
+      });
 
       // Обрабатываем слоты и записи с учетом пересечений
       const servicesWithSlots = organization.services.map(service => {
@@ -331,24 +403,48 @@ export class AIService {
           const isBooked = slot.bookings.length > 0;
           const appointment = slot.bookings[0]; // Предполагаем, что в слоте одна запись
           
-          // Проверяем пересечения с другими занятыми слотами
-          const hasTimeConflict = allSlots.some(otherSlot => {
-            if (otherSlot.id === slot.id) return false; // Не сравниваем с самим собой
-            
-            const otherIsBooked = otherSlot.bookings.length > 0;
-            if (!otherIsBooked) return false; // Нас интересуют только занятые слоты
-            
-            const slotStart = new Date(slot.startAt);
-            const slotEnd = new Date(slot.endAt);
-            const otherStart = new Date(otherSlot.startAt);
-            const otherEnd = new Date(otherSlot.endAt);
+          // Проверяем пересечения с активными записями (как в bookingInline.ts)
+          const slotStart = new Date(slot.startAt);
+          const slotEnd = new Date(slot.endAt);
+          
+          let hasTimeConflict = false;
+          for (const activeAppointment of activeAppointments) {
+            const appointmentStart = new Date(activeAppointment.slot.startAt);
+            const appointmentEnd = new Date(activeAppointment.slot.endAt);
             
             // Проверяем пересечение времени
-            return slotStart < otherEnd && slotEnd > otherStart;
-          });
+            if (slotStart < appointmentEnd && slotEnd > appointmentStart) {
+              hasTimeConflict = true;
+              
+              // Логируем для отладки
+              console.log(`🚨 Time conflict detected:`, {
+                slotId: slot.id,
+                slotTime: `${slotStart.toISOString()} - ${slotEnd.toISOString()}`,
+                appointmentId: activeAppointment.id,
+                appointmentTime: `${appointmentStart.toISOString()} - ${appointmentEnd.toISOString()}`,
+                serviceName: service.nameRu || service.name
+              });
+              break;
+            }
+          }
           
           // Слот недоступен если он занят ИЛИ есть конфликт времени
           const isAvailable = !isBooked && !hasTimeConflict;
+          
+          // Логируем состояние слота для отладки
+          const slotDate = new Date(slot.startAt);
+          if (slotDate.getDate() === 22 && slotDate.getMonth() === 9 && slotDate.getFullYear() === 2025) { // 22.10.2025
+            console.log(`🔍 Slot analysis for 22.10.2025:`, {
+              slotId: slot.id,
+              startAt: slot.startAt,
+              endAt: slot.endAt,
+              isBooked: isBooked,
+              hasTimeConflict: hasTimeConflict,
+              isAvailable: isAvailable,
+              bookingsCount: slot.bookings.length,
+              serviceName: service.nameRu || service.name
+            });
+          }
           
           return {
             id: slot.id,
@@ -403,6 +499,7 @@ export class AIService {
         currentDateTime: new Date().toISOString(),
         // Добавляем промпты из AI конфигурации
         baseSystemPrompt: aiConfig?.baseSystemPrompt,
+        systemPrompt: aiConfig?.systemPrompt, // Пользовательские инструкции
         contextInstructions: aiConfig?.contextInstructions,
         behaviorInstructions: aiConfig?.behaviorInstructions,
         fallbackPrompt: aiConfig?.fallbackPrompt

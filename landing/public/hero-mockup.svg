@@ -1,0 +1,53 @@
+<svg width="400" height="600" viewBox="0 0 400 600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Phone frame -->
+  <rect x="50" y="50" width="300" height="500" rx="30" ry="30" fill="#1a1a1a" stroke="#333" stroke-width="2"/>
+  
+  <!-- Screen -->
+  <rect x="70" y="100" width="260" height="400" rx="15" ry="15" fill="#000"/>
+  
+  <!-- Telegram interface -->
+  <!-- Header -->
+  <rect x="70" y="100" width="260" height="60" fill="#1976d2"/>
+  <circle cx="100" cy="130" r="15" fill="#fff"/>
+  <text x="130" y="140" fill="#fff" font-family="Arial" font-size="16" font-weight="bold">Bookly Bot</text>
+  
+  <!-- Messages -->
+  <rect x="80" y="180" width="200" height="40" rx="20" ry="20" fill="#e3f2fd"/>
+  <text x="100" y="205" fill="#1976d2" font-family="Arial" font-size="14">Привет! Записаться на прием?</text>
+  
+  <rect x="120" y="240" width="180" height="40" rx="20" ry="20" fill="#1976d2"/>
+  <text x="140" y="265" fill="#fff" font-family="Arial" font-size="14">Да, хочу записаться</text>
+  
+  <!-- Calendar -->
+  <rect x="80" y="300" width="200" height="120" rx="10" ry="10" fill="#fff" stroke="#e0e0e0"/>
+  <text x="180" y="320" fill="#1976d2" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle">Выберите дату</text>
+  
+  <!-- Date grid -->
+  <rect x="90" y="340" width="30" height="25" fill="#f5f5f5" stroke="#e0e0e0"/>
+  <rect x="130" y="340" width="30" height="25" fill="#f5f5f5" stroke="#e0e0e0"/>
+  <rect x="170" y="340" width="30" height="25" fill="#1976d2" stroke="#1976d2"/>
+  <rect x="210" y="340" width="30" height="25" fill="#f5f5f5" stroke="#e0e0e0"/>
+  <rect x="250" y="340" width="30" height="25" fill="#f5f5f5" stroke="#e0e0e0"/>
+  
+  <text x="105" y="355" fill="#666" font-family="Arial" font-size="12" text-anchor="middle">15</text>
+  <text x="145" y="355" fill="#666" font-family="Arial" font-size="12" text-anchor="middle">16</text>
+  <text x="185" y="355" fill="#fff" font-family="Arial" font-size="12" text-anchor="middle">17</text>
+  <text x="225" y="355" fill="#666" font-family="Arial" font-size="12" text-anchor="middle">18</text>
+  <text x="265" y="355" fill="#666" font-family="Arial" font-size="12" text-anchor="middle">19</text>
+  
+  <!-- Time slots -->
+  <rect x="90" y="380" width="60" height="25" fill="#e8f5e8" stroke="#4caf50"/>
+  <rect x="160" y="380" width="60" height="25" fill="#e8f5e8" stroke="#4caf50"/>
+  <rect x="230" y="380" width="60" height="25" fill="#ffebee" stroke="#f44336"/>
+  
+  <text x="120" y="395" fill="#4caf50" font-family="Arial" font-size="12" text-anchor="middle">10:00</text>
+  <text x="190" y="395" fill="#4caf50" font-family="Arial" font-size="12" text-anchor="middle">11:00</text>
+  <text x="260" y="395" fill="#f44336" font-family="Arial" font-size="12" text-anchor="middle">12:00</text>
+  
+  <!-- Confirmation -->
+  <rect x="80" y="440" width="200" height="40" rx="20" ry="20" fill="#4caf50"/>
+  <text x="180" y="465" fill="#fff" font-family="Arial" font-size="14" text-anchor="middle">Запись подтверждена!</text>
+  
+  <!-- Home button -->
+  <circle cx="200" cy="550" r="8" fill="#666"/>
+</svg>

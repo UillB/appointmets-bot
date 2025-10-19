@@ -43,8 +43,6 @@ import { AuthService, User } from '../../core/services/auth';
 })
 export class AIConfigComponent implements OnInit {
   aiConfigForm: FormGroup;
-  customPromptsForm: FormGroup;
-  advancedPromptsForm: FormGroup;
   isLoading = false;
   isValidatingApiKey = false;
   isTestingAI = false;
@@ -62,14 +60,6 @@ export class AIConfigComponent implements OnInit {
     { value: 'custom', label: 'Custom API', icon: '⚙️' }
   ];
 
-  scenarios = [
-    { key: 'greeting', label: 'Приветствие новых пользователей', placeholder: 'Привет! Я AI ассистент...' },
-    { key: 'bookingHelp', label: 'Помощь с записью', placeholder: 'Помогу вам выбрать услугу и время...' },
-    { key: 'serviceInfo', label: 'Информация об услугах', placeholder: 'Расскажу подробно об услугах...' },
-    { key: 'general', label: 'Общие вопросы', placeholder: 'Отвечу на любые вопросы...' },
-    { key: 'support', label: 'Поддержка', placeholder: 'Помогу решить проблемы...' }
-  ];
-
   constructor(
     private fb: FormBuilder,
     private aiConfigService: AIConfigService,
@@ -82,23 +72,8 @@ export class AIConfigComponent implements OnInit {
       model: ['gpt-4o-mini', Validators.required],
       maxTokens: [1000],
       temperature: [0.7],
-      systemPrompt: [''],
+      customPrompt: [''], // Упрощенное поле для кастомных инструкций
       enabled: [false]
-    });
-
-    this.customPromptsForm = this.fb.group({
-      greeting: [''],
-      bookingHelp: [''],
-      serviceInfo: [''],
-      general: [''],
-      support: ['']
-    });
-
-    this.advancedPromptsForm = this.fb.group({
-      baseSystemPrompt: [''],
-      contextInstructions: [''],
-      behaviorInstructions: [''],
-      fallbackPrompt: ['']
     });
   }
 
@@ -144,20 +119,8 @@ export class AIConfigComponent implements OnInit {
       model: config.model,
       maxTokens: config.maxTokens || 1000,
       temperature: config.temperature || 0.7,
-      systemPrompt: config.systemPrompt || '',
+      customPrompt: config.systemPrompt || '', // Используем systemPrompt для кастомных инструкций
       enabled: config.enabled
-    });
-
-    if (config.customPrompts) {
-      this.customPromptsForm.patchValue(config.customPrompts);
-    }
-
-    // Загружаем расширенные промпты
-    this.advancedPromptsForm.patchValue({
-      baseSystemPrompt: config.baseSystemPrompt || '',
-      contextInstructions: config.contextInstructions || '',
-      behaviorInstructions: config.behaviorInstructions || '',
-      fallbackPrompt: config.fallbackPrompt || ''
     });
   }
 
@@ -272,28 +235,22 @@ export class AIConfigComponent implements OnInit {
       return null;
     }
 
-    const baseConfig = this.aiConfigForm.value;
-    const customPrompts = this.customPromptsForm.value;
-    const advancedPrompts = this.advancedPromptsForm.value;
+    if (!this.currentUser?.organizationId) {
+      this.snackBar.open('Ошибка: не удалось определить организацию', 'Закрыть', { duration: 3000 });
+      return null;
+    }
 
-    // Убираем пустые промпты
-    const filteredPrompts = Object.fromEntries(
-      Object.entries(customPrompts).filter(([_, value]) => value && typeof value === 'string' && value.trim())
-    );
-
-    // Убираем пустые расширенные промпты
-    const filteredAdvancedPrompts = Object.fromEntries(
-      Object.entries(advancedPrompts).filter(([_, value]) => value && typeof value === 'string' && value.trim())
-    );
+    const formValue = this.aiConfigForm.value;
 
     return {
-      ...this.currentConfig,
-      ...baseConfig,
-      customPrompts: Object.keys(filteredPrompts).length > 0 ? filteredPrompts : undefined,
-      baseSystemPrompt: filteredAdvancedPrompts['baseSystemPrompt'],
-      contextInstructions: filteredAdvancedPrompts['contextInstructions'],
-      behaviorInstructions: filteredAdvancedPrompts['behaviorInstructions'],
-      fallbackPrompt: filteredAdvancedPrompts['fallbackPrompt']
+      provider: formValue.provider,
+      apiKey: formValue.apiKey,
+      model: formValue.model,
+      maxTokens: formValue.maxTokens,
+      temperature: formValue.temperature,
+      systemPrompt: formValue.customPrompt || '', // Кастомные инструкции пользователя
+      enabled: formValue.enabled,
+      organizationId: this.currentUser.organizationId
     };
   }
 
@@ -316,17 +273,6 @@ export class AIConfigComponent implements OnInit {
     });
   }
 
-  getScenarioIcon(scenario: string): string {
-    const icons: Record<string, string> = {
-      greeting: '👋',
-      bookingHelp: '📅',
-      serviceInfo: 'ℹ️',
-      general: '💬',
-      support: '🆘'
-    };
-    return icons[scenario] || '💭';
-  }
-
   formatTokens(tokens: number | undefined): string {
     if (!tokens || tokens === 0) {
       return '0';
@@ -337,10 +283,5 @@ export class AIConfigComponent implements OnInit {
       return `${(tokens / 1000).toFixed(1)}K`;
     }
     return tokens.toString();
-  }
-
-  getScenarioKeys(): string[] {
-    if (!this.usageStats?.requestsByScenario) return [];
-    return Object.keys(this.usageStats.requestsByScenario);
   }
 }

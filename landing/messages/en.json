@@ -1,0 +1,252 @@
+{
+  "navigation": {
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Sign Up",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "Revolutionary Telegram Booking System",
+    "subtitle": "Create your bot in 10 minutes and start accepting appointments today!",
+    "description": "Bookly is a modern appointment management system with unique Telegram bot integration. Perfect for clinics, beauty salons, consultants, and any service business.",
+    "cta_primary": "Start Free",
+    "cta_secondary": "Watch Demo",
+    "stats": {
+      "users": "1000+ users",
+      "appointments": "50,000+ appointments",
+      "countries": "15 countries"
+    }
+  },
+  "features": {
+    "title": "Why Choose Bookly?",
+    "subtitle": "Everything you need for efficient appointment management",
+    "telegram_integration": {
+      "title": "Telegram Integration",
+      "description": "Your clients can book appointments directly in Telegram - the most popular messenger"
+    },
+    "multilingual": {
+      "title": "Multilingual",
+      "description": "Russian, English, and Hebrew support out of the box"
+    },
+    "easy_setup": {
+      "title": "Quick Setup",
+      "description": "Create a bot and start accepting appointments in 10 minutes"
+    },
+    "admin_panel": {
+      "title": "Beautiful Admin Panel",
+      "description": "Modern interface with Material Design 3"
+    },
+    "analytics": {
+      "title": "Analytics & Reports",
+      "description": "Track statistics and optimize your work"
+    },
+    "security": {
+      "title": "Security",
+      "description": "JWT authentication and role-based access control"
+    }
+  },
+  "how_it_works": {
+    "title": "How It Works?",
+    "subtitle": "Just 3 simple steps to launch",
+    "step1": {
+      "title": "Create Bot",
+      "description": "Follow step-by-step instructions to create a Telegram bot via @BotFather"
+    },
+    "step2": {
+      "title": "Setup Services",
+      "description": "Add your services, prices, and working hours"
+    },
+    "step3": {
+      "title": "Start Accepting",
+      "description": "Share your bot link with clients and start accepting appointments"
+    }
+  },
+  "benefits": {
+    "title": "Benefits for Your Business",
+    "subtitle": "Increase efficiency and customer satisfaction",
+    "benefit1": {
+      "title": "24/7 Availability",
+      "description": "Clients can book appointments anytime, even when you're sleeping"
+    },
+    "benefit2": {
+      "title": "Automation",
+      "description": "Fewer calls, more time to work with clients"
+    },
+    "benefit3": {
+      "title": "Client Convenience",
+      "description": "Familiar Telegram interface - no learning required"
+    },
+    "benefit4": {
+      "title": "Mobility",
+      "description": "Manage appointments from any device"
+    }
+  },
+  "pricing": {
+    "title": "Simple and Transparent Pricing",
+    "subtitle": "Choose a plan that fits your business",
+    "free": {
+      "name": "Free",
+      "price": "$0",
+      "period": "forever",
+      "description": "Perfect for getting started",
+      "features": [
+        "Up to 50 appointments per month",
+        "1 organization",
+        "Telegram bot",
+        "Basic analytics",
+        "Email support"
+      ],
+      "cta": "Start Free"
+    },
+    "professional": {
+      "name": "Professional",
+      "price": "$29",
+      "period": "per month",
+      "description": "For growing business",
+      "features": [
+        "Up to 500 appointments per month",
+        "3 organizations",
+        "Advanced analytics",
+        "Email notifications",
+        "Priority support",
+        "Bot customization"
+      ],
+      "cta": "Choose Plan",
+      "popular": "Popular"
+    },
+    "business": {
+      "name": "Business",
+      "price": "$99",
+      "period": "per month",
+      "description": "For large business",
+      "features": [
+        "Unlimited appointments",
+        "Unlimited organizations",
+        "Full analytics",
+        "SMS notifications",
+        "CRM integrations",
+        "Personal manager",
+        "API access"
+      ],
+      "cta": "Contact Us"
+    }
+  },
+  "testimonials": {
+    "title": "What Our Clients Say",
+    "subtitle": "Over 1000 satisfied users worldwide",
+    "testimonial1": {
+      "text": "Bookly has completely changed how our clinic works. Now 80% of appointments come through our Telegram bot!",
+      "author": "Dr. Anna Petrova",
+      "role": "Dental Clinic Owner"
+    },
+    "testimonial2": {
+      "text": "Very convenient! Clients book themselves, and I get notifications. Saves tons of time.",
+      "author": "Maria Ivanova",
+      "role": "Nail Artist"
+    },
+    "testimonial3": {
+      "text": "Setup took literally 15 minutes. Now I have a professional booking system.",
+      "author": "Alexey Smirnov",
+      "role": "Business Consultant"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Answers to popular questions about Bookly",
+    "q1": {
+      "question": "How long does setup take?",
+      "answer": "Full system setup takes only 10-15 minutes. We provide step-by-step instructions with pictures."
+    },
+    "q2": {
+      "question": "Do I need technical knowledge?",
+      "answer": "No! Our system is designed for regular users. All actions are intuitive."
+    },
+    "q3": {
+      "question": "Can I use it on mobile?",
+      "answer": "Yes! We have a responsive admin panel and Telegram Web App for mobile management."
+    },
+    "q4": {
+      "question": "Are there client limits?",
+      "answer": "Free plan includes up to 50 appointments per month. Paid plans have virtually no limits."
+    },
+    "q5": {
+      "question": "Can I integrate with other systems?",
+      "answer": "Yes, we have API for integration with CRM, calendars, and other systems."
+    }
+  },
+  "cta": {
+    "title": "Ready to Start?",
+    "subtitle": "Join thousands of satisfied Bookly users",
+    "description": "Create your bot in 10 minutes and start accepting appointments today!",
+    "button": "Start Free",
+    "guarantee": "30 days free • No credit card • Cancel anytime"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign In",
+      "subtitle": "Welcome back!",
+      "email": "Email",
+      "password": "Password",
+      "remember": "Remember me",
+      "forgot": "Forgot password?",
+      "button": "Sign In",
+      "no_account": "Don't have an account?",
+      "register_link": "Sign up"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Start your journey with Bookly",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm Password",
+      "organization": "Organization Name",
+      "phone": "Phone",
+      "terms": "I agree to the",
+      "terms_link": "Terms of Service",
+      "privacy": "and",
+      "privacy_link": "Privacy Policy",
+      "button": "Create Account",
+      "has_account": "Already have an account?",
+      "login_link": "Sign in"
+    },
+    "errors": {
+      "required": "This field is required",
+      "email_invalid": "Please enter a valid email",
+      "password_short": "Password must be at least 6 characters",
+      "passwords_not_match": "Passwords don't match",
+      "login_failed": "Invalid email or password",
+      "register_failed": "Registration failed",
+      "network_error": "Network error. Please try again later"
+    },
+    "success": {
+      "login": "Welcome!",
+      "register": "Account created successfully!"
+    }
+  },
+  "footer": {
+    "description": "Bookly - revolutionary appointment management system with Telegram bot integration.",
+    "product": "Product",
+    "company": "Company",
+    "support": "Support",
+    "legal": "Legal",
+    "features_link": "Features",
+    "pricing_link": "Pricing",
+    "demo_link": "Demo",
+    "about_link": "About",
+    "contact_link": "Contact",
+    "blog_link": "Blog",
+    "help_link": "Help",
+    "docs_link": "Documentation",
+    "status_link": "Status",
+    "terms_link": "Terms of Service",
+    "privacy_link": "Privacy Policy",
+    "cookies_link": "Cookie Policy",
+    "copyright": "© 2025 Bookly. All rights reserved.",
+    "made_with": "Made with ❤️ in Russia"
+  }
+}

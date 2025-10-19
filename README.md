@@ -8,6 +8,7 @@
 appointments-bot/
 ├── backend/          # Node.js + Express + Prisma + Telegram Bot
 ├── admin-panel/      # Angular 20 Admin Panel
+├── landing/          # Next.js Landing Page (многоязычный)
 ├── scripts/          # Автоматизация и скрипты развертывания
 ├── docs/             # Документация проекта
 └── docker-compose.yml # Docker конфигурация для продакшена
@@ -53,9 +54,16 @@ appointments-bot/
    npm run dev
    ```
 
-2. **Frontend:**
+2. **Admin Panel:**
    ```bash
    cd admin-panel
+   npm install
+   npm run dev
+   ```
+
+3. **Landing Page:**
+   ```bash
+   cd landing
    npm install
    npm run dev
    ```
@@ -64,6 +72,7 @@ appointments-bot/
 
 - **Backend API:** http://localhost:4000
 - **Admin Panel:** http://localhost:4200
+- **Landing Page:** http://localhost:3000
 - **API Health Check:** http://localhost:4000/api/health
 
 ## 🔐 Аутентификация

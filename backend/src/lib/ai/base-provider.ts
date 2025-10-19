@@ -31,6 +31,11 @@ export abstract class BaseAIProvider implements AIProvider {
     
     let prompt = basePrompt;
     
+    // Добавляем пользовательские инструкции если есть
+    if (context.systemPrompt && context.systemPrompt.trim()) {
+      prompt += `\n\n🎯 ДОПОЛНИТЕЛЬНЫЕ ИНСТРУКЦИИ ОТ ВЛАДЕЛЬЦА:\n${context.systemPrompt}`;
+    }
+    
     // Добавляем описание организации если есть
     if (context.description) {
       prompt += `\n\nО нашей организации: ${context.description}`;

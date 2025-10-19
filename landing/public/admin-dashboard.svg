@@ -1,0 +1,72 @@
+<svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Browser frame -->
+  <rect x="0" y="0" width="600" height="400" fill="#f5f5f5" stroke="#ddd" stroke-width="1"/>
+  
+  <!-- Browser header -->
+  <rect x="0" y="0" width="600" height="40" fill="#e0e0e0"/>
+  <circle cx="15" cy="20" r="6" fill="#ff5f57"/>
+  <circle cx="35" cy="20" r="6" fill="#ffbd2e"/>
+  <circle cx="55" cy="20" r="6" fill="#28ca42"/>
+  
+  <!-- URL bar -->
+  <rect x="80" y="10" width="200" height="20" rx="10" ry="10" fill="#fff"/>
+  <text x="90" y="22" fill="#666" font-family="Arial" font-size="12">bookly.app/admin</text>
+  
+  <!-- Sidebar -->
+  <rect x="0" y="40" width="200" height="360" fill="#1976d2"/>
+  
+  <!-- Logo -->
+  <text x="100" y="70" fill="#fff" font-family="Arial" font-size="18" font-weight="bold" text-anchor="middle">Bookly</text>
+  
+  <!-- Menu items -->
+  <rect x="10" y="90" width="180" height="30" fill="#1565c0"/>
+  <text x="20" y="108" fill="#fff" font-family="Arial" font-size="14">📊 Dashboard</text>
+  
+  <rect x="10" y="130" width="180" height="30" fill="transparent"/>
+  <text x="20" y="148" fill="#fff" font-family="Arial" font-size="14">📅 Записи</text>
+  
+  <rect x="10" y="170" width="180" height="30" fill="transparent"/>
+  <text x="20" y="188" fill="#fff" font-family="Arial" font-size="14">⚙️ Услуги</text>
+  
+  <rect x="10" y="210" width="180" height="30" fill="transparent"/>
+  <text x="20" y="228" fill="#fff" font-family="Arial" font-size="14">🤖 Бот</text>
+  
+  <!-- Main content -->
+  <rect x="200" y="40" width="400" height="360" fill="#fff"/>
+  
+  <!-- Header -->
+  <text x="220" y="70" fill="#333" font-family="Arial" font-size="24" font-weight="bold">Dashboard</text>
+  
+  <!-- Stats cards -->
+  <rect x="220" y="90" width="120" height="80" fill="#e3f2fd" stroke="#1976d2" stroke-width="1"/>
+  <text x="280" y="115" fill="#1976d2" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">24</text>
+  <text x="280" y="135" fill="#666" font-family="Arial" font-size="14" text-anchor="middle">Записей сегодня</text>
+  
+  <rect x="360" y="90" width="120" height="80" fill="#e8f5e8" stroke="#4caf50" stroke-width="1"/>
+  <text x="420" y="115" fill="#4caf50" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">156</text>
+  <text x="420" y="135" fill="#666" font-family="Arial" font-size="14" text-anchor="middle">Записей в неделю</text>
+  
+  <rect x="500" y="90" width="80" height="80" fill="#fff3e0" stroke="#ff9800" stroke-width="1"/>
+  <text x="540" y="115" fill="#ff9800" font-family="Arial" font-size="24" font-weight="bold" text-anchor="middle">8</text>
+  <text x="540" y="135" fill="#666" font-family="Arial" font-size="14" text-anchor="middle">Услуг</text>
+  
+  <!-- Recent appointments -->
+  <text x="220" y="200" fill="#333" font-family="Arial" font-size="18" font-weight="bold">Последние записи</text>
+  
+  <!-- Appointment list -->
+  <rect x="220" y="220" width="360" height="30" fill="#f9f9f9" stroke="#e0e0e0"/>
+  <text x="230" y="238" fill="#333" font-family="Arial" font-size="14">Иван Петров - 10:00</text>
+  <text x="500" y="238" fill="#4caf50" font-family="Arial" font-size="12">Подтверждено</text>
+  
+  <rect x="220" y="260" width="360" height="30" fill="#f9f9f9" stroke="#e0e0e0"/>
+  <text x="230" y="278" fill="#333" font-family="Arial" font-size="14">Мария Сидорова - 11:30</text>
+  <text x="500" y="278" fill="#ff9800" font-family="Arial" font-size="12">Ожидает</text>
+  
+  <rect x="220" y="300" width="360" height="30" fill="#f9f9f9" stroke="#e0e0e0"/>
+  <text x="230" y="318" fill="#333" font-family="Arial" font-size="14">Алексей Козлов - 14:00</text>
+  <text x="500" y="318" fill="#4caf50" font-family="Arial" font-size="12">Подтверждено</text>
+  
+  <!-- Chart placeholder -->
+  <rect x="220" y="350" width="360" height="40" fill="#f0f0f0" stroke="#ddd"/>
+  <text x="400" y="375" fill="#999" font-family="Arial" font-size="14" text-anchor="middle">📈 График записей</text>
+</svg>
