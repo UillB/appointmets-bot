@@ -4,9 +4,11 @@ import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Check, Star, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 
 export default function Pricing() {
   const t = useTranslations('pricing')
+  const locale = useLocale()
 
   const plans = [
     {
@@ -14,13 +16,7 @@ export default function Pricing() {
       price: t('free.price'),
       period: t('free.period'),
       description: t('free.description'),
-      features: [
-        'До 50 записей в месяц',
-        '1 организация',
-        'Telegram бот',
-        'Базовая аналитика',
-        'Поддержка по email'
-      ],
+      features: t.raw('free.features') as string[],
       cta: t('free.cta'),
       popular: false,
       color: 'border-gray-200',
@@ -31,14 +27,7 @@ export default function Pricing() {
       price: t('professional.price'),
       period: t('professional.period'),
       description: t('professional.description'),
-      features: [
-        'До 500 записей в месяц',
-        '3 организации',
-        'Расширенная аналитика',
-        'Email уведомления',
-        'Приоритетная поддержка',
-        'Кастомизация бота'
-      ],
+      features: t.raw('professional.features') as string[],
       cta: t('professional.cta'),
       popular: true,
       color: 'border-primary-500',
@@ -49,15 +38,7 @@ export default function Pricing() {
       price: t('business.price'),
       period: t('business.period'),
       description: t('business.description'),
-      features: [
-        'Неограниченные записи',
-        'Неограниченные организации',
-        'Полная аналитика',
-        'SMS уведомления',
-        'Интеграции с CRM',
-        'Персональный менеджер',
-        'API доступ'
-      ],
+      features: t.raw('business.features') as string[],
       cta: t('business.cta'),
       popular: false,
       color: 'border-gray-200',
@@ -146,7 +127,7 @@ export default function Pricing() {
 
               {/* CTA Button */}
               <Link
-                href="/register"
+                href={`/${locale}/register`}
                 className={`w-full ${plan.buttonColor} flex items-center justify-center group`}
               >
                 {plan.cta}
@@ -166,17 +147,17 @@ export default function Pricing() {
         >
           <div className="bg-gray-50 rounded-2xl p-8 max-w-4xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Нужен индивидуальный план?
+              {t('contact.title')}
             </h3>
             <p className="text-gray-600 mb-6">
-              Свяжитесь с нами для обсуждения корпоративных решений и специальных условий.
+              {t('contact.text')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="btn-primary">
-                Связаться с нами
+                {t('contact.primary')}
               </button>
               <button className="btn-outline">
-                Запросить демо
+                {t('contact.secondary')}
               </button>
             </div>
           </div>
@@ -191,28 +172,26 @@ export default function Pricing() {
           className="mt-16"
         >
           <div className="text-center mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Частые вопросы о тарифах
-            </h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('faq.title')}</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="space-y-6">
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h4 className="font-semibold text-gray-900 mb-2">
-                  Можно ли изменить тариф?
+                  {t('faq.q1.title')}
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Да, вы можете изменить тариф в любое время. Изменения вступают в силу в следующем биллинговом цикле.
+                  {t('faq.q1.text')}
                 </p>
               </div>
 
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h4 className="font-semibold text-gray-900 mb-2">
-                  Есть ли пробный период?
+                  {t('faq.q2.title')}
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Да, все платные тарифы имеют 14-дневный пробный период без обязательств.
+                  {t('faq.q2.text')}
                 </p>
               </div>
             </div>
@@ -220,19 +199,19 @@ export default function Pricing() {
             <div className="space-y-6">
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h4 className="font-semibold text-gray-900 mb-2">
-                  Что происходит при превышении лимитов?
+                  {t('faq.q3.title')}
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Мы уведомим вас заранее. Вы можете обновить тариф или приобрести дополнительные записи.
+                  {t('faq.q3.text')}
                 </p>
               </div>
 
               <div className="bg-white rounded-lg p-6 shadow-sm">
                 <h4 className="font-semibold text-gray-900 mb-2">
-                  Какие способы оплаты доступны?
+                  {t('faq.q4.title')}
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Мы принимаем банковские карты, PayPal и банковские переводы для корпоративных клиентов.
+                  {t('faq.q4.text')}
                 </p>
               </div>
             </div>

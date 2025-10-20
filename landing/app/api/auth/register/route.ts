@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password, organizationName, phone } = await request.json()
+    const { name, email, password, organization, organizationName, phone } = await request.json()
 
     // Валидация
-    if (!name || !email || !password || !organizationName) {
+    const orgName = organizationName || organization
+    if (!name || !email || !password || !orgName) {
       return NextResponse.json(
         { message: 'Все обязательные поля должны быть заполнены' },
         { status: 400 }
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
         name, 
         email, 
         password, 
-        organizationName, 
+        organizationName: orgName, 
         phone 
       }),
     })

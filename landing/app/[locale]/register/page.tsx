@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, Mail, Lock, User, Building, Phone, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
@@ -24,6 +25,7 @@ export default function RegisterPage() {
   const tErrors = useTranslations('auth.errors')
   const tSuccess = useTranslations('auth.success')
   const router = useRouter()
+  const locale = useLocale()
   
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -65,7 +67,9 @@ export default function RegisterPage() {
         localStorage.setItem('user', JSON.stringify(result.user))
         
         toast.success(tSuccess('register'))
-        router.push('/dashboard')
+        // После регистрации перенаправляем в админку и передаем токен
+        const token = result.token
+        router.push(`http://localhost:4200/auth/login-token?token=${encodeURIComponent(token)}`)
       } else {
         const error = await response.json()
         toast.error(error.message || tErrors('register_failed'))
@@ -87,7 +91,7 @@ export default function RegisterPage() {
       >
         {/* Back Button */}
         <Link 
-          href="/"
+          href={`/${locale}`}
           className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -119,7 +123,7 @@ export default function RegisterPage() {
                   })}
                   type="text"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
-                  placeholder="Иван Иванов"
+                  placeholder="John Doe"
                 />
               </div>
               {errors.name && (
@@ -165,7 +169,7 @@ export default function RegisterPage() {
                   })}
                   type="text"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
-                  placeholder="Моя клиника"
+                  placeholder="My organization"
                 />
               </div>
               {errors.organization && (
@@ -184,7 +188,7 @@ export default function RegisterPage() {
                   {...register('phone')}
                   type="tel"
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
-                  placeholder="+7 (999) 123-45-67"
+                  placeholder="+1 555 123 4567"
                 />
               </div>
             </div>
@@ -300,7 +304,7 @@ export default function RegisterPage() {
               <span className="text-gray-600">
                 {t('has_account')}{' '}
                 <Link
-                  href="/login"
+                  href={`/${locale}/login`}
                   className="text-primary-600 hover:text-primary-700 font-semibold transition-colors"
                 >
                   {t('login_link')}

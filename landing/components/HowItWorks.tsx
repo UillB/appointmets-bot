@@ -97,7 +97,7 @@ export default function HowItWorks() {
                   <div className="mt-6 flex items-center justify-center">
                     <CheckCircle className="w-6 h-6 text-success-500" />
                     <span className="ml-2 text-sm text-success-600 font-medium">
-                      Готово за 5 минут
+                      {t('ready_in_5min')}
                     </span>
                   </div>
                 </div>
@@ -124,19 +124,11 @@ export default function HowItWorks() {
           className="text-center mt-16"
         >
           <div className="bg-white rounded-2xl p-8 shadow-lg max-w-2xl mx-auto">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Готовы начать?
-            </h3>
-            <p className="text-gray-600 mb-6">
-              Создайте своего бота за 10 минут и начните принимать записи уже сегодня!
-            </p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('cta.title')}</h3>
+            <p className="text-gray-600 mb-6">{t('cta.subtitle')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="btn-primary">
-                Создать бота бесплатно
-              </button>
-              <button className="btn-outline">
-                Посмотреть демо
-              </button>
+              <button className="btn-primary">{t('cta.primary')}</button>
+              <button className="btn-outline">{t('cta.secondary')}</button>
             </div>
           </div>
         </motion.div>

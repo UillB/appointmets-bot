@@ -42,12 +42,7 @@ export default function Benefits() {
     }
   ]
 
-  const stats = [
-    { value: '95%', label: 'Удовлетворенность клиентов' },
-    { value: '3x', label: 'Увеличение записей' },
-    { value: '50%', label: 'Сокращение времени на администрирование' },
-    { value: '24/7', label: 'Доступность для клиентов' }
-  ]
+  const stats = (t.raw('results.stats') as { value: string; label: string }[])
 
   return (
     <section className="section-padding bg-gradient-to-br from-primary-50 to-primary-100">
@@ -109,10 +104,10 @@ export default function Benefits() {
         >
           <div className="text-center mb-12">
             <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-              Результаты наших клиентов
+              {t('results.title')}
             </h3>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Посмотрите, как Bookly помогает бизнесу расти и развиваться
+              {t('results.subtitle')}
             </p>
           </div>
 
@@ -153,15 +148,15 @@ export default function Benefits() {
                   <Users className="w-6 h-6 text-blue-600" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">Клиника "Здоровье"</h4>
-                  <p className="text-sm text-gray-600">Медицинский центр</p>
+                  <h4 className="font-bold text-gray-900">{t('stories.1.title')}</h4>
+                  <p className="text-sm text-gray-600">{t('stories.1.role')}</p>
                 </div>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed">
-                "За 3 месяца использования Bookly количество записей увеличилось в 2.5 раза. Клиенты довольны удобством записи через Telegram."
+                "{t('stories.1.text')}"
               </p>
               <div className="mt-4 text-sm font-medium text-primary-600">
-                +150% записей
+                {t('stories.1.metric')}
               </div>
             </div>
 
@@ -172,15 +167,15 @@ export default function Benefits() {
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">Салон "Красота"</h4>
-                  <p className="text-sm text-gray-600">Салон красоты</p>
+                  <h4 className="font-bold text-gray-900">{t('stories.2.title')}</h4>
+                  <p className="text-sm text-gray-600">{t('stories.2.role')}</p>
                 </div>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed">
-                "Теперь 80% записей приходит через бота. Освободилось время для работы с клиентами вместо ответов на звонки."
+                "{t('stories.2.text')}"
               </p>
               <div className="mt-4 text-sm font-medium text-success-600">
-                +80% автоматизации
+                {t('stories.2.metric')}
               </div>
             </div>
 
@@ -191,15 +186,15 @@ export default function Benefits() {
                   <Heart className="w-6 h-6 text-purple-600" />
                 </div>
                 <div>
-                  <h4 className="font-bold text-gray-900">Доктор Иванов</h4>
-                  <p className="text-sm text-gray-600">Частная практика</p>
+                  <h4 className="font-bold text-gray-900">{t('stories.3.title')}</h4>
+                  <p className="text-sm text-gray-600">{t('stories.3.role')}</p>
                 </div>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed">
-                "Простая настройка, понятный интерфейс. Клиенты записываются в любое время, а я получаю уведомления."
+                "{t('stories.3.text')}"
               </p>
               <div className="mt-4 text-sm font-medium text-purple-600">
-                100% довольных клиентов
+                {t('stories.3.metric')}
               </div>
             </div>
           </div>

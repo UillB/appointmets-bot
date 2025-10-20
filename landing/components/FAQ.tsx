@@ -113,17 +113,17 @@ export default function FAQ() {
         >
           <div className="bg-white rounded-2xl p-8 shadow-lg max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Не нашли ответ на свой вопрос?
+              {t('contact.title')}
             </h3>
             <p className="text-gray-600 mb-6">
-              Наша команда поддержки готова помочь вам 24/7
+              {t('contact.subtitle')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="btn-primary">
-                Связаться с поддержкой
+                {t('contact.primary')}
               </button>
               <button className="btn-outline">
-                Посмотреть документацию
+                {t('contact.secondary')}
               </button>
             </div>
           </div>

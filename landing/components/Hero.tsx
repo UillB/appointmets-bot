@@ -4,25 +4,27 @@ import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { ArrowRight, Play, Users, Calendar, Globe } from 'lucide-react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 
 export default function Hero() {
   const t = useTranslations('hero')
+  const locale = useLocale()
 
   const stats = [
     {
       icon: Users,
       value: t('stats.users'),
-      label: 'Пользователей'
+      label: t('labels.users')
     },
     {
       icon: Calendar,
       value: t('stats.appointments'),
-      label: 'Записей'
+      label: t('labels.appointments')
     },
     {
       icon: Globe,
       value: t('stats.countries'),
-      label: 'Стран'
+      label: t('labels.countries')
     }
   ]
 
@@ -88,7 +90,7 @@ export default function Hero() {
               className="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium mb-6"
             >
               <span className="w-2 h-2 bg-primary-500 rounded-full mr-2 animate-pulse"></span>
-              Новая версия доступна
+              {t('badge_new')}
             </motion.div>
 
             {/* Main Title */}
@@ -119,7 +121,7 @@ export default function Hero() {
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-12"
             >
               <Link
-                href="/register"
+                href={`/${locale}/register`}
                 className="btn-primary group flex items-center justify-center"
               >
                 {t('cta_primary')}
@@ -189,37 +191,35 @@ export default function Hero() {
                         <span className="text-white text-xs font-bold">B</span>
                       </div>
                       <div className="bg-white rounded-2xl rounded-tl-sm p-3 shadow-sm max-w-[80%]">
-                        <p className="text-sm text-gray-800">
-                          Привет! 👋 Я помогу вам записаться на прием. Выберите услугу:
-                        </p>
+                        <p className="text-sm text-gray-800">{t('bot.greeting')}</p>
                       </div>
                     </div>
 
                     {/* Service Options */}
                     <div className="space-y-2">
                       <div className="bg-primary-100 rounded-lg p-3 text-sm">
-                        <p className="font-medium text-primary-800">Консультация</p>
-                        <p className="text-primary-600">30 мин • 2000₽</p>
+                        <p className="font-medium text-primary-800">{t('bot.service1.title')}</p>
+                        <p className="text-primary-600">{t('bot.service1.price')}</p>
                       </div>
                       <div className="bg-primary-100 rounded-lg p-3 text-sm">
-                        <p className="font-medium text-primary-800">Лечение</p>
-                        <p className="text-primary-600">60 мин • 5000₽</p>
+                        <p className="font-medium text-primary-800">{t('bot.service2.title')}</p>
+                        <p className="text-primary-600">{t('bot.service2.price')}</p>
                       </div>
                     </div>
 
                     {/* User Message */}
                     <div className="flex justify-end">
                       <div className="bg-primary-600 text-white rounded-2xl rounded-tr-sm p-3 max-w-[80%]">
-                        <p className="text-sm">Выберу консультацию</p>
+                        <p className="text-sm">{t('bot.userChoice')}</p>
                       </div>
                     </div>
 
                     {/* Calendar */}
                     <div className="bg-white rounded-lg p-3 shadow-sm">
-                      <p className="text-sm font-medium text-gray-800 mb-2">Выберите дату:</p>
+                      <p className="text-sm font-medium text-gray-800 mb-2">{t('calendar.select')}</p>
                       <div className="grid grid-cols-7 gap-1 text-xs">
-                        {['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].map((day) => (
-                          <div key={day} className="text-center text-gray-500 p-1">{day}</div>
+                        {['mon','tue','wed','thu','fri','sat','sun'].map((key) => (
+                          <div key={key} className="text-center text-gray-500 p-1">{t(`calendar.weekdays.${key}`)}</div>
                         ))}
                         {Array.from({ length: 14 }, (_, i) => (
                           <div key={i} className={`text-center p-1 rounded ${

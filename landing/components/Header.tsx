@@ -6,9 +6,11 @@ import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Globe, User, LogIn } from 'lucide-react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 
 export default function Header() {
   const t = useTranslations('navigation')
+  const locale = useLocale()
   const router = useRouter()
   const pathname = usePathname()
   
@@ -121,7 +123,7 @@ export default function Header() {
 
             {/* Auth Buttons */}
             <Link
-              href="/login"
+              href={`/${locale}/login`}
               className="flex items-center space-x-1 text-gray-600 hover:text-primary-600 transition-colors"
             >
               <LogIn className="w-4 h-4" />
@@ -129,7 +131,7 @@ export default function Header() {
             </Link>
             
             <Link
-              href="/register"
+              href={`/${locale}/register`}
               className="btn-primary text-sm"
             >
               {t('register')}
@@ -208,7 +210,7 @@ export default function Header() {
                 {/* Mobile Auth Buttons */}
                 <div className="pt-4 border-t border-gray-200 space-y-3">
                   <Link
-                    href="/login"
+                    href={`/${locale}/login`}
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center justify-center space-x-2 w-full py-2 text-gray-600 hover:text-primary-600 transition-colors"
                   >
@@ -217,7 +219,7 @@ export default function Header() {
                   </Link>
                   
                   <Link
-                    href="/register"
+                    href={`/${locale}/register`}
                     onClick={() => setIsMenuOpen(false)}
                     className="btn-primary w-full text-center"
                   >

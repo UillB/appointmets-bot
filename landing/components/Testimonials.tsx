@@ -105,7 +105,7 @@ export default function Testimonials() {
           className="bg-gray-50 rounded-2xl p-8 text-center"
         >
           <h3 className="text-xl font-bold text-gray-900 mb-6">
-            Нам доверяют
+            {t('trusted_by')}
           </h3>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
@@ -114,28 +114,28 @@ export default function Testimonials() {
               <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-2">
                 <span className="text-2xl">🛡️</span>
               </div>
-              <div className="text-sm font-medium text-gray-700">Безопасность</div>
+              <div className="text-sm font-medium text-gray-700">{t('badges.security')}</div>
             </div>
 
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 bg-success-100 rounded-full flex items-center justify-center mb-2">
                 <span className="text-2xl">⚡</span>
               </div>
-              <div className="text-sm font-medium text-gray-700">Быстрая настройка</div>
+              <div className="text-sm font-medium text-gray-700">{t('badges.fast_setup')}</div>
             </div>
 
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 bg-warning-100 rounded-full flex items-center justify-center mb-2">
                 <span className="text-2xl">🌍</span>
               </div>
-              <div className="text-sm font-medium text-gray-700">Многоязычность</div>
+              <div className="text-sm font-medium text-gray-700">{t('badges.multilingual')}</div>
             </div>
 
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-2">
                 <span className="text-2xl">📱</span>
               </div>
-              <div className="text-sm font-medium text-gray-700">Мобильность</div>
+              <div className="text-sm font-medium text-gray-700">{t('badges.mobile')}</div>
             </div>
           </div>
         </motion.div>

@@ -67,14 +67,7 @@ export default function Features() {
     }
   ]
 
-  const benefits = [
-    'Автоматическое создание слотов',
-    'Уведомления в реальном времени',
-    'Интеграция с календарями',
-    'Мобильное приложение',
-    'API для разработчиков',
-    '24/7 техническая поддержка'
-  ]
+  const benefits = t.raw('more.list') as string[]
 
   return (
     <section id="features" className="section-padding bg-white">
@@ -123,7 +116,7 @@ export default function Features() {
                 {/* Hover Effect */}
                 <div className="mt-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="flex items-center text-primary-600 font-medium">
-                    <span className="text-sm">Узнать больше</span>
+                    <span className="text-sm">{t('learn_more')}</span>
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </div>
                 </div>
@@ -144,10 +137,10 @@ export default function Features() {
             {/* Left Column */}
             <div>
               <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">
-                И еще больше возможностей
+                {t('more.title')}
               </h3>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                Bookly предоставляет полный набор инструментов для эффективного управления записями и роста вашего бизнеса.
+                {t('more.description')}
               </p>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -174,7 +167,7 @@ export default function Features() {
                 <div className="space-y-4">
                   {/* Header */}
                   <div className="flex items-center justify-between pb-4 border-b border-gray-200">
-                    <h4 className="font-bold text-gray-900">Панель управления</h4>
+                    <h4 className="font-bold text-gray-900">{t('more.dashboard_title')}</h4>
                     <div className="flex space-x-2">
                       <div className="w-3 h-3 bg-success-500 rounded-full"></div>
                       <div className="w-3 h-3 bg-warning-500 rounded-full"></div>
@@ -186,11 +179,11 @@ export default function Features() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-primary-50 rounded-lg p-4">
                       <div className="text-2xl font-bold text-primary-600">127</div>
-                      <div className="text-sm text-gray-600">Записей сегодня</div>
+                      <div className="text-sm text-gray-600">{t('more.today_appointments')}</div>
                     </div>
                     <div className="bg-success-50 rounded-lg p-4">
                       <div className="text-2xl font-bold text-success-600">89%</div>
-                      <div className="text-sm text-gray-600">Заполненность</div>
+                      <div className="text-sm text-gray-600">{t('more.occupancy')}</div>
                     </div>
                   </div>
 
@@ -203,15 +196,15 @@ export default function Features() {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-3 text-sm">
                       <div className="w-2 h-2 bg-success-500 rounded-full"></div>
-                      <span className="text-gray-600">Новая запись: Консультация</span>
+                      <span className="text-gray-600">{t('more.activity.new_appointment')}</span>
                     </div>
                     <div className="flex items-center space-x-3 text-sm">
                       <div className="w-2 h-2 bg-warning-500 rounded-full"></div>
-                      <span className="text-gray-600">Отмена: Лечение</span>
+                      <span className="text-gray-600">{t('more.activity.cancel')}</span>
                     </div>
                     <div className="flex items-center space-x-3 text-sm">
                       <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
-                      <span className="text-gray-600">Обновление расписания</span>
+                      <span className="text-gray-600">{t('more.activity.schedule_update')}</span>
                     </div>
                   </div>
                 </div>

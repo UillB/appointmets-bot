@@ -4,22 +4,24 @@ import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { ArrowRight, Shield, Clock, Users } from 'lucide-react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 
 export default function CTA() {
   const t = useTranslations('cta')
+  const locale = useLocale()
 
   const guarantees = [
     {
       icon: Shield,
-      text: '30 дней бесплатно'
+      text: t('guarantees.free30days')
     },
     {
       icon: Clock,
-      text: 'Без кредитной карты'
+      text: t('guarantees.noCard')
     },
     {
       icon: Users,
-      text: 'Отмена в любое время'
+      text: t('guarantees.cancelAnytime')
     }
   ]
 
@@ -100,7 +102,7 @@ export default function CTA() {
             className="mb-12"
           >
             <Link
-              href="/register"
+              href={`/${locale}/register`}
               className="inline-flex items-center bg-white text-primary-600 hover:bg-gray-50 font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl group"
             >
               {t('button')}
@@ -143,15 +145,15 @@ export default function CTA() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white">
             <div>
               <div className="text-3xl md:text-4xl font-bold mb-2">1000+</div>
-              <div className="text-sm opacity-80">Довольных клиентов</div>
+              <div className="text-sm opacity-80">{t('stats.happyCustomers')}</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold mb-2">50,000+</div>
-              <div className="text-sm opacity-80">Успешных записей</div>
+              <div className="text-sm opacity-80">{t('stats.successfulBookings')}</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold mb-2">99.9%</div>
-              <div className="text-sm opacity-80">Время работы</div>
+              <div className="text-sm opacity-80">{t('stats.uptime')}</div>
             </div>
           </div>
         </motion.div>

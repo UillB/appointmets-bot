@@ -54,16 +54,7 @@ export default function Footer() {
       text: 'hello@bookly.app',
       href: 'mailto:hello@bookly.app'
     },
-    {
-      icon: Phone,
-      text: '+7 (999) 123-45-67',
-      href: 'tel:+79991234567'
-    },
-    {
-      icon: MapPin,
-      text: 'Москва, Россия',
-      href: '#'
-    }
+    // Phone and address intentionally omitted to keep neutral/international tone
   ]
 
   return (
@@ -158,21 +149,21 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <h3 className="text-xl font-semibold mb-2">
-                Подпишитесь на обновления
+                {t('newsletter.title')}
               </h3>
               <p className="text-gray-300">
-                Получайте новости о новых функциях и обновлениях
+                {t('newsletter.subtitle')}
               </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
               <input
                 type="email"
-                placeholder="Ваш email"
+                placeholder={t('newsletter.placeholder')}
                 className="px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 min-w-[250px]"
               />
               <button className="bg-white text-primary-600 hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg transition-colors whitespace-nowrap">
-                Подписаться
+                {t('newsletter.button')}
               </button>
             </div>
           </div>

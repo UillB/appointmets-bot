@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
@@ -20,6 +21,7 @@ export default function LoginPage() {
   const tErrors = useTranslations('auth.errors')
   const tSuccess = useTranslations('auth.success')
   const router = useRouter()
+  const locale = useLocale()
   
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -54,7 +56,8 @@ export default function LoginPage() {
         localStorage.setItem('user', JSON.stringify(result.user))
         
         toast.success(tSuccess('login'))
-        router.push('/dashboard')
+        // После логина перенаправляем в админку и передаем токен
+        router.push(`http://localhost:4200/auth/login-token?token=${encodeURIComponent(result.token)}`)
       } else {
         const error = await response.json()
         toast.error(error.message || tErrors('login_failed'))
@@ -76,7 +79,7 @@ export default function LoginPage() {
       >
         {/* Back Button */}
         <Link 
-          href="/"
+          href={`/${locale}`}
           className="inline-flex items-center text-primary-600 hover:text-primary-700 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -190,7 +193,7 @@ export default function LoginPage() {
               <span className="text-gray-600">
                 {t('no_account')}{' '}
                 <Link
-                  href="/register"
+                  href={`/${locale}/register`}
                   className="text-primary-600 hover:text-primary-700 font-semibold transition-colors"
                 >
                   {t('register_link')}
