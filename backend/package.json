@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
+    "link:tg-admin": "tsx scripts/linkTelegramAdmin.ts",
     "slots:month": "tsx scripts/generateSlots.ts --days=31",
     "slots:weekends": "tsx scripts/generateSlots.ts --days=31 --weekends",
     "slots:custom": "tsx scripts/generateSlots.ts --days=31 --start=10 --end=18 --step=20 --cap=2",

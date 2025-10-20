@@ -219,42 +219,75 @@ router.post('/refresh', async (req: Request, res: Response) => {
   }
 });
 
-// POST /auth/telegram-login - Аутентификация через Telegram Web App
-router.post('/telegram-login', async (req: Request, res: Response) => {
+// Verify Telegram initData signature
+function verifyTelegramInitData(initData: string, botToken?: string): boolean {
   try {
-    const { telegramId, firstName, lastName, username, languageCode } = req.body;
+    if (!initData || !botToken) return false;
+  const url = new URLSearchParams(initData as string);
+    const hash = url.get('hash');
+    url.delete('hash');
+    const dataCheckString = Array.from(url.entries())
+      .map(([k, v]) => `${k}=${v}`)
+      .sort()
+      .join('\n');
+
+    const crypto = require('crypto');
+    const secretKey = crypto.createHmac('sha256', 'WebAppData').update(botToken).digest();
+    const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex');
+    return calculatedHash === hash;
+  } catch (e) {
+    return false;
+  }
+}
+
+// POST /auth/telegram-login - Аутентификация через Telegram Web App
+router.post('/telegram-login', async (req: any, res: any) => {
+  try {
+    const { telegramId, firstName, lastName, username, languageCode, initData } = req.body;
+    console.log('🔐 /auth/telegram-login body:', { telegramId, username, hasInitData: !!initData });
 
     if (!telegramId) {
       return res.status(400).json({ error: 'Telegram ID is required' });
     }
 
-    // Ищем пользователя по Telegram ID
+    // Attempt to find existing user first to determine organization context
     let user = await prisma.user.findFirst({
       where: { telegramId: telegramId.toString() },
       include: { organization: true }
     });
+    console.log('🔐 Found user by telegramId:', !!user, 'orgId:', user?.organizationId);
+
+    // Verify initData signature strictly against organization's bot token if available
+    if (initData) {
+      let tokenForVerification: string | undefined;
+      if (user?.organization?.botToken) {
+        tokenForVerification = user.organization.botToken;
+      } else if (process.env.TELEGRAM_BOT_TOKEN) {
+        // fallback only for legacy/global bot (single-tenant); discouraged
+        tokenForVerification = process.env.TELEGRAM_BOT_TOKEN;
+      }
+      if (tokenForVerification) {
+        const ok = verifyTelegramInitData(initData, tokenForVerification);
+        if (!ok) {
+          const allowInDev = (process.env.NODE_ENV || 'development') !== 'production';
+          console.warn('Telegram login: invalid initData signature', {
+            telegramId,
+            hasUser: !!user,
+            orgId: user?.organizationId,
+            allowInDev
+          });
+          if (!allowInDev) {
+            return res.status(401).json({ error: 'Invalid Telegram initData signature' });
+          }
+        }
+      }
+    }
 
     // Если пользователь не найден, создаем нового (только для админов)
     if (!user) {
-      // Проверяем, является ли пользователь админом
-      const isAdmin = await checkIfTelegramUserIsAdmin(telegramId, username);
-      
-      if (!isAdmin) {
-        return res.status(403).json({ error: 'Access denied. Admin privileges required.' });
-      }
-
-      // Создаем нового админа
-      user = await prisma.user.create({
-        data: {
-          telegramId: telegramId.toString(),
-          name: `${firstName} ${lastName || ''}`.trim(),
-          email: `${telegramId}@telegram.local`, // Временный email
-          password: '', // Пустой пароль для Telegram пользователей
-          role: 'SUPER_ADMIN', // Или другая роль
-          organizationId: 1, // Или создать организацию
-        },
-        include: { organization: true }
-      });
+      // Новый пользователь через TWA без онбординга организации запрещен
+      console.warn('🔐 Telegram login: user not found for telegramId', telegramId);
+      return res.status(403).json({ error: 'User not found. Complete organization onboarding in web admin first.' });
     }
 
     // Генерируем токены
@@ -298,7 +331,7 @@ async function checkIfTelegramUserIsAdmin(telegramId: number, username?: string)
 }
 
 // POST /auth/logout
-router.post('/logout', (req: Request, res: Response) => {
+router.post('/logout', (req: any, res: any) => {
   // In a stateless JWT implementation, logout is handled client-side
   // by removing the token from storage
   res.json({ message: 'Logout successful' });

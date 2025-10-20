@@ -6,7 +6,10 @@
     </mat-card-header>
     
     <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div *ngIf="isTelegram" class="telegram-autologin">
+        <p>Вход через Telegram...</p>
+      </div>
+      <form *ngIf="!isTelegram" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" placeholder="Введите email">
@@ -41,7 +44,7 @@
       </form>
     </mat-card-content>
 
-    <mat-card-actions>
+    <mat-card-actions *ngIf="!isTelegram">
       <button mat-button color="accent" (click)="goToRegister()">
         Нет аккаунта? Зарегистрироваться
       </button>

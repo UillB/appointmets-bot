@@ -30,7 +30,7 @@ const webappTexts = {
 };
 
 // API endpoint для получения доступности дней
-r.get("/calendar/availability", async (req, res) => {
+r.get("/calendar/availability", async (req: any, res: any) => {
   const { serviceId, month, year } = req.query;
   
   if (!serviceId) {
@@ -79,7 +79,7 @@ r.get("/calendar/availability", async (req, res) => {
   res.json(availability);
 });
 
-r.get("/calendar", (req, res) => {
+r.get("/calendar", (req: any, res: any) => {
   // Определяем язык из параметров запроса
   const lang = detectLang(req.query.lang as string);
   const texts = webappTexts[lang];
@@ -180,6 +180,47 @@ r.get("/calendar", (req, res) => {
         console.error(e);
       }
     });
+  </script>
+</body>
+</html>
+  `);
+});
+
+// Admin WebApp wrapper: initializes Telegram WebApp and redirects to Angular app
+r.get("/admin", (req: any, res: any) => {
+  const lang = detectLang(req.query.lang as string);
+  // IMPORTANT: Use same-origin path for Telegram iOS webview to avoid cross-origin redirects
+  const frontendUrl = "/admin-panel";
+
+  res.type("html").send(`
+<!doctype html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu; background: var(--tg-theme-bg-color, #ffffff); color: var(--tg-theme-text-color, #000000); }
+    #loading { display:flex; align-items:center; justify-content:center; height:100vh; flex-direction:column; gap:16px; }
+    .spinner { width:40px; height:40px; border:4px solid rgba(0,0,0,0.1); border-top:4px solid #3b82f6; border-radius:50%; animation:spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>Loading Admin Panel…</p>
+  </div>
+  <script>
+    (function(){
+      try {
+        var tg = window.Telegram && window.Telegram.WebApp;
+        if (tg) { tg.ready(); tg.expand(); }
+      } catch (e) { /* no-op */ }
+      // Redirect to same-origin Angular build served by backend
+      window.location.replace('${frontendUrl}');
+    })();
   </script>
 </body>
 </html>

@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:4000/api'
+  // Use same-origin API when running inside Telegram WebApp served by backend
+  apiUrl: '/api'
 };

@@ -1,5 +1,6 @@
 import { Telegraf, session } from "telegraf";
 import { ENV } from "../lib/env";
+import { prisma } from "../lib/prisma";
 import { i18nMw } from "./mw/i18n";
 
 import { handleStart, handleLang, handleHelp, registerLangCallbacks } from "./handlers/start";
@@ -27,6 +28,21 @@ export function createBot() {
   bot.command("book", handleBookingFlow());
   bot.command("slots", handleSlots());
   bot.command("my", handleMy());
+  bot.command("admin", async (ctx) => {
+    const url = `${ENV.PUBLIC_BASE_URL}/webapp/admin?lang=${(ctx as any).lang || 'ru'}`;
+    try {
+      await ctx.reply(
+        ctx.tt("admin.openPanel"),
+        {
+          reply_markup: {
+            inline_keyboard: [[{ text: "🔧 " + ctx.tt("admin.openPanel"), web_app: { url } }]]
+          }
+        }
+      );
+    } catch (e) {
+      await ctx.reply(ctx.tt("admin.accessDenied"));
+    }
+  });
 
   // inline и webapp
   registerMyCallbacks(bot);

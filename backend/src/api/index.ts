@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import cors from "cors";
 import appointments from "./routes/appointments";
 import services from "./routes/services";
@@ -37,6 +38,19 @@ app.use("/api/bot", botManagement);
 app.use("/api/ai-config", aiConfig);
 console.log("✅ AI Config routes registered at /api/ai-config");
 app.use("/webapp", webapp);
+
+// Serve prebuilt Angular admin panel for Telegram WebApp from dist (same origin for mobile TG)
+try {
+  const adminDist = path.resolve(process.cwd(), "../admin-panel/dist/admin-panel/browser");
+  app.use("/admin-panel", express.static(adminDist, { index: ["index.html"] }));
+  console.log("✅ Admin panel static served from:", adminDist);
+  // SPA fallback for deep links and refresh inside Telegram WebView
+  app.get('/admin-panel/*', (req, res) => {
+    res.sendFile(path.join(adminDist, 'index.html'));
+  });
+} catch (e) {
+  console.warn("⚠️ Failed to mount admin-panel static dir:", e);
+}
 
 
 app.get("/api/health", (_, res) => res.json({ ok: true }));

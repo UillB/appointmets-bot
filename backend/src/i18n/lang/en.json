@@ -64,9 +64,14 @@
     "book": "Book appointment",
     "viewSlots": "View slots",
     "myAppointments": "My appointments",
-    "language": "Language"
+    "language": "Language",
+    "adminPanel": "Admin panel"
   },
   "help": {
     "text": "📖 Command help:\n\n📅 /book - Book an appointment\n👀 /slots - View available slots\n📋 /my - My appointments\n🌐 /lang - Change language\n❓ /help - Show this help\n\nOr use the buttons below:"
+  },
+  "admin": {
+    "openPanel": "Open admin panel",
+    "accessDenied": "Access denied. Admin privileges required."
   }
 }

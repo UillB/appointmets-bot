@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { ApiService } from './api';
+import { TelegramWebAppService } from './telegram-webapp.service';
 import { catchError, tap } from 'rxjs/operators';
 
 export interface User {
@@ -50,7 +51,8 @@ export class AuthService {
 
   constructor(
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private telegramWebApp: TelegramWebAppService
   ) {
     // Check for existing tokens on service initialization
     this.checkStoredAuth();
@@ -167,6 +169,37 @@ export class AuthService {
       }),
       catchError(error => {
         console.error('AuthService: Registration error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // Login via Telegram Web App initData
+  loginWithTelegram(): Observable<AuthResponse> {
+    if (!this.telegramWebApp.isInTelegram) {
+      return throwError(() => new Error('Not in Telegram Web App'));
+    }
+
+    const user = this.telegramWebApp.currentUser;
+    const initData = this.telegramWebApp.initData;
+    if (!user || !initData) {
+      return throwError(() => new Error('Telegram init data missing'));
+    }
+
+    return this.apiService.post<AuthResponse>('/auth/telegram-login', {
+      telegramId: user.id,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      username: user.username,
+      languageCode: user.language_code,
+      initData
+    }).pipe(
+      tap(response => {
+        this.setTokens(response.accessToken, response.refreshToken);
+        this.currentUserSubject.next(response.user);
+      }),
+      catchError(error => {
+        console.error('Telegram login error:', error);
         return throwError(() => error);
       })
     );

@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService, LoginRequest } from '../../../core/services/auth';
+import { TelegramWebAppService } from '../../../core/services/telegram-webapp.service';
 
 @Component({
   selector: 'app-login',
@@ -29,17 +30,39 @@ export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
   hidePassword = true;
+  isTelegram = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private telegramWebApp: TelegramWebAppService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+
+    // Auto login in Telegram WebApp
+    this.isTelegram = this.telegramWebApp.isInTelegram;
+    if (this.isTelegram) {
+      this.isLoading = true;
+      this.authService.loginWithTelegram().subscribe({
+        next: () => {
+          this.isLoading = false;
+          this.router.navigate(['/dashboard']);
+        },
+        error: (error) => {
+          this.isLoading = false;
+          this.snackBar.open(
+            error.error?.error || 'Ошибка входа через Telegram',
+            'Закрыть',
+            { duration: 5000 }
+          );
+        }
+      });
+    }
   }
 
   onSubmit(): void {

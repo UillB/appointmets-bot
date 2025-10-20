@@ -36,6 +36,7 @@ export const handleStart = (organizationId?: number) => async (ctx: Context) => 
     [Markup.button.callback("📅 " + ctx.tt("menu.book"), "main_book")],
     [Markup.button.callback("👀 " + ctx.tt("menu.viewSlots"), "main_slots")],
     [Markup.button.callback("📋 " + ctx.tt("menu.myAppointments"), "main_my")],
+    [Markup.button.callback("⚙️ " + ctx.tt("menu.adminPanel"), "main_admin")],
     [Markup.button.callback("🌐 " + ctx.tt("menu.language"), "lang_menu")]
   ]);
   
@@ -134,5 +135,28 @@ export function registerLangCallbacks(bot: Telegraf, organizationId?: number) {
     // Отвечаем на выбранном языке
     const message = ctx.tt("lang.set", { lang });
     await ctx.editMessageText(message);
+  });
+
+  // Главное меню - админ панель
+  bot.action("main_admin", async (ctx) => {
+    await ctx.answerCbQuery();
+    // Проверяем права: ищем пользователя по telegramId
+    const telegramId = ctx.from?.id;
+    if (!telegramId) {
+      await ctx.reply(ctx.tt("admin.accessDenied"));
+      return;
+    }
+
+    const user = await prisma.user.findFirst({ where: { telegramId: String(telegramId) } });
+    if (!user || (user.role !== 'SUPER_ADMIN' && user.role !== 'OWNER')) {
+      await ctx.reply(ctx.tt("admin.accessDenied"));
+      return;
+    }
+
+    const url = `${ENV.PUBLIC_BASE_URL}/webapp/admin?lang=${(ctx as any).lang || 'ru'}`;
+    await ctx.reply(
+      ctx.tt("admin.openPanel"),
+      Markup.inlineKeyboard([[Markup.button.webApp("🔧 " + ctx.tt("admin.openPanel"), url)]])
+    );
   });
 }
