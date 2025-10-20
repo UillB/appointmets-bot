@@ -33,6 +33,11 @@ export class SlotsService {
     });
   }
 
+  // Получить слоты со статусом (available/booked/conflict) для организации
+  getSlotsStatus(params: { organizationId: number; serviceId?: number; date?: string; page?: number; limit?: number }): Observable<{ slots: (Slot & { status: string; isBooked: boolean; hasConflict: boolean })[]; pagination: { page: number; limit: number; total: number; pages: number } }> {
+    return this.api.get<{ slots: (Slot & { status: string; isBooked: boolean; hasConflict: boolean })[]; pagination: { page: number; limit: number; total: number; pages: number } }>(`/slots/status`, params);
+  }
+
   // Получить слот по ID
   getSlot(id: number): Observable<Slot> {
     return this.api.get<Slot>(`/slots/${id}`);
@@ -41,5 +46,10 @@ export class SlotsService {
   // Удалить слот
   deleteSlot(id: number): Observable<void> {
     return this.api.delete<void>(`/slots/${id}`);
+  }
+
+  // Быстрая генерация слотов (совместимо с backend /slots/generate)
+  generateSlotsAdvanced(request: { serviceId: number; startDate: string; endDate: string; startTime: string; endTime: string; includeWeekends?: boolean; lunchBreakStart?: string; lunchBreakEnd?: string; slotDuration: number; }): Observable<{ created: number }> {
+    return this.api.post<{ created: number }>(`/slots/generate`, request);
   }
 }

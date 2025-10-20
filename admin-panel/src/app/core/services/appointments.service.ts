@@ -65,6 +65,11 @@ export class AppointmentsService {
     return this.api.put<Appointment>(`/appointments/${id}`, data);
   }
 
+  // Отменить запись с причиной
+  cancelAppointment(id: number, reason?: string): Observable<{ message: string; appointment: Appointment }> {
+    return this.api.put<{ message: string; appointment: Appointment }>(`/appointments/${id}/cancel`, { reason });
+  }
+
   // Удалить запись
   deleteAppointment(id: number): Observable<void> {
     return this.api.delete<void>(`/appointments/${id}`);
