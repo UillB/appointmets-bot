@@ -1,181 +1,100 @@
 <div class="slots-management-container">
-  <div class="header">
-    <h1>📅 Управление слотами</h1>
-    <p class="subtitle">Создавайте и управляйте временными слотами для записи</p>
+  <!-- Universal Header -->
+  <div class="universal-header">
+    <div class="datetime-info">
+      <div class="current-date">{{ currentDate | date:'EEEE, d MMMM y' }}</div>
+      <div class="current-time">{{ currentTime | date:'HH:mm:ss' }}</div>
+    </div>
+    <button mat-icon-button 
+            color="primary" 
+            (click)="onRefresh()" 
+            [disabled]="isLoading" 
+            class="refresh-btn"
+            [attr.aria-label]="'Обновить данные'">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="page-title">
+      <mat-icon class="title-icon">schedule</mat-icon>
+      <div class="title-content">
+        <h1>Управление слотами</h1>
+        <p class="page-description">Создавайте и управляйте временными слотами для записи</p>
+      </div>
+    </div>
   </div>
 
   <div class="content">
     <mat-tab-group>
-      <!-- Вкладка генерации слотов -->
-      <mat-tab label="Генерация слотов">
-        <div class="tab-content">
-          <mat-card class="generation-card">
-            <mat-card-header>
-              <mat-card-title>
-                <mat-icon>auto_awesome</mat-icon>
-                Автоматическая генерация слотов
-              </mat-card-title>
-              <mat-card-subtitle>
-                Создайте слоты для выбранной услуги на указанный период
-              </mat-card-subtitle>
-            </mat-card-header>
-
-            <mat-card-content>
-              <form [formGroup]="generationForm" class="generation-form">
-                <div class="form-row">
-                  <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Услуга</mat-label>
-                    <mat-select formControlName="serviceId" required>
-                      <mat-option *ngFor="let service of services" [value]="service.id">
-                        {{ service.name }} ({{ service.durationMin }} мин)
-                      </mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="generationForm.get('serviceId')?.hasError('required')">
-                      Выберите услугу
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <div class="form-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Дата начала</mat-label>
-                    <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
-                    <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-                    <mat-datepicker #startPicker></mat-datepicker>
-                    <mat-error *ngIf="generationForm.get('startDate')?.hasError('required')">
-                      Выберите дату начала
-                    </mat-error>
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline">
-                    <mat-label>Дата окончания</mat-label>
-                    <input matInput [matDatepicker]="endPicker" formControlName="endDate" required>
-                    <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-                    <mat-datepicker #endPicker></mat-datepicker>
-                    <mat-error *ngIf="generationForm.get('endDate')?.hasError('required')">
-                      Выберите дату окончания
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <div class="form-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Время начала</mat-label>
-                    <input matInput type="time" formControlName="startTime" required>
-                    <mat-error *ngIf="generationForm.get('startTime')?.hasError('required')">
-                      Укажите время начала
-                    </mat-error>
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline">
-                    <mat-label>Время окончания</mat-label>
-                    <input matInput type="time" formControlName="endTime" required>
-                    <mat-error *ngIf="generationForm.get('endTime')?.hasError('required')">
-                      Укажите время окончания
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <div class="form-row">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Длительность слота (минуты)</mat-label>
-                    <input matInput type="number" formControlName="slotDuration" min="15" max="480" required>
-                    <mat-error *ngIf="generationForm.get('slotDuration')?.hasError('required')">
-                      Укажите длительность слота
-                    </mat-error>
-                    <mat-error *ngIf="generationForm.get('slotDuration')?.hasError('min')">
-                      Минимум 15 минут
-                    </mat-error>
-                    <mat-error *ngIf="generationForm.get('slotDuration')?.hasError('max')">
-                      Максимум 480 минут (8 часов)
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-
-                <div class="form-row">
-                  <mat-checkbox formControlName="includeWeekends">
-                    Включать выходные дни
-                  </mat-checkbox>
-                </div>
-
-                <div class="form-row" *ngIf="!generationForm.get('includeWeekends')?.value">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Начало обеденного перерыва</mat-label>
-                    <input matInput type="time" formControlName="lunchBreakStart">
-                  </mat-form-field>
-
-                  <mat-form-field appearance="outline">
-                    <mat-label>Конец обеденного перерыва</mat-label>
-                    <input matInput type="time" formControlName="lunchBreakEnd">
-                  </mat-form-field>
-                </div>
-
-                <div class="form-actions">
-                  <button 
-                    mat-raised-button 
-                    color="primary" 
-                    (click)="generateSlots()"
-                    [disabled]="generationForm.invalid || isGenerating"
-                    class="generate-button">
-                    <mat-icon *ngIf="!isGenerating">auto_awesome</mat-icon>
-                    <mat-spinner *ngIf="isGenerating" diameter="20"></mat-spinner>
-                    {{ isGenerating ? 'Генерация...' : 'Сгенерировать слоты' }}
-                  </button>
-                </div>
-              </form>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </mat-tab>
-
       <!-- Вкладка управления слотами -->
       <mat-tab label="Управление слотами">
         <div class="tab-content">
-          <div class="slots-header">
-            <div class="slots-title-section">
-              <h3>Существующие слоты</h3>
-              <div class="counters" *ngIf="servicesCount > 1 || slotsCount > 1">
-                <span class="counter" *ngIf="servicesCount > 1">
-                  <mat-icon>business_center</mat-icon>
-                  {{ servicesCount }} услуг
-                </span>
-                <span class="counter" *ngIf="slotsCount > 1">
-                  <mat-icon>schedule</mat-icon>
-                  {{ slotsCount }} слотов
-                </span>
+          <!-- Quick Actions -->
+          <div class="quick-actions">
+            <button mat-stroked-button (click)="openQuickGenerateDialog()" class="quick-action-btn">
+              <mat-icon>bolt</mat-icon>
+              Быстрая генерация
+            </button>
+            <button mat-stroked-button color="warn" (click)="deleteEmptySlots()" class="quick-action-btn">
+              <mat-icon>delete_sweep</mat-icon>
+              Удалить пустые
+            </button>
+          </div>
+
+          <!-- Filters -->
+          <div class="filters-section">
+            <div class="filter-group">
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Услуга</mat-label>
+                <mat-select [(ngModel)]="selectedServiceId" (selectionChange)="onServiceFilterChange()">
+                  <mat-option [value]="null">Все услуги</mat-option>
+                  <mat-option *ngFor="let service of services" [value]="service.id">
+                    {{ service.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="filter-field">
+                <mat-label>Дата</mat-label>
+                <input matInput type="date" [(ngModel)]="selectedDate" (change)="onDateFilterChange()" [value]="getTodayDate()">
+              </mat-form-field>
+
+              <button mat-stroked-button (click)="clearFilters()" class="clear-filters-btn">
+                <mat-icon>clear</mat-icon>
+                Очистить фильтры
+              </button>
+            </div>
+          </div>
+
+          <!-- Desktop Table View -->
+          <div class="slots-table desktop-view" *ngIf="!isLoading && slots.length > 0">
+            <div class="slots-header">
+              <div class="slots-title-section">
+                <h3>Существующие слоты</h3>
+                <div class="counters">
+                  <span class="counter">
+                    <mat-icon>business_center</mat-icon>
+                    {{ servicesCount }} услуг
+                  </span>
+                  <span class="counter">
+                    <mat-icon>schedule</mat-icon>
+                    {{ slotsCount }} слотов
+                  </span>
+                </div>
+              </div>
+              <div class="slots-actions">
+                <button 
+                  mat-stroked-button 
+                  color="warn"
+                  (click)="deleteAllSlots()"
+                  class="delete-all-button">
+                  <mat-icon>delete_sweep</mat-icon>
+                  Удалить все слоты
+                </button>
               </div>
             </div>
-            <div class="slots-actions">
-              <button 
-                mat-stroked-button 
-                color="warn"
-                (click)="deleteAllSlots()"
-                class="delete-all-button">
-                <mat-icon>delete_sweep</mat-icon>
-                Удалить все слоты
-              </button>
-              <button 
-                mat-stroked-button 
-                (click)="loadSlots()"
-                class="refresh-button">
-                <mat-icon>refresh</mat-icon>
-                Обновить
-              </button>
-            </div>
-          </div>
 
-          <div *ngIf="isLoading" class="loading-container">
-            <mat-spinner></mat-spinner>
-            <p>Загрузка слотов...</p>
-          </div>
-
-          <div *ngIf="!isLoading && slots.length === 0" class="empty-state">
-            <mat-icon class="empty-icon">event_busy</mat-icon>
-            <h3>Слоты не найдены</h3>
-            <p>Создайте слоты с помощью генератора на первой вкладке</p>
-          </div>
-
-          <div *ngIf="!isLoading && slots.length > 0" class="slots-table">
             <table mat-table [dataSource]="slots" class="mat-elevation-z2">
               <!-- Услуга -->
               <ng-container matColumnDef="service">
@@ -249,8 +168,227 @@
               class="slots-paginator">
             </mat-paginator>
           </div>
+
+          <!-- Mobile Cards View -->
+          <div class="mobile-slots mobile-view" *ngIf="!isLoading && slots.length > 0">
+            <div class="mobile-slot-card" *ngFor="let slot of slots">
+              <div class="card-header">
+                <div class="slot-info">
+                  <mat-icon class="slot-icon">schedule</mat-icon>
+                  <div class="slot-details">
+                    <h3 class="slot-service">{{ getServiceName(slot.serviceId) }}</h3>
+                    <div class="slot-meta">
+                      <span class="slot-date">{{ formatDate(slot.startAt) }}</span>
+                      <span class="slot-duration">{{ getDuration(slot.startAt, slot.endAt) }} мин</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="slot-status" [ngClass]="getSlotStatusClass(slot)">
+                  {{ getSlotStatusText(slot) }}
+                </div>
+              </div>
+              
+              <div class="card-content">
+                <div class="info-row">
+                  <mat-icon>access_time</mat-icon>
+                  <span>{{ formatTime(slot.startAt) }} - {{ formatTime(slot.endAt) }}</span>
+                </div>
+                <div class="info-row">
+                  <mat-icon>people</mat-icon>
+                  <span>Вместимость: {{ slot.capacity }}</span>
+                </div>
+              </div>
+              
+              <div class="card-actions">
+                <button mat-stroked-button (click)="deleteSlot(slot.id)" class="action-btn">
+                  <mat-icon>delete</mat-icon>
+                  Удалить
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="isLoading" class="loading-container">
+            <mat-spinner></mat-spinner>
+            <p>Загрузка слотов...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="!isLoading && slots.length === 0" class="empty-state">
+            <mat-icon class="empty-icon">event_busy</mat-icon>
+            <h3>Слоты не найдены</h3>
+            <p>Создайте слоты с помощью генератора на первой вкладке</p>
+          </div>
         </div>
       </mat-tab>
+
+      <!-- Вкладка генерации слотов -->
+      <mat-tab label="Генерация слотов">
+        <div class="tab-content">
+          <div class="generation-section">
+            <div class="section-header">
+              <div class="section-title">
+                <mat-icon class="section-icon">auto_awesome</mat-icon>
+                <h2>Автоматическая генерация слотов</h2>
+              </div>
+              <p class="section-description">Создайте слоты для выбранной услуги на указанный период</p>
+            </div>
+
+            <form [formGroup]="generationForm" class="generation-form">
+              <div class="form-grid">
+                <!-- Service Selection -->
+                <div class="form-group service-group">
+                  <label class="form-label">
+                    <mat-icon>business_center</mat-icon>
+                    Услуга
+                    <span class="required">*</span>
+                  </label>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-select formControlName="serviceId" required>
+                      <mat-option *ngFor="let service of services" [value]="service.id">
+                        {{ service.name }} ({{ service.durationMin }} мин)
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="generationForm.get('serviceId')?.hasError('required')">
+                      Выберите услугу
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- Date Range -->
+                <div class="form-group date-group">
+                  <label class="form-label">
+                    <mat-icon>date_range</mat-icon>
+                    Период
+                    <span class="required">*</span>
+                  </label>
+                  <div class="date-range">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Дата начала</mat-label>
+                      <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
+                      <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                      <mat-datepicker #startPicker></mat-datepicker>
+                      <mat-error *ngIf="generationForm.get('startDate')?.hasError('required')">
+                        Выберите дату начала
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                      <mat-label>Дата окончания</mat-label>
+                      <input matInput [matDatepicker]="endPicker" formControlName="endDate" required>
+                      <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                      <mat-datepicker #endPicker></mat-datepicker>
+                      <mat-error *ngIf="generationForm.get('endDate')?.hasError('required')">
+                        Выберите дату окончания
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- Time Range -->
+                <div class="form-group time-group">
+                  <label class="form-label">
+                    <mat-icon>access_time</mat-icon>
+                    Рабочее время
+                    <span class="required">*</span>
+                  </label>
+                  <div class="time-range">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Начало</mat-label>
+                      <input matInput type="time" formControlName="startTime" required>
+                      <mat-error *ngIf="generationForm.get('startTime')?.hasError('required')">
+                        Укажите время начала
+                      </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                      <mat-label>Окончание</mat-label>
+                      <input matInput type="time" formControlName="endTime" required>
+                      <mat-error *ngIf="generationForm.get('endTime')?.hasError('required')">
+                        Укажите время окончания
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <!-- Slot Duration -->
+                <div class="form-group duration-group">
+                  <label class="form-label">
+                    <mat-icon>timer</mat-icon>
+                    Длительность слота
+                    <span class="required">*</span>
+                  </label>
+                  <mat-form-field appearance="outline" class="full-width">
+                    <input matInput type="number" formControlName="slotDuration" min="15" max="480" required>
+                    <span matSuffix class="suffix-text">минут</span>
+                    <mat-error *ngIf="generationForm.get('slotDuration')?.hasError('required')">
+                      Укажите длительность слота
+                    </mat-error>
+                    <mat-error *ngIf="generationForm.get('slotDuration')?.hasError('min')">
+                      Минимум 15 минут
+                    </mat-error>
+                    <mat-error *ngIf="generationForm.get('slotDuration')?.hasError('max')">
+                      Максимум 480 минут (8 часов)
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- Weekend Option -->
+                <div class="form-group weekend-group">
+                  <label class="form-label">
+                    <mat-icon>weekend</mat-icon>
+                    Выходные дни
+                  </label>
+                  <mat-checkbox formControlName="includeWeekends" class="weekend-checkbox">
+                    Включать выходные дни
+                  </mat-checkbox>
+                </div>
+
+                <!-- Lunch Break Settings -->
+                <div class="form-group lunch-settings-group">
+                  <label class="form-label">
+                    <mat-icon>restaurant</mat-icon>
+                    Обеденный перерыв
+                  </label>
+                  <div class="lunch-settings">
+                    <mat-checkbox formControlName="enableLunchBreak" class="lunch-toggle">
+                      Включить обеденный перерыв
+                    </mat-checkbox>
+                    
+                    <div *ngIf="generationForm.get('enableLunchBreak')?.value" class="lunch-break">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Начало</mat-label>
+                        <input matInput type="time" formControlName="lunchBreakStart">
+                      </mat-form-field>
+
+                      <mat-form-field appearance="outline">
+                        <mat-label>Конец</mat-label>
+                        <input matInput type="time" formControlName="lunchBreakEnd">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Generate Button -->
+              <div class="form-actions">
+                <button 
+                  mat-raised-button 
+                  color="primary" 
+                  (click)="generateSlots()"
+                  [disabled]="generationForm.invalid || isGenerating"
+                  class="generate-button">
+                  <mat-icon *ngIf="!isGenerating">auto_awesome</mat-icon>
+                  <mat-spinner *ngIf="isGenerating" diameter="20"></mat-spinner>
+                  {{ isGenerating ? 'Генерация...' : 'Сгенерировать слоты' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </mat-tab>
+
     </mat-tab-group>
   </div>
 </div>

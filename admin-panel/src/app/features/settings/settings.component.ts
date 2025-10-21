@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SystemSettingsComponent } from './system-settings/system-settings.component';
+import { UniversalHeaderComponent } from '../../shared/components/universal-header/universal-header.component';
 
 @Component({
   selector: 'app-settings',
@@ -18,10 +19,14 @@ import { SystemSettingsComponent } from './system-settings/system-settings.compo
     MatIconModule,
     TranslatePipe,
     UserProfileComponent,
-    SystemSettingsComponent
+    SystemSettingsComponent,
+    UniversalHeaderComponent
   ],
   template: `
     <div class="settings-container">
+      <!-- Universal Header with DateTime and Refresh -->
+      <app-universal-header></app-universal-header>
+      
       <div class="settings-header">
         <div class="header-content">
           <div class="title-section">
@@ -212,4 +217,11 @@ export class SettingsComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  @HostListener('window:universal-refresh')
+  onUniversalRefresh() {
+    console.log('🔄 Universal refresh triggered in SettingsComponent');
+    // Settings page doesn't need to refresh data, but we can add a visual feedback
+    console.log('Settings page refreshed');
+  }
 }

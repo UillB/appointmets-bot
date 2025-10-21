@@ -1,31 +1,117 @@
 .dashboard-container {
-  padding: 24px;
+  padding: 16px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
+// DateTime Header
+.datetime-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  
+  .datetime-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
+    .current-date {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.2;
+    }
+    
+    .current-time {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1976d2;
+      line-height: 1;
+      font-family: 'Courier New', monospace;
+    }
+  }
+  
+  .refresh-btn {
+    min-width: 36px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(25, 118, 210, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background: rgba(25, 118, 210, 0.2);
+    }
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
 .welcome-section {
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   
   .welcome-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 16px;
+    gap: 12px;
+  }
+  
+  .welcome-text {
+    flex: 1;
   }
   
   h1 {
-    font-size: 32px;
+    font-size: 24px;
     font-weight: 600;
     color: #333;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    line-height: 1.2;
   }
   
   p {
-    font-size: 16px;
+    font-size: 14px;
     color: #666;
     margin: 0;
+  }
+  
+  .refresh-btn {
+    min-width: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(25, 118, 210, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background: rgba(25, 118, 210, 0.2);
+    }
+    
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }
 
@@ -43,22 +129,131 @@
   }
 }
 
+// Quick Actions Section
+.quick-actions-section {
+  margin-bottom: 20px;
+  
+  .quick-actions-card {
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .action-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      
+      .action-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        padding: 16px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        min-height: 80px;
+        
+        mat-icon {
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+        
+        span {
+          font-size: 11px;
+          text-align: center;
+          line-height: 1.2;
+        }
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+}
+
+// Calendar Section
+.calendar-section {
+  margin-bottom: 20px;
+  
+  .calendar-card {
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    .appointment-calendar {
+      width: 100%;
+      
+      ::ng-deep {
+        .mat-calendar-body-selected {
+          background-color: #1976d2 !important;
+          color: white !important;
+          border-radius: 50% !important;
+          width: 36px !important;
+          height: 36px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          margin: 0 auto !important;
+        }
+        
+        .mat-calendar-body-cell {
+          width: 36px !important;
+          height: 36px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        
+        .mat-calendar-body-cell-content {
+          width: 36px !important;
+          height: 36px !important;
+          border-radius: 50% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          transition: all 0.2s ease !important;
+          font-size: 14px !important;
+          
+          &:hover {
+            background-color: rgba(25, 118, 210, 0.1) !important;
+          }
+        }
+      }
+    }
+  }
+}
+
 .stats-section {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  
+  // Desktop/Tablet Grid - show by default
+  .desktop-stats {
+    display: block;
+  }
+  
+  // Mobile Cards - hide by default
+  .mobile-stats {
+    display: none;
+  }
 }
 
 .stat-card {
-  height: 120px !important;
+  height: 110px !important;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-left: 4px solid transparent;
   display: flex;
   align-items: center;
-  min-height: 120px;
-  max-height: 120px;
+  min-height: 110px;
+  max-height: 110px;
   position: relative;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
   
   // Subtle gradient overlay
   &::before {
@@ -110,27 +305,33 @@
 .stat-content {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   height: 100%;
   width: 100%;
   padding: 16px;
+  box-sizing: border-box;
 }
 
 .stat-icon {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
   color: #667eea;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  flex-shrink: 0;
 }
 
 .stat-info {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .stat-number {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #333;
   line-height: 1;
@@ -138,9 +339,12 @@
 }
 
 .stat-label {
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   font-weight: 500;
+  line-height: 1.2;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .actions-section {
@@ -364,137 +568,119 @@
   
 }
 
-// Последние записи
+// Recent Appointments with Improved Design
 .recent-appointments-card {
   flex: 1;
   display: flex;
   flex-direction: column;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   
   .mat-mdc-card-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    padding: 16px;
   }
   
-  .mat-mdc-list {
-    flex: 1;
-    overflow-y: auto;
-  }
-  
-  .appointment-list-item {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border-radius: 8px;
-    margin: 4px 0;
-    padding: 12px 0;
-    min-height: 60px;
+  .appointments-list {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .appointment-item {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 4px solid #e9ecef;
+    transition: all 0.3s ease;
     
     &:hover {
-      background-color: rgba(25, 118, 210, 0.05);
-      transform: translateX(4px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-left-color: #1976d2;
     }
     
-    &:last-child {
-      border-bottom: none;
-    }
-    
-    mat-icon {
-      color: #667eea;
-      transition: all 0.3s ease;
-    }
-    
-    &:hover mat-icon {
-      color: #1976d2;
-      transform: scale(1.1);
-    }
-    
-    [matListItemTitle] {
-      font-weight: 600;
-      color: #333;
-      font-size: 14px;
-      line-height: 1.4;
-      margin-bottom: 4px;
-    }
-    
-    [matListItemLine] {
-      color: #666;
-      font-size: 12px;
-      margin-top: 2px;
-      line-height: 1.3;
+    .appointment-header {
       display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .appointment-date {
-      font-weight: 600;
-      color: #333;
-      font-size: 13px;
-    }
-
-    .appointment-time {
-      color: #667eea;
-      font-weight: 500;
-    }
-
-    .appointment-id {
-      color: #999;
-      font-size: 11px;
-    }
-    
-    [matListItemMeta] {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-    }
-  }
-  
-  .status-chip {
-    font-size: 12px;
-    height: 32px;
-    border-radius: 16px;
-    padding: 0 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    min-width: 80px;
-    text-align: center;
-    line-height: 1;
-    
-    &:hover {
-      transform: scale(1.02);
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    &.status-confirmed {
-      background: #4caf50;
-      color: white;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      
+      .appointment-service {
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+        line-height: 1.3;
+        flex: 1;
+        margin-right: 12px;
+      }
+      
+      .appointment-status {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        
+        .status-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          flex-shrink: 0;
+          
+          &.status-confirmed {
+            background: #4caf50;
+          }
+          
+          &.status-pending {
+            background: #ff9800;
+          }
+          
+          &.status-cancelled {
+            background: #f44336;
+          }
+          
+          &.status-default {
+            background: #9e9e9e;
+          }
+        }
+        
+        .status-text {
+          font-size: 11px;
+          font-weight: 500;
+          color: #666;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+      }
     }
     
-    &.status-pending {
-      background: #ff9800;
-      color: white;
-    }
-    
-    &.status-cancelled {
-      background: #f44336;
-      color: white;
-    }
-    
-    &.status-default {
-      background: #e0e0e0;
-      color: #666;
+    .appointment-details {
+      .appointment-date-time {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 4px;
+        
+        .appointment-date {
+          font-weight: 600;
+          color: #333;
+          font-size: 12px;
+        }
+        
+        .appointment-time {
+          color: #1976d2;
+          font-weight: 500;
+          font-size: 12px;
+        }
+      }
+      
+      .appointment-id {
+        color: #999;
+        font-size: 10px;
+        font-family: monospace;
+      }
     }
   }
 }
@@ -592,54 +778,114 @@
 
 @media (max-width: 768px) {
   .dashboard-container {
-    padding: 16px;
+    padding: 12px;
+  }
+  
+  .datetime-header {
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    
+    .datetime-info {
+      .current-date {
+        font-size: 12px;
+      }
+      
+      .current-time {
+        font-size: 16px;
+      }
+    }
+    
+    .refresh-btn {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
   }
   
   .welcome-section {
-    margin-bottom: 24px;
-    
-    .welcome-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-    }
+    margin-bottom: 16px;
     
     h1 {
-      font-size: 24px;
+      font-size: 20px;
       line-height: 1.2;
     }
     
     p {
-      font-size: 14px;
+      font-size: 12px;
+    }
+    
+    .refresh-btn {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
     }
   }
   
+  .quick-actions-section {
+    margin-bottom: 16px;
+    
+    .action-buttons {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      
+      .action-btn {
+        padding: 12px 8px;
+        min-height: 70px;
+        
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+        
+        span {
+          font-size: 10px;
+        }
+      }
+    }
+  }
+  
+  .calendar-section {
+    margin-bottom: 16px;
+  }
+  
   .stats-section {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     
     ::ng-deep mat-grid-list {
       --mat-grid-cols: 2 !important;
-      --mat-grid-gutter: 12px !important;
+      --mat-grid-gutter: 8px !important;
     }
   }
   
   .stat-card {
-    height: 100px !important;
-    min-height: 100px;
-    max-height: 100px;
+    height: 90px !important;
+    min-height: 90px;
+    max-height: 90px;
   }
   
   .stat-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 8px;
     padding: 12px;
+    gap: 10px;
+    flex-direction: row;
   }
   
   .stat-icon {
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
   }
   
   .stat-number {
@@ -647,33 +893,62 @@
   }
   
   .stat-label {
-    font-size: 12px;
-  }
-  
-  .actions-card .action-buttons {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    
-    button {
-      padding: 14px 16px;
-      font-size: 13px;
-    }
+    font-size: 10px;
+    line-height: 1.2;
   }
   
   .main-content {
-    gap: 16px;
+    gap: 12px;
   }
 }
 
 @media (max-width: 480px) {
   .dashboard-container {
-    padding: 12px;
+    padding: 8px;
+  }
+  
+  .welcome-section {
+    margin-bottom: 12px;
+    
+    h1 {
+      font-size: 18px;
+    }
+    
+    p {
+      font-size: 11px;
+    }
+  }
+  
+  .quick-actions-section {
+    margin-bottom: 12px;
+    
+    .action-buttons {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      
+      .action-btn {
+        padding: 10px 6px;
+        min-height: 60px;
+        
+        mat-icon {
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+        
+        span {
+          font-size: 9px;
+        }
+      }
+    }
   }
   
   .stats-section {
+    margin-bottom: 12px;
+    
     ::ng-deep mat-grid-list {
       --mat-grid-cols: 1 !important;
-      --mat-grid-gutter: 8px !important;
+      --mat-grid-gutter: 6px !important;
     }
   }
   
@@ -684,14 +959,16 @@
   }
   
   .stat-content {
-    padding: 8px;
-    gap: 4px;
+    padding: 10px;
+    gap: 6px;
+    flex-direction: column;
+    text-align: center;
   }
   
   .stat-icon {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
   }
   
   .stat-number {
@@ -699,21 +976,133 @@
   }
   
   .stat-label {
-    font-size: 11px;
+    font-size: 9px;
+    line-height: 1.1;
   }
   
-  .welcome-section h1 {
-    font-size: 20px;
+  .main-content {
+    gap: 8px;
   }
+}
+
+// Mobile Stats Styles
+.mobile-stats {
+  display: none;
   
-  .actions-card .action-buttons button {
-    padding: 12px 14px;
-    font-size: 12px;
+  .mobile-stats-row {
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     
-    mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
+    .stat-label-mobile {
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      text-align: center;
+      line-height: 1.2;
+    }
+    
+    .stat-card-mobile {
+      height: 50px !important;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+      }
+      
+      .stat-content-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        height: 100%;
+        padding: 8px;
+        
+        .stat-icon-mobile {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+          color: #667eea;
+        }
+        
+        .stat-number-mobile {
+          font-size: 18px;
+          font-weight: 700;
+          color: #333;
+        }
+      }
+      
+      // Color variants
+      &.stat-primary {
+        border-left: 3px solid #1976d2;
+        background: linear-gradient(135deg, rgba(25, 118, 210, 0.05), rgba(25, 118, 210, 0.02));
+      }
+      
+      &.stat-success {
+        border-left: 3px solid #4caf50;
+        background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(76, 175, 80, 0.02));
+      }
+      
+      &.stat-warning {
+        border-left: 3px solid #ff9800;
+        background: linear-gradient(135deg, rgba(255, 152, 0, 0.05), rgba(255, 152, 0, 0.02));
+      }
+      
+      &.stat-info {
+        border-left: 3px solid #2196f3;
+        background: linear-gradient(135deg, rgba(33, 150, 243, 0.05), rgba(33, 150, 243, 0.02));
+      }
+    }
+  }
+}
+
+// Show mobile stats on small screens
+@media (max-width: 768px) {
+  .stats-section {
+    .desktop-stats {
+      display: none;
+    }
+    
+    .mobile-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      
+      .mobile-stats-row {
+        margin-bottom: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        
+        .stat-label-mobile {
+          font-size: 10px;
+          margin-bottom: 2px;
+        }
+        
+        .stat-card-mobile {
+          height: 45px !important;
+          
+          .stat-content-mobile {
+            padding: 6px;
+            gap: 6px;
+            
+            .stat-icon-mobile {
+              font-size: 18px;
+              width: 18px;
+              height: 18px;
+            }
+            
+            .stat-number-mobile {
+              font-size: 16px;
+            }
+          }
+        }
+      }
     }
   }
 }

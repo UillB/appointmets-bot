@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { UniversalHeaderComponent } from '../../shared/components/universal-header/universal-header.component';
 
 import { AIConfigService, AIConfig, AvailableModel, AIUsageStats } from '../../core/services/ai-config.service';
 import { AuthService, User } from '../../core/services/auth';
@@ -36,7 +37,8 @@ import { AuthService, User } from '../../core/services/auth';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatTooltipModule,
-    MatExpansionModule
+    MatExpansionModule,
+    UniversalHeaderComponent
   ],
   templateUrl: './ai-config.component.html',
   styleUrls: ['./ai-config.component.scss']
@@ -283,5 +285,27 @@ export class AIConfigComponent implements OnInit {
       return `${(tokens / 1000).toFixed(1)}K`;
     }
     return tokens.toString();
+  }
+
+  refreshConfig(): void {
+    this.loadAIConfig();
+  }
+
+  resetToDefaults(): void {
+    this.aiConfigForm.patchValue({
+      provider: 'openai',
+      apiKey: '',
+      model: 'gpt-4o-mini',
+      maxTokens: 1000,
+      temperature: 0.7,
+      customPrompt: '',
+      enabled: false
+    });
+    this.snackBar.open('Настройки сброшены к значениям по умолчанию', 'Закрыть', { duration: 3000 });
+  }
+
+  exportConfig(): void {
+    // TODO: Implement export functionality
+    this.snackBar.open('Функция экспорта в разработке', 'Закрыть', { duration: 3000 });
   }
 }

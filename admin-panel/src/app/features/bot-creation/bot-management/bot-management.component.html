@@ -1,7 +1,44 @@
 <div class="bot-management-container">
-  <div class="header">
-    <h1>🤖 Управление ботом</h1>
-    <p class="subtitle">Создайте и настройте Telegram бота для вашей организации</p>
+  <!-- Universal Header -->
+  <div class="universal-header">
+    <div class="datetime-info">
+      <div class="current-date">{{ currentDate | date:'EEEE, d MMMM y' }}</div>
+      <div class="current-time">{{ currentTime | date:'HH:mm:ss' }}</div>
+    </div>
+    <button mat-icon-button 
+            color="primary" 
+            (click)="onRefresh()" 
+            [disabled]="isLoading" 
+            class="refresh-btn"
+            [attr.aria-label]="'Обновить данные'">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <div class="page-header">
+    <div class="page-title">
+      <mat-icon class="title-icon">smart_toy</mat-icon>
+      <div class="title-content">
+        <h1>Управление ботом</h1>
+        <p class="page-description">Создайте и настройте Telegram бота для автоматической записи клиентов</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <button mat-stroked-button (click)="onRefresh()" class="quick-action-btn">
+      <mat-icon>refresh</mat-icon>
+      Обновить статус
+    </button>
+    <button mat-stroked-button (click)="onExportBotData()" class="quick-action-btn">
+      <mat-icon>download</mat-icon>
+      Экспорт данных
+    </button>
+    <button mat-stroked-button (click)="onOpenHelp()" class="quick-action-btn">
+      <mat-icon>help</mat-icon>
+      Помощь
+    </button>
   </div>
 
   <div class="content">
@@ -15,6 +52,52 @@
       </app-post-bot-creation-guide>
     </div>
 
+    <!-- Bot Status Overview -->
+    <div class="bot-status-overview" *ngIf="!showPostCreationGuide">
+      <div class="status-cards">
+        <div class="status-card" [ngClass]="getBotStatusClass()">
+          <div class="card-icon">
+            <mat-icon>{{ getBotStatusIcon() }}</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3>{{ getBotStatusTitle() }}</h3>
+            <p>{{ getBotStatusDescription() }}</p>
+          </div>
+        </div>
+        
+        <div class="status-card info">
+          <div class="card-icon">
+            <mat-icon>business</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3>Организация</h3>
+            <p>{{ organizationName }}</p>
+          </div>
+        </div>
+        
+        <div class="status-card info" *ngIf="botActivated">
+          <div class="card-icon">
+            <mat-icon>link</mat-icon>
+          </div>
+          <div class="card-content">
+            <h3>Ссылка на бота</h3>
+            <p>https://t.me/{{ activatedBotUsername }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div class="progress-section" *ngIf="!showPostCreationGuide">
+      <div class="progress-header">
+        <h3>Прогресс настройки бота</h3>
+        <span class="progress-text">{{ getProgressText() }}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+      </div>
+    </div>
+
     <!-- Основные вкладки управления ботом -->
     <mat-tab-group 
       *ngIf="!showPostCreationGuide"
@@ -25,9 +108,8 @@
       <mat-tab [disabled]="!isTabEnabled(0)">
         <ng-template mat-tab-label>
           <div class="tab-label" [ngClass]="getTabStatus(0)">
-            <mat-icon>{{ getTabIcon(0) }}</mat-icon>
+            <mat-icon class="tab-icon">{{ getTabIcon(0) }}</mat-icon>
             <span>{{ getTabTitle(0) }}</span>
-            <mat-icon *ngIf="getTabStatus(0) === 'completed'" class="status-icon">check_circle</mat-icon>
           </div>
         </ng-template>
         
@@ -51,9 +133,8 @@
       <mat-tab [disabled]="!isTabEnabled(1)">
         <ng-template mat-tab-label>
           <div class="tab-label" [ngClass]="getTabStatus(1)">
-            <mat-icon>{{ getTabIcon(1) }}</mat-icon>
+            <mat-icon class="tab-icon">{{ getTabIcon(1) }}</mat-icon>
             <span>{{ getTabTitle(1) }}</span>
-            <mat-icon *ngIf="getTabStatus(1) === 'completed'" class="status-icon">check_circle</mat-icon>
           </div>
         </ng-template>
         
@@ -89,9 +170,8 @@
       <mat-tab [disabled]="!isTabEnabled(2)">
         <ng-template mat-tab-label>
           <div class="tab-label" [ngClass]="getTabStatus(2)">
-            <mat-icon>{{ getTabIcon(2) }}</mat-icon>
+            <mat-icon class="tab-icon">{{ getTabIcon(2) }}</mat-icon>
             <span>{{ getTabTitle(2) }}</span>
-            <mat-icon *ngIf="getTabStatus(2) === 'completed'" class="status-icon">check_circle</mat-icon>
           </div>
         </ng-template>
         
@@ -115,18 +195,4 @@
     </mat-tab-group>
   </div>
 
-  <!-- Статус бота -->
-  <div class="bot-status" *ngIf="botActivated">
-    <mat-card class="status-card success">
-      <mat-card-content>
-        <div class="status-content">
-          <mat-icon>check_circle</mat-icon>
-          <div class="status-text">
-            <h3>Бот активирован!</h3>
-            <p>Ваш Telegram бот готов к работе. Клиенты могут записываться через бота.</p>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { I18nService } from '../../../core/services/i18n.service';
+import { UniversalHeaderComponent } from '../../../shared/components/universal-header/universal-header.component';
 
 import { AppointmentsService, AppointmentsFilters } from '../../../core/services/appointments.service';
 import { ServicesService } from '../../../core/services/services.service';
@@ -47,23 +48,27 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
     MatMenuModule,
     MatSnackBarModule,
     FormsModule,
-    TranslatePipe
+    TranslatePipe,
+    UniversalHeaderComponent
   ],
   template: `
     <div class="appointments-container">
+      <!-- Universal Header with DateTime and Refresh -->
+      <app-universal-header></app-universal-header>
+      
       <div class="header-section">
         <div class="header-content">
           <h1>{{ 'appointments.title' | translate }}</h1>
           <p>{{ 'appointments.subtitle' | translate }}</p>
         </div>
-        <button mat-raised-button color="primary" (click)="onCreateAppointment()">
+        <button mat-raised-button color="primary" (click)="onCreateAppointment()" class="create-btn">
           <mat-icon>add</mat-icon>
-          {{ 'appointments.create' | translate }}
+          <span class="create-text">{{ 'appointments.create' | translate }}</span>
         </button>
       </div>
 
-      <!-- Filters -->
-      <mat-card class="filters-card">
+      <!-- Desktop Filters -->
+      <mat-card class="filters-card desktop-filters">
         <mat-card-content>
           <div class="filters-row">
             <mat-form-field appearance="outline" class="filter-field">
@@ -101,6 +106,68 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
         </mat-card-content>
       </mat-card>
 
+      <!-- Mobile Compact Filters -->
+      <div class="mobile-filters">
+        <!-- Quick Filter Chips -->
+        <div class="quick-filters">
+          <button mat-stroked-button 
+                  [class.active]="quickFilter === 'today'" 
+                  (click)="setQuickFilter('today')" 
+                  class="quick-filter-btn">
+            <mat-icon>today</mat-icon>
+            Сегодня
+          </button>
+          <button mat-stroked-button 
+                  [class.active]="quickFilter === 'tomorrow'" 
+                  (click)="setQuickFilter('tomorrow')" 
+                  class="quick-filter-btn">
+            <mat-icon>event</mat-icon>
+            Завтра
+          </button>
+          <button mat-stroked-button 
+                  [class.active]="quickFilter === 'all'" 
+                  (click)="setQuickFilter('all')" 
+                  class="quick-filter-btn">
+            <mat-icon>list</mat-icon>
+            Все
+          </button>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="mobile-filter-row">
+          <mat-form-field appearance="outline" class="mobile-filter-field">
+            <mat-label>Статус</mat-label>
+            <mat-select [(ngModel)]="filters.status" (selectionChange)="onStatusChange()">
+              <mat-option value="">Все статусы</mat-option>
+              <mat-option value="confirmed">Подтверждена</mat-option>
+              <mat-option value="pending">Ожидает</mat-option>
+              <mat-option value="cancelled">Отменена</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Service Filter -->
+        <div class="mobile-filter-row">
+          <mat-form-field appearance="outline" class="mobile-filter-field">
+            <mat-label>Услуга</mat-label>
+            <mat-select [(ngModel)]="filters.serviceId" (selectionChange)="onServiceChange()">
+              <mat-option value="">Все услуги</mat-option>
+              <mat-option *ngFor="let service of services" [value]="service.id">
+                {{ getServiceName(service) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Clear Filters -->
+        <div class="mobile-filter-actions">
+          <button mat-stroked-button (click)="clearFilters()" class="clear-btn">
+            <mat-icon>clear</mat-icon>
+            Очистить
+          </button>
+        </div>
+      </div>
+
       <!-- Appointments Table -->
       <mat-card class="appointments-card">
         <mat-card-content>
@@ -118,7 +185,8 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
             </button>
           </div>
 
-          <div class="table-container" *ngIf="!loading && appointments.length > 0">
+          <!-- Desktop Table View -->
+          <div class="table-container desktop-view" *ngIf="!loading && appointments.length > 0">
             <table mat-table [dataSource]="appointments" class="appointments-table">
 
               <!-- Service Column -->
@@ -207,6 +275,51 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
               showFirstLastButtons>
             </mat-paginator>
           </div>
+
+          <!-- Mobile Cards View -->
+          <div class="mobile-cards mobile-view" *ngIf="!loading && appointments.length > 0">
+            <div class="appointment-card" *ngFor="let appointment of appointments">
+              <div class="card-header">
+                <div class="service-info-mobile">
+                  <mat-icon class="service-icon-mobile">psychology</mat-icon>
+                  <span class="service-name">{{ getServiceName(appointment.service) }}</span>
+                </div>
+                <div class="status-badge" [class]="'status-' + appointment.status">
+                  {{ getStatusText(appointment.status || '') }}
+                </div>
+              </div>
+              
+              <div class="card-content">
+                <div class="info-row">
+                  <mat-icon>schedule</mat-icon>
+                  <div class="datetime-info-mobile">
+                    <div class="date-mobile">{{ formatDate(appointment.slot?.startAt || '') }}</div>
+                    <div class="time-mobile">{{ formatTime(appointment.slot?.startAt || '') }} - {{ formatTime(appointment.slot?.endAt || '') }}</div>
+                  </div>
+                </div>
+                
+                <div class="info-row">
+                  <mat-icon>person</mat-icon>
+                  <span class="client-id">ID: {{ appointment.chatId }}</span>
+                </div>
+              </div>
+              
+              <div class="card-actions">
+                <button mat-stroked-button (click)="onViewAppointment($event, appointment)" class="action-btn">
+                  <mat-icon>visibility</mat-icon>
+                  {{ 'common.view' | translate }}
+                </button>
+                <button mat-stroked-button (click)="onEditAppointment($event, appointment)" *ngIf="appointment.status !== 'cancelled'" class="action-btn">
+                  <mat-icon>edit</mat-icon>
+                  {{ 'common.edit' | translate }}
+                </button>
+                <button mat-stroked-button color="warn" (click)="onCancelAppointment($event, appointment)" *ngIf="appointment.status !== 'cancelled'" class="action-btn">
+                  <mat-icon>cancel</mat-icon>
+                  {{ 'appointments.cancel' | translate }}
+                </button>
+              </div>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>
@@ -239,6 +352,27 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       margin: 0;
     }
 
+    .create-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+      }
+      
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
     .filters-card {
       margin-bottom: 24px;
     }
@@ -256,6 +390,29 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
 
     .clear-filters-btn {
       margin-left: auto;
+    }
+
+    // Mobile Cards Styles
+    .mobile-cards {
+      display: none;
+    }
+
+    .desktop-view {
+      display: block;
+    }
+
+    .mobile-view {
+      display: none;
+    }
+
+    // Desktop filters
+    .desktop-filters {
+      display: block;
+    }
+
+    // Mobile filters
+    .mobile-filters {
+      display: none;
     }
 
     .appointments-card {
@@ -494,28 +651,337 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       }
     }
 
+    // Mobile Cards Styles
+    .appointment-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 12px;
+      padding: 16px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .service-info-mobile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .service-icon-mobile {
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 6px;
+      padding: 6px;
+      font-size: 18px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-name {
+      font-weight: 600;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: capitalize;
+      
+      &.status-confirmed {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      
+      &.status-pending {
+        background: #fff3e0;
+        color: #ef6c00;
+      }
+      
+      &.status-cancelled {
+        background: #ffebee;
+        color: #c62828;
+      }
+    }
+
+    .card-content {
+      margin-bottom: 12px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      
+      mat-icon {
+        color: #666;
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .datetime-info-mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .date-mobile {
+      font-weight: 600;
+      color: #2c3e50;
+      font-size: 14px;
+    }
+
+    .time-mobile {
+      font-size: 13px;
+      color: #7f8c8d;
+      background: rgba(127, 140, 141, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .client-id {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-width: 0;
+      font-size: 12px;
+      padding: 8px 12px;
+      
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
+    }
+
     @media (max-width: 768px) {
       .appointments-container {
-        padding: 16px;
+        padding: 12px;
       }
 
       .header-section {
         flex-direction: column;
         align-items: stretch;
+        margin-bottom: 16px;
       }
 
-      .filters-row {
-        flex-direction: column;
-        align-items: stretch;
+      .header-content h1 {
+        font-size: 24px;
       }
 
-      .filter-field {
-        min-width: auto;
+      .header-content p {
+        font-size: 14px;
       }
 
-      .clear-filters-btn {
-        margin-left: 0;
-        margin-top: 8px;
+      .create-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+        width: 100%;
+        justify-content: center;
+        
+        .create-text {
+          display: block;
+        }
+      }
+
+      // Compact filters for mobile
+      .filters-card {
+        margin-bottom: 16px;
+        
+        .filters-row {
+          flex-direction: column;
+          gap: 8px;
+        }
+        
+        .filter-field {
+          min-width: auto;
+          width: 100%;
+        }
+        
+        .clear-filters-btn {
+          margin-left: 0;
+          margin-top: 8px;
+          align-self: flex-start;
+        }
+      }
+
+      // Show mobile cards, hide desktop table
+      .desktop-view {
+        display: none;
+      }
+
+      .mobile-view {
+        display: block;
+      }
+
+      .mobile-cards {
+        display: block;
+      }
+
+      // Show mobile filters, hide desktop filters
+      .desktop-filters {
+        display: none;
+      }
+
+      .mobile-filters {
+        display: block;
+        margin-bottom: 16px;
+      }
+    }
+
+    // Mobile Filters Styles
+    .mobile-filters {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e9ecef;
+    }
+
+    .quick-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .quick-filter-btn {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 16px;
+      border-radius: 25px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      border: 2px solid transparent;
+      
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+      
+      &.active {
+        background: #1976d2;
+        color: white;
+        border-color: #1976d2;
+        box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+        transform: translateY(-1px);
+      }
+      
+      &:not(.active) {
+        background: white;
+        color: #666;
+        border-color: #ddd;
+        
+        &:hover {
+          background: #f8f9fa;
+          border-color: #1976d2;
+          color: #1976d2;
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+
+    .mobile-filter-row {
+      margin-bottom: 12px;
+    }
+
+    .mobile-filter-field {
+      width: 100%;
+      
+      ::ng-deep {
+        .mat-mdc-form-field {
+          width: 100%;
+        }
+        
+        .mat-mdc-form-field-outline {
+          border-radius: 12px;
+        }
+        
+        .mat-mdc-select {
+          font-size: 14px;
+          padding: 8px 0;
+        }
+        
+        .mat-mdc-form-field-label {
+          font-weight: 500;
+          color: #333;
+        }
+        
+        .mat-mdc-select-value {
+          color: #333;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .mobile-filter-actions {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 8px;
+    }
+
+    .clear-btn {
+      color: #666;
+      border-color: #ddd;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        margin-right: 6px;
+      }
+      
+      &:hover {
+        background: #f8f9fa;
+        border-color: #999;
+        color: #333;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       }
     }
 
@@ -545,7 +1011,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
     }
   `]
 })
-export class AppointmentsListComponent implements OnInit {
+export class AppointmentsListComponent implements OnInit, OnDestroy {
   appointments: Appointment[] = [];
   services: any[] = [];
   loading = false;
@@ -560,6 +1026,8 @@ export class AppointmentsListComponent implements OnInit {
     serviceId: '',
     date: null as Date | null
   };
+  
+  quickFilter: 'today' | 'tomorrow' | 'all' = 'all';
 
   constructor(
     private appointmentsService: AppointmentsService,
@@ -576,6 +1044,16 @@ export class AppointmentsListComponent implements OnInit {
     console.log('🔥 Initial filters:', this.filters);
     this.loadAppointments();
     this.loadServices();
+  }
+
+  ngOnDestroy() {
+    // Cleanup if needed
+  }
+
+  @HostListener('window:universal-refresh')
+  onUniversalRefresh() {
+    console.log('🔄 Universal refresh triggered in AppointmentsListComponent');
+    this.loadAppointments();
   }
 
   loadAppointments() {
@@ -643,6 +1121,31 @@ export class AppointmentsListComponent implements OnInit {
       serviceId: '',
       date: null
     };
+    this.quickFilter = 'all';
+    this.applyFilters();
+  }
+
+  setQuickFilter(filter: 'today' | 'tomorrow' | 'all') {
+    this.quickFilter = filter;
+    
+    // Reset other filters when using quick filters
+    this.filters.status = '';
+    this.filters.serviceId = '';
+    
+    switch (filter) {
+      case 'today':
+        this.filters.date = new Date();
+        break;
+      case 'tomorrow':
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        this.filters.date = tomorrow;
+        break;
+      case 'all':
+        this.filters.date = null;
+        break;
+    }
+    
     this.applyFilters();
   }
 

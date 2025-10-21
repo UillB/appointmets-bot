@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -15,8 +15,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatDialog } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Subject, takeUntil, interval } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 import { ApiService } from '../../../core/services/api';
 import { AuthService } from '../../../core/services/auth';
@@ -59,6 +60,7 @@ export interface SlotGenerationRequest {
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -72,7 +74,8 @@ export interface SlotGenerationRequest {
     MatProgressSpinnerModule,
     MatTabsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDialogModule
   ],
   templateUrl: './slots-management.component.html',
   styleUrl: './slots-management.component.scss'
@@ -86,6 +89,14 @@ export class SlotsManagementComponent implements OnInit, OnDestroy {
   generationForm: FormGroup;
   currentUser: any = null;
   organizationId = 0;
+  
+  // Universal header properties
+  currentDate = new Date();
+  currentTime = new Date();
+  
+  // Filter properties
+  selectedServiceId: number | null = null;
+  selectedDate: string | null = null;
   
   displayedColumns: string[] = ['service', 'date', 'time', 'duration', 'capacity', 'status', 'actions'];
   
@@ -159,6 +170,7 @@ export class SlotsManagementComponent implements OnInit, OnDestroy {
       startTime: ['09:00', Validators.required],
       endTime: ['18:00', Validators.required],
       includeWeekends: [false],
+      enableLunchBreak: [true], // По умолчанию включен
       lunchBreakStart: ['13:00'],
       lunchBreakEnd: ['14:00'],
       slotDuration: [30, [Validators.required, Validators.min(15), Validators.max(480)]]
@@ -173,6 +185,14 @@ export class SlotsManagementComponent implements OnInit, OnDestroy {
 
     this.loadServices();
     this.loadSlots();
+
+    // Update time every second
+    interval(1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.currentTime = new Date();
+        this.currentDate = new Date();
+      });
 
     // Подписываемся на изменения выбранной услуги для автоматического заполнения длительности слота
     this.generationForm.get('serviceId')?.valueChanges.subscribe(serviceId => {
@@ -190,6 +210,81 @@ export class SlotsManagementComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('window:universal-refresh')
+  onUniversalRefresh() {
+    console.log('🔄 Universal refresh triggered in SlotsManagementComponent');
+    this.loadSlots();
+  }
+
+  onRefresh(): void {
+    this.loadSlots();
+  }
+
+  openQuickGenerateDialog(): void {
+    if (this.services.length === 0) {
+      this.showErrorMessage('Сначала загрузите услуги');
+      return;
+    }
+
+    const dialogData = {
+      title: 'Быстрая генерация слотов',
+      services: this.services,
+      defaultDate: new Date().toISOString().slice(0, 10),
+      defaultStartTime: '10:00',
+      defaultEndTime: '18:00',
+      defaultDuration: 30
+    };
+
+    // TODO: Create QuickGenerateDialogComponent
+    this.showSuccessMessage('Диалог быстрой генерации в разработке');
+  }
+
+  onServiceFilterChange(): void {
+    console.log('Service filter changed:', this.selectedServiceId);
+    this.pageIndex = 0; // Сбрасываем на первую страницу при изменении фильтра
+    this.loadSlots();
+  }
+
+  onDateFilterChange(): void {
+    console.log('Date filter changed:', this.selectedDate);
+    this.pageIndex = 0; // Сбрасываем на первую страницу при изменении фильтра
+    this.loadSlots();
+  }
+
+  clearFilters(): void {
+    this.selectedServiceId = null;
+    this.selectedDate = null;
+    this.pageIndex = 0; // Сбрасываем на первую страницу
+    this.showSuccessMessage('Фильтры очищены');
+    this.loadSlots();
+  }
+
+  getTodayDate(): string {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  deleteEmptySlots(): void {
+    const dialogData: ConfirmationDialogData = {
+      title: 'Удаление пустых слотов',
+      message: 'Вы уверены, что хотите удалить все пустые слоты? Это действие нельзя отменить.',
+      confirmText: 'Удалить',
+      cancelText: 'Отмена',
+      confirmColor: 'warn',
+      icon: 'delete_sweep'
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      data: dialogData,
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.showSuccessMessage('Функция удаления пустых слотов в разработке');
+      }
+    });
   }
 
   loadServices(): void {
@@ -225,7 +320,18 @@ export class SlotsManagementComponent implements OnInit, OnDestroy {
     const page = this.pageIndex + 1; // Backend использует 1-based пагинацию
     console.log('Loading slots with:', { pageIndex: this.pageIndex, pageSize: this.pageSize, page: page });
     
-    this.apiService.get<{ slots: Slot[], pagination: any }>(`/slots/status?organizationId=${this.organizationId}&limit=${this.pageSize}&page=${page}`)
+    // Build query parameters
+    let queryParams = `organizationId=${this.organizationId}&limit=${this.pageSize}&page=${page}`;
+    
+    if (this.selectedServiceId) {
+      queryParams += `&serviceId=${this.selectedServiceId}`;
+    }
+    
+    if (this.selectedDate) {
+      queryParams += `&date=${this.selectedDate}`;
+    }
+    
+    this.apiService.get<{ slots: Slot[], pagination: any }>(`/slots/status?${queryParams}`)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -233,11 +339,28 @@ export class SlotsManagementComponent implements OnInit, OnDestroy {
           this.slots = response.slots || [];
           this.totalCount = response.pagination?.total || 0;
           this.isLoading = false;
+          
+          // Показываем сообщение об успешной загрузке
+          if (this.slots.length > 0) {
+            this.showSuccessMessage(`Загружено ${this.slots.length} слотов`);
+          }
         },
         error: (error) => {
           console.error('Error loading slots:', error);
-          this.showErrorMessage('Ошибка загрузки слотов');
+          this.slots = [];
+          this.totalCount = 0;
           this.isLoading = false;
+          
+          // Показываем более детальную ошибку
+          if (error.status === 403) {
+            this.showErrorMessage('У вас нет прав для просмотра слотов');
+          } else if (error.status === 404) {
+            this.showErrorMessage('Слоты не найдены');
+          } else if (error.status === 500) {
+            this.showErrorMessage('Ошибка сервера при загрузке слотов');
+          } else {
+            this.showErrorMessage('Ошибка загрузки слотов. Проверьте подключение к интернету');
+          }
         }
       });
   }

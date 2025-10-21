@@ -44,6 +44,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   
   currentUser: User | null = null;
+  currentDate = new Date();
+  currentTime = new Date();
+  
   stats: DashboardStats = {
     totalAppointments: 0,
     todayAppointments: 0,
@@ -75,6 +78,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     
     this.loadDashboardData();
     this.loadCalendarData();
+    
+    // Update time every second
+    interval(1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.currentTime = new Date();
+        this.currentDate = new Date();
+      });
     
     // Обновляем данные каждые 5 минут
     interval(5 * 60 * 1000)
@@ -139,6 +150,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   onDateSelected(date: Date | null): void {
     this.selectedDate = date;
+    
+    // Smooth scroll to appointments section when date is selected
+    if (date) {
+      setTimeout(() => {
+        const appointmentsSection = document.querySelector('.selected-date-card');
+        if (appointmentsSection) {
+          appointmentsSection.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+          });
+        }
+      }, 100);
+    }
+  }
+
+  onStatClick(statKey: string): void {
+    // Navigate to appropriate section based on stat clicked
+    switch (statKey) {
+      case 'totalAppointments':
+      case 'todayAppointments':
+      case 'pendingAppointments':
+        this.router.navigate(['/appointments']);
+        break;
+      case 'totalServices':
+        this.router.navigate(['/services']);
+        break;
+    }
   }
 
   getAppointmentsForDate(date: Date): Appointment[] {

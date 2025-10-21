@@ -78,13 +78,23 @@ export class TelegramWebAppService {
 
   private initializeTelegramWebApp(): void {
     if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
-      this.webApp = window.Telegram.WebApp;
-      this.isTelegramWebApp = true;
-      this.webApp.ready();
-      this.webApp.expand();
-      const userData = this.webApp.initDataUnsafe?.user;
-      if (userData) {
-        this.userDataSubject.next(userData);
+      const webApp = window.Telegram.WebApp;
+      
+      // Проверяем, что мы действительно в Telegram WebView
+      // В обычном браузере initData будет пустым или отсутствовать
+      const hasValidInitData = webApp.initData && webApp.initData.length > 0;
+      const hasUserData = webApp.initDataUnsafe?.user;
+      const isInTelegramView = hasValidInitData || hasUserData;
+      
+      if (isInTelegramView) {
+        this.webApp = webApp;
+        this.isTelegramWebApp = true;
+        this.webApp.ready();
+        this.webApp.expand();
+        const userData = this.webApp.initDataUnsafe?.user;
+        if (userData) {
+          this.userDataSubject.next(userData);
+        }
       }
     }
   }

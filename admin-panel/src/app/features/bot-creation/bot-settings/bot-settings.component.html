@@ -258,46 +258,6 @@
 
         <mat-divider></mat-divider>
 
-        <div class="advanced-item">
-          <mat-icon>web</mat-icon>
-          <div class="advanced-text">
-            <h4>Telegram Web App</h4>
-            <p>Интеграция с веб-приложением для управления</p>
-            
-            <!-- WebApp URL -->
-            <div class="webapp-url-section" *ngIf="webAppUrl">
-              <mat-form-field appearance="outline" class="webapp-url-field">
-                <mat-label>WebApp URL</mat-label>
-                <input 
-                  matInput 
-                  [value]="webAppUrl"
-                  readonly>
-                <button 
-                  mat-icon-button 
-                  matSuffix 
-                  (click)="copyWebAppUrl()"
-                  matTooltip="Копировать WebApp URL">
-                  <mat-icon>content_copy</mat-icon>
-                </button>
-              </mat-form-field>
-              
-              <div class="webapp-actions">
-                <button 
-                  mat-raised-button 
-                  color="primary"
-                  (click)="openWebApp()"
-                  class="open-webapp-button">
-                  <mat-icon>launch</mat-icon>
-                  Открыть WebApp
-                </button>
-              </div>
-            </div>
-            
-            <div class="webapp-placeholder" *ngIf="!webAppUrl">
-              <p>WebApp URL будет доступен после активации бота</p>
-            </div>
-          </div>
-        </div>
       </div>
     </mat-card-content>
   </mat-card>

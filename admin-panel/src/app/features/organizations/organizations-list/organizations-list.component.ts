@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -7,6 +7,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 
 import { OrganizationsService, Organization } from '../../../core/services/organizations.service';
@@ -14,6 +18,7 @@ import { AuthService } from '../../../core/services/auth';
 import { OrganizationFormComponent } from '../organization-form/organization-form.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { UniversalHeaderComponent } from '../../../shared/components/universal-header/universal-header.component';
 
 @Component({
   selector: 'app-organizations-list',
@@ -24,7 +29,12 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    TranslatePipe
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    FormsModule,
+    TranslatePipe,
+    UniversalHeaderComponent
   ],
   templateUrl: './organizations-list.component.html',
   styleUrls: ['./organizations-list.component.scss']
@@ -34,6 +44,10 @@ export class OrganizationsListComponent implements OnInit, OnDestroy {
   isSuperAdmin = false;
   isLoading = true;
   displayedColumns: string[] = ['avatar', 'name', 'users', 'services', 'createdAt', 'actions'];
+  
+  // Filter properties
+  searchQuery = '';
+  sortBy = 'name';
   
   private destroy$ = new Subject<void>();
 
@@ -70,6 +84,37 @@ export class OrganizationsListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('window:universal-refresh')
+  onUniversalRefresh() {
+    console.log('🔄 Universal refresh triggered in OrganizationsListComponent');
+    this.loadOrganizations();
+  }
+
+  refreshOrganizations(): void {
+    this.loadOrganizations();
+  }
+
+  exportOrganizations(): void {
+    // TODO: Implement export functionality
+    this.snackBar.open('Функция экспорта в разработке', 'Закрыть', { duration: 3000 });
+  }
+
+  onSearchChange(): void {
+    // TODO: Implement search functionality
+    console.log('Search query:', this.searchQuery);
+  }
+
+  onSortChange(): void {
+    // TODO: Implement sort functionality
+    console.log('Sort by:', this.sortBy);
+  }
+
+  clearFilters(): void {
+    this.searchQuery = '';
+    this.sortBy = 'name';
+    this.loadOrganizations();
   }
 
   loadOrganizations(): void {

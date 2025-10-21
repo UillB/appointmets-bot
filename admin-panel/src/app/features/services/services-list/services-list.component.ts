@@ -14,6 +14,7 @@ import { ServicesService, Service } from '../../../core/services/services.servic
 import { OrganizationsService } from '../../../core/services/organizations.service';
 import { I18nService } from '../../../core/services/i18n.service';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
+import { UniversalHeaderComponent } from '../../../shared/components/universal-header/universal-header.component';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -29,10 +30,14 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatDialogModule,
-    TranslatePipe
+    TranslatePipe,
+    UniversalHeaderComponent
   ],
   template: `
     <div class="services-container">
+      <!-- Universal Header with DateTime and Refresh -->
+      <app-universal-header></app-universal-header>
+      
       <div class="services-header">
         <div class="header-content">
           <h1>{{ 'services.title' | translate }}</h1>
@@ -67,7 +72,8 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
           </button>
         </div>
 
-        <div *ngIf="!loading && services.length > 0" class="services-grid">
+        <!-- Desktop Grid View -->
+        <div *ngIf="!loading && services.length > 0" class="services-grid desktop-view">
           <mat-card *ngFor="let service of services" class="service-card">
             <mat-card-header>
               <mat-card-title>{{ getLocalizedName(service) }}</mat-card-title>
@@ -120,6 +126,56 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
               </button>
             </mat-card-actions>
           </mat-card>
+        </div>
+
+        <!-- Mobile Cards View -->
+        <div *ngIf="!loading && services.length > 0" class="mobile-services mobile-view">
+          <div *ngFor="let service of services" class="mobile-service-card">
+            <div class="card-header">
+              <div class="service-info">
+                <mat-icon class="service-icon">build</mat-icon>
+                <div class="service-details">
+                  <h3 class="service-name">{{ getLocalizedName(service) }}</h3>
+                  <div class="service-meta">
+                    <span class="organization">{{ service.organization?.name }}</span>
+                    <span class="duration">{{ formatDuration(service.durationMin) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-content">
+              <div class="stats-row">
+                <div class="stat-item">
+                  <mat-icon>schedule</mat-icon>
+                  <span>{{ service._count?.slots || 0 }} слотов</span>
+                </div>
+                <div class="stat-item">
+                  <mat-icon>event</mat-icon>
+                  <span>{{ service._count?.appointments || 0 }} записей</span>
+                </div>
+              </div>
+              
+              <p *ngIf="getLocalizedDescription(service)" class="description-mobile">
+                {{ getLocalizedDescription(service) }}
+              </p>
+            </div>
+            
+            <div class="card-actions">
+              <button mat-stroked-button [routerLink]="['/services', service.id]" class="action-btn">
+                <mat-icon>visibility</mat-icon>
+                Просмотр
+              </button>
+              <button mat-stroked-button [routerLink]="['/services', service.id, 'edit']" class="action-btn">
+                <mat-icon>edit</mat-icon>
+                Редактировать
+              </button>
+              <button mat-stroked-button color="warn" (click)="deleteService(service)" class="action-btn">
+                <mat-icon>delete</mat-icon>
+                Удалить
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -209,6 +265,16 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       gap: 24px;
     }
 
+    // Desktop view - show by default
+    .desktop-view {
+      display: block;
+    }
+
+    // Mobile view - hide by default
+    .mobile-view {
+      display: none;
+    }
+
     .service-card {
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -254,6 +320,140 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       gap: 4px;
     }
 
+    // Mobile Services Styles
+    .mobile-services {
+      display: none;
+    }
+
+    .mobile-service-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid #e9ecef;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .service-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .service-icon {
+      color: #667eea;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 6px;
+      padding: 6px;
+      font-size: 18px;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .service-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .service-name {
+      font-weight: 600;
+      font-size: 16px;
+      color: #333;
+      margin: 0;
+    }
+
+    .service-meta {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .organization {
+      color: #666;
+    }
+
+    .duration {
+      color: #1976d2;
+      font-weight: 500;
+    }
+
+    .card-content {
+      margin-bottom: 12px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      color: #666;
+      
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: #1976d2;
+      }
+    }
+
+    .description-mobile {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.4;
+      margin: 8px 0 0 0;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-width: 0;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        margin-right: 4px;
+      }
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+    }
+
     @media (max-width: 768px) {
       .services-container {
         padding: 16px;
@@ -272,6 +472,19 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       .services-grid {
         grid-template-columns: 1fr;
         gap: 16px;
+      }
+
+      // Show mobile view, hide desktop view
+      .desktop-view {
+        display: none;
+      }
+
+      .mobile-view {
+        display: block;
+      }
+
+      .mobile-services {
+        display: block;
       }
     }
   `]
