@@ -19,13 +19,13 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { I18nService } from '../../../core/services/i18n.service';
-import { UniversalHeaderComponent } from '../../../shared/components/universal-header/universal-header.component';
 
 import { AppointmentsService, AppointmentsFilters } from '../../../core/services/appointments.service';
 import { ServicesService } from '../../../core/services/services.service';
 import { ApiService } from '../../../core/services/api';
 import { Appointment } from '../../../shared/models/api.models';
 import { AppointmentDetailsComponent } from '../appointment-details/appointment-details.component';
+import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -48,23 +48,92 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
     MatMenuModule,
     MatSnackBarModule,
     FormsModule,
-    TranslatePipe,
-    UniversalHeaderComponent
+    TranslatePipe
   ],
   template: `
     <div class="appointments-container">
-      <!-- Universal Header with DateTime and Refresh -->
-      <app-universal-header></app-universal-header>
-      
       <div class="header-section">
         <div class="header-content">
           <h1>{{ 'appointments.title' | translate }}</h1>
           <p>{{ 'appointments.subtitle' | translate }}</p>
         </div>
-        <button mat-raised-button color="primary" (click)="onCreateAppointment()" class="create-btn">
-          <mat-icon>add</mat-icon>
-          <span class="create-text">{{ 'appointments.create' | translate }}</span>
+        <div class="header-actions">
+          <button mat-raised-button color="primary" (click)="onCreateAppointment()" class="create-btn">
+            <mat-icon>add</mat-icon>
+            <span class="create-text">+ New Appointment</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Status Filters -->
+      <div class="status-filters">
+        <button mat-stroked-button 
+                [class.active]="filters.status === ''" 
+                (click)="setStatusFilter('')" 
+                class="status-filter-btn">
+          All ({{ getTotalCount() }})
         </button>
+        <button mat-stroked-button 
+                [class.active]="filters.status === 'confirmed'" 
+                (click)="setStatusFilter('confirmed')" 
+                class="status-filter-btn">
+          Confirmed ({{ getConfirmedCount() }})
+        </button>
+        <button mat-stroked-button 
+                [class.active]="filters.status === 'pending'" 
+                (click)="setStatusFilter('pending')" 
+                class="status-filter-btn">
+          Pending ({{ getPendingCount() }})
+        </button>
+        <button mat-stroked-button 
+                [class.active]="filters.status === 'cancelled'" 
+                (click)="setStatusFilter('cancelled')" 
+                class="status-filter-btn">
+          Cancelled ({{ getCancelledCount() }})
+        </button>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="summary-cards">
+        <div class="summary-card">
+          <div class="summary-icon">
+            <mat-icon>calendar_month</mat-icon>
+          </div>
+          <div class="summary-content">
+            <div class="summary-number">{{ getTotalCount() }}</div>
+            <div class="summary-label">Total</div>
+          </div>
+        </div>
+        
+        <div class="summary-card">
+          <div class="summary-icon confirmed">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+          <div class="summary-content">
+            <div class="summary-number">{{ getConfirmedCount() }}</div>
+            <div class="summary-label">Confirmed</div>
+          </div>
+        </div>
+        
+        <div class="summary-card">
+          <div class="summary-icon pending">
+            <mat-icon>schedule</mat-icon>
+          </div>
+          <div class="summary-content">
+            <div class="summary-number">{{ getPendingCount() }}</div>
+            <div class="summary-label">Pending</div>
+          </div>
+        </div>
+        
+        <div class="summary-card">
+          <div class="summary-icon cancelled">
+            <mat-icon>cancel</mat-icon>
+          </div>
+          <div class="summary-content">
+            <div class="summary-number">{{ getCancelledCount() }}</div>
+            <div class="summary-label">Cancelled</div>
+          </div>
+        </div>
       </div>
 
       <!-- Desktop Filters -->
@@ -339,6 +408,34 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       gap: 16px;
     }
 
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .filter-date-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+      
+      &:hover {
+        background: #f8f9fa;
+        border-color: #4F46E5;
+        color: #4F46E5;
+      }
+    }
+
     .header-content h1 {
       font-size: 32px;
       font-weight: 600;
@@ -371,6 +468,113 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
         width: 20px;
         height: 20px;
       }
+    }
+
+    // Status Filters
+    .status-filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .status-filter-btn {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      border: 2px solid #e9ecef;
+      background: white;
+      color: #6c757d;
+      
+      &.active {
+        background: #4F46E5;
+        color: white;
+        border-color: #4F46E5;
+        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+      }
+      
+      &:not(.active):hover {
+        background: #f8f9fa;
+        border-color: #4F46E5;
+        color: #4F46E5;
+      }
+    }
+
+    // Summary Cards
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .summary-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e9ecef;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    .summary-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e3f2fd;
+      color: #1976d2;
+      
+      &.confirmed {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+      
+      &.pending {
+        background: #fff3e0;
+        color: #ef6c00;
+      }
+      
+      &.cancelled {
+        background: #ffebee;
+        color: #c62828;
+      }
+      
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+
+    .summary-content {
+      flex: 1;
+    }
+
+    .summary-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: #333;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .summary-label {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500;
     }
 
     .filters-card {
@@ -806,6 +1010,17 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
         font-size: 14px;
       }
 
+      .header-actions {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .filter-date-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
       .create-btn {
         padding: 10px 16px;
         font-size: 14px;
@@ -815,6 +1030,42 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
         .create-text {
           display: block;
         }
+      }
+
+      // Status filters mobile
+      .status-filters {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .status-filter-btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      // Summary cards mobile
+      .summary-cards {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .summary-card {
+        padding: 16px;
+      }
+
+      .summary-icon {
+        width: 40px;
+        height: 40px;
+        
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .summary-number {
+        font-size: 20px;
       }
 
       // Compact filters for mobile
@@ -1171,8 +1422,23 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
   }
 
   onCreateAppointment() {
-    // TODO: Navigate to create appointment form
-    console.log('Create appointment');
+    // Open appointment form dialog
+    const dialogRef = this.dialog.open(AppointmentFormComponent, {
+      width: '90vw',
+      maxWidth: '800px',
+      height: '90vh',
+      maxHeight: '600px',
+      data: { mode: 'create' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadAppointments();
+        this.snackBar.open('Appointment created successfully!', 'Close', {
+          duration: 3000
+        });
+      }
+    });
   }
 
   onViewAppointment(event: Event, appointment: Appointment) {
@@ -1317,5 +1583,27 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
       horizontalPosition: 'right',
       verticalPosition: 'bottom'
     });
+  }
+
+  setStatusFilter(status: string) {
+    this.filters.status = status;
+    this.applyFilters();
+  }
+
+
+  getTotalCount(): number {
+    return this.totalCount;
+  }
+
+  getConfirmedCount(): number {
+    return this.appointments.filter(apt => apt.status === 'confirmed').length;
+  }
+
+  getPendingCount(): number {
+    return this.appointments.filter(apt => apt.status === 'pending').length;
+  }
+
+  getCancelledCount(): number {
+    return this.appointments.filter(apt => apt.status === 'cancelled').length;
   }
 }

@@ -1,36 +1,52 @@
 <div class="sidebar-container">
+  <!-- Header Section -->
   <div class="sidebar-header">
     <div class="logo">
       <mat-icon class="logo-icon">calendar_today</mat-icon>
-      <h2>Appointments</h2>
+      <div class="logo-text">
+        <h1>Appointments</h1>
+        <p>Business Manager</p>
+      </div>
     </div>
   </div>
   
-  <mat-nav-list class="nav-list">
-    <a mat-list-item 
-       *ngFor="let item of menuItems" 
-       [routerLink]="item.route"
-       [class]="'nav-item ' + getRouteClass(item.route)"
-       class="nav-item">
-      <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-      <span matListItemTitle>{{ item.title }}</span>
-      <span matListItemMeta *ngIf="item.badge" class="badge">
-        <mat-icon [matBadge]="item.badge" matBadgeColor="warn" matBadgeSize="small">
-          notifications
-        </mat-icon>
-      </span>
-    </a>
-  </mat-nav-list>
-  
-  <mat-divider></mat-divider>
-  
-  <div class="sidebar-footer">
-    <div class="footer-info">
-      <p class="version">v1.0.0</p>
-      <p class="status">
-        <mat-icon class="status-icon">circle</mat-icon>
-        Online
-      </p>
+  <!-- Navigation Section -->
+  <nav class="nav-section">
+    <div class="nav-item" 
+         *ngFor="let item of menuItems" 
+         [routerLink]="item.route"
+         [class.active]="isActiveRoute(item.route)"
+         (click)="onNavigate()">
+      <div class="nav-content">
+        <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+        <span class="nav-title">{{ item.title }}</span>
+        <div class="nav-badge" *ngIf="item.badge">
+          <span class="badge-text" [class.number-badge]="typeof item.badge === 'number'">
+            {{ item.badge }}
+          </span>
+        </div>
+      </div>
     </div>
+  </nav>
+  
+  <!-- Summary Cards Section -->
+  <div class="summary-section">
+    <div class="summary-card" *ngFor="let card of summaryCards">
+      <div class="card-content">
+        <mat-icon class="card-icon">{{ card.icon }}</mat-icon>
+        <div class="card-text">
+          <span class="card-title">{{ card.title }}</span>
+          <span class="card-value">{{ card.value }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer Section -->
+  <div class="sidebar-footer">
+    <button class="logout-btn" (click)="onLogout()">
+      <mat-icon class="logout-icon">logout</mat-icon>
+      <span>Logout</span>
+    </button>
   </div>
 </div>

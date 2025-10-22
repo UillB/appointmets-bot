@@ -14,7 +14,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { UniversalHeaderComponent } from '../../shared/components/universal-header/universal-header.component';
 
 import { AIConfigService, AIConfig, AvailableModel, AIUsageStats } from '../../core/services/ai-config.service';
 import { AuthService, User } from '../../core/services/auth';
@@ -37,8 +36,7 @@ import { AuthService, User } from '../../core/services/auth';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatTooltipModule,
-    MatExpansionModule,
-    UniversalHeaderComponent
+    MatExpansionModule
   ],
   templateUrl: './ai-config.component.html',
   styleUrls: ['./ai-config.component.scss']

@@ -8,7 +8,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 
-import { HeaderComponent } from './header/header';
 import { SidebarComponent } from './sidebar/sidebar';
 
 @NgModule({
@@ -21,11 +20,9 @@ import { SidebarComponent } from './sidebar/sidebar';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
-    HeaderComponent,
     SidebarComponent
   ],
   exports: [
-    HeaderComponent,
     SidebarComponent
   ]
 })

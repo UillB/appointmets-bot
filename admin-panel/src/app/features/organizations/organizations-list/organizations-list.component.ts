@@ -18,7 +18,6 @@ import { AuthService } from '../../../core/services/auth';
 import { OrganizationFormComponent } from '../organization-form/organization-form.component';
 import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import { UniversalHeaderComponent } from '../../../shared/components/universal-header/universal-header.component';
 
 @Component({
   selector: 'app-organizations-list',
@@ -33,8 +32,7 @@ import { UniversalHeaderComponent } from '../../../shared/components/universal-h
     MatInputModule,
     MatSelectModule,
     FormsModule,
-    TranslatePipe,
-    UniversalHeaderComponent
+    TranslatePipe
   ],
   templateUrl: './organizations-list.component.html',
   styleUrls: ['./organizations-list.component.scss']

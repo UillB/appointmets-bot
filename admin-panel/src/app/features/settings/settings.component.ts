@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { SystemSettingsComponent } from './system-settings/system-settings.component';
-import { UniversalHeaderComponent } from '../../shared/components/universal-header/universal-header.component';
 
 @Component({
   selector: 'app-settings',
@@ -19,14 +18,10 @@ import { UniversalHeaderComponent } from '../../shared/components/universal-head
     MatIconModule,
     TranslatePipe,
     UserProfileComponent,
-    SystemSettingsComponent,
-    UniversalHeaderComponent
+    SystemSettingsComponent
   ],
   template: `
     <div class="settings-container">
-      <!-- Universal Header with DateTime and Refresh -->
-      <app-universal-header></app-universal-header>
-      
       <div class="settings-header">
         <div class="header-content">
           <div class="title-section">

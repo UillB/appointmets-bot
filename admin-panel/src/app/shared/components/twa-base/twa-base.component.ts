@@ -6,7 +6,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { TelegramWebAppService } from '../../../core/services/telegram-webapp.service';
-import { UniversalHeaderComponent } from '../universal-header/universal-header.component';
 
 @Component({
   selector: 'app-twa-base',
@@ -16,14 +15,10 @@ import { UniversalHeaderComponent } from '../universal-header/universal-header.c
     MatIconModule,
     MatButtonModule,
     MatCardModule,
-    MatProgressSpinnerModule,
-    UniversalHeaderComponent
+    MatProgressSpinnerModule
   ],
   template: `
     <div class="twa-container" [class.telegram-theme]="isInTelegram" [class.dark-theme]="isDarkTheme">
-      <!-- Universal Header with DateTime and Refresh -->
-      <app-universal-header></app-universal-header>
-      
       <!-- TWA Status Indicator -->
       <div *ngIf="isInTelegram" class="twa-status">
         <mat-icon class="telegram-icon">telegram</mat-icon>

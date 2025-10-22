@@ -33,9 +33,9 @@ import { TranslatePipe } from '../../../shared/pipes/translate.pipe';
     MatProgressSpinnerModule,
     MatChipsModule,
     MatListModule,
-    MatDividerModule,
-    ApiTestComponent,
-    TranslatePipe
+            MatDividerModule,
+            ApiTestComponent,
+            TranslatePipe
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
@@ -149,12 +149,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   onDateSelected(date: Date | null): void {
+    console.log('📅 Date selected:', date);
     this.selectedDate = date;
     
-    // Smooth scroll to appointments section when date is selected
+    // Load appointments for selected date
     if (date) {
+      this.loadAppointmentsForDate(date);
+      
+      // Smooth scroll to appointments section when date is selected
       setTimeout(() => {
-        const appointmentsSection = document.querySelector('.selected-date-card');
+        const appointmentsSection = document.querySelector('.upcoming-appointments');
         if (appointmentsSection) {
           appointmentsSection.scrollIntoView({ 
             behavior: 'smooth', 
@@ -163,6 +167,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }, 100);
     }
+  }
+
+  loadAppointmentsForDate(date: Date): void {
+    console.log('📅 Loading appointments for date:', date);
+    // Filter appointments for the selected date
+    this.recentAppointments = this.calendarAppointments.filter(apt => {
+      const aptDate = new Date(apt.slot?.startAt || apt.createdAt || '');
+      return aptDate.toDateString() === date.toDateString();
+    });
+    console.log('📅 Found appointments:', this.recentAppointments.length);
   }
 
   onStatClick(statKey: string): void {
@@ -195,12 +209,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  getAppointmentIcon(status?: string): string {
+    switch (status) {
+      case 'confirmed': return 'check_circle';
+      case 'pending': return 'schedule';
+      case 'cancelled': return 'cancel';
+      default: return 'event';
+    }
+  }
+
   formatAppointmentTime(appointment: Appointment): string {
     const date = new Date(appointment.slot?.startAt || appointment.createdAt || '');
     return date.toLocaleTimeString('ru-RU', { 
       hour: '2-digit', 
       minute: '2-digit' 
     });
+  }
+
+  getSelectedDateHeader(): string {
+    if (this.selectedDate) {
+      return this.selectedDate.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+    }
+    return this.currentDate.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  }
+
+  getClientName(appointment: Appointment): string {
+    // Placeholder for client name - in real app this would come from appointment data
+    return `Client ID: ${appointment.chatId}`;
   }
 
   formatAppointmentDate(appointment: Appointment): string {
@@ -245,6 +288,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'en': return service.nameEn || service.name;
       default: return service.name;
     }
+  }
+
+  getInitials(name: string | undefined): string {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
   }
 
   getStatusText(status: string | undefined): string {

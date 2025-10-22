@@ -6,9 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { filter, Subscription } from 'rxjs';
 
-import { HeaderComponent } from '../header/header';
 import { SidebarComponent } from '../sidebar/sidebar';
 import { ThemeService } from '../../core/services/theme.service';
+import { UniversalHeaderComponent } from '../../shared/components/universal-header/universal-header.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -18,8 +18,8 @@ import { ThemeService } from '../../core/services/theme.service';
     MatSidenavModule,
     MatIconModule,
     MatButtonModule,
-    HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    UniversalHeaderComponent
   ],
   template: `
     <mat-sidenav-container class="main-container" [hasBackdrop]="isMobile">
@@ -33,10 +33,17 @@ import { ThemeService } from '../../core/services/theme.service';
       </mat-sidenav>
       
       <mat-sidenav-content class="main-content">
-        <app-header 
-          (toggleSidenav)="toggleSidenav()"
-          (toggleTheme)="onToggleTheme()">
-        </app-header>
+        <!-- Universal Header -->
+        <app-universal-header></app-universal-header>
+        
+        <!-- Mobile Header -->
+        <div class="mobile-header" *ngIf="isMobile">
+          <button mat-icon-button (click)="toggleSidenav()" class="menu-btn">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <h1 class="mobile-title">Appointments</h1>
+          <div class="mobile-spacer"></div>
+        </div>
         
         <main class="content">
           <router-outlet></router-outlet>
@@ -45,11 +52,51 @@ import { ThemeService } from '../../core/services/theme.service';
     </mat-sidenav-container>
   `,
   styles: [`
-    .main-container { height: 100vh; }
-    .sidebar { width: 280px; }
-    .main-content { display: flex; flex-direction: column; }
-    .content { flex: 1; padding: 24px; overflow-y: auto; }
-    @media (max-width: 768px) { .content { padding: 12px; } }
+    .main-container { 
+      height: 100vh; 
+      background: #fafafa;
+    }
+    .sidebar { 
+      width: 256px; 
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+    .main-content { 
+      display: flex; 
+      flex-direction: column; 
+      background: #fafafa;
+    }
+    .content { 
+      flex: 1; 
+      padding: 0; 
+      overflow-y: auto; 
+      background: #fafafa;
+      padding-top: 80px; /* Отступ для фиксированного хедера */
+    }
+    .mobile-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .menu-btn {
+      color: #4F46E5;
+    }
+    .mobile-title {
+      flex: 1;
+      margin: 0 0 0 16px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #0F172A;
+    }
+    .mobile-spacer {
+      width: 48px;
+    }
+    @media (max-width: 768px) { 
+      .content { padding: 0; } 
+      .sidebar { width: 100%; }
+    }
   `]
 })
 export class MainLayoutComponent implements OnInit, OnDestroy {

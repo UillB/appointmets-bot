@@ -14,6 +14,7 @@ export interface Service {
   descriptionEn?: string;
   descriptionHe?: string;
   durationMin: number;
+  price?: number;
   organizationId: number;
   organization?: {
     id: number;
