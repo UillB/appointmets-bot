@@ -23,10 +23,10 @@ services:
     networks:
       - appointments-network
 
-  # Frontend Admin Panel
+  # Frontend Admin Panel (React)
   frontend:
     build:
-      context: ./admin-panel
+      context: ./admin-panel-react
       dockerfile: Dockerfile
     ports:
       - "4200:80"

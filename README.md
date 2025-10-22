@@ -7,7 +7,8 @@
 ```
 appointments-bot/
 ├── backend/          # Node.js + Express + Prisma + Telegram Bot
-├── admin-panel/      # Angular 20 Admin Panel
+├── admin-panel-react/ # React Admin Panel (Main)
+├── admin-panel/       # Angular 20 Admin Panel (Legacy)
 ├── landing/          # Next.js Landing Page (многоязычный)
 ├── scripts/          # Автоматизация и скрипты развертывания
 ├── docs/             # Документация проекта
@@ -54,14 +55,21 @@ appointments-bot/
    npm run dev
    ```
 
-2. **Admin Panel:**
+2. **React Admin Panel (Main):**
+   ```bash
+   cd admin-panel-react
+   npm install
+   npm run dev
+   ```
+
+3. **Angular Admin Panel (Legacy):**
    ```bash
    cd admin-panel
    npm install
    npm run dev
    ```
 
-3. **Landing Page:**
+4. **Landing Page:**
    ```bash
    cd landing
    npm install
@@ -71,7 +79,8 @@ appointments-bot/
 ## 🌐 Доступные сервисы
 
 - **Backend API:** http://localhost:4000
-- **Admin Panel:** http://localhost:4200
+- **React Admin Panel:** http://localhost:4200
+- **Angular Admin Panel:** http://localhost:4201 (if running)
 - **Landing Page:** http://localhost:3000
 - **API Health Check:** http://localhost:4000/api/health
 
@@ -158,13 +167,15 @@ docker-compose up -d
 
 ## 📊 Функциональность
 
-### Admin Panel
-- 📈 Dashboard с аналитикой
+### React Admin Panel (Main)
+- 📈 Dashboard с аналитикой и статистикой
 - 📅 Управление записями с фильтрацией
 - 🏢 Управление организациями
 - 🔧 Управление услугами
+- 🤖 AI Assistant с настройками
 - ⚙️ Настройки системы
 - 👤 Профиль пользователя
+- 🎨 Современный UI с Tailwind CSS
 
 ### API Endpoints
 - `GET /api/health` - проверка здоровья
@@ -179,7 +190,7 @@ docker-compose up -d
 ### Структура проекта
 
 - **Backend:** Express.js с TypeScript, Prisma ORM, JWT аутентификация
-- **Frontend:** Angular 20 с Material Design, Standalone Components
+- **Frontend:** React с Tailwind CSS (Main), Angular 20 с Material Design (Legacy)
 - **Bot:** Telegram Bot API с многоязычной поддержкой
 - **Database:** SQLite с возможностью миграции на PostgreSQL
 

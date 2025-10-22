@@ -28,20 +28,21 @@ echo "✅ Backend started (PID: $BACKEND_PID)"
 # Wait a moment for backend to start
 sleep 3
 
-# Start frontend
-echo "🎨 Starting frontend server..."
-cd ../admin-panel
+# Start frontend (React Admin Panel)
+echo "🎨 Starting React admin panel..."
+cd ../admin-panel-react
 npm run dev &
 FRONTEND_PID=$!
-echo "✅ Frontend started (PID: $FRONTEND_PID)"
+echo "✅ React admin panel started (PID: $FRONTEND_PID)"
 
 echo ""
 echo "🎉 Development environment is running!"
 echo ""
 echo "📱 Backend API: http://localhost:4000"
-echo "🌐 Frontend Admin Panel: http://localhost:4200"
+echo "🌐 React Admin Panel (Main): http://localhost:4200"
 echo "📊 API Health Check: http://localhost:4000/api/health"
 echo ""
+echo "💡 React admin panel is now the main interface!"
 echo "Press Ctrl+C to stop all servers"
 
 # Wait for background processes

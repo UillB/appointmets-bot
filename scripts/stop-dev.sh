@@ -28,6 +28,7 @@ stop_service() {
 
 # Stop services
 stop_service "backend"
+stop_service "admin-panel-react"
 stop_service "admin-panel"
 stop_service "landing"
 stop_service "ngrok"
