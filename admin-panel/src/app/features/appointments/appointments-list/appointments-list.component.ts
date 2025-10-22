@@ -60,7 +60,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
         <div class="header-actions">
           <button mat-raised-button color="primary" (click)="onCreateAppointment()" class="create-btn">
             <mat-icon>add</mat-icon>
-            <span class="create-text">+ New Appointment</span>
+            <span class="create-text">+ {{ 'appointments.create' | translate }}</span>
           </button>
         </div>
       </div>
@@ -71,25 +71,25 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
                 [class.active]="filters.status === ''" 
                 (click)="setStatusFilter('')" 
                 class="status-filter-btn">
-          All ({{ getTotalCount() }})
+          {{ 'common.all' | translate }} ({{ getTotalCount() }})
         </button>
         <button mat-stroked-button 
                 [class.active]="filters.status === 'confirmed'" 
                 (click)="setStatusFilter('confirmed')" 
                 class="status-filter-btn">
-          Confirmed ({{ getConfirmedCount() }})
+          {{ 'appointments.status.confirmed' | translate }} ({{ getConfirmedCount() }})
         </button>
         <button mat-stroked-button 
                 [class.active]="filters.status === 'pending'" 
                 (click)="setStatusFilter('pending')" 
                 class="status-filter-btn">
-          Pending ({{ getPendingCount() }})
+          {{ 'appointments.status.pending' | translate }} ({{ getPendingCount() }})
         </button>
         <button mat-stroked-button 
                 [class.active]="filters.status === 'cancelled'" 
                 (click)="setStatusFilter('cancelled')" 
                 class="status-filter-btn">
-          Cancelled ({{ getCancelledCount() }})
+          {{ 'appointments.status.cancelled' | translate }} ({{ getCancelledCount() }})
         </button>
       </div>
 
@@ -101,7 +101,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
           </div>
           <div class="summary-content">
             <div class="summary-number">{{ getTotalCount() }}</div>
-            <div class="summary-label">Total</div>
+            <div class="summary-label">{{ 'appointments.summary.total' | translate }}</div>
           </div>
         </div>
         
@@ -111,7 +111,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
           </div>
           <div class="summary-content">
             <div class="summary-number">{{ getConfirmedCount() }}</div>
-            <div class="summary-label">Confirmed</div>
+            <div class="summary-label">{{ 'appointments.summary.confirmed' | translate }}</div>
           </div>
         </div>
         
@@ -121,7 +121,7 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
           </div>
           <div class="summary-content">
             <div class="summary-number">{{ getPendingCount() }}</div>
-            <div class="summary-label">Pending</div>
+            <div class="summary-label">{{ 'appointments.summary.pending' | translate }}</div>
           </div>
         </div>
         
@@ -131,49 +131,36 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
           </div>
           <div class="summary-content">
             <div class="summary-number">{{ getCancelledCount() }}</div>
-            <div class="summary-label">Cancelled</div>
+            <div class="summary-label">{{ 'appointments.summary.cancelled' | translate }}</div>
           </div>
         </div>
       </div>
 
-      <!-- Desktop Filters -->
-      <mat-card class="filters-card desktop-filters">
-        <mat-card-content>
-          <div class="filters-row">
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>{{ 'appointments.filters.status' | translate }}</mat-label>
-              <mat-select [(ngModel)]="filters.status" (selectionChange)="onStatusChange()">
-                <mat-option value="">{{ 'common.all' | translate }}</mat-option>
-                <mat-option value="confirmed">{{ 'appointments.status.confirmed' | translate }}</mat-option>
-                <mat-option value="pending">{{ 'appointments.status.pending' | translate }}</mat-option>
-                <mat-option value="cancelled">{{ 'appointments.status.cancelled' | translate }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+      <!-- Search and Filter Bar -->
+      <div class="search-filter-bar">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>{{ 'appointments.search.placeholder' | translate }}</mat-label>
+          <input matInput [(ngModel)]="searchQuery" (input)="onSearchChange()" placeholder="{{ 'appointments.search.placeholder' | translate }}">
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'appointments.filters.service' | translate }}</mat-label>
+          <mat-select [(ngModel)]="filters.serviceId" (selectionChange)="onServiceChange()">
+            <mat-option value="">{{ 'common.all' | translate }}</mat-option>
+            <mat-option *ngFor="let service of services" [value]="service.id">
+              {{ getServiceName(service) }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>{{ 'appointments.filters.service' | translate }}</mat-label>
-              <mat-select [(ngModel)]="filters.serviceId" (selectionChange)="onServiceChange()">
-                <mat-option value="">{{ 'common.all' | translate }}</mat-option>
-                <mat-option *ngFor="let service of services" [value]="service.id">
-                  {{ getServiceName(service) }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>{{ 'appointments.filters.date' | translate }}</mat-label>
-              <input matInput [matDatepicker]="datePicker" [(ngModel)]="filters.date" (dateChange)="onDateChange()">
-              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-              <mat-datepicker #datePicker></mat-datepicker>
-            </mat-form-field>
-
-            <button mat-button (click)="clearFilters()" class="clear-filters-btn">
-              <mat-icon>clear</mat-icon>
-              {{ 'common.clear' | translate }}
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>{{ 'appointments.filters.date' | translate }}</mat-label>
+          <input matInput [matDatepicker]="datePicker" [(ngModel)]="filters.date" (dateChange)="onDateChange()">
+          <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+          <mat-datepicker #datePicker></mat-datepicker>
+        </mat-form-field>
+      </div>
 
       <!-- Mobile Compact Filters -->
       <div class="mobile-filters">
@@ -263,8 +250,8 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
                 <th mat-header-cell *matHeaderCellDef>{{ 'appointments.table.service' | translate }}</th>
                 <td mat-cell *matCellDef="let appointment">
                   <div class="service-info">
-                    <mat-icon class="service-icon">psychology</mat-icon>
-                    <span>{{ getServiceName(appointment.service) }}</span>
+                    <mat-icon class="service-icon">calendar_month</mat-icon>
+                    <span class="service-name">{{ getServiceName(appointment.service) }}</span>
                   </div>
                 </td>
               </ng-container>
@@ -285,8 +272,11 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
                 <th mat-header-cell *matHeaderCellDef>{{ 'appointments.table.client' | translate }}</th>
                 <td mat-cell *matCellDef="let appointment">
                   <div class="client-info">
-                    <mat-icon class="client-icon">person</mat-icon>
-                    <span>{{ appointment.chatId }}</span>
+                    <div class="client-avatar">{{ appointment.id }}</div>
+                    <div class="client-details">
+                      <div class="client-id">{{ appointment.id }}</div>
+                      <div class="client-chat-id">{{ appointment.chatId }}</div>
+                    </div>
                   </div>
                 </td>
               </ng-container>
@@ -295,12 +285,10 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
               <ng-container matColumnDef="status">
                 <th mat-header-cell *matHeaderCellDef>{{ 'appointments.table.status' | translate }}</th>
                 <td mat-cell *matCellDef="let appointment">
-                  <div class="status-container">
-                    <div class="status-indicator" [class]="'status-' + appointment.status">
-                      <mat-icon class="status-icon">{{ getStatusIcon(appointment.status) }}</mat-icon>
-                    </div>
+                  <mat-chip [class]="'status-chip status-' + appointment.status">
+                    <mat-icon class="status-icon">{{ getStatusIcon(appointment.status) }}</mat-icon>
                     <span class="status-text">{{ getStatusText(appointment.status) }}</span>
-                  </div>
+                  </mat-chip>
                 </td>
               </ng-container>
 
@@ -336,6 +324,10 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
+            <div class="pagination-info">
+              <span class="pagination-text">{{ 'appointments.pagination.showing' | translate }} {{ getDisplayedCount() }} {{ 'appointments.pagination.of' | translate }} {{ totalCount }} {{ 'appointments.pagination.appointments' | translate }}</span>
+            </div>
+            
             <mat-paginator
               [length]="totalCount"
               [pageSize]="pageSize"
@@ -479,26 +471,57 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
     }
 
     .status-filter-btn {
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 500;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
       font-size: 14px;
       transition: all 0.3s ease;
       border: 2px solid #e9ecef;
       background: white;
       color: #6c757d;
+      position: relative;
+      overflow: hidden;
+      min-height: 44px; /* Улучшенный touch target */
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+      }
       
       &.active {
-        background: #4F46E5;
-        color: white;
-        border-color: #4F46E5;
-        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        background: linear-gradient(135deg, #4F46E5, #7C3AED) !important;
+        color: white !important;
+        border-color: #4F46E5 !important;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4) !important;
+        transform: translateY(-1px);
+        
+        &::before {
+          left: 100%;
+        }
       }
       
       &:not(.active):hover {
         background: #f8f9fa;
         border-color: #4F46E5;
         color: #4F46E5;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+      }
+    }
+
+    // Принудительное применение стилей для Angular Material
+    ::ng-deep {
+      .status-filter-btn.active {
+        background: linear-gradient(135deg, #4F46E5, #7C3AED) !important;
+        color: white !important;
+        border-color: #4F46E5 !important;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4) !important;
       }
     }
 
@@ -520,10 +543,29 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       align-items: center;
       gap: 16px;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #4F46E5, #7C3AED);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
       
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+        border-color: #4F46E5;
+        
+        &::before {
+          transform: scaleX(1);
+        }
       }
     }
 
@@ -594,6 +636,24 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
 
     .clear-filters-btn {
       margin-left: auto;
+    }
+
+    // Search and Filter Bar
+    .search-filter-bar {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .search-field {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .filter-field {
+      min-width: 200px;
     }
 
     // Mobile Cards Styles
@@ -701,12 +761,14 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
         }
         
         .mat-mdc-row {
-          transition: all 0.2s ease;
+          transition: all 0.3s ease;
+          cursor: pointer;
           
           &:hover {
             background-color: #f8f9fa;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.1);
+            border-left: 3px solid #4F46E5;
           }
           
           &:last-child .mat-mdc-cell {
@@ -735,6 +797,12 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       justify-content: center;
     }
 
+    .service-name {
+      font-weight: 500;
+      font-size: 14px;
+      color: #333;
+    }
+
     .datetime-info {
       display: flex;
       flex-direction: column;
@@ -761,6 +829,36 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       display: flex;
       align-items: center;
       gap: 12px;
+    }
+
+    .client-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #4F46E5;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .client-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .client-id {
+      font-weight: 600;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .client-chat-id {
+      font-size: 12px;
+      color: #666;
     }
 
     .client-icon {
@@ -837,6 +935,45 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       color: #495057;
     }
 
+    // Status Chips
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: capitalize;
+      
+      &.status-confirmed {
+        background: #e8f5e9;
+        color: #2e7d32;
+        
+        .status-icon {
+          color: #4caf50;
+        }
+      }
+      
+      &.status-pending {
+        background: #fff3e0;
+        color: #ef6c00;
+        
+        .status-icon {
+          color: #ff9800;
+        }
+      }
+      
+      &.status-cancelled {
+        background: #ffebee;
+        color: #c62828;
+        
+        .status-icon {
+          color: #f44336;
+        }
+      }
+    }
+
     .delete-action {
       color: #f44336;
     }
@@ -864,10 +1001,29 @@ import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../sh
       padding: 16px;
       border: 1px solid #e9ecef;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #4F46E5, #7C3AED);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
       
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+        border-color: #4F46E5;
+        
+        &::before {
+          transform: scaleX(1);
+        }
       }
     }
 
@@ -1279,6 +1435,7 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
   };
   
   quickFilter: 'today' | 'tomorrow' | 'all' = 'all';
+  searchQuery = '';
 
   constructor(
     private appointmentsService: AppointmentsService,
@@ -1593,6 +1750,14 @@ export class AppointmentsListComponent implements OnInit, OnDestroy {
 
   getTotalCount(): number {
     return this.totalCount;
+  }
+
+  getDisplayedCount(): number {
+    return this.appointments.length;
+  }
+
+  onSearchChange(): void {
+    this.applyFilters();
   }
 
   getConfirmedCount(): number {

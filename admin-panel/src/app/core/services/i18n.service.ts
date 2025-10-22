@@ -26,7 +26,7 @@ export class I18nService {
       'nav.settings': 'Settings',
       
       // Dashboard
-      'dashboard.welcome': 'Welcome',
+      'dashboard.welcome': 'Welcome back',
       'dashboard.refresh': 'Refresh',
       'dashboard.stats.totalAppointments': 'Total Appointments',
       'dashboard.stats.todayAppointments': 'Today\'s Appointments',
@@ -36,6 +36,39 @@ export class I18nService {
       'dashboard.stats.activeServices': 'Active Services',
       'dashboard.stats.totalRevenue': 'Total Revenue',
       'dashboard.stats.todayRevenue': 'Today\'s Revenue',
+      
+      // Dashboard Quick Access
+      'dashboard.quickAccess.appointments.title': 'Appointments',
+      'dashboard.quickAccess.appointments.description': 'Manage bookings',
+      'dashboard.quickAccess.services.title': 'Services',
+      'dashboard.quickAccess.services.description': 'Configure offerings',
+      'dashboard.quickAccess.organizations.title': 'Organizations',
+      'dashboard.quickAccess.organizations.description': 'Manage locations',
+      'dashboard.quickAccess.settings.title': 'Settings',
+      'dashboard.quickAccess.settings.description': 'System configuration',
+      'dashboard.quickAccess.today': 'today',
+      'dashboard.quickAccess.available': 'available',
+      'dashboard.quickAccess.active': 'active',
+      'dashboard.quickAccess.account': 'Account',
+      
+      // Dashboard Statistics
+      'dashboard.statistics.title': 'Statistics & Overview',
+      'dashboard.statistics.viewAll': 'View All',
+      'dashboard.statistics.totalAppointments': 'Total Appointments',
+      'dashboard.statistics.todayBookings': 'Today\'s Bookings',
+      'dashboard.statistics.pendingApprovals': 'Pending Approvals',
+      'dashboard.statistics.activeServices': 'Active Services',
+      'dashboard.statistics.thisWeek': 'for this week',
+      'dashboard.statistics.scheduledToday': 'Scheduled for today',
+      'dashboard.statistics.awaitingConfirmation': 'Awaiting confirmation',
+      'dashboard.statistics.availableForBooking': 'Available for booking',
+      
+      // Dashboard Calendar
+      'dashboard.calendar.title': 'Calendar',
+      
+      // Dashboard Appointments
+      'dashboard.appointments.newAppointment': 'New Appointment',
+      'dashboard.appointments.noAppointments': 'No appointments scheduled',
       
       // Calendar
       'calendar.appointments': 'Appointments',
@@ -131,7 +164,21 @@ export class I18nService {
       // Appointments
       'appointments.title': 'Appointments',
       'appointments.subtitle': 'Manage appointments and bookings',
-      'appointments.create': 'Create Appointment',
+      'appointments.create': 'New Appointment',
+      
+      // Appointments Summary
+      'appointments.summary.total': 'All time bookings',
+      'appointments.summary.confirmed': 'Successfully confirmed',
+      'appointments.summary.pending': 'Awaiting confirmation',
+      'appointments.summary.cancelled': 'Cancelled bookings',
+      
+      // Appointments Search
+      'appointments.search.placeholder': 'Search by client ID or service...',
+      
+      // Appointments Pagination
+      'appointments.pagination.showing': 'Showing',
+      'appointments.pagination.of': 'of',
+      'appointments.pagination.appointments': 'appointments',
       'appointments.edit': 'Edit Appointment',
       'appointments.cancel': 'Cancel Appointment',
       'appointments.details.title': 'Appointment Details',
@@ -242,6 +289,39 @@ export class I18nService {
       'dashboard.stats.totalRevenue': 'Общий доход',
       'dashboard.stats.todayRevenue': 'Доход за сегодня',
       
+      // Dashboard Quick Access
+      'dashboard.quickAccess.appointments.title': 'Записи',
+      'dashboard.quickAccess.appointments.description': 'Управление записями',
+      'dashboard.quickAccess.services.title': 'Услуги',
+      'dashboard.quickAccess.services.description': 'Настройка услуг',
+      'dashboard.quickAccess.organizations.title': 'Организации',
+      'dashboard.quickAccess.organizations.description': 'Управление локациями',
+      'dashboard.quickAccess.settings.title': 'Настройки',
+      'dashboard.quickAccess.settings.description': 'Конфигурация системы',
+      'dashboard.quickAccess.today': 'сегодня',
+      'dashboard.quickAccess.available': 'доступно',
+      'dashboard.quickAccess.active': 'активно',
+      'dashboard.quickAccess.account': 'Аккаунт',
+      
+      // Dashboard Statistics
+      'dashboard.statistics.title': 'Статистика и обзор',
+      'dashboard.statistics.viewAll': 'Посмотреть все',
+      'dashboard.statistics.totalAppointments': 'Всего записей',
+      'dashboard.statistics.todayBookings': 'Записи на сегодня',
+      'dashboard.statistics.pendingApprovals': 'Ожидают подтверждения',
+      'dashboard.statistics.activeServices': 'Активные услуги',
+      'dashboard.statistics.thisWeek': 'на этой неделе',
+      'dashboard.statistics.scheduledToday': 'Запланировано на сегодня',
+      'dashboard.statistics.awaitingConfirmation': 'Ожидают подтверждения',
+      'dashboard.statistics.availableForBooking': 'Доступно для записи',
+      
+      // Dashboard Calendar
+      'dashboard.calendar.title': 'Календарь',
+      
+      // Dashboard Appointments
+      'dashboard.appointments.newAppointment': 'Новая запись',
+      'dashboard.appointments.noAppointments': 'Нет запланированных записей',
+      
       // Calendar
       'calendar.appointments': 'Записи',
       'calendar.noAppointments': 'Нет записей на эту дату',
@@ -336,7 +416,21 @@ export class I18nService {
       // Appointments
       'appointments.title': 'Записи',
       'appointments.subtitle': 'Управление записями и бронированием',
-      'appointments.create': 'Создать запись',
+      'appointments.create': 'Новая запись',
+      
+      // Appointments Summary
+      'appointments.summary.total': 'Всего записей',
+      'appointments.summary.confirmed': 'Успешно подтверждены',
+      'appointments.summary.pending': 'Ожидают подтверждения',
+      'appointments.summary.cancelled': 'Отмененные записи',
+      
+      // Appointments Search
+      'appointments.search.placeholder': 'Поиск по ID клиента или услуге...',
+      
+      // Appointments Pagination
+      'appointments.pagination.showing': 'Показано',
+      'appointments.pagination.of': 'из',
+      'appointments.pagination.appointments': 'записей',
       'appointments.edit': 'Редактировать запись',
       'appointments.cancel': 'Отменить запись',
       'appointments.details.title': 'Детали записи',
@@ -447,6 +541,39 @@ export class I18nService {
       'dashboard.stats.totalRevenue': 'סה"כ הכנסות',
       'dashboard.stats.todayRevenue': 'הכנסות להיום',
       
+      // Dashboard Quick Access
+      'dashboard.quickAccess.appointments.title': 'תורים',
+      'dashboard.quickAccess.appointments.description': 'ניהול תורים',
+      'dashboard.quickAccess.services.title': 'שירותים',
+      'dashboard.quickAccess.services.description': 'הגדרת שירותים',
+      'dashboard.quickAccess.organizations.title': 'ארגונים',
+      'dashboard.quickAccess.organizations.description': 'ניהול מיקומים',
+      'dashboard.quickAccess.settings.title': 'הגדרות',
+      'dashboard.quickAccess.settings.description': 'תצורת מערכת',
+      'dashboard.quickAccess.today': 'היום',
+      'dashboard.quickAccess.available': 'זמין',
+      'dashboard.quickAccess.active': 'פעיל',
+      'dashboard.quickAccess.account': 'חשבון',
+      
+      // Dashboard Statistics
+      'dashboard.statistics.title': 'סטטיסטיקה וסקירה',
+      'dashboard.statistics.viewAll': 'הצג הכל',
+      'dashboard.statistics.totalAppointments': 'סה"כ תורים',
+      'dashboard.statistics.todayBookings': 'תורים להיום',
+      'dashboard.statistics.pendingApprovals': 'ממתינים לאישור',
+      'dashboard.statistics.activeServices': 'שירותים פעילים',
+      'dashboard.statistics.thisWeek': 'השבוע',
+      'dashboard.statistics.scheduledToday': 'מתוזמנים להיום',
+      'dashboard.statistics.awaitingConfirmation': 'ממתינים לאישור',
+      'dashboard.statistics.availableForBooking': 'זמין להזמנה',
+      
+      // Dashboard Calendar
+      'dashboard.calendar.title': 'לוח שנה',
+      
+      // Dashboard Appointments
+      'dashboard.appointments.newAppointment': 'תור חדש',
+      'dashboard.appointments.noAppointments': 'אין תורים מתוזמנים',
+      
       // Calendar
       'calendar.appointments': 'תורים',
       'calendar.noAppointments': 'אין תורים לתאריך זה',
@@ -541,7 +668,21 @@ export class I18nService {
       // Appointments
       'appointments.title': 'תורים',
       'appointments.subtitle': 'ניהול תורים והזמנות',
-      'appointments.create': 'צור תור',
+      'appointments.create': 'תור חדש',
+      
+      // Appointments Summary
+      'appointments.summary.total': 'סה"כ תורים',
+      'appointments.summary.confirmed': 'אושרו בהצלחה',
+      'appointments.summary.pending': 'ממתינים לאישור',
+      'appointments.summary.cancelled': 'תורים מבוטלים',
+      
+      // Appointments Search
+      'appointments.search.placeholder': 'חיפוש לפי מזהה לקוח או שירות...',
+      
+      // Appointments Pagination
+      'appointments.pagination.showing': 'מציג',
+      'appointments.pagination.of': 'מתוך',
+      'appointments.pagination.appointments': 'תורים',
       'appointments.edit': 'ערוך תור',
       'appointments.cancel': 'בטל תור',
       'appointments.details.title': 'פרטי התור',

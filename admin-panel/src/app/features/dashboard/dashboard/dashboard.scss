@@ -170,11 +170,29 @@
       display: flex;
       align-items: center;
       gap: 16px;
+      position: relative;
+      overflow: hidden;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #4F46E5, #7C3AED);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+      }
       
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
         border-color: #4F46E5;
+        
+        &::before {
+          transform: scaleX(1);
+        }
         
         .stat-icon {
           background: #4F46E5;

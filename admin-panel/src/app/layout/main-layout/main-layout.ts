@@ -59,6 +59,7 @@ import { UniversalHeaderComponent } from '../../shared/components/universal-head
     .sidebar { 
       width: 256px; 
       box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+      border-radius: 0;
     }
     .main-content { 
       display: flex; 
@@ -70,7 +71,11 @@ import { UniversalHeaderComponent } from '../../shared/components/universal-head
       padding: 0; 
       overflow-y: auto; 
       background: #fafafa;
-      padding-top: 80px; /* Отступ для фиксированного хедера */
+      padding-top: 64px; /* Отступ для фиксированного хедера */
+      
+      @media (max-width: 768px) {
+        padding-top: 80px; /* Больше места для мобильного хедера */
+      }
     }
     .mobile-header {
       display: flex;
@@ -95,7 +100,15 @@ import { UniversalHeaderComponent } from '../../shared/components/universal-head
     }
     @media (max-width: 768px) { 
       .content { padding: 0; } 
-      .sidebar { width: 100%; }
+      .sidebar { 
+        width: 100%; 
+        border-radius: 0;
+      }
+      .main-container {
+        ::ng-deep .mat-sidenav {
+          border-radius: 0;
+        }
+      }
     }
   `]
 })

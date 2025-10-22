@@ -47,16 +47,16 @@ import { I18nService, Language } from '../../../core/services/i18n.service';
           <mat-icon class="dropdown-icon">expand_more</mat-icon>
         </button>
         <mat-menu #languageMenu="matMenu" class="language-menu">
-          <button mat-menu-item (click)="changeLanguage('ru')">
-            <mat-icon>flag</mat-icon>
+          <button mat-menu-item (click)="changeLanguage('ru')" class="language-option">
+            <span class="flag-icon">🇷🇺</span>
             <span>Русский</span>
           </button>
-          <button mat-menu-item (click)="changeLanguage('en')">
-            <mat-icon>flag</mat-icon>
+          <button mat-menu-item (click)="changeLanguage('en')" class="language-option">
+            <span class="flag-icon">🇺🇸</span>
             <span>English</span>
           </button>
-          <button mat-menu-item (click)="changeLanguage('he')">
-            <mat-icon>flag</mat-icon>
+          <button mat-menu-item (click)="changeLanguage('he')" class="language-option">
+            <span class="flag-icon">🇮🇱</span>
             <span>עברית</span>
           </button>
         </mat-menu>
@@ -108,17 +108,23 @@ import { I18nService, Language } from '../../../core/services/i18n.service';
       justify-content: space-between;
       align-items: center;
       background: #ffffff;
-      border-bottom: 2px solid #d1d5db;
-      padding: 12px 24px;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 8px 24px;
       margin-bottom: 0;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      height: 56px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      height: 48px;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
       
       @media (max-width: 768px) {
         left: 0;
-        padding: 12px 16px;
+        padding: 8px 16px;
+        height: 44px;
+        flex-direction: column;
+        gap: 8px;
+        height: auto;
+        min-height: 44px;
       }
       
       .system-status {
@@ -132,21 +138,46 @@ import { I18nService, Language } from '../../../core/services/i18n.service';
           gap: 8px;
           
           .status-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
+            position: relative;
             
             &.online {
               background: #10b981;
-              box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+              box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+              animation: pulse 2s infinite;
+            }
+            
+            &::after {
+              content: '';
+              position: absolute;
+              top: -2px;
+              left: -2px;
+              right: -2px;
+              bottom: -2px;
+              border-radius: 50%;
+              background: rgba(16, 185, 129, 0.1);
+              animation: ripple 2s infinite;
             }
           }
           
           .status-text {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #111827;
           }
+        }
+        
+        @keyframes pulse {
+          0% { opacity: 1; }
+          50% { opacity: 0.7; }
+          100% { opacity: 1; }
+        }
+        
+        @keyframes ripple {
+          0% { transform: scale(1); opacity: 1; }
+          100% { transform: scale(1.5); opacity: 0; }
         }
         
         .last-updated {
@@ -367,13 +398,27 @@ import { I18nService, Language } from '../../../core/services/i18n.service';
           padding: 8px 0;
         }
         
-        .mat-mdc-menu-item {
+        .language-option {
+          display: flex;
+          align-items: center;
+          gap: 12px;
           min-height: 40px;
           padding: 8px 16px;
+          transition: all 0.2s ease;
           
-          mat-icon {
-            margin-right: 12px;
-            color: #6b7280;
+          &:hover {
+            background: #f3f4f6;
+          }
+          
+          .flag-icon {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+          }
+          
+          span:last-child {
+            font-weight: 500;
+            color: #111827;
           }
         }
       }

@@ -1,0 +1,476 @@
+import { useState } from "react";
+import { useAuth } from "../hooks/useAuth";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { Checkbox } from "./ui/checkbox";
+import {
+  LogIn,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  Calendar,
+  ArrowRight,
+  Shield,
+  Zap,
+  CheckCircle2,
+  User,
+  Building,
+} from "lucide-react";
+import { toast } from "sonner@2.0.3";
+
+interface ProfessionalLoginPageProps {
+  onSwitchToRegister?: () => void;
+}
+
+export function ProfessionalLoginPage({ onSwitchToRegister }: ProfessionalLoginPageProps) {
+  const { login, register, isLoading } = useAuth();
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  
+  // Login form state
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
+  
+  // Register form state
+  const [registerData, setRegisterData] = useState({
+    email: "",
+    password: "",
+    name: "",
+    organizationName: "",
+  });
+  
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!loginData.email || !loginData.password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    try {
+      await login(loginData.email, loginData.password);
+      toast.success("Welcome back!", {
+        description: "You have successfully logged in",
+      });
+    } catch (error) {
+      // Error is handled in the hook
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!registerData.email || !registerData.password || !registerData.name || !registerData.organizationName) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerData.email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (registerData.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      await register(
+        registerData.email,
+        registerData.password,
+        registerData.name,
+        registerData.organizationName
+      );
+      toast.success("Account created successfully!", {
+        description: "Welcome to Appointments Bot",
+      });
+    } catch (error) {
+      // Error is handled in the hook
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 flex items-center justify-center p-4">
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-20 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse delay-2000"></div>
+      </div>
+
+      <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 relative z-10">
+        {/* Left Side - Branding */}
+        <div className="hidden lg:flex flex-col justify-center space-y-8">
+          {/* Logo */}
+          <div className="space-y-4">
+            <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl">
+              <Calendar className="w-12 h-12 text-white" />
+            </div>
+            <div>
+              <h1 className="text-5xl mb-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 bg-clip-text text-transparent">
+                Appointments Bot
+              </h1>
+              <p className="text-xl text-gray-600">
+                Manage your bookings with ease
+              </p>
+            </div>
+          </div>
+
+          {/* Features */}
+          <div className="space-y-6">
+            <div className="flex items-start gap-4 p-4 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg mb-1 text-gray-900">Lightning Fast</h3>
+                <p className="text-sm text-gray-600">
+                  Instant booking confirmations and real-time updates
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 p-4 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Shield className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg mb-1 text-gray-900">Secure & Private</h3>
+                <p className="text-sm text-gray-600">
+                  Your data is encrypted and protected at all times
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4 p-4 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                <CheckCircle2 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-lg mb-1 text-gray-900">Easy to Use</h3>
+                <p className="text-sm text-gray-600">
+                  Intuitive interface designed for efficiency
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-3 gap-4">
+            <div className="text-center p-4 bg-white/40 backdrop-blur-sm rounded-xl">
+              <div className="text-3xl text-indigo-600 mb-1">10K+</div>
+              <div className="text-sm text-gray-600">Users</div>
+            </div>
+            <div className="text-center p-4 bg-white/40 backdrop-blur-sm rounded-xl">
+              <div className="text-3xl text-purple-600 mb-1">50K+</div>
+              <div className="text-sm text-gray-600">Bookings</div>
+            </div>
+            <div className="text-center p-4 bg-white/40 backdrop-blur-sm rounded-xl">
+              <div className="text-3xl text-pink-600 mb-1">99.9%</div>
+              <div className="text-sm text-gray-600">Uptime</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side - Login/Register Form */}
+        <div className="flex items-center justify-center">
+          <Card className="w-full max-w-md p-8 bg-white/80 backdrop-blur-xl shadow-2xl border-white/60">
+            {/* Mobile Logo */}
+            <div className="lg:hidden mb-8 text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-4">
+                <Calendar className="w-10 h-10 text-white" />
+              </div>
+              <h2 className="text-2xl mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 bg-clip-text text-transparent">
+                Appointments Bot
+              </h2>
+            </div>
+
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg hidden lg:flex">
+                <LogIn className="w-8 h-8 text-white" />
+              </div>
+              <h2 className="text-3xl mb-2 text-gray-900">
+                {isLoginMode ? "Welcome Back" : "Create Account"}
+              </h2>
+              <p className="text-gray-600">
+                {isLoginMode 
+                  ? "Sign in to access your dashboard" 
+                  : "Join us and start managing your bookings"
+                }
+              </p>
+            </div>
+
+            {/* Login Form */}
+            {isLoginMode ? (
+              <form onSubmit={handleLogin} className="space-y-5">
+                {/* Email */}
+                <div className="space-y-2">
+                  <Label htmlFor="email">
+                    Email Address <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={loginData.email}
+                      onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                      className="pl-11 h-12 bg-white/50 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="your@email.com"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                {/* Password */}
+                <div className="space-y-2">
+                  <Label htmlFor="password">
+                    Password <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={loginData.password}
+                      onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                      className="pl-11 pr-11 h-12 bg-white/50 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="Enter your password"
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      disabled={isLoading}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Remember Me & Forgot Password */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="remember"
+                      checked={loginData.rememberMe}
+                      onCheckedChange={(checked) =>
+                        setLoginData({ ...loginData, rememberMe: checked as boolean })
+                      }
+                      disabled={isLoading}
+                    />
+                    <Label
+                      htmlFor="remember"
+                      className="text-sm cursor-pointer select-none"
+                    >
+                      Remember me
+                    </Label>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="text-sm text-indigo-600 hover:text-indigo-700 px-0"
+                    disabled={isLoading}
+                    onClick={() => toast.info("Password reset link sent to your email")}
+                  >
+                    Forgot password?
+                  </Button>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  className="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Signing in...
+                    </>
+                  ) : (
+                    <>
+                      Sign In
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            ) : (
+              /* Register Form */
+              <form onSubmit={handleRegister} className="space-y-5">
+                {/* Name */}
+                <div className="space-y-2">
+                  <Label htmlFor="register-name">
+                    Full Name <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="register-name"
+                      type="text"
+                      value={registerData.name}
+                      onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
+                      className="pl-11 h-12 bg-white/50 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="Enter your full name"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="space-y-2">
+                  <Label htmlFor="register-email">
+                    Email Address <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="register-email"
+                      type="email"
+                      value={registerData.email}
+                      onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
+                      className="pl-11 h-12 bg-white/50 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="your@email.com"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                {/* Organization */}
+                <div className="space-y-2">
+                  <Label htmlFor="register-organization">
+                    Organization Name <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="register-organization"
+                      type="text"
+                      value={registerData.organizationName}
+                      onChange={(e) => setRegisterData({ ...registerData, organizationName: e.target.value })}
+                      className="pl-11 h-12 bg-white/50 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="Enter organization name"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+
+                {/* Password */}
+                <div className="space-y-2">
+                  <Label htmlFor="register-password">
+                    Password <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      id="register-password"
+                      type={showRegisterPassword ? "text" : "password"}
+                      value={registerData.password}
+                      onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
+                      className="pl-11 pr-11 h-12 bg-white/50 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500"
+                      placeholder="Create a password"
+                      disabled={isLoading}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      disabled={isLoading}
+                    >
+                      {showRegisterPassword ? (
+                        <EyeOff className="w-5 h-5" />
+                      ) : (
+                        <Eye className="w-5 h-5" />
+                      )}
+                    </button>
+                  </div>
+                  <p className="text-xs text-gray-500">Minimum 6 characters</p>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  className="w-full h-12 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Creating account...
+                    </>
+                  ) : (
+                    <>
+                      Create Account
+                      <ArrowRight className="w-5 h-5 ml-2" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            )}
+
+            {/* Divider */}
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white/80 text-gray-500">
+                  {isLoginMode ? "New to Appointments Bot?" : "Already have an account?"}
+                </span>
+              </div>
+            </div>
+
+            {/* Switch Mode Button */}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full h-12 border-2 border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50 transition-colors"
+              onClick={() => setIsLoginMode(!isLoginMode)}
+            >
+              {isLoginMode ? "Create an Account" : "Sign In"}
+            </Button>
+
+            {/* Demo Credentials */}
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="flex items-start gap-3">
+                <div className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5">
+                  <svg fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="text-sm text-blue-700">
+                  <p className="font-medium mb-1">Demo Credentials</p>
+                  <p className="text-xs">
+                    Email: some@example.com<br />
+                    Password: Test1234
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
