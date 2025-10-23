@@ -26,6 +26,8 @@ model Organization {
   services    Service[]
   aiConfig    OrganizationAIConfig?
   aiUsageLogs AIUsageLog[]
+  notifications Notification[]
+  eventLogs   EventLog[]
 }
 
 model User {
@@ -39,6 +41,8 @@ model User {
   organization   Organization @relation(fields: [organizationId], references: [id])
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  notifications  Notification[]
+  eventLogs      EventLog[]
 }
 
 enum UserRole {
@@ -126,4 +130,45 @@ model AIUsageLog {
   scenario       String?  // 'greeting', 'booking_help', 'service_info', etc.
   model          String?
   createdAt      DateTime @default(now())
+}
+
+// WebSocket Real-time System Models
+model Notification {
+  id            String   @id @default(cuid())
+  userId        Int
+  organizationId Int
+  type          String   // EventType enum
+  title         String
+  message       String
+  data          Json?    // Additional event data
+  isRead        Boolean  @default(false)
+  isArchived    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  readAt        DateTime?
+  archivedAt    DateTime?
+  
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, isRead])
+  @@index([organizationId, createdAt])
+  @@index([type, createdAt])
+}
+
+model EventLog {
+  id            String   @id @default(cuid())
+  organizationId Int
+  type          String   // EventType enum
+  source        String   // 'telegram' | 'admin_panel' | 'api' | 'system'
+  userId        Int?
+  data          Json
+  metadata      Json?
+  timestamp     DateTime @default(now())
+  
+  organization  Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user          User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@index([organizationId, timestamp])
+  @@index([type, timestamp])
+  @@index([source, timestamp])
 }

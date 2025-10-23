@@ -505,6 +505,96 @@ class ApiClient {
     return response;
   }
 
+  // Notification methods
+  async getNotifications(params?: {
+    page?: number;
+    limit?: number;
+    unreadOnly?: boolean;
+  }): Promise<{
+    notifications: any[];
+    pagination: {
+      page: number;
+      limit: number;
+      total: number;
+      pages: number;
+    };
+    unreadCount: number;
+  }> {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', params.page.toString());
+    if (params?.limit) searchParams.set('limit', params.limit.toString());
+    if (params?.unreadOnly) searchParams.set('unreadOnly', params.unreadOnly.toString());
+
+    const queryString = searchParams.toString();
+    const endpoint = `/notifications${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request(endpoint);
+  }
+
+  async markNotificationAsRead(notificationId: string): Promise<{ success: boolean }> {
+    return this.request(`/notifications/${notificationId}/read`, {
+      method: 'POST',
+    });
+  }
+
+  async markAllNotificationsAsRead(): Promise<{ success: boolean }> {
+    return this.request('/notifications/read-all', {
+      method: 'POST',
+    });
+  }
+
+  async deleteNotification(notificationId: string): Promise<{ success: boolean }> {
+    return this.request(`/notifications/${notificationId}`, {
+      method: 'DELETE',
+    });
+  }
+
+  async clearAllNotifications(): Promise<{ success: boolean }> {
+    return this.request('/notifications/clear-all', {
+      method: 'DELETE',
+    });
+  }
+
+  async getNotificationStats(): Promise<{
+    total: number;
+    unread: number;
+    byType: Array<{ type: string; _count: { type: number } }>;
+    recent: any[];
+  }> {
+    return this.request('/notifications/stats');
+  }
+
+  async archiveNotification(notificationId: string): Promise<{ success: boolean }> {
+    return this.request(`/notifications/${notificationId}/archive`, {
+      method: 'POST',
+    });
+  }
+
+  // Generic HTTP methods for direct API calls
+  async get<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint);
+  }
+
+  async post<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'POST',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
+  async put<T>(endpoint: string, data?: any): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined,
+    });
+  }
+
+  async delete<T>(endpoint: string): Promise<T> {
+    return this.request<T>(endpoint, {
+      method: 'DELETE',
+    });
+  }
+
   // Dashboard stats
   async getDashboardStats(): Promise<{
     totalAppointments: number;

@@ -9,6 +9,7 @@ import auth from "./routes/auth";
 import organizations from "./routes/organizations";
 import botManagement from "./routes/bot-management";
 import aiConfig from "./routes/ai-config";
+import notifications from "./routes/notifications";
 
 
 export function createApi() {
@@ -37,7 +38,9 @@ app.use("/api/slots", slots);
 app.use("/api/organizations", organizations);
 app.use("/api/bot", botManagement);
 app.use("/api/ai-config", aiConfig);
+app.use("/api/notifications", notifications);
 console.log("✅ AI Config routes registered at /api/ai-config");
+console.log("✅ Notifications routes registered at /api/notifications");
 app.use("/webapp", webapp);
 
 // Serve prebuilt Angular admin panel for Telegram WebApp from dist (same origin for mobile TG)
@@ -55,5 +58,25 @@ try {
 
 
 app.get("/api/health", (_, res) => res.json({ ok: true }));
+
+// WebSocket health check
+app.get("/api/health/websocket", (_, res) => {
+  const wsManager = (global as any).wsManager;
+  if (wsManager) {
+    const stats = wsManager.getStats();
+    res.json({ 
+      ok: true, 
+      websocket: true,
+      stats 
+    });
+  } else {
+    res.json({ 
+      ok: false, 
+      websocket: false,
+      error: 'WebSocket manager not initialized' 
+    });
+  }
+});
+
 return app;
 }
