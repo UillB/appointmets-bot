@@ -1,15 +1,27 @@
-import { Moon, Globe, Bell, HelpCircle, Menu } from "lucide-react";
+import React from "react";
+import { Moon, Globe, Bell, HelpCircle, Menu, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import { useAuth } from "../hooks/useAuth";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const { logout, user } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="flex items-center justify-between px-4 lg:px-6 py-3 gap-4">
         {/* Left side */}
         <div className="flex items-center gap-4">
@@ -56,14 +68,25 @@ export function Header({ onMenuClick }: HeaderProps) {
             <HelpCircle className="w-4 h-4" />
           </Button>
           
+          {/* Logout Button - Always accessible */}
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={handleLogout}
+            className="w-9 h-9 text-red-600 hover:text-red-700 hover:bg-red-50"
+            title="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
+          
           <div className="flex items-center gap-2 ml-2 pl-2 border-l border-gray-200">
             <div className="hidden sm:block text-right">
-              <p className="text-sm">Vladi</p>
-              <p className="text-xs text-gray-500">Demo City</p>
+              <p className="text-sm">{user?.name || 'User'}</p>
+              <p className="text-xs text-gray-500">{user?.organization?.name || 'Organization'}</p>
             </div>
             <Avatar className="w-8 h-8 bg-indigo-600">
               <AvatarFallback className="bg-indigo-600 text-white text-sm">
-                V
+                {user?.name?.charAt(0)?.toUpperCase() || 'U'}
               </AvatarFallback>
             </Avatar>
           </div>

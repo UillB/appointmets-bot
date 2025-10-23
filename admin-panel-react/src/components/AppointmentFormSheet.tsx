@@ -185,7 +185,7 @@ export function AppointmentFormSheet({ open, onOpenChange }: AppointmentFormShee
           <Button 
             type="submit"
             form="appointment-form"
-            className="bg-indigo-600 hover:bg-indigo-700 w-full sm:w-auto"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white w-full sm:w-auto"
           >
             Create Appointment
           </Button>

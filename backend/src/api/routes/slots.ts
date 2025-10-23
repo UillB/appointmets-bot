@@ -57,18 +57,14 @@ const slotGenerationSchema = z.object({
 // GET /api/slots - Получение слотов
 router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { organizationId, serviceId, date, page = 1, limit = 25 } = req.query;
+    const { serviceId, date, page = 1, limit = 25 } = req.query;
     
-    // Проверяем права доступа
-    if (req.user!.role !== 'SUPER_ADMIN' && req.user!.organizationId !== parseInt(organizationId as string)) {
-      return res.status(403).json({ error: 'Access denied to this organization' });
-    }
-
     const where: any = {};
     
-    if (organizationId) {
+    // Автоматически фильтруем по organizationId пользователя (как в appointments API)
+    if (req.user!.role !== 'SUPER_ADMIN') {
       where.service = {
-        organizationId: parseInt(organizationId as string)
+        organizationId: req.user!.organizationId
       };
     }
     
@@ -127,13 +123,13 @@ router.get('/', authenticateToken, async (req: AuthenticatedRequest, res: Respon
 // GET /api/slots/status - Получение слотов с их статусом
 router.get('/status', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { organizationId, serviceId, date, page = 1, limit = 100 } = req.query;
+    const { serviceId, date, page = 1, limit = 100 } = req.query;
 
     // Получаем все слоты для организации
     const slots = await prisma.slot.findMany({
       where: {
         service: {
-          organizationId: parseInt(organizationId as string)
+          organizationId: req.user!.role !== 'SUPER_ADMIN' ? req.user!.organizationId : undefined
         },
         ...(serviceId && { serviceId: parseInt(serviceId as string) }),
         ...(date && {
@@ -158,7 +154,7 @@ router.get('/status', authenticateToken, async (req: AuthenticatedRequest, res: 
     const activeAppointments = await prisma.appointment.findMany({
       where: {
         service: {
-          organizationId: parseInt(organizationId as string)
+          organizationId: req.user!.role !== 'SUPER_ADMIN' ? req.user!.organizationId : undefined
         },
         status: { not: 'cancelled' }
       },
@@ -205,7 +201,7 @@ router.get('/status', authenticateToken, async (req: AuthenticatedRequest, res: 
     const total = await prisma.slot.count({
       where: {
         service: {
-          organizationId: parseInt(organizationId as string)
+          organizationId: req.user!.role !== 'SUPER_ADMIN' ? req.user!.organizationId : undefined
         },
         ...(serviceId && { serviceId: parseInt(serviceId as string) }),
         ...(date && {

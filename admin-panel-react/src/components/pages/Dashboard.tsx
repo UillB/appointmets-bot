@@ -19,18 +19,18 @@ import {
   ChevronRight,
   Plus,
 } from "lucide-react";
-import { Button } from "./ui/button";
-import { Card } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import { QuickActionCard } from "./cards/QuickActionCard";
-import { StatCard } from "./cards/StatCard";
-import { AppointmentCard } from "./cards/AppointmentCard";
-import { PageHeader } from "./PageHeader";
+import { Button } from "../ui/button";
+import { Card } from "../ui/card";
+import { Badge } from "../ui/badge";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { QuickActionCard } from "../cards/QuickActionCard";
+import { StatCard } from "../cards/StatCard";
+import { AppointmentCard } from "../cards/AppointmentCard";
+import { PageHeader } from "../PageHeader";
 import { toast } from "sonner";
-import { apiClient } from "../services/api";
-import { useAuth } from "../hooks/useAuth";
-import { formatTimeToLocal, isSameDay } from "../utils/dateUtils";
+import { apiClient } from "../../services/api";
+import { useAuth } from "../../hooks/useAuth";
+import { formatTimeToLocal, isSameDay } from "../../utils/dateUtils";
 
 interface DashboardStats {
   totalAppointments: number;
@@ -57,19 +57,11 @@ export function Dashboard() {
   const loadDashboardData = async () => {
     try {
       setIsLoading(true);
-      console.log('🔄 Loading dashboard data...');
-      
       const [statsData, appointmentsData, organizationsData] = await Promise.all([
         apiClient.getDashboardStats(),
         apiClient.getAppointments({ limit: 5 }),
         apiClient.getOrganizations()
       ]);
-      
-      console.log('📊 Dashboard data loaded:', {
-        stats: statsData,
-        appointments: appointmentsData.appointments.length,
-        organizations: organizationsData.organizations.length
-      });
       
       setStats(statsData);
       setRecentAppointments(appointmentsData.appointments);
@@ -436,7 +428,7 @@ export function Dashboard() {
                 </Button>
               </div>
 
-              <div className="space-y-2">
+              <div className="max-h-96 overflow-y-auto space-y-2 pr-2">
                 {filteredAppointments.length > 0 ? (
                   filteredAppointments.map((appointment: any, idx) => {
                     const AppointmentComponent = () => (

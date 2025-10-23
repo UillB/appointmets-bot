@@ -1,22 +1,24 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
-import { Sidebar } from "./components/Sidebar";
-import { Header } from "./components/Header";
-import { SimpleDashboard } from "./components/SimpleDashboard";
-import { AppointmentsPage } from "./components/AppointmentsPage";
-import { ServicesPage } from "./components/ServicesPage";
-import { OrganizationsPage } from "./components/OrganizationsPage";
-import { BotManagementPage } from "./components/BotManagementPage";
-import { SlotsPage } from "./components/SlotsPage";
-import { AIAssistantPage } from "./components/AIAssistantPage";
-import { SettingsPage } from "./components/SettingsPage";
+import { 
+  Sidebar, 
+  Header, 
+  Dashboard, 
+  AppointmentsPage, 
+  ServicesPage, 
+  OrganizationsPage, 
+  BotManagementPage, 
+  SlotsPage, 
+  AIAssistantPage, 
+  SettingsPage, 
+  IntegratedLoginPage 
+} from "./components";
 import { Toaster } from "./components/ui/sonner";
-import { IntegratedLoginPage } from "./components/IntegratedLoginPage";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [activePage, setActivePage] = useState("dashboard");
 
   // Show loading spinner while checking authentication
   if (isLoading) {
@@ -32,65 +34,50 @@ function AppContent() {
     return <IntegratedLoginPage />;
   }
 
-  const renderPage = () => {
-    const handleMenuClick = () => setSidebarOpen(true);
-    
-    switch (activePage) {
-      case "appointments":
-        return <AppointmentsPage onMenuClick={handleMenuClick} />;
-      case "services":
-        return <ServicesPage onMenuClick={handleMenuClick} />;
-      case "organizations":
-        return <OrganizationsPage onMenuClick={handleMenuClick} />;
-      case "bot-management":
-        return <BotManagementPage onMenuClick={handleMenuClick} />;
-      case "slots":
-        return <SlotsPage onMenuClick={handleMenuClick} />;
-      case "ai":
-        return <AIAssistantPage onMenuClick={handleMenuClick} />;
-      case "settings":
-        return <SettingsPage onMenuClick={handleMenuClick} />;
-      case "dashboard":
-      default:
-        return <SimpleDashboard />;
-    }
-  };
-
-  // Pages with PageHeader component (full-height layout)
-  const fullHeightPages = ["appointments", "services", "organizations", "bot-management", "slots", "ai", "settings"];
-  const isFullHeightPage = fullHeightPages.includes(activePage);
-
   return (
-    <div className="min-h-screen bg-[#FAFAFA]">
-      {/* Toast Notifications */}
-      <Toaster position="top-right" richColors closeButton />
-      
-      {/* Sidebar */}
+    <div className="h-screen bg-[#FAFAFA] flex overflow-hidden">
       <Sidebar 
         isOpen={sidebarOpen} 
         onClose={() => setSidebarOpen(false)}
-        activePage={activePage}
-        onNavigate={setActivePage}
+        activePage={window.location.pathname}
+        onNavigate={() => {}}
       />
-
-      {/* Main Content */}
-      <div className="lg:ml-64 min-h-screen flex flex-col">
-        {/* Header - only for dashboard */}
-        {!isFullHeightPage && <Header onMenuClick={() => setSidebarOpen(true)} />}
-
-        {/* Main Dashboard Content */}
-        <main className={isFullHeightPage ? "flex-1 flex flex-col min-h-0" : "flex-1 p-4 lg:p-6"}>
-          {renderPage()}
+      
+      <div className="flex-1 flex flex-col min-h-0">
+        <Header 
+          onMenuClick={() => setSidebarOpen(true)}
+        />
+        
+        <main className="flex-1 overflow-y-auto p-6">
+          <Routes>
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/appointments" element={<AppointmentsPage />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/organizations" element={<OrganizationsPage />} />
+            <Route path="/bot-management" element={<BotManagementPage />} />
+            <Route path="/slots" element={<SlotsPage />} />
+            <Route path="/ai" element={<AIAssistantPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
         </main>
       </div>
     </div>
   );
 }
 
-export default function App() {
+function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <Router>
+      <AuthProvider children={
+        <div>
+          <AppContent />
+          <Toaster />
+        </div>
+      } />
+    </Router>
   );
 }
+
+export default App;

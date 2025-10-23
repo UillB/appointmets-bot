@@ -110,10 +110,147 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
 
     res.json({
       services,
+      total: services.length,
+      page: 1,
+      limit: services.length,
       isSuperAdmin: role === 'SUPER_ADMIN'
     });
   } catch (error) {
     console.error('Get services error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// GET /services/stats - Get services statistics
+router.get('/stats', verifyToken, async (req: any, res: Response) => {
+  try {
+    const { role, organizationId } = req.user;
+
+    let whereClause: any = {};
+
+    if (role === 'SUPER_ADMIN') {
+      const { organizationId: queryOrgId } = req.query;
+      if (queryOrgId) {
+        whereClause.organizationId = parseInt(queryOrgId as string);
+      }
+    } else {
+      whereClause.organizationId = organizationId;
+    }
+
+    // Get service IDs for this organization
+    const services = await prisma.service.findMany({
+      where: whereClause,
+      select: { id: true }
+    });
+    const serviceIds = services.map(s => s.id);
+
+    // Basic counts
+    const totalServices = serviceIds.length;
+
+    // Get appointment counts
+    const totalAppointments = await prisma.appointment.count({
+      where: { serviceId: { in: serviceIds } }
+    });
+
+    const pendingAppointments = await prisma.appointment.count({
+      where: { 
+        serviceId: { in: serviceIds },
+        status: 'pending' 
+      }
+    });
+
+    // Get today's appointments
+    const today = new Date();
+    const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const endOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+    
+    const todayAppointments = await prisma.appointment.count({
+      where: { 
+        serviceId: { in: serviceIds },
+        slot: {
+          startAt: {
+            gte: startOfToday,
+            lte: endOfToday
+          }
+        }
+      }
+    });
+
+    // Get this week's appointments
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 7);
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    const weekAppointments = await prisma.appointment.count({
+      where: { 
+        serviceId: { in: serviceIds },
+        slot: {
+          startAt: {
+            gte: startOfWeek,
+            lte: endOfWeek
+          }
+        }
+      }
+    });
+
+    // Get slots count
+    const totalSlots = await prisma.slot.count({ 
+      where: { serviceId: { in: serviceIds } } 
+    });
+
+    const averageOccupancy = totalSlots > 0 ? Math.round((totalAppointments / totalSlots) * 100) : 0;
+
+    // Calculate revenue by getting appointments with their service prices
+    const appointmentsWithRevenue = await prisma.appointment.findMany({
+      where: { 
+        serviceId: { in: serviceIds },
+        status: { not: 'cancelled' }
+      },
+      include: {
+        service: {
+          select: { price: true }
+        }
+      }
+    });
+
+    const todayAppointmentsWithRevenue = await prisma.appointment.findMany({
+      where: { 
+        serviceId: { in: serviceIds },
+        status: { not: 'cancelled' },
+        slot: {
+          startAt: {
+            gte: startOfToday,
+            lte: endOfToday
+          }
+        }
+      },
+      include: {
+        service: {
+          select: { price: true }
+        }
+      }
+    });
+
+    const totalRevenue = appointmentsWithRevenue.reduce((sum, apt) => sum + (apt.service.price || 0), 0);
+    const todayRevenue = todayAppointmentsWithRevenue.reduce((sum, apt) => sum + (apt.service.price || 0), 0);
+
+    const stats = {
+      totalServices,
+      totalAppointments,
+      todayAppointments,
+      weekAppointments,
+      pendingAppointments,
+      averageOccupancy,
+      totalRevenue,
+      todayRevenue
+    };
+
+    res.json(stats);
+  } catch (error) {
+    console.error('Get services stats error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
@@ -124,8 +261,14 @@ router.get('/:id', verifyToken, async (req: any, res: Response) => {
     const { id } = req.params;
     const { role, organizationId } = req.user;
 
+    // Validate ID parameter
+    const serviceId = parseInt(id);
+    if (isNaN(serviceId)) {
+      return res.status(400).json({ error: 'Invalid service ID' });
+    }
+
     const service = await prisma.service.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: serviceId },
       include: {
         organization: {
           select: {

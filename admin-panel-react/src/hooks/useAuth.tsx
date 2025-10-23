@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
+import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { apiClient, User, AuthResponse } from '../services/api';
 import { toast } from 'sonner';
 
@@ -115,8 +115,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
+    // Clear all authentication data from localStorage
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    
+    // Clear API client token
     apiClient.logout();
+    
+    // Clear user state
     setUser(null);
+    
     toast.info('Logged out successfully');
   };
 

@@ -46,7 +46,7 @@ try {
   app.use("/admin-panel", express.static(adminDist, { index: ["index.html"] }));
   console.log("✅ Admin panel static served from:", adminDist);
   // SPA fallback for deep links and refresh inside Telegram WebView
-  app.get('/admin-panel/*', (req, res) => {
+  app.get('/admin-panel*', (req, res) => {
     res.sendFile(path.join(adminDist, 'index.html'));
   });
 } catch (e) {

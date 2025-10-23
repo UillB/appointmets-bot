@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import { 
   LayoutDashboard, 
   Calendar, 
@@ -10,6 +11,9 @@ import {
   Clock
 } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { useNavigate, useLocation } from "react-router-dom";
+import { apiClient } from "../services/api";
+import { useAuth } from "../hooks/useAuth";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -19,10 +23,43 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { logout } = useAuth();
+  const [stats, setStats] = useState({
+    todayAppointments: 0,
+    weekAppointments: 0,
+    totalServices: 0,
+    totalAppointments: 0
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load sidebar statistics
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        setIsLoading(true);
+        const dashboardStats = await apiClient.getDashboardStats();
+        setStats({
+          todayAppointments: dashboardStats.todayAppointments,
+          weekAppointments: dashboardStats.weekAppointments,
+          totalServices: dashboardStats.totalServices,
+          totalAppointments: dashboardStats.totalAppointments
+        });
+      } catch (error) {
+        console.error('Failed to load sidebar stats:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadStats();
+  }, []);
+
   const navItems = [
     { icon: LayoutDashboard, label: "Dashboard", page: "dashboard" },
-    { icon: Calendar, label: "Appointments", page: "appointments", badge: "5" },
-    { icon: Wrench, label: "Services", page: "services", badge: "3" },
+    { icon: Calendar, label: "Appointments", page: "appointments", badge: (stats.totalAppointments || 0).toString() },
+    { icon: Wrench, label: "Services", page: "services", badge: (stats.totalServices || 0).toString() },
     { icon: Building2, label: "Organizations", page: "organizations" },
     { icon: Bot, label: "Bot Management", page: "bot-management", badge: "NEW", badgeVariant: "secondary" as const },
     { icon: Clock, label: "Slots", page: "slots" },
@@ -30,10 +67,16 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
     { icon: Settings, label: "Settings", page: "settings" },
   ];
 
-  const stats = [
-    { label: "Today", value: "0 appts" },
-    { label: "This Week", value: "5 appts" },
-  ];
+  const handleLogout = async () => {
+    try {
+      await apiClient.logout();
+      logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Still logout locally even if API call fails
+      logout();
+    }
+  };
 
   return (
     <>
@@ -48,14 +91,15 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
       {/* Sidebar */}
       <aside 
         className={`
-          fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-[#5B4FE9] to-[#4338CA] 
-          text-white z-50 transition-transform duration-300 ease-in-out
+          w-64 bg-gradient-to-b from-[#5B4FE9] to-[#4338CA] 
+          text-white transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+          ${isOpen ? 'fixed top-0 left-0 h-screen z-50' : 'lg:relative lg:z-auto lg:h-screen'}
         `}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="p-6">
+          <div className="p-6 flex-shrink-0">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
                 <Calendar className="w-6 h-6" />
@@ -68,17 +112,17 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 px-3 space-y-1">
+          <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
             {navItems.map((item) => (
               <button
                 key={item.label}
                 onClick={() => {
-                  onNavigate(item.page);
+                  navigate(`/${item.page}`);
                   onClose();
                 }}
                 className={`
                   w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all
-                  ${activePage === item.page
+                  ${location.pathname === `/${item.page}`
                     ? 'bg-white/20 backdrop-blur-sm shadow-sm' 
                     : 'hover:bg-white/10'
                   }
@@ -104,23 +148,32 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
             ))}
           </nav>
 
-          {/* Stats */}
-          <div className="p-4 space-y-3">
-            {stats.map((stat) => (
-              <div 
-                key={stat.label}
-                className="flex items-center gap-3 px-3 py-2 bg-white/10 rounded-lg backdrop-blur-sm"
-              >
-                <Calendar className="w-4 h-4" />
-                <div className="flex-1">
-                  <p className="text-xs text-white/70">{stat.label}</p>
-                  <p className="text-sm font-medium">{stat.value}</p>
-                </div>
+          {/* Stats and Logout - Fixed at bottom */}
+          <div className="p-4 space-y-3 flex-shrink-0">
+            <div className="flex items-center gap-3 px-3 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+              <Calendar className="w-4 h-4" />
+              <div className="flex-1">
+                <p className="text-xs text-white/70">Today</p>
+                <p className="text-sm font-medium">
+                  {isLoading ? "..." : `${stats.todayAppointments || 0} appts`}
+                </p>
               </div>
-            ))}
+            </div>
+            <div className="flex items-center gap-3 px-3 py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+              <Calendar className="w-4 h-4" />
+              <div className="flex-1">
+                <p className="text-xs text-white/70">This Week</p>
+                <p className="text-sm font-medium">
+                  {isLoading ? "..." : `${stats.weekAppointments || 0} appts`}
+                </p>
+              </div>
+            </div>
             
             {/* Logout */}
-            <button className="w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-white/10 rounded-lg transition-all">
+            <button 
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-white/10 rounded-lg transition-all"
+            >
               <LogOut className="w-4 h-4" />
               <span>Logout</span>
             </button>

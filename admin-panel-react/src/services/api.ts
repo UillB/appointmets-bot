@@ -25,25 +25,39 @@ export interface AuthResponse {
 
 export interface Appointment {
   id: number;
-  clientName: string;
-  clientPhone: string;
+  chatId: string;
+  serviceId: number;
+  slotId: number;
+  createdAt: string;
+  status: 'pending' | 'confirmed' | 'cancelled';
   service: {
     id: number;
     name: string;
+    nameRu?: string;
+    nameEn?: string;
+    nameHe?: string;
+    description?: string;
+    descriptionRu?: string;
+    descriptionEn?: string;
+    descriptionHe?: string;
     durationMin: number;
     price?: number;
     currency?: string;
+    organizationId: number;
+    organization?: {
+      id: number;
+      name: string;
+    };
+    createdAt: string;
+    updatedAt: string;
   };
   slot: {
     id: number;
-    date: string;
-    startTime: string;
-    endTime: string;
+    serviceId: number;
+    startAt: string;
+    endAt: string;
+    capacity: number;
   };
-  status: 'pending' | 'confirmed' | 'cancelled';
-  notes?: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface Service {
@@ -86,18 +100,30 @@ export interface Organization {
 export interface Slot {
   id: number;
   serviceId: number;
+  startAt: string;
+  endAt: string;
+  capacity: number;
+  status?: 'available' | 'booked' | 'conflict';
+  isBooked?: boolean;
+  hasConflict?: boolean;
   service: {
     id: number;
     name: string;
+    durationMin: number;
+    organizationId: number;
   };
-  date: string;
+}
+
+export interface SlotGenerationRequest {
+  serviceId: number;
+  startDate: string;
+  endDate: string;
   startTime: string;
   endTime: string;
-  capacity: number;
-  bookingsCount: number;
-  status: 'available' | 'booked' | 'unavailable';
-  createdAt: string;
-  updatedAt: string;
+  includeWeekends: boolean;
+  lunchBreakStart?: string;
+  lunchBreakEnd?: string;
+  slotDuration: number;
 }
 
 export interface AIConfig {
@@ -207,18 +233,6 @@ class ApiClient {
     return response;
   }
 
-  async logout(): Promise<void> {
-    try {
-      await this.request('/auth/logout', { method: 'POST' });
-    } catch (error) {
-      console.warn('Logout request failed:', error);
-    } finally {
-      this.accessToken = null;
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user');
-    }
-  }
 
   // Appointments methods
   async getAppointments(params?: {
@@ -253,6 +267,13 @@ class ApiClient {
     return this.request(`/appointments/${id}/status`, {
       method: 'PUT',
       body: JSON.stringify({ status, notes }),
+    });
+  }
+
+  async createAppointment(appointment: { chatId: string; serviceId: number; slotId: number }): Promise<Appointment> {
+    return this.request('/appointments', {
+      method: 'POST',
+      body: JSON.stringify(appointment),
     });
   }
 
@@ -299,6 +320,19 @@ class ApiClient {
     return this.request(`/services/${id}`, {
       method: 'DELETE',
     });
+  }
+
+  async getServicesStats(): Promise<{
+    totalServices: number;
+    totalAppointments: number;
+    todayAppointments: number;
+    weekAppointments: number;
+    pendingAppointments: number;
+    averageOccupancy: number;
+    totalRevenue: number;
+    todayRevenue: number;
+  }> {
+    return this.request('/services/stats');
   }
 
   // Organizations methods
@@ -381,6 +415,39 @@ class ApiClient {
   }
 
   // Bot Management methods
+  async getAllBots(): Promise<{ bots: any[] }> {
+    return this.request('/bot');
+  }
+
+  async validateBotToken(token: string): Promise<{ success: boolean; bot?: any; error?: string }> {
+    return this.request('/bot/validate-token', {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+    });
+  }
+
+  async activateBot(token: string, organizationId: number): Promise<{ success: boolean; message?: string; error?: string }> {
+    return this.request('/bot/activate', {
+      method: 'POST',
+      body: JSON.stringify({ token, organizationId }),
+    });
+  }
+
+  async getBotStatus(organizationId: number): Promise<{ success: boolean; organization?: any; botStatus?: any; error?: string }> {
+    return this.request(`/bot/status/${organizationId}`);
+  }
+
+  async getWebAppUrl(organizationId: number): Promise<{ success: boolean; url?: string }> {
+    return this.request(`/bot/webapp-url/${organizationId}`);
+  }
+
+  async updateBotSettings(organizationId: number, settings: any): Promise<{ success: boolean; message?: string; error?: string }> {
+    return this.request('/bot/settings', {
+      method: 'PUT',
+      body: JSON.stringify({ organizationId, ...settings }),
+    });
+  }
+
   async getBotConfig(): Promise<{
     botToken?: string;
     botUsername?: string;
@@ -426,6 +493,18 @@ class ApiClient {
     });
   }
 
+  // Auth methods
+  async logout(): Promise<{ message: string }> {
+    const response = await this.request<{ message: string }>('/auth/logout', {
+      method: 'POST',
+    });
+    
+    // Clear the access token from the API client
+    this.accessToken = null;
+    
+    return response;
+  }
+
   // Dashboard stats
   async getDashboardStats(): Promise<{
     totalAppointments: number;
@@ -437,40 +516,18 @@ class ApiClient {
     totalRevenue: number;
     todayRevenue: number;
   }> {
-    // Since backend doesn't have dedicated dashboard endpoint, we'll aggregate from existing endpoints
-    const [appointments, services, organizations] = await Promise.all([
-      this.getAppointments(),
-      this.getServices(),
-      this.getOrganizations()
-    ]);
-
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-    const todayAppointments = appointments.appointments.filter((apt: any) => {
-      const aptDate = new Date(apt.slot?.startAt || apt.createdAt || '');
-      return aptDate >= today;
-    }).length;
-
-    const weekAppointments = appointments.appointments.filter((apt: any) => {
-      const aptDate = new Date(apt.slot?.startAt || apt.createdAt || '');
-      return aptDate >= weekAgo;
-    }).length;
-
-    const pendingAppointments = appointments.appointments.filter((apt: any) => 
-      apt.status === 'pending'
-    ).length;
-
+    // Use the services stats endpoint which provides comprehensive data
+    const servicesStats = await this.getServicesStats();
+    
     return {
-      totalAppointments: appointments.total,
-      todayAppointments,
-      weekAppointments,
-      pendingAppointments,
-      totalServices: services.total,
-      activeServices: services.total, // All services are considered active for now
-      totalRevenue: 0, // TODO: Implement revenue calculation
-      todayRevenue: 0  // TODO: Implement revenue calculation
+      totalAppointments: servicesStats.totalAppointments,
+      todayAppointments: servicesStats.todayAppointments,
+      weekAppointments: servicesStats.weekAppointments,
+      pendingAppointments: servicesStats.pendingAppointments,
+      totalServices: servicesStats.totalServices,
+      activeServices: servicesStats.totalServices, // All services are considered active for now
+      totalRevenue: servicesStats.totalRevenue,
+      todayRevenue: servicesStats.todayRevenue
     };
   }
 }
