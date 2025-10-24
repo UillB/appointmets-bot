@@ -69,11 +69,13 @@
 5. ✅ Production Deployment - Docker containerization and hosting
 
 **IMMEDIATE PRIORITIES (Current Session):**
-1. **Slots Page Integration** - Integrate API backend to create slots and improve UI, test functionality
-2. **Localization Testing** - Ensure all languages (Russian, English, Hebrew) are fully supported
-3. **Bot Integration Instructions** - Verify and document how to add bot to Telegram
-4. **Real-time Notifications** - Test WebSocket integration for automatic notifications when appointments are made via Telegram
-5. **Dynamic Sidebar Updates** - Ensure sidebar counts (appointments, services, etc.) update automatically with real-time data
+1. **Auto-Slot Generation Implementation** - Implement automatic slot generation when services are created (1 year ahead)
+2. **Remove Slots Page Complexity** - Eliminate manual slots management UI since slots auto-generate
+3. **Service Creation Enhancement** - Add working hours configuration to service creation
+4. **Localization Testing** - Ensure all languages (Russian, English, Hebrew) are fully supported
+5. **Bot Integration Instructions** - Verify and document how to add bot to Telegram
+6. **Real-time Notifications** - Test WebSocket integration for automatic notifications when appointments are made via Telegram
+7. **Dynamic Sidebar Updates** - Ensure sidebar counts (appointments, services, etc.) update automatically with real-time data
 
 **NEXT SESSION PRIORITIES:**
 1. **Production Testing** - Deploy and test the complete system

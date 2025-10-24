@@ -1,17 +1,28 @@
 # 📋 TASK QUEUE
 
 **Last Updated:** October 24, 2025
-**Total Tasks:** 0 (All critical tasks completed)
+**Total Tasks:** 3 (New critical tasks added)
+
+## 🎯 MAJOR ARCHITECTURAL DECISION
+**Auto-Slot Generation Strategy Identified:**
+- Manual slots management creates unnecessary complexity
+- Solution: Auto-generate slots when services are created (1 year ahead)
+- Eliminates need for complex slots management UI
+- Dramatically simplifies user experience
+- Focus on service creation, not slot management
 
 ## 🔴 CRITICAL (Do First)
 - [x] WebSocket Notifications System - ✅ Completed - January 18, 2025
 - [x] Responsive Design Enhancements - ✅ Completed - January 18, 2025
-- [x] Slots Page Redesign - ✅ Completed - January 18, 2025
+- [x] Slots Page Redesign - ✅ Completed - January 18, 2025 (NOW OBSOLETE - Auto-slot generation)
 - [x] Telegram Web App Integration - ✅ Completed - January 18, 2025
 - [x] Bot Creation Flow Implementation - ✅ Completed - January 18, 2025
 - [x] Multi-tenant Bot Management - ✅ Completed - January 18, 2025
 - [x] AI Assistant Configuration - ✅ Completed - January 18, 2025
 - [x] Production Deployment Infrastructure - ✅ Completed - January 18, 2025
+- [ ] **Auto-Slot Generation Implementation** - 🚧 IN PROGRESS - Major UX improvement
+- [ ] **Remove Manual Slots Management** - 🚧 PENDING - Eliminate complex slots page
+- [ ] **Service Creation Enhancement** - 🚧 PENDING - Add working hours configuration
 
 ## 🟡 HIGH PRIORITY
 - [x] Production deployment testing - ✅ Completed - January 18, 2025
