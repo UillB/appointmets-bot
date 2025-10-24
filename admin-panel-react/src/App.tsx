@@ -48,19 +48,21 @@ function AppContent() {
           onMenuClick={() => setSidebarOpen(true)}
         />
         
-        <main className="flex-1 overflow-y-auto p-6">
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/appointments" element={<AppointmentsPage />} />
-            <Route path="/services" element={<ServicesPage />} />
-            <Route path="/organizations" element={<OrganizationsPage />} />
-            <Route path="/bot-management" element={<BotManagementPage />} />
-            <Route path="/slots" element={<SlotsPage />} />
-            <Route path="/ai" element={<AIAssistantPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
+          <div className="max-w-7xl mx-auto">
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/appointments" element={<AppointmentsPage />} />
+              <Route path="/services" element={<ServicesPage />} />
+              <Route path="/organizations" element={<OrganizationsPage />} />
+              <Route path="/bot-management" element={<BotManagementPage />} />
+              <Route path="/slots" element={<SlotsPage />} />
+              <Route path="/ai" element={<AIAssistantPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </div>
         </main>
       </div>
     </div>

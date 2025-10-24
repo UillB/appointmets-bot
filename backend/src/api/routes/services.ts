@@ -3,6 +3,11 @@ import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 
+// Get WebSocket emitters from global scope
+const getAppointmentEmitter = () => (global as any).appointmentEmitter;
+const getServiceEmitter = () => (global as any).serviceEmitter;
+const getBotEmitter = () => (global as any).botEmitter;
+
 const router = Router();
 const prisma = new PrismaClient();
 
@@ -385,6 +390,27 @@ router.post('/', verifyToken, async (req: any, res: Response) => {
       }
     });
 
+    // Auto-generate slots for 1 year when service is created
+    try {
+      await generateSlotsForService(service.id, validatedData.durationMin);
+      console.log(`✅ Auto-generated slots for service ${service.name} (ID: ${service.id})`);
+    } catch (slotError) {
+      console.error(`❌ Failed to auto-generate slots for service ${service.id}:`, slotError);
+      // Don't fail the service creation if slot generation fails
+    }
+
+    // Emit real-time notification for service creation
+    try {
+      const serviceEmitter = getServiceEmitter();
+      if (serviceEmitter) {
+        await serviceEmitter.emitServiceCreated(service);
+        console.log('✅ WebSocket notification sent for service creation');
+      }
+    } catch (error) {
+      console.error('❌ Failed to send WebSocket notification for service creation:', error);
+      // Don't fail the request if WebSocket notification fails
+    }
+
     res.status(201).json({
       message: 'Service created successfully',
       service
@@ -454,6 +480,18 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
       }
     });
 
+    // Emit real-time notification for service update
+    try {
+      const serviceEmitter = getServiceEmitter();
+      if (serviceEmitter) {
+        await serviceEmitter.emitServiceUpdated(service, validatedData);
+        console.log('✅ WebSocket notification sent for service update');
+      }
+    } catch (error) {
+      console.error('❌ Failed to send WebSocket notification for service update:', error);
+      // Don't fail the request if WebSocket notification fails
+    }
+
     res.json({
       message: 'Service updated successfully',
       service
@@ -501,6 +539,18 @@ router.delete('/:id', verifyToken, async (req: any, res: Response) => {
       return res.status(400).json({ 
         error: 'Cannot delete service with existing slots or appointments. Please remove all slots and appointments first.' 
       });
+    }
+
+    // Emit real-time notification for service deletion before deleting
+    try {
+      const serviceEmitter = getServiceEmitter();
+      if (serviceEmitter) {
+        await serviceEmitter.emitServiceDeleted(existingService);
+        console.log('✅ WebSocket notification sent for service deletion');
+      }
+    } catch (error) {
+      console.error('❌ Failed to send WebSocket notification for service deletion:', error);
+      // Don't fail the request if WebSocket notification fails
     }
 
     await prisma.service.delete({

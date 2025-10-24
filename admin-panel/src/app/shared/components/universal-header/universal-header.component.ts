@@ -8,6 +8,8 @@ import { Subject, interval } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../../core/services/auth';
 import { I18nService, Language } from '../../../core/services/i18n.service';
+import { TelegramWebAppService } from '../../../core/services/telegram-webapp.service';
+import { TelegramThemeService } from '../../../core/services/telegram-theme.service';
 
 @Component({
   selector: 'app-universal-header',
@@ -20,7 +22,7 @@ import { I18nService, Language } from '../../../core/services/i18n.service';
     MatBadgeModule
   ],
   template: `
-    <div class="universal-header">
+    <div class="universal-header" [class.telegram-webapp]="isTelegramWebApp">
       <!-- Left side: System status -->
       <div class="system-status">
         <div class="status-indicator">
@@ -35,8 +37,8 @@ import { I18nService, Language } from '../../../core/services/i18n.service';
       
       <!-- Right side: Actions and user info -->
       <div class="header-actions">
-        <!-- Theme toggle -->
-        <button mat-icon-button class="action-btn" (click)="toggleTheme()">
+        <!-- Theme toggle - hide in Telegram Web App -->
+        <button *ngIf="!isTelegramWebApp" mat-icon-button class="action-btn" (click)="toggleTheme()">
           <mat-icon>{{ isDarkTheme ? 'wb_sunny' : 'dark_mode' }}</mat-icon>
         </button>
         
@@ -452,15 +454,24 @@ export class UniversalHeaderComponent implements OnInit, OnDestroy {
   isDarkTheme = false;
   currentUser: any = null;
   currentLanguage: Language = 'en';
+  isTelegramWebApp = false;
 
   constructor(
     private authService: AuthService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private telegramWebApp: TelegramWebAppService,
+    private telegramTheme: TelegramThemeService
   ) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.currentLanguage = this.i18nService.getCurrentLanguage();
+    this.isTelegramWebApp = this.telegramWebApp.isInTelegram;
+    
+    // Setup Telegram Web App if in Telegram
+    if (this.isTelegramWebApp) {
+      this.setupTelegramWebApp();
+    }
     
     // Subscribe to language changes
     this.i18nService.currentLanguage$
@@ -493,9 +504,30 @@ export class UniversalHeaderComponent implements OnInit, OnDestroy {
     console.log('Help clicked');
   }
 
+  private setupTelegramWebApp(): void {
+    // Apply Telegram theme
+    this.telegramTheme.applyTelegramTheme();
+    
+    // Setup back button
+    this.telegramWebApp.setupBackButton(() => {
+      // Navigate back or close Web App
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        this.telegramWebApp.close();
+      }
+    });
+  }
+
   logout(): void {
-    // TODO: Implement logout logic
-    console.log('Logout clicked');
+    this.authService.logout();
+    
+    // If in Telegram Web App, close it after logout
+    if (this.isTelegramWebApp) {
+      setTimeout(() => {
+        this.telegramWebApp.close();
+      }, 1000);
+    }
   }
 
   getInitials(name: string | undefined): string {

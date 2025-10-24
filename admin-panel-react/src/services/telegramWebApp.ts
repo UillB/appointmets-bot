@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 declare global {
@@ -75,13 +74,24 @@ declare global {
   }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface TelegramUser {
+  id: number;
+  first_name: string;
+  last_name?: string;
+  username?: string;
+  language_code?: string;
+}
+
+export interface TelegramWebAppData {
+  user?: TelegramUser;
+  auth_date: number;
+  hash: string;
+}
+
 export class TelegramWebAppService {
   private webApp: any;
   private isTelegramWebApp = false;
-  private userDataSubject = new BehaviorSubject<any>(null);
+  private userDataSubject = new BehaviorSubject<TelegramUser | null>(null);
   public userData$ = this.userDataSubject.asObservable();
 
   constructor() {
@@ -93,11 +103,11 @@ export class TelegramWebAppService {
       this.webApp = window.Telegram.WebApp;
       this.isTelegramWebApp = true;
       
-      // Инициализация Web App
+      // Initialize Web App
       this.webApp.ready();
       this.webApp.expand();
       
-      // Получение данных пользователя
+      // Get user data
       const userData = this.webApp.initDataUnsafe?.user;
       if (userData) {
         this.userDataSubject.next(userData);
@@ -116,7 +126,7 @@ export class TelegramWebAppService {
     return this.isTelegramWebApp;
   }
 
-  get currentUser(): any {
+  get currentUser(): TelegramUser | null {
     return this.userDataSubject.value;
   }
 
@@ -128,7 +138,7 @@ export class TelegramWebAppService {
     return this.webApp?.themeParams || {};
   }
 
-  // Настройка кнопки "Назад"
+  // Setup back button
   setupBackButton(callback: () => void): void {
     if (this.webApp?.BackButton) {
       this.webApp.BackButton.onClick(callback);
@@ -142,7 +152,7 @@ export class TelegramWebAppService {
     }
   }
 
-  // Настройка главной кнопки
+  // Setup main button
   setupMainButton(text: string, callback: () => void): void {
     if (this.webApp?.MainButton) {
       this.webApp.MainButton.setText(text);
@@ -157,21 +167,21 @@ export class TelegramWebAppService {
     }
   }
 
-  // Отправка данных в бот
+  // Send data to bot
   sendData(data: any): void {
     if (this.webApp) {
       this.webApp.sendData(JSON.stringify(data));
     }
   }
 
-  // Закрытие Web App
+  // Close Web App
   close(): void {
     if (this.webApp) {
       this.webApp.close();
     }
   }
 
-  // Показ уведомления
+  // Show alert
   showAlert(message: string): void {
     if (this.webApp) {
       this.webApp.showAlert(message);
@@ -180,7 +190,7 @@ export class TelegramWebAppService {
     }
   }
 
-  // Показ подтверждения
+  // Show confirmation
   showConfirm(message: string): Promise<boolean> {
     return new Promise((resolve) => {
       if (this.webApp) {
@@ -190,4 +200,45 @@ export class TelegramWebAppService {
       }
     });
   }
+
+  // Apply Telegram theme to document
+  applyTheme(): void {
+    if (this.webApp && this.isTelegramWebApp) {
+      const theme = this.getTheme();
+      const colors = this.getThemeColors();
+      
+      // Apply theme classes to body
+      document.body.classList.toggle('telegram-theme', true);
+      document.body.classList.toggle('telegram-light', theme === 'light');
+      document.body.classList.toggle('telegram-dark', theme === 'dark');
+      
+      // Apply colors from Telegram
+      if (colors.bg_color) {
+        document.documentElement.style.setProperty('--telegram-bg', colors.bg_color);
+      }
+      if (colors.text_color) {
+        document.documentElement.style.setProperty('--telegram-text', colors.text_color);
+      }
+      if (colors.button_color) {
+        document.documentElement.style.setProperty('--telegram-button', colors.button_color);
+      }
+    }
+  }
+
+  private getTheme(): 'light' | 'dark' {
+    if (this.webApp && this.isTelegramWebApp) {
+      return this.webApp.colorScheme;
+    }
+    return 'light';
+  }
+
+  private getThemeColors(): any {
+    if (this.webApp && this.isTelegramWebApp) {
+      return this.webApp.themeParams;
+    }
+    return {};
+  }
 }
+
+// Export singleton instance
+export const telegramWebApp = new TelegramWebAppService();

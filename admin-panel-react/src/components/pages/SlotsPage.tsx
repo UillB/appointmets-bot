@@ -55,7 +55,7 @@ import { Switch } from "../ui/switch";
 // Using Slot interface from API
 
 export function SlotsPage() {
-  const [activeTab, setActiveTab] = useState("management");
+  const [createSlotsOpen, setCreateSlotsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [serviceFilter, setServiceFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -278,6 +278,14 @@ export function SlotsPage() {
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh
             </Button>
+            <Button
+              onClick={() => setCreateSlotsOpen(true)}
+              size="sm"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Create Slots
+            </Button>
           </>
         }
       />
@@ -292,21 +300,8 @@ export function SlotsPage() {
             ))}
           </div>
 
-          {/* Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="management" className="gap-2">
-                <CalendarDays className="w-4 h-4" />
-                Slot Management
-              </TabsTrigger>
-              <TabsTrigger value="generation" className="gap-2">
-                <Sparkles className="w-4 h-4" />
-                Slot Generation
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Slot Management Tab */}
-            <TabsContent value="management" className="mt-0 space-y-6">
+          {/* Slot Management */}
+          <div className="space-y-6">
               <Card className="p-4 lg:p-6 bg-white">
                 {/* Quick Actions */}
                 <div className="flex flex-col sm:flex-row gap-2 mb-6 pb-6 border-b">
@@ -625,227 +620,222 @@ export function SlotsPage() {
                   </>
                 )}
               </Card>
-            </TabsContent>
+          </div>
 
-            {/* Slot Generation Tab */}
-            <TabsContent value="generation" className="mt-0">
-              <Card className="p-4 lg:p-6 bg-white">
-                <div className="max-w-3xl mx-auto">
-                  {/* Header */}
-                  <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Sparkles className="w-8 h-8 text-white" />
-                    </div>
-                    <h2 className="text-2xl mb-2">Automatic Slot Generation</h2>
-                    <p className="text-gray-500">
-                      Create time slots for your selected service for any period
-                    </p>
-                  </div>
+          {/* Create Slots Drawer */}
+          <Sheet open={createSlotsOpen} onOpenChange={setCreateSlotsOpen}>
+            <SheetContent side="right" className="w-[400px] sm:w-[500px]">
+              <SheetHeader>
+                <SheetTitle className="flex items-center gap-2">
+                  <Sparkles className="w-5 h-5" />
+                  Create Time Slots
+                </SheetTitle>
+                <SheetDescription>
+                  Generate time slots for your services automatically
+                </SheetDescription>
+              </SheetHeader>
+              
+              <div className="space-y-6 pt-6">
+                {/* Service Selection */}
+                <div className="space-y-2">
+                  <Label htmlFor="service">
+                    Service <span className="text-red-500">*</span>
+                  </Label>
+                  <Select
+                    value={selectedService}
+                    onValueChange={setSelectedService}
+                  >
+                    <SelectTrigger id="service">
+                      <SelectValue placeholder="Select a service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {services.map((service) => (
+                        <SelectItem key={service.id} value={service.id.toString()}>
+                          {service.name} ({service.durationMin} min)
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                  {/* Form */}
-                  <div className="space-y-6">
-                    {/* Service Selection */}
-                    <div className="space-y-2">
-                      <Label htmlFor="service">
-                        Service <span className="text-red-500">*</span>
+                {/* Period */}
+                <div className="space-y-2">
+                  <Label>
+                    Period <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="start-date" className="text-sm text-gray-600">
+                        Start Date
                       </Label>
-                      <Select
-                        value={selectedService}
-                        onValueChange={setSelectedService}
-                      >
-                        <SelectTrigger id="service">
-                          <SelectValue placeholder="Select a service" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {services.map((service) => (
-                            <SelectItem key={service.id} value={service.name}>
-                              {service.name} ({service.duration} min)
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        id="start-date"
+                        type="date"
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                      />
                     </div>
-
-                    {/* Period */}
-                    <div className="space-y-2">
-                      <Label>
-                        Period <span className="text-red-500">*</span>
+                    <div>
+                      <Label htmlFor="end-date" className="text-sm text-gray-600">
+                        End Date
                       </Label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="start-date" className="text-sm text-gray-600">
-                            Start Date
-                          </Label>
-                          <Input
-                            id="start-date"
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="end-date" className="text-sm text-gray-600">
-                            End Date
-                          </Label>
-                          <Input
-                            id="end-date"
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Working Hours */}
-                    <div className="space-y-2">
-                      <Label>
-                        Working Hours <span className="text-red-500">*</span>
-                      </Label>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="work-start" className="text-sm text-gray-600">
-                            Start
-                          </Label>
-                          <Input
-                            id="work-start"
-                            type="time"
-                            value={workStart}
-                            onChange={(e) => setWorkStart(e.target.value)}
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="work-end" className="text-sm text-gray-600">
-                            End
-                          </Label>
-                          <Input
-                            id="work-end"
-                            type="time"
-                            value={workEnd}
-                            onChange={(e) => setWorkEnd(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Slot Duration */}
-                    <div className="space-y-2">
-                      <Label htmlFor="duration">
-                        Slot Duration <span className="text-red-500">*</span>
-                      </Label>
-                      <div className="flex gap-2">
-                        <Input
-                          id="duration"
-                          type="number"
-                          min="5"
-                          step="5"
-                          value={slotDuration}
-                          onChange={(e) => setSlotDuration(e.target.value)}
-                          className="flex-1"
-                        />
-                        <div className="flex items-center px-4 bg-gray-50 border rounded-md">
-                          <span className="text-sm text-gray-600">minutes</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Working Days */}
-                    <div className="space-y-3">
-                      <Label>Working Days</Label>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        {Object.entries(selectedDays).map(([day, isSelected]) => (
-                          <div
-                            key={day}
-                            className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
-                            onClick={() => toggleDay(day as keyof typeof selectedDays)}
-                          >
-                            <Checkbox
-                              checked={isSelected}
-                              onCheckedChange={() =>
-                                toggleDay(day as keyof typeof selectedDays)
-                              }
-                            />
-                            <label className="text-sm capitalize cursor-pointer">
-                              {day}
-                            </label>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Break Time */}
-                    <div className="space-y-3 pt-4 border-t">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Lunch Break</Label>
-                          <p className="text-sm text-gray-500">
-                            Exclude lunch break from generation
-                          </p>
-                        </div>
-                        <Switch
-                          checked={enableBreak}
-                          onCheckedChange={setEnableBreak}
-                        />
-                      </div>
-
-                      {enableBreak && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                          <div>
-                            <Label htmlFor="break-start" className="text-sm text-gray-600">
-                              Start
-                            </Label>
-                            <Input
-                              id="break-start"
-                              type="time"
-                              value={breakStart}
-                              onChange={(e) => setBreakStart(e.target.value)}
-                            />
-                          </div>
-                          <div>
-                            <Label htmlFor="break-end" className="text-sm text-gray-600">
-                              End
-                            </Label>
-                            <Input
-                              id="break-end"
-                              type="time"
-                              value={breakEnd}
-                              onChange={(e) => setBreakEnd(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Generate Button */}
-                    <div className="pt-6 flex gap-3">
-                      <Button
-                        onClick={handleGenerate}
-                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
-                      >
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        Generate Slots
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setSelectedService("");
-                          setStartDate("");
-                          setEndDate("");
-                          setWorkStart("09:00");
-                          setWorkEnd("18:00");
-                          setSlotDuration("30");
-                          setEnableBreak(false);
-                        }}
-                      >
-                        <X className="w-4 h-4 mr-2" />
-                        Clear
-                      </Button>
+                      <Input
+                        id="end-date"
+                        type="date"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                      />
                     </div>
                   </div>
                 </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
+
+                {/* Working Hours */}
+                <div className="space-y-2">
+                  <Label>
+                    Working Hours <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="work-start" className="text-sm text-gray-600">
+                        Start
+                      </Label>
+                      <Input
+                        id="work-start"
+                        type="time"
+                        value={workStart}
+                        onChange={(e) => setWorkStart(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="work-end" className="text-sm text-gray-600">
+                        End
+                      </Label>
+                      <Input
+                        id="work-end"
+                        type="time"
+                        value={workEnd}
+                        onChange={(e) => setWorkEnd(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Slot Duration */}
+                <div className="space-y-2">
+                  <Label htmlFor="duration">
+                    Slot Duration <span className="text-red-500">*</span>
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="duration"
+                      type="number"
+                      min="5"
+                      step="5"
+                      value={slotDuration}
+                      onChange={(e) => setSlotDuration(e.target.value)}
+                      className="flex-1"
+                    />
+                    <div className="flex items-center px-4 bg-gray-50 border rounded-md">
+                      <span className="text-sm text-gray-600">minutes</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Working Days */}
+                <div className="space-y-3">
+                  <Label>Working Days</Label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {Object.entries(selectedDays).map(([day, isSelected]) => (
+                      <div
+                        key={day}
+                        className="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50"
+                        onClick={() => toggleDay(day as keyof typeof selectedDays)}
+                      >
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={() =>
+                            toggleDay(day as keyof typeof selectedDays)
+                          }
+                        />
+                        <label className="text-sm capitalize cursor-pointer">
+                          {day}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Break Time */}
+                <div className="space-y-3 pt-4 border-t">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label>Lunch Break</Label>
+                      <p className="text-sm text-gray-500">
+                        Exclude lunch break from generation
+                      </p>
+                    </div>
+                    <Switch
+                      checked={enableBreak}
+                      onCheckedChange={setEnableBreak}
+                    />
+                  </div>
+
+                  {enableBreak && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <div>
+                        <Label htmlFor="break-start" className="text-sm text-gray-600">
+                          Start
+                        </Label>
+                        <Input
+                          id="break-start"
+                          type="time"
+                          value={breakStart}
+                          onChange={(e) => setBreakStart(e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="break-end" className="text-sm text-gray-600">
+                          End
+                        </Label>
+                        <Input
+                          id="break-end"
+                          type="time"
+                          value={breakEnd}
+                          onChange={(e) => setBreakEnd(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Generate Button */}
+                <div className="pt-6 flex gap-3">
+                  <Button
+                    onClick={handleGenerate}
+                    className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
+                  >
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    Generate Slots
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setSelectedService("");
+                      setStartDate("");
+                      setEndDate("");
+                      setWorkStart("09:00");
+                      setWorkEnd("18:00");
+                      setSlotDuration("30");
+                      setEnableBreak(false);
+                    }}
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Clear
+                  </Button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </div>

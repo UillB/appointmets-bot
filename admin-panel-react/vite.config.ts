@@ -1,10 +1,14 @@
 
-  import { defineConfig } from 'vite';
-  import react from '@vitejs/plugin-react-swc';
-  import path from 'path';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import tailwindcss from '@tailwindcss/vite';
+import path from 'path';
 
-  export default defineConfig({
-    plugins: [react()],
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+  css: {
+    postcss: false, // Disable PostCSS since we're using TailwindCSS v4 with Vite plugin
+  },
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
@@ -53,7 +57,8 @@
       outDir: 'build',
     },
     server: {
-      port: 4200,
-      open: true,
+      port: 5173,
+      host: '0.0.0.0',
+      open: false,
     },
   });

@@ -3,6 +3,11 @@ import { prisma } from "../../lib/prisma";
 import { botManager } from "../../bot/bot-manager";
 import jwt from 'jsonwebtoken';
 
+// Get WebSocket emitters from global scope
+const getAppointmentEmitter = () => (global as any).appointmentEmitter;
+const getServiceEmitter = () => (global as any).serviceEmitter;
+const getBotEmitter = () => (global as any).botEmitter;
+
 const r = Router();
 
 // Extend Request interface to include user
@@ -259,10 +264,26 @@ const appt = await prisma.appointment.create({
     slotId: Number(slotId) 
   },
   include: {
-    service: true,
+    service: {
+      include: {
+        organization: true
+      }
+    },
     slot: true
   }
 });
+
+// Emit real-time notification for appointment creation
+try {
+  const appointmentEmitter = getAppointmentEmitter();
+  if (appointmentEmitter) {
+    await appointmentEmitter.emitAppointmentCreated(appt);
+    console.log('✅ WebSocket notification sent for appointment creation');
+  }
+} catch (error) {
+  console.error('❌ Failed to send WebSocket notification for appointment creation:', error);
+  // Don't fail the request if WebSocket notification fails
+}
 
 res.status(201).json(appt);
 });
@@ -356,6 +377,18 @@ r.put("/:id/cancel", verifyToken, async (req: any, res: any) => {
     } catch (notificationError) {
       console.error('Failed to send cancellation notification:', notificationError);
       // Не прерываем процесс, если уведомление не отправилось
+    }
+
+    // Emit real-time notification for appointment cancellation
+    try {
+      const appointmentEmitter = getAppointmentEmitter();
+      if (appointmentEmitter) {
+        await appointmentEmitter.emitAppointmentCancelled(updatedAppointment);
+        console.log('✅ WebSocket notification sent for appointment cancellation');
+      }
+    } catch (error) {
+      console.error('❌ Failed to send WebSocket notification for appointment cancellation:', error);
+      // Don't fail the request if WebSocket notification fails
     }
 
     res.json({
