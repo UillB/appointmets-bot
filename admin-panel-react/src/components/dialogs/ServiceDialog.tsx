@@ -203,20 +203,97 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                 </div>
               </div>
 
+              {/* Working Hours Configuration */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-blue-600" />
+                  <h3 className="text-lg font-semibold text-gray-800">Working Hours</h3>
+                </div>
+                <p className="text-sm text-gray-600">
+                  Configure when this service is available. Slots will be auto-generated based on these hours.
+                </p>
+                
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="workStart" className="text-sm font-semibold text-gray-700">
+                      Start Time *
+                    </Label>
+                    <Input
+                      id="workStart"
+                      name="workStart"
+                      type="time"
+                      defaultValue="09:00"
+                      required
+                      className="h-12 text-base"
+                    />
+                  </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-semibold text-gray-700">
-                  Description
-                </Label>
-                <Textarea
-                  id="description"
-                  name="description"
-                  placeholder="Describe the service..."
-                  rows={4}
-                  defaultValue={service?.description}
-                  className="text-base"
-                />
+                  <div className="space-y-2">
+                    <Label htmlFor="workEnd" className="text-sm font-semibold text-gray-700">
+                      End Time *
+                    </Label>
+                    <Input
+                      id="workEnd"
+                      name="workEnd"
+                      type="time"
+                      defaultValue="18:00"
+                      required
+                      className="h-12 text-base"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="lunchStart" className="text-sm font-semibold text-gray-700">
+                      Lunch Break Start (optional)
+                    </Label>
+                    <Input
+                      id="lunchStart"
+                      name="lunchStart"
+                      type="time"
+                      defaultValue="13:00"
+                      className="h-12 text-base"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="lunchEnd" className="text-sm font-semibold text-gray-700">
+                      Lunch Break End (optional)
+                    </Label>
+                    <Input
+                      id="lunchEnd"
+                      name="lunchEnd"
+                      type="time"
+                      defaultValue="14:00"
+                      className="h-12 text-base"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <Label className="text-sm font-semibold text-gray-700">Working Days</Label>
+                  <div className="grid grid-cols-7 gap-2">
+                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
+                      <div key={day} className="flex flex-col items-center space-y-1">
+                        <Label htmlFor={`day-${index}`} className="text-xs text-gray-600">
+                          {day}
+                        </Label>
+                        <input
+                          id={`day-${index}`}
+                          name={`workingDays`}
+                          type="checkbox"
+                          value={index}
+                          defaultChecked={index < 5} // Monday-Friday by default
+                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
+
+
               
               {/* Submit and Cancel buttons inside the form */}
               <div className="flex gap-4 pt-6">

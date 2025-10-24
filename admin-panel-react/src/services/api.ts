@@ -414,6 +414,61 @@ class ApiClient {
     });
   }
 
+  // Slot expiration and renewal
+  async getSlotStatus(serviceId: number): Promise<{
+    needsRenewal: boolean;
+    daysUntilExpiry: number;
+    latestSlotDate: string;
+    message: string;
+  }> {
+    return this.request(`/services/${serviceId}/slots/status`);
+  }
+
+  async renewSlots(serviceId: number): Promise<{
+    message: string;
+    slotsCreated: number;
+    serviceId: number;
+  }> {
+    return this.request(`/services/${serviceId}/slots/renew`, {
+      method: 'POST',
+    });
+  }
+
+  // Service deletion with safety checks
+  async deleteServiceWithCheck(serviceId: number): Promise<{
+    error?: string;
+    details?: {
+      totalAppointments: number;
+      futureAppointments: number;
+      nextAppointmentDate: string;
+      nextAppointmentTime: string;
+      message: string;
+    };
+  }> {
+    try {
+      return await this.request(`/services/${serviceId}`, {
+        method: 'DELETE',
+      });
+    } catch (error: any) {
+      if (error.status === 400) {
+        return error.data;
+      }
+      throw error;
+    }
+  }
+
+  async forceDeleteService(serviceId: number): Promise<{
+    message: string;
+    deletedAppointments: number;
+    deletedSlots: number;
+    serviceId: number;
+  }> {
+    return this.request(`/services/${serviceId}/force`, {
+      method: 'DELETE',
+      body: JSON.stringify({ confirmDelete: true }),
+    });
+  }
+
   // Bot Management methods
   async getAllBots(): Promise<{ bots: any[] }> {
     return this.request('/bot');

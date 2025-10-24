@@ -23,6 +23,7 @@ import { StatCard } from "../cards/StatCard";
 import { ServiceCard } from "../cards/ServiceCard";
 import { ServiceDialog } from "../dialogs/ServiceDialog";
 import { SlotsManagementPage } from "./SlotsManagementPage";
+import { ServiceDeletionDialog } from "../ServiceDeletionDialog";
 import {
   Sheet,
   SheetContent,
@@ -44,6 +45,8 @@ export function ServicesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [showSlotsManagement, setShowSlotsManagement] = useState(false);
   const [selectedServiceForSlots, setSelectedServiceForSlots] = useState<number | null>(null);
+  const [deletionDialogOpen, setDeletionDialogOpen] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState<{ id: number; name: string } | null>(null);
   const [stats, setStats] = useState({
     totalServices: 0,
     totalAppointments: 0,
@@ -139,18 +142,11 @@ export function ServicesPage() {
   };
 
   const handleDeleteService = async (serviceId: number) => {
-    if (!confirm("Are you sure you want to delete this service?")) {
-      return;
-    }
+    const service = services.find(s => s.id === serviceId);
+    if (!service) return;
 
-    try {
-      await apiClient.deleteService(serviceId);
-      toast.success("Service deleted successfully");
-      await loadData(); // Refresh the list
-    } catch (error) {
-      console.error('Failed to delete service:', error);
-      toast.error("Failed to delete service");
-    }
+    setServiceToDelete({ id: serviceId, name: service.name });
+    setDeletionDialogOpen(true);
   };
 
   const handleManageSlots = (serviceId: number) => {
@@ -336,33 +332,50 @@ export function ServicesPage() {
                 </div>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredServices.map((service) => {
-                  const ServiceCardComponent = () => (
-                    <ServiceCard
-                      id={service.id}
-                      name={service.name}
-                      nameRu={service.nameRu}
-                      nameEn={service.nameEn}
-                      nameHe={service.nameHe}
-                      description={service.description}
-                      descriptionRu={service.descriptionRu}
-                      descriptionEn={service.descriptionEn}
-                      descriptionHe={service.descriptionHe}
-                      durationMin={service.durationMin}
-                      price={service.price}
-                      currency={service.currency}
-                      organizationId={service.organizationId}
-                      createdAt={service.createdAt}
-                      updatedAt={service.updatedAt}
-                      _count={service._count}
-                      onEdit={() => setDialogOpen(true)}
-                      onDelete={() => handleDeleteService(service.id)}
-                      onManageSlots={() => handleManageSlots(service.id)}
-                    />
-                  );
-                  return <ServiceCardComponent key={service.id} />;
-                })}
+              <div className="space-y-6">
+                {/* Info Banner about Auto-Slot Generation */}
+                <Card className="border-blue-200 bg-blue-50">
+                  <div className="p-4 flex items-start gap-3">
+                    <div className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0">ℹ️</div>
+                    <div>
+                      <h3 className="font-medium text-blue-900">Auto-Generated Slots</h3>
+                      <p className="text-blue-700 text-sm mt-1">
+                        Time slots are automatically generated for 1 year when you create services. 
+                        No manual slot management needed - just create your services and start booking!
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* Services Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {filteredServices.map((service) => {
+                    const ServiceCardComponent = () => (
+                      <ServiceCard
+                        id={service.id}
+                        name={service.name}
+                        nameRu={service.nameRu}
+                        nameEn={service.nameEn}
+                        nameHe={service.nameHe}
+                        description={service.description}
+                        descriptionRu={service.descriptionRu}
+                        descriptionEn={service.descriptionEn}
+                        descriptionHe={service.descriptionHe}
+                        durationMin={service.durationMin}
+                        price={service.price}
+                        currency={service.currency}
+                        organizationId={service.organizationId}
+                        createdAt={service.createdAt}
+                        updatedAt={service.updatedAt}
+                        _count={service._count}
+                        onEdit={() => setDialogOpen(true)}
+                        onDelete={() => handleDeleteService(service.id)}
+                        onManageSlots={() => handleManageSlots(service.id)}
+                      />
+                    );
+                    return <ServiceCardComponent key={service.id} />;
+                  })}
+                </div>
               </div>
             )}
 
@@ -376,11 +389,18 @@ export function ServicesPage() {
             )}
           </Card>
 
-          {/* Dialog */}
+          {/* Dialogs */}
           <ServiceDialog 
             open={dialogOpen} 
             onOpenChange={setDialogOpen}
             onServiceSaved={handleRefresh}
+          />
+
+          <ServiceDeletionDialog
+            open={deletionDialogOpen}
+            onOpenChange={setDeletionDialogOpen}
+            service={serviceToDelete || { id: 0, name: '' }}
+            onServiceDeleted={handleRefresh}
           />
         </div>
       </div>

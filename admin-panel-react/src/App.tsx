@@ -9,7 +9,6 @@ import {
   ServicesPage, 
   OrganizationsPage, 
   BotManagementPage, 
-  SlotsPage, 
   AIAssistantPage, 
   SettingsPage, 
   IntegratedLoginPage 
@@ -57,7 +56,6 @@ function AppContent() {
               <Route path="/services" element={<ServicesPage />} />
               <Route path="/organizations" element={<OrganizationsPage />} />
               <Route path="/bot-management" element={<BotManagementPage />} />
-              <Route path="/slots" element={<SlotsPage />} />
               <Route path="/ai" element={<AIAssistantPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />

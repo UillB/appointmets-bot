@@ -95,7 +95,6 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
     { icon: Wrench, label: "Services", page: "services", badge: (stats.totalServices || 0).toString() },
     { icon: Building2, label: "Organizations", page: "organizations" },
     { icon: Bot, label: "Bot Management", page: "bot-management", badge: "NEW", badgeVariant: "secondary" as const },
-    { icon: Clock, label: "Slots", page: "slots" },
     { icon: Sparkles, label: "AI Assistant", page: "ai", badge: "BETA", badgeVariant: "secondary" as const },
     { icon: Settings, label: "Settings", page: "settings" },
   ];
