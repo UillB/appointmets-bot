@@ -2,6 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
+import { performanceMonitor, monitorPerformance, QueryOptimizer } from '../../lib/performance';
+import { DatabaseCache, CacheUtils } from '../../lib/cache';
 
 // Get WebSocket emitters from global scope
 const getAppointmentEmitter = () => (global as any).appointmentEmitter;
@@ -247,6 +249,8 @@ const verifyToken = (req: any, res: Response, next: NextFunction) => {
 
 // GET /services - Get all services (super admin) or organization's services
 router.get('/', verifyToken, async (req: any, res: Response) => {
+  const endTimer = performanceMonitor.startTimer('get_services');
+  
   try {
     const { role, organizationId } = req.user;
     const { organizationId: queryOrgId } = req.query;
@@ -263,35 +267,48 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
       whereClause.organizationId = organizationId;
     }
 
-    const services = await prisma.service.findMany({
-      where: whereClause,
-      include: {
-        organization: {
-          select: {
-            id: true,
-            name: true
+    // Create cache key based on user role and filters
+    const cacheKey = `services_${role}_${organizationId}_${queryOrgId || 'all'}`;
+    
+    const result = await DatabaseCache.getCachedQuery(
+      cacheKey,
+      async () => {
+        const services = await prisma.service.findMany({
+          where: whereClause,
+          include: {
+            organization: {
+              select: {
+                id: true,
+                name: true
+              }
+            },
+            _count: {
+              select: {
+                slots: true,
+                appointments: true
+              }
+            }
+          },
+          orderBy: {
+            createdAt: 'desc'
           }
-        },
-        _count: {
-          select: {
-            slots: true,
-            appointments: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: 'desc'
-      }
-    });
+        });
 
-    res.json({
-      services,
-      total: services.length,
-      page: 1,
-      limit: services.length,
-      isSuperAdmin: role === 'SUPER_ADMIN'
-    });
+        return {
+          services,
+          total: services.length,
+          page: 1,
+          limit: services.length,
+          isSuperAdmin: role === 'SUPER_ADMIN'
+        };
+      },
+      30000 // 30 seconds cache
+    );
+
+    endTimer();
+    res.json(result);
   } catch (error) {
+    endTimer();
     console.error('Get services error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }

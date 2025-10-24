@@ -13,6 +13,8 @@ import {
   SettingsPage, 
   IntegratedLoginPage 
 } from "./components";
+import { AnalyticsPage } from "./components/pages/AnalyticsPage";
+import { MobileOptimizedWrapper } from "./components/MobileOptimizations";
 import { Toaster } from "./components/ui/sonner";
 
 function AppContent() {
@@ -34,36 +36,39 @@ function AppContent() {
   }
 
   return (
-    <div className="h-screen bg-[#FAFAFA] flex overflow-hidden">
-      <Sidebar 
-        isOpen={sidebarOpen} 
-        onClose={() => setSidebarOpen(false)}
-        activePage={window.location.pathname}
-        onNavigate={() => {}}
-      />
-      
-      <div className="flex-1 flex flex-col min-h-0">
-        <Header 
-          onMenuClick={() => setSidebarOpen(true)}
+    <MobileOptimizedWrapper>
+      <div className="h-screen bg-[#FAFAFA] flex overflow-hidden">
+        <Sidebar 
+          isOpen={sidebarOpen} 
+          onClose={() => setSidebarOpen(false)}
+          activePage={window.location.pathname}
+          onNavigate={() => {}}
         />
         
-        <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
-          <div className="max-w-7xl mx-auto">
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/appointments" element={<AppointmentsPage />} />
-              <Route path="/services" element={<ServicesPage />} />
-              <Route path="/organizations" element={<OrganizationsPage />} />
-              <Route path="/bot-management" element={<BotManagementPage />} />
-              <Route path="/ai" element={<AIAssistantPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
-          </div>
-        </main>
+        <div className="flex-1 flex flex-col min-h-0">
+          <Header 
+            onMenuClick={() => setSidebarOpen(true)}
+          />
+          
+          <main className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6">
+            <div className="max-w-7xl mx-auto">
+              <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/appointments" element={<AppointmentsPage />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/analytics" element={<AnalyticsPage />} />
+                <Route path="/organizations" element={<OrganizationsPage />} />
+                <Route path="/bot-management" element={<BotManagementPage />} />
+                <Route path="/ai" element={<AIAssistantPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </MobileOptimizedWrapper>
   );
 }
 

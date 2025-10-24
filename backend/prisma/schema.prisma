@@ -28,6 +28,11 @@ model Organization {
   aiUsageLogs AIUsageLog[]
   notifications Notification[]
   eventLogs   EventLog[]
+
+  @@index([name])
+  @@index([botToken])
+  @@index([botUsername])
+  @@index([createdAt])
 }
 
 model User {
@@ -43,6 +48,11 @@ model User {
   updatedAt      DateTime     @updatedAt
   notifications  Notification[]
   eventLogs      EventLog[]
+
+  @@index([organizationId, role])
+  @@index([email])
+  @@index([telegramId])
+  @@index([createdAt])
 }
 
 enum UserRole {
@@ -70,6 +80,10 @@ model Service {
   appointments   Appointment[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, name])
+  @@index([price])
 }
 
 
@@ -83,6 +97,9 @@ model Slot {
   bookings   Appointment[]
 
   @@unique([serviceId, startAt]) // ← защищает от повторной генерации
+  @@index([serviceId, startAt, endAt])
+  @@index([startAt])
+  @@index([endAt])
 }
 
 
@@ -98,6 +115,10 @@ model Appointment {
   status     String   @default("confirmed")
 
   @@unique([slotId]) // <— добавили
+  @@index([chatId])
+  @@index([serviceId, createdAt])
+  @@index([status, createdAt])
+  @@index([createdAt])
 }
 
 // AI Configuration for Organizations
@@ -130,6 +151,11 @@ model AIUsageLog {
   scenario       String?  // 'greeting', 'booking_help', 'service_info', etc.
   model          String?
   createdAt      DateTime @default(now())
+
+  @@index([organizationId, createdAt])
+  @@index([scenario, createdAt])
+  @@index([model, createdAt])
+  @@index([createdAt])
 }
 
 // WebSocket Real-time System Models

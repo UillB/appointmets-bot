@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import cors from "cors";
+import { performanceMiddleware } from "../lib/performance";
 import appointments from "./routes/appointments";
 import services from "./routes/services";
 import slots from "./routes/slots";
@@ -10,6 +11,8 @@ import organizations from "./routes/organizations";
 import botManagement from "./routes/bot-management";
 import aiConfig from "./routes/ai-config";
 import notifications from "./routes/notifications";
+import performance from "./routes/performance";
+import analytics from "./routes/analytics";
 
 
 export function createApi() {
@@ -30,6 +33,9 @@ app.use(cors({
 
 app.use(express.json());
 
+// Performance monitoring middleware
+app.use(performanceMiddleware);
+
 
 app.use("/api/auth", auth);
 app.use("/api/appointments", appointments);
@@ -39,6 +45,8 @@ app.use("/api/organizations", organizations);
 app.use("/api/bot", botManagement);
 app.use("/api/ai-config", aiConfig);
 app.use("/api/notifications", notifications);
+app.use("/api/performance", performance);
+app.use("/api/analytics", analytics);
 console.log("✅ AI Config routes registered at /api/ai-config");
 console.log("✅ Notifications routes registered at /api/notifications");
 app.use("/webapp", webapp);

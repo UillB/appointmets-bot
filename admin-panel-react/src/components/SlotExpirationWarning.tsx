@@ -35,24 +35,43 @@ export function SlotExpirationWarning({
   const [isRenewing, setIsRenewing] = useState(false);
 
   useEffect(() => {
-    // For now, just show a simple message that slots auto-generate
-    setSlotStatus({
-      needsRenewal: false,
-      daysUntilExpiry: 365,
-      latestSlotDate: new Date().toISOString(),
-      message: 'Slots are auto-generated for 1 year when service is created'
-    });
+    checkSlotStatus();
   }, [serviceId]);
 
   const checkSlotStatus = async () => {
-    // Placeholder for future implementation
-    console.log('Slot status check not yet implemented');
+    setIsLoading(true);
+    try {
+      const response = await apiClient.get(`/services/${serviceId}/slots/status`);
+      setSlotStatus(response.data);
+    } catch (error) {
+      console.error('Error checking slot status:', error);
+      toast.error('Failed to check slot status');
+      // Fallback to showing auto-generation message
+      setSlotStatus({
+        needsRenewal: false,
+        daysUntilExpiry: 365,
+        latestSlotDate: new Date().toISOString(),
+        message: 'Slots are auto-generated for 1 year when service is created'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renewSlots = async () => {
-    // Placeholder for future implementation
-    toast.success('Slot renewal feature coming soon!');
-    onSlotsRenewed?.();
+    setIsRenewing(true);
+    try {
+      const response = await apiClient.post(`/services/${serviceId}/slots/renew`);
+      toast.success(`Successfully generated ${response.data.slotsCreated} new slots`);
+      // Refresh the slot status
+      await checkSlotStatus();
+      onSlotsRenewed?.();
+    } catch (error) {
+      console.error('Error renewing slots:', error);
+      toast.error('Failed to renew slots');
+    } finally {
+      setIsRenewing(false);
+    }
   };
 
   if (isLoading) {
