@@ -66,7 +66,7 @@ export function Dashboard() {
       setIsLoading(true);
       const [statsData, appointmentsData, organizationsData, summaryStatsData, botStatusData] = await Promise.all([
         apiClient.getDashboardStats(),
-        apiClient.getAppointments({ limit: 5 }),
+        apiClient.getAppointments({ limit: 100 }), // Load more appointments for calendar
         apiClient.getOrganizations(),
         apiClient.getAppointmentsSummaryStats().catch(() => ({ totalAppointments: 0, confirmedAppointments: 0, pendingAppointments: 0, rejectedAppointments: 0 })), // Use new endpoint
         user?.organizationId ? apiClient.getBotStatus(user.organizationId).catch(() => null) : Promise.resolve(null)
@@ -198,6 +198,17 @@ export function Dashboard() {
       selectedDate.getMonth() === currentMonth.getMonth() &&
       selectedDate.getFullYear() === currentMonth.getFullYear()
     );
+  };
+
+  const hasAppointments = (day: number) => {
+    if (!recentAppointments || recentAppointments.length === 0) return false;
+    const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+    return recentAppointments.some((apt: any) => {
+      if (apt.slot?.startAt) {
+        return isSameDay(new Date(apt.slot.startAt), date);
+      }
+      return false;
+    });
   };
 
   const quickActions = [
@@ -455,12 +466,13 @@ export function Dashboard() {
                   {/* Days of the month */}
                   {Array.from({ length: getDaysInMonth(currentMonth) }, (_, i) => {
                     const day = i + 1;
+                    const hasAppts = hasAppointments(day);
                     return (
                       <button
                         key={day}
                         onClick={() => handleDateClick(day)}
                         className={`
-                          w-8 h-8 flex items-center justify-center text-sm rounded-md
+                          w-8 h-8 flex flex-col items-center justify-center text-sm rounded-md relative
                           transition-all duration-200 hover:scale-105
                           ${isToday(day)
                             ? "bg-indigo-600 text-white font-semibold shadow-md"
@@ -470,7 +482,12 @@ export function Dashboard() {
                           }
                         `}
                       >
-                        {day}
+                        <span>{day}</span>
+                        {hasAppts && (
+                          <div className={`absolute bottom-0.5 w-1 h-1 rounded-full ${
+                            isToday(day) ? "bg-white" : "bg-indigo-600"
+                          }`} />
+                        )}
                       </button>
                     );
                   })}
@@ -509,11 +526,12 @@ export function Dashboard() {
                 </Button>
               </div>
 
-              <div className="max-h-96 overflow-y-auto space-y-2 pr-2">
+              <div className="max-h-96 overflow-y-auto space-y-3 pr-2">
                 {filteredAppointments.length > 0 ? (
                   filteredAppointments.map((appointment: any, idx) => {
                     const AppointmentComponent = () => (
                       <AppointmentCard 
+                        appointment={appointment}
                         clientName={`Chat ID: ${appointment.chatId || 'Unknown'}`}
                         clientId={appointment.chatId || 'N/A'}
                         time={appointment.slot?.startAt ? formatTimeToLocal(appointment.slot.startAt) : 'N/A'}

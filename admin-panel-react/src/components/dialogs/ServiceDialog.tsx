@@ -15,6 +15,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { X, Wrench, Clock } from "lucide-react";
 import { apiClient } from "../../services/api";
 import { toast } from "sonner";
+import { StepIndicator } from "../StepIndicator";
 
 interface ServiceDialogProps {
   open: boolean;
@@ -105,193 +106,284 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
       <DrawerContent className="bg-white border shadow-lg">
-        <DrawerHeader className="border-b bg-gradient-to-r from-purple-500 to-blue-500 text-white p-6">
+        <DrawerHeader className="border-b bg-gradient-to-r from-indigo-50 to-purple-50 flex-shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <Wrench className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                <Wrench className="w-5 h-5 text-white" />
               </div>
               <div>
-                <DrawerTitle className="text-white text-2xl font-bold">
-                  {isEdit ? "Edit Service" : "Add New Service"}
+                <DrawerTitle className="text-xl text-gray-900">
+                  {isEdit ? "Edit Service" : "Create New Service"}
                 </DrawerTitle>
-                <DrawerDescription className="text-white/90 text-base">
+                <DrawerDescription className="text-gray-600">
                   {isEdit 
                     ? "Update service information and settings."
-                    : "Create a new service for appointments"}
+                    : "Follow the steps below to add a new service"}
                 </DrawerDescription>
               </div>
             </div>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={() => onOpenChange(false)}
-              className="h-8 w-8 p-0 text-white hover:bg-white/20"
+              className="h-8 w-8 text-gray-600 hover:bg-gray-100"
             >
               <X className="w-4 h-4" />
             </Button>
           </div>
         </DrawerHeader>
 
-        <div className="flex-1 overflow-y-auto p-8 bg-gray-50">
-          <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="space-y-2">
-                <Label htmlFor="serviceName" className="text-sm font-semibold text-gray-700">
-                  Service Name *
-                </Label>
-                <Input
-                  id="serviceName"
-                  name="serviceName"
-                  placeholder="e.g., Haircut & Styling"
-                  defaultValue={service?.name}
-                  required
-                  className="h-12 text-base"
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6">
+            <form onSubmit={handleSubmit} id="service-form" className="space-y-2">
+            {/* Step 1: Basic Information */}
+            {!isEdit ? (
+              <>
+                <StepIndicator
+                  stepNumber={1}
+                  title="Basic Information"
+                  description="Service name and description"
                 />
-              </div>
+                <div className="pl-14 space-y-4 pb-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="serviceName" className="text-sm">
+                      Service Name <span className="text-red-500">*</span>
+                    </Label>
+                    <Input
+                      id="serviceName"
+                      name="serviceName"
+                      placeholder="e.g., Haircut, Massage, Consultation"
+                      className="h-11"
+                      required
+                    />
+                  </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="description" className="text-sm font-semibold text-gray-700">
-                  Description *
-                </Label>
-                <Textarea
-                  id="description"
-                  name="description"
-                  placeholder="Describe the service..."
-                  defaultValue={service?.description}
-                  rows={4}
-                  className="text-base"
+                  <div className="space-y-2">
+                    <Label htmlFor="description" className="text-sm">
+                      Description
+                    </Label>
+                    <Textarea
+                      id="description"
+                      name="description"
+                      placeholder="Describe the service..."
+                      rows={3}
+                      className="resize-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Step 2: Pricing & Duration */}
+                <StepIndicator
+                  stepNumber={2}
+                  title="Pricing & Duration"
+                  description="Set the price and time required"
+                  isLast={false}
                 />
-              </div>
-
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="duration" className="text-sm font-semibold text-gray-700">
-                    Duration (minutes) *
-                  </Label>
-                  <div className="relative">
-                    <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <Input
-                      id="duration"
-                      name="duration"
-                      type="number"
-                      placeholder="30"
-                      defaultValue={service?.durationMin}
-                      min="1"
-                      required
-                      className="h-12 pl-10 text-base"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="price" className="text-sm font-semibold text-gray-700">
-                    Price (optional)
-                  </Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-medium">₽</span>
-                    <Input
-                      id="price"
-                      name="price"
-                      type="number"
-                      placeholder="0.00"
-                      defaultValue={service?.price}
-                      min="0"
-                      step="0.01"
-                      className="h-12 pl-8 text-base"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Working Hours Configuration */}
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-semibold text-gray-800">Working Hours</h3>
-                </div>
-                <p className="text-sm text-gray-600">
-                  Configure when this service is available. Slots will be auto-generated based on these hours.
-                </p>
-                
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="workStart" className="text-sm font-semibold text-gray-700">
-                      Start Time *
-                    </Label>
-                    <Input
-                      id="workStart"
-                      name="workStart"
-                      type="time"
-                      defaultValue="09:00"
-                      required
-                      className="h-12 text-base"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="workEnd" className="text-sm font-semibold text-gray-700">
-                      End Time *
-                    </Label>
-                    <Input
-                      id="workEnd"
-                      name="workEnd"
-                      type="time"
-                      defaultValue="18:00"
-                      required
-                      className="h-12 text-base"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="lunchStart" className="text-sm font-semibold text-gray-700">
-                      Lunch Break Start (optional)
-                    </Label>
-                    <Input
-                      id="lunchStart"
-                      name="lunchStart"
-                      type="time"
-                      defaultValue="13:00"
-                      className="h-12 text-base"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="lunchEnd" className="text-sm font-semibold text-gray-700">
-                      Lunch Break End (optional)
-                    </Label>
-                    <Input
-                      id="lunchEnd"
-                      name="lunchEnd"
-                      type="time"
-                      defaultValue="14:00"
-                      className="h-12 text-base"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <Label className="text-sm font-semibold text-gray-700">Working Days</Label>
-                  <div className="grid grid-cols-7 gap-2">
-                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
-                      <div key={day} className="flex flex-col items-center space-y-1">
-                        <Label htmlFor={`day-${index}`} className="text-xs text-gray-600">
-                          {day}
-                        </Label>
-                        <input
-                          id={`day-${index}`}
-                          name={`workingDays`}
-                          type="checkbox"
-                          value={index}
-                          defaultChecked={index < 5} // Monday-Friday by default
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                <div className="pl-14 space-y-4 pb-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="duration" className="text-sm">
+                        Duration (minutes) <span className="text-red-500">*</span>
+                      </Label>
+                      <div className="relative">
+                        <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Input
+                          id="duration"
+                          name="duration"
+                          type="number"
+                          placeholder="30"
+                          min="1"
+                          required
+                          className="h-11 pl-10"
                         />
                       </div>
-                    ))}
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="price" className="text-sm">
+                        Price (optional)
+                      </Label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-medium">₽</span>
+                        <Input
+                          id="price"
+                          name="price"
+                          type="number"
+                          placeholder="0.00"
+                          min="0"
+                          step="0.01"
+                          className="h-11 pl-8"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            ) : (
+            /* Edit mode - simple form without steps */
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="serviceName" className="text-sm font-semibold text-gray-700">
+                    Service Name *
+                  </Label>
+                  <Input
+                    id="serviceName"
+                    name="serviceName"
+                    placeholder="e.g., Haircut & Styling"
+                    defaultValue={service?.name}
+                    required
+                    className="h-12 text-base"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="description" className="text-sm font-semibold text-gray-700">
+                    Description *
+                  </Label>
+                  <Textarea
+                    id="description"
+                    name="description"
+                    placeholder="Describe the service..."
+                    defaultValue={service?.description}
+                    rows={4}
+                    className="text-base"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="duration" className="text-sm font-semibold text-gray-700">
+                      Duration (minutes) *
+                    </Label>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Input
+                        id="duration"
+                        name="duration"
+                        type="number"
+                        placeholder="30"
+                        defaultValue={service?.durationMin}
+                        min="1"
+                        required
+                        className="h-12 pl-10 text-base"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="price" className="text-sm font-semibold text-gray-700">
+                      Price (optional)
+                    </Label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-medium">₽</span>
+                      <Input
+                        id="price"
+                        name="price"
+                        type="number"
+                        placeholder="0.00"
+                        defaultValue={service?.price}
+                        min="0"
+                        step="0.01"
+                        className="h-12 pl-8 text-base"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
+            )}
+
+            {/* Working Hours Configuration - only for create mode */}
+            {!isEdit && (
+              <>
+                <StepIndicator
+                  stepNumber={3}
+                  title="Working Hours"
+                  description="Configure when this service is available"
+                  isLast={true}
+                />
+                <div className="pl-14 space-y-4 pb-6">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="workStart" className="text-sm">
+                        Start Time <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="workStart"
+                        name="workStart"
+                        type="time"
+                        defaultValue="09:00"
+                        required
+                        className="h-11"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="workEnd" className="text-sm">
+                        End Time <span className="text-red-500">*</span>
+                      </Label>
+                      <Input
+                        id="workEnd"
+                        name="workEnd"
+                        type="time"
+                        defaultValue="18:00"
+                        required
+                        className="h-11"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="lunchStart" className="text-sm">
+                        Lunch Break Start (optional)
+                      </Label>
+                      <Input
+                        id="lunchStart"
+                        name="lunchStart"
+                        type="time"
+                        defaultValue="13:00"
+                        className="h-11"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="lunchEnd" className="text-sm">
+                        Lunch Break End (optional)
+                      </Label>
+                      <Input
+                        id="lunchEnd"
+                        name="lunchEnd"
+                        type="time"
+                        defaultValue="14:00"
+                        className="h-11"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label className="text-sm">Working Days</Label>
+                    <div className="grid grid-cols-7 gap-2">
+                      {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
+                        <div key={day} className="flex flex-col items-center space-y-1">
+                          <Label htmlFor={`day-${index}`} className="text-xs text-gray-600">
+                            {day}
+                          </Label>
+                          <input
+                            id={`day-${index}`}
+                            name={`workingDays`}
+                            type="checkbox"
+                            value={index}
+                            defaultChecked={index < 5} // Monday-Friday by default
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
 
 
               
@@ -313,7 +405,8 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                   Cancel
                 </Button>
               </div>
-          </form>
+            </form>
+          </div>
         </div>
       </DrawerContent>
     </Drawer>

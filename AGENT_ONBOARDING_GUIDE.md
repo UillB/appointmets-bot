@@ -1,14 +1,68 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 3.4  
-**Last Updated:** January 18, 2025 (Latest Session - Loader Unification & UI Consistency)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements
+**Version:** 3.5  
+**Last Updated:** January 18, 2025 (Latest Session - Forms Redesign, UI Consistency & Navigation Improvements)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign
 
 > **This is the ONLY document you need to read to start working on this project.**
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Loader Unification & UI Consistency ✅
+### Latest Session (January 18, 2025) - Forms Redesign, UI Consistency & Navigation Improvements ✅
+
+#### Forms Redesign to Figma Style
+- ✅ **AppointmentDialog Redesign** - Полностью переработан в стиле Figma с StepIndicator, фиксированным header/footer, скроллируемым контентом
+- ✅ **OrganizationDialog Redesign** - Обновлен аналогично AppointmentDialog с StepIndicator для режима создания
+- ✅ **ServiceDialog** - Уже был в стиле Figma, используется как эталон
+- ✅ **Form Structure** - Все формы имеют фиксированный header сверху, кнопки внизу формы, скроллируемый контент между ними
+- ✅ **StepIndicator Integration** - StepIndicator используется во всех формах создания (Service, Appointment, Organization)
+
+#### Navigation & UI Consistency Improvements
+- ✅ **Settings Page Navigation** - Добавлен редирект на настройки с активной вкладкой из Header (Profile → `/settings?tab=profile`, Settings → `/settings?tab=system`)
+- ✅ **URL Parameters Support** - SettingsPage поддерживает query параметры для автоматического выбора вкладки
+- ✅ **Page Headers Unification** - Все страницы теперь используют PageTitle вместо PageHeader (ServicesPage, AppointmentsPage, SettingsPage, BotManagementPage, OrganizationsPage, AIAssistantPage)
+- ✅ **Consistent Header Design** - Единый стиль хедеров на всех страницах как в AnalyticsPage
+
+#### Dashboard & Appointments Improvements
+- ✅ **Calendar Fix** - Увеличен лимит загрузки appointments с 5 до 100 для корректного отображения всех дней с appointments в календаре
+- ✅ **Confirmation Rate Progress Bar** - Исправлен и улучшен progress bar для confirmation rate в AppointmentsSummaryCard
+- ✅ **Appointments Table Enhancement** - Добавлены метаданные в таблицу: Duration, Created (дата и время создания), улучшенное отображение Client (имя и Chat ID)
+
+#### NotificationCenter Improvements
+- ✅ **Scroll Support** - Добавлен ScrollArea для просмотра всех нотификаций, скролл работает корректно
+
+#### Key Technical Changes:
+- Все формы создания используют единую структуру: DrawerContent с flex-col h-screen, фиксированный DrawerHeader, скроллируемый контент, кнопки внутри формы
+- StepIndicator используется для создания новых записей (не для редактирования)
+- URL параметры для навигации с активными вкладками
+- PageTitle компонент используется везде для единообразия
+- Улучшенная таблица appointments с большим количеством метаданных
+
+#### Files Modified:
+- `admin-panel-react/src/components/Header.tsx` - Добавлен редирект на настройки с query параметрами
+- `admin-panel-react/src/components/pages/SettingsPage.tsx` - Добавлена поддержка URL параметров для выбора вкладки
+- `admin-panel-react/src/components/pages/Dashboard.tsx` - Увеличен лимит appointments для календаря
+- `admin-panel-react/src/components/cards/AppointmentsSummaryCard.tsx` - Улучшен progress bar
+- `admin-panel-react/src/components/pages/AppointmentsPage.tsx` - Добавлены метаданные в таблицу, добавлен импорт User иконки
+- `admin-panel-react/src/components/pages/ServicesPage.tsx` - Обновлен хедер на PageTitle
+- `admin-panel-react/src/components/pages/AppointmentsPage.tsx` - Обновлен хедер на PageTitle
+- `admin-panel-react/src/components/pages/SettingsPage.tsx` - Обновлен хедер на PageTitle
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Обновлен хедер на PageTitle
+- `admin-panel-react/src/components/pages/OrganizationsPage.tsx` - Обновлен хедер на PageTitle
+- `admin-panel-react/src/components/pages/AIAssistantPage.tsx` - Обновлен хедер на PageTitle
+- `admin-panel-react/src/components/dialogs/AppointmentDialog.tsx` - Полностью переработан в стиле Figma
+- `admin-panel-react/src/components/dialogs/OrganizationDialog.tsx` - Полностью переработан в стиле Figma
+- `admin-panel-react/src/components/NotificationCenter.tsx` - Добавлен ScrollArea для скролла нотификаций
+
+#### Current Status:
+- ✅ **All Forms Redesigned** - Все формы создания используют единый стиль Figma
+- ✅ **Navigation Improved** - Редиректы на настройки с активными вкладками работают
+- ✅ **Headers Unified** - Все страницы используют PageTitle компонент
+- ✅ **Table Enhanced** - Таблица appointments показывает больше метаданных
+- ✅ **Calendar Fixed** - Календарь показывает все дни с appointments
+- ✅ **Notifications Scrollable** - Можно прокручивать все нотификации
+
+### Previous Session (January 18, 2025) - Loader Unification & UI Consistency ✅
 
 #### Loader Standardization Across All Pages
 - ✅ **Unified Loader Design** - Все лоадеры на всех страницах теперь одинаковые и используют простой спиннер без текста и переводов
@@ -2484,5 +2538,5 @@ cd backend && npm run dev
 ---
 
 *Agent Onboarding Guide - Complete guide for AI agents working on Appointments Bot*  
-*Version: 3.4 | Last Updated: January 18, 2025 (Latest Session - Loader Unification & UI Consistency)*  
-*Status: Production Ready - All Critical Features Complete (100%) + WebSocket Real-time System Fully Functional + UI Consistency Improvements*
+*Version: 3.5 | Last Updated: January 18, 2025 (Latest Session - Forms Redesign, UI Consistency & Navigation Improvements)*  
+*Status: Production Ready - All Critical Features Complete (100%) + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign*

@@ -42,6 +42,7 @@ import {
   SlidersHorizontal,
   RefreshCw,
   Download,
+  User,
 } from "lucide-react";
 import { StatCard } from "../cards/StatCard";
 import { AppointmentDialog } from "../dialogs/AppointmentDialog";
@@ -53,6 +54,7 @@ import { Calendar } from "../ui/calendar";
 import { ScrollArea } from "../ui/scroll-area";
 import { format } from "date-fns";
 import { PageHeader } from "../PageHeader";
+import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { apiClient, Appointment } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
@@ -254,44 +256,42 @@ export function AppointmentsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        icon={<CalendarDays className="w-7 h-7 text-white" />}
-        title="Appointments"
-        description="Manage appointments and bookings"
-        onRefresh={handleRefresh}
-        actions={
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="hidden sm:flex bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-            <Button
-              onClick={() => setDialogOpen(true)}
-              size="sm"
-              className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 text-white"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              New Appointment
-            </Button>
-            <Button
-              onClick={() => setSheetOpen(true)}
-              size="sm"
-              className="sm:hidden bg-indigo-600 hover:bg-indigo-700 text-white"
-            >
-              <Plus className="w-4 h-4" />
-            </Button>
-          </>
-        }
-      />
-
-      {/* Main Content */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-7xl mx-auto space-y-6">
+          {/* Page Title */}
+          <PageTitle
+            icon={<CalendarDays className="w-6 h-6 text-white" />}
+            title="Appointments"
+            description="Manage appointments and bookings"
+            actions={
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  className="hidden sm:flex"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh
+                </Button>
+                <Button
+                  onClick={() => setDialogOpen(true)}
+                  size="sm"
+                  className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Appointment
+                </Button>
+                <Button
+                  onClick={() => setSheetOpen(true)}
+                  size="sm"
+                  className="sm:hidden bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </>
+            }
+          />
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {stats.map((stat, index) => {
@@ -508,15 +508,17 @@ export function AppointmentsPage() {
                   <TableRow className="bg-gray-50">
                     <TableHead>Service</TableHead>
                     <TableHead>Date & Time</TableHead>
-                    <TableHead>Client</TableHead>
+                    <TableHead>Client / Chat ID</TableHead>
+                    <TableHead>Duration</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Created</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredAppointments.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center py-12">
+                      <TableCell colSpan={7} className="text-center py-12">
                         <div className="flex flex-col items-center gap-2">
                           <CalendarDays className="w-12 h-12 text-gray-300" />
                           <p className="text-gray-500">No appointments found</p>
@@ -555,17 +557,26 @@ export function AppointmentsPage() {
                         <TableCell>
                           <div className="flex items-center gap-2">
                             <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                              <span className="text-xs text-gray-600">
-                                {apt.chatId ? apt.chatId.slice(-2) : 'N/A'}
-                              </span>
+                              <User className="w-4 h-4 text-gray-600" />
                             </div>
                             <div>
-                              <span className="text-sm font-medium">Chat ID: {apt.chatId || 'Unknown'}</span>
-                              <p className="text-xs text-gray-500">Telegram User</p>
+                              <span className="text-sm font-medium">{apt.customerName || 'Unknown'}</span>
+                              <p className="text-xs text-gray-500">ID: {apt.chatId || 'N/A'}</p>
                             </div>
                           </div>
                         </TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            <span className="font-medium">{apt.service?.durationMin || 'N/A'} min</span>
+                          </div>
+                        </TableCell>
                         <TableCell>{getStatusBadge(apt.status)}</TableCell>
+                        <TableCell>
+                          <div className="text-sm">
+                            <p className="text-gray-900">{apt.createdAt ? formatDateToLocal(apt.createdAt) : 'N/A'}</p>
+                            <p className="text-xs text-gray-500">{apt.createdAt ? formatTimeToLocal(apt.createdAt) : ''}</p>
+                          </div>
+                        </TableCell>
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>

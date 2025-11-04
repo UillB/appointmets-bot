@@ -47,6 +47,7 @@ import { Badge } from "../ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card } from "../ui/card";
 import { PageHeader } from "../PageHeader";
+import { PageTitle } from "../PageTitle";
 import { Alert, AlertDescription } from "../ui/alert";
 import {
   AlertDialog,
@@ -261,8 +262,8 @@ export function BotManagementPage() {
         // Check admin link status from response
         if (response.botStatus?.adminLinked !== undefined) {
           setAdminLinked(response.botStatus.adminLinked);
-        } else if (response.adminLinked !== undefined) {
-          setAdminLinked(response.adminLinked);
+        } else if ('adminLinked' in response && response.adminLinked !== undefined) {
+          setAdminLinked((response as any).adminLinked);
         }
       } else {
         // No bot configured
@@ -730,38 +731,36 @@ export function BotManagementPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        icon={<Bot className="w-7 h-7 text-white" />}
-        title={t('botManagement.title')}
-        description={t('botManagement.description')}
-        onRefresh={handleRefreshStatus}
-        actions={
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefreshStatus}
-              className="hidden sm:flex bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-              disabled={isLoading}
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              {t('botManagement.refreshStatus')}
-            </Button>
-            <Button
-              size="sm"
-              onClick={handleHelp}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white"
-            >
-              <BookOpen className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">{t('botManagement.instructions')}</span>
-            </Button>
-          </>
-        }
-      />
-
-      {/* Main Content */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-7xl mx-auto space-y-6">
+          {/* Page Title */}
+          <PageTitle
+            icon={<Bot className="w-6 h-6 text-white" />}
+            title={t('botManagement.title')}
+            description={t('botManagement.description')}
+            actions={
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefreshStatus}
+                  className="hidden sm:flex"
+                  disabled={isLoading}
+                >
+                  <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+                  {t('botManagement.refreshStatus')}
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleHelp}
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  <BookOpen className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">{t('botManagement.instructions')}</span>
+                </Button>
+              </>
+            }
+          />
           {/* Status Cards Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Bot Active Card */}

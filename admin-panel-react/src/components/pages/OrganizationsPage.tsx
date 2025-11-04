@@ -20,6 +20,7 @@ import {
 import { OrganizationCard } from "../cards/OrganizationCard";
 import { OrganizationDialog } from "../dialogs/OrganizationDialog";
 import { PageHeader } from "../PageHeader";
+import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { apiClient, Organization } from "../../services/api";
 
@@ -180,39 +181,41 @@ export function OrganizationsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        icon={<Building2 className="w-7 h-7 text-white" />}
-        title="Organizations"
-        description="Manage your organizations and their settings"
-        onRefresh={handleRefresh}
-        actions={
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="hidden sm:flex"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-            <Button
-              onClick={() => {
-                setSelectedOrg(null);
-                setDialogOpen(true);
-              }}
-              size="sm"
-              className="bg-indigo-600 hover:bg-indigo-700 text-white"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              New Organization
-            </Button>
-          </>
-        }
-      />
-
-      {/* Filters */}
-      <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Page Title */}
+          <PageTitle
+            icon={<Building2 className="w-6 h-6 text-white" />}
+            title="Organizations"
+            description="Manage your organizations and their settings"
+            actions={
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  className="hidden sm:flex"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh
+                </Button>
+                <Button
+                  onClick={() => {
+                    setSelectedOrg(null);
+                    setDialogOpen(true);
+                  }}
+                  size="sm"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Organization
+                </Button>
+              </>
+            }
+          />
+          
+          {/* Filters */}
+          <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Search */}
           <div className="relative flex-1">
@@ -326,13 +329,15 @@ export function OrganizationsPage() {
         </div>
       )}
 
-      {/* Dialog */}
-      <OrganizationDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        organization={selectedOrg}
-        onSave={handleSave}
-      />
+          {/* Dialog */}
+          <OrganizationDialog
+            open={dialogOpen}
+            onOpenChange={setDialogOpen}
+            organization={selectedOrg}
+            onSave={handleSave}
+          />
+        </div>
+      </div>
     </div>
   );
 }

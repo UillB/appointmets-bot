@@ -24,11 +24,11 @@ import {
   PopoverTrigger,
 } from "../ui/popover";
 import { Textarea } from "../ui/textarea";
-import { ScrollArea } from "../ui/scroll-area";
 import { CalendarIcon, Clock, X } from "lucide-react";
 import { apiClient } from "../../services/api";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import { StepIndicator } from "../StepIndicator";
 
 interface AppointmentDialogProps {
   open: boolean;
@@ -69,7 +69,7 @@ export function AppointmentDialog({
       }
 
       const appointmentData = {
-        chatId: clientId || `client_${Date.now()}`, // Use clientId or generate a unique chatId
+        chatId: clientId || `client_${Date.now()}`,
         serviceId: parseInt(serviceId),
         slotId: parseInt(slotId),
       };
@@ -88,196 +88,184 @@ export function AppointmentDialog({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="bg-white border shadow-lg">
-        <DrawerHeader className="border-b bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-6">
+      <DrawerContent className="w-full sm:max-w-lg flex flex-col h-screen bg-white border shadow-lg">
+        <DrawerHeader className="border-b bg-gradient-to-r from-indigo-50 to-purple-50 flex-shrink-0">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <CalendarIcon className="w-6 h-6 text-white" />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                <CalendarIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <DrawerTitle className="text-white text-2xl font-bold">
+                <DrawerTitle className="text-xl text-gray-900">
                   Create New Appointment
                 </DrawerTitle>
-                <DrawerDescription className="text-white/90 text-base">
-                  Fill in the details below to create a new appointment.
+                <DrawerDescription className="text-gray-600">
+                  Follow the steps below to create a new appointment
                 </DrawerDescription>
               </div>
             </div>
             <Button
               variant="ghost"
-              size="sm"
+              size="icon"
               onClick={() => onOpenChange(false)}
-              className="h-8 w-8 p-0 text-white hover:bg-white/20"
+              className="h-8 w-8 text-gray-600 hover:bg-gray-100"
             >
               <X className="w-4 h-4" />
             </Button>
           </div>
         </DrawerHeader>
 
-        <div className="flex-1 overflow-y-auto p-8 bg-gray-50">
-          <form onSubmit={handleSubmit}>
-            <div className="space-y-8">
-            {/* Client Information */}
-            <div className="space-y-2">
-              <Label htmlFor="clientName" className="text-sm font-semibold text-gray-700">Client Name *</Label>
-              <Input
-                id="clientName"
-                placeholder="Enter client name"
-                required
-                className="h-12 text-base"
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6">
+            <form onSubmit={handleSubmit} id="appointment-form" className="space-y-2">
+              {/* Step 1: Client Information */}
+              <StepIndicator
+                stepNumber={1}
+                title="Client Information"
+                description="Enter client details"
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="clientId" className="text-sm font-semibold text-gray-700">Client ID</Label>
-              <Input
-                id="clientId"
-                placeholder="Enter client ID or phone"
-                className="h-12 text-base"
-              />
-            </div>
-
-            {/* Service Selection */}
-            <div className="space-y-2">
-              <Label htmlFor="service">Service</Label>
-              <Select required>
-                <SelectTrigger id="service">
-                  <SelectValue placeholder="Select a service" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="test-one">
-                    Test One
-                  </SelectItem>
-                  <SelectItem value="test-two">
-                    Test Two
-                  </SelectItem>
-                  <SelectItem value="haircut">
-                    Haircut
-                  </SelectItem>
-                  <SelectItem value="consultation">
-                    Consultation
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Date and Time */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Date</Label>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={`w-full justify-start text-left font-normal ${
-                        !date && "text-muted-foreground"
-                      }`}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {date
-                        ? format(date, "PPP")
-                        : "Pick a date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="time">Time</Label>
-                <div className="relative">
-                  <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <div className="pl-14 space-y-4 pb-6">
+                <div className="space-y-2">
+                  <Label htmlFor="clientName" className="text-sm">
+                    Client Name <span className="text-red-500">*</span>
+                  </Label>
                   <Input
-                    id="time"
-                    type="time"
-                    className="pl-10"
+                    id="clientName"
+                    name="clientName"
+                    placeholder="Enter client name"
+                    className="h-11"
                     required
                   />
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="clientId" className="text-sm">
+                    Client ID (optional)
+                  </Label>
+                  <Input
+                    id="clientId"
+                    name="clientId"
+                    placeholder="Enter client ID or phone"
+                    className="h-11"
+                  />
+                </div>
               </div>
-            </div>
 
-            {/* Duration */}
-            <div className="space-y-2">
-              <Label htmlFor="duration">Duration</Label>
-              <Select defaultValue="30">
-                <SelectTrigger id="duration">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="15">15 minutes</SelectItem>
-                  <SelectItem value="30">30 minutes</SelectItem>
-                  <SelectItem value="45">45 minutes</SelectItem>
-                  <SelectItem value="60">1 hour</SelectItem>
-                  <SelectItem value="90">1.5 hours</SelectItem>
-                  <SelectItem value="120">2 hours</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Status */}
-            <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select defaultValue="pending">
-                <SelectTrigger id="status">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">
-                    Pending
-                  </SelectItem>
-                  <SelectItem value="confirmed">
-                    Confirmed
-                  </SelectItem>
-                  <SelectItem value="cancelled">
-                    Cancelled
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Notes */}
-            <div className="space-y-2">
-              <Label htmlFor="notes">Notes (Optional)</Label>
-              <Textarea
-                id="notes"
-                placeholder="Add any additional notes..."
-                rows={3}
+              {/* Step 2: Service & Time */}
+              <StepIndicator
+                stepNumber={2}
+                title="Service & Time"
+                description="Select service and time slot"
+                isLast={true}
               />
-            </div>
-            </div>
-          </form>
-        </div>
+              <div className="pl-14 space-y-4 pb-6">
+                <div className="space-y-2">
+                  <Label htmlFor="service" className="text-sm">
+                    Service <span className="text-red-500">*</span>
+                  </Label>
+                  <Select name="service" required>
+                    <SelectTrigger id="service" className="h-11">
+                      <SelectValue placeholder="Select a service" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">Test One</SelectItem>
+                      <SelectItem value="2">Test Two</SelectItem>
+                      <SelectItem value="3">Haircut</SelectItem>
+                      <SelectItem value="4">Consultation</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-        <DrawerFooter className="border-t bg-white p-6">
-          <div className="flex gap-4">
-            <Button
-              type="submit"
-              className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white h-12 text-base font-semibold"
-            >
-              Create Appointment
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-              className="flex-1 h-12 text-base font-semibold border-gray-300 hover:bg-gray-50"
-            >
-              Cancel
-            </Button>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm">Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          className={`w-full justify-start text-left font-normal h-11 ${
+                            !date && "text-muted-foreground"
+                          }`}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {date ? format(date, "PPP") : "Pick a date"}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="time" className="text-sm">Time</Label>
+                    <div className="relative">
+                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="time"
+                        name="time"
+                        type="time"
+                        className="pl-10 h-11"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="slot" className="text-sm">
+                    Time Slot <span className="text-red-500">*</span>
+                  </Label>
+                  <Select name="slot" required>
+                    <SelectTrigger id="slot" className="h-11">
+                      <SelectValue placeholder="Select a time slot" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">09:00 - 09:30</SelectItem>
+                      <SelectItem value="2">09:30 - 10:00</SelectItem>
+                      <SelectItem value="3">10:00 - 10:30</SelectItem>
+                      <SelectItem value="4">10:30 - 11:00</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="notes" className="text-sm">Notes (optional)</Label>
+                  <Textarea
+                    id="notes"
+                    name="notes"
+                    placeholder="Add any additional notes..."
+                    rows={3}
+                    className="resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* Submit and Cancel buttons */}
+              <div className="flex gap-4 pt-6">
+                <Button
+                  type="submit" 
+                  className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
+                >
+                  Create Appointment
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                  className="flex-1 h-12 text-base font-semibold border-gray-300 hover:bg-gray-50"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
           </div>
-        </DrawerFooter>
+        </div>
       </DrawerContent>
     </Drawer>
   );

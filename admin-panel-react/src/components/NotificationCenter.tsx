@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bell, Check, X, Archive, Trash2, AlertCircle, Clock, Calendar, Users, Sparkles, CheckCircle2, AlertTriangle, Info, BellOff, CheckCheck } from 'lucide-react';
+import { Bell, Check, X, Archive, Trash2, AlertCircle, Clock, Calendar, Users, Sparkles, CheckCircle2, AlertTriangle, Info, BellOff, CheckCheck, User } from 'lucide-react';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { apiClient } from '../services/api';
 import { toast } from 'sonner';
@@ -334,53 +334,140 @@ export function NotificationCenter() {
           </h3>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
-        {notifications.map(notification => (
-          <div
-            key={notification.id}
-            className={`p-3 border-b hover:bg-gray-50 transition-colors ${
-              !notification.isRead ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-            }`}
-          >
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center space-x-2 mb-1">
+        {notifications.map(notification => {
+          const customerInfo = notification.data?.customerInfo || {};
+          const serviceName = notification.data?.serviceName || notification.data?.service?.name;
+          const slotStart = notification.data?.slot?.startAt || notification.data?.slotStart;
+          const slotEnd = notification.data?.slot?.endAt || notification.data?.slotEnd;
+          
+          return (
+            <div
+              key={notification.id}
+              className={`p-4 border rounded-lg hover:shadow-sm transition-all ${
+                !notification.isRead ? 'bg-blue-50 border-blue-200 border-l-4' : 'bg-white border-gray-200'
+              }`}
+            >
+              <div className="flex items-start gap-3">
+                <div className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center ${
+                  !notification.isRead ? 'bg-blue-100' : 'bg-gray-100'
+                }`}>
                   {getNotificationIcon(notification.type)}
-                  <h4 className="font-medium text-gray-900 truncate">
-                    {notification.title}
-                  </h4>
-                  {!notification.isRead && (
-                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
-                  )}
                 </div>
-                <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                  {notification.message}
-                </p>
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <Clock className="w-3 h-3" />
-                  <span>{getTimeAgo(notification.createdAt)}</span>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 mb-1">
+                        {notification.title}
+                      </h4>
+                      <p className="text-sm text-gray-600 mb-2">
+                        {notification.message}
+                      </p>
+                      
+                      {/* Customer Metadata */}
+                      {(customerInfo.firstName || customerInfo.username || customerInfo.chatId) && (
+                        <div className="mt-2 p-2 bg-gray-50 rounded border border-gray-200">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-xs">
+                            {customerInfo.firstName && (
+                              <div className="flex items-center gap-1">
+                                <Users className="w-3 h-3 text-gray-400" />
+                                <span className="text-gray-600 font-medium">Name:</span>
+                                <span className="text-gray-900">{customerInfo.firstName} {customerInfo.lastName || ''}</span>
+                              </div>
+                            )}
+                            {customerInfo.username && (
+                              <div className="flex items-center gap-1">
+                                <span className="text-gray-600 font-medium">Username:</span>
+                                <span className="text-gray-900">@{customerInfo.username}</span>
+                              </div>
+                            )}
+                            {customerInfo.chatId && (
+                              <div className="flex items-center gap-1">
+                                <span className="text-gray-600 font-medium">Chat ID:</span>
+                                <span className="text-gray-900">{customerInfo.chatId}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Service & Time Info */}
+                      {(serviceName || slotStart) && (
+                        <div className="mt-2 space-y-1 text-xs">
+                          {serviceName && (
+                            <div className="flex items-center gap-1.5 text-gray-600">
+                              <Sparkles className="w-3 h-3" />
+                              <span className="font-medium">Service:</span>
+                              <span className="text-gray-900">{serviceName}</span>
+                            </div>
+                          )}
+                          {slotStart && (
+                            <div className="flex items-center gap-1.5 text-gray-600">
+                              <Calendar className="w-3 h-3" />
+                              <span className="font-medium">Date:</span>
+                              <span className="text-gray-900">
+                                {new Date(slotStart).toLocaleDateString('en-US', { 
+                                  month: 'short', 
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                })}
+                              </span>
+                            </div>
+                          )}
+                          {(slotStart && slotEnd) && (
+                            <div className="flex items-center gap-1.5 text-gray-600">
+                              <Clock className="w-3 h-3" />
+                              <span className="font-medium">Time:</span>
+                              <span className="text-gray-900">
+                                {new Date(slotStart).toLocaleTimeString('en-US', { 
+                                  hour: '2-digit', 
+                                  minute: '2-digit'
+                                })} - {new Date(slotEnd).toLocaleTimeString('en-US', { 
+                                  hour: '2-digit', 
+                                  minute: '2-digit'
+                                })}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    
+                    {!notification.isRead && (
+                      <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-1"></div>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-200">
+                    <div className="flex items-center gap-2 text-xs text-gray-400">
+                      <Clock className="w-3 h-3" />
+                      <span>{getTimeAgo(notification.createdAt)}</span>
+                    </div>
+                    
+                    <div className="flex space-x-1">
+                      {!notification.isRead && (
+                        <button
+                          onClick={() => markAsRead(notification.id)}
+                          className="p-1.5 text-green-600 hover:text-green-800 hover:bg-green-100 rounded transition-colors"
+                          title="Mark as read"
+                        >
+                          <Check className="h-4 w-4" />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => archiveNotification(notification.id)}
+                        className="p-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
+                        title="Archive"
+                      >
+                        <Archive className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="flex space-x-1 ml-2 flex-shrink-0">
-                {!notification.isRead && (
-                  <button
-                    onClick={() => markAsRead(notification.id)}
-                    className="p-1 text-green-600 hover:text-green-800 hover:bg-green-100 rounded transition-colors"
-                    title="Mark as read"
-                  >
-                    <Check className="h-4 w-4" />
-                  </button>
-                )}
-                <button
-                  onClick={() => archiveNotification(notification.id)}
-                  className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
-                  title="Archive"
-                >
-                  <Archive className="h-4 w-4" />
-                </button>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   };
@@ -458,7 +545,7 @@ export function NotificationCenter() {
                 onValueChange={(v) => setActiveTab(v as 'all' | 'unread')}
                 className="flex-1 flex flex-col"
               >
-                <div className="border-b bg-gray-50 px-4 pt-3">
+                <div className="border-b bg-gray-50 px-4 pt-3 flex-shrink-0">
                   <TabsList className="w-full grid grid-cols-2">
                     <TabsTrigger value="all" className="relative">
                       All

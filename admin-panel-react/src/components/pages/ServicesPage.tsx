@@ -34,6 +34,7 @@ import {
 } from "../ui/sheet";
 import { ScrollArea } from "../ui/scroll-area";
 import { PageHeader } from "../PageHeader";
+import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { apiClient } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
@@ -208,37 +209,35 @@ export function ServicesPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        icon={<Wrench className="w-7 h-7 text-white" />}
-        title="Services"
-        description="Manage your services and track their performance"
-        onRefresh={handleRefresh}
-        actions={
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="hidden sm:flex bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-            <Button
-              onClick={() => setDialogOpen(true)}
-              size="sm"
-              className="bg-indigo-600 hover:bg-indigo-700 text-white"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Add Service
-            </Button>
-          </>
-        }
-      />
-
-      {/* Main Content */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-7xl mx-auto space-y-6">
+          {/* Page Title */}
+          <PageTitle
+            icon={<Wrench className="w-6 h-6 text-white" />}
+            title="Services"
+            description="Manage your services and track their performance"
+            actions={
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  className="hidden sm:flex"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh
+                </Button>
+                <Button
+                  onClick={() => setDialogOpen(true)}
+                  size="sm"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Add Service
+                </Button>
+              </>
+            }
+          />
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {statsCards.map((stat, index) => {

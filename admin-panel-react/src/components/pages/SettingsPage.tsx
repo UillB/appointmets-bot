@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 import { StatCard } from "../cards/StatCard";
 import { PageHeader } from "../PageHeader";
+import { PageTitle } from "../PageTitle";
 import React from "react";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -40,10 +41,20 @@ import { Switch } from "../ui/switch";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { useLanguage } from "../../i18n";
+import { useSearchParams } from "react-router-dom";
 
 export function SettingsPage() {
-  const [activeTab, setActiveTab] = useState("profile");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabParam || "profile");
   const { language, setLanguage } = useLanguage();
+
+  // Update active tab when URL param changes
+  useEffect(() => {
+    if (tabParam && (tabParam === 'profile' || tabParam === 'system')) {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
   
   // User Profile State
   const [fullName, setFullName] = useState("Vladi");
@@ -130,33 +141,39 @@ export function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        icon={<SettingsIcon className="w-7 h-7 text-white" />}
-        title="Settings"
-        description="Manage your account and system preferences"
-        onRefresh={handleRefresh}
-        actions={
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="hidden sm:flex"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-          </>
-        }
-      />
-
-      {/* Main Content */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-7xl mx-auto space-y-6">
+          {/* Page Title */}
+          <PageTitle
+            icon={<SettingsIcon className="w-6 h-6 text-white" />}
+            title="Settings"
+            description="Manage your account and system preferences"
+            actions={
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  className="hidden sm:flex"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh
+                </Button>
+              </>
+            }
+          />
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {stats.map((stat) => (
-              <StatCard key={stat.title} {...stat} />
+              <StatCard 
+                key={stat.title}
+                icon={stat.icon}
+                iconBg={stat.iconBg}
+                iconColor={stat.iconColor}
+                title={stat.title}
+                value={stat.value}
+                subtitle={stat.subtitle}
+              />
             ))}
           </div>
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Moon, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User } from "lucide-react";
+import { Moon, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User, Wifi, WifiOff } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback } from "./ui/avatar";
@@ -16,6 +16,7 @@ import { useLanguage, Language } from "../i18n";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { NotificationCenter } from "./NotificationCenter";
+import { useWebSocket } from "../hooks/useWebSocket";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -26,6 +27,7 @@ export function Header({ onMenuClick }: HeaderProps) {
   const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const { isConnected } = useWebSocket();
 
   const handleLogout = async () => {
     try {
@@ -81,29 +83,38 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
           
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="flex items-center gap-1 sm:gap-2">
-              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full animate-pulse" />
-              <span className="text-xs sm:text-sm text-gray-700">System Online</span>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              {isConnected ? (
+                <>
+                  <Wifi className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-sm text-gray-700">Connected</span>
+                </>
+              ) : (
+                <>
+                  <WifiOff className="w-3.5 h-3.5 text-red-600" />
+                  <span className="text-sm text-gray-700">Offline</span>
+                </>
+              )}
             </div>
             <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
               <div className="w-1 h-1 bg-gray-400 rounded-full" />
-              <span>Updated just now</span>
+              <span>Live updates</span>
             </div>
           </div>
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-0.5 sm:gap-1">
-          <Button variant="ghost" size="icon" className="hidden md:flex w-8 h-8 sm:w-9 sm:h-9">
-            <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" className="hidden md:flex w-9 h-9">
+            <Moon className="w-4 h-4" />
           </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="hidden md:flex h-8 sm:h-9 px-2 sm:px-3 gap-1 sm:gap-2">
-                <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                <span className="text-xs sm:text-sm uppercase">{language}</span>
+              <Button variant="ghost" className="hidden md:flex h-9 px-3 gap-2">
+                <Globe className="w-4 h-4" />
+                <span className="text-sm uppercase">{language}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
@@ -133,19 +144,19 @@ export function Header({ onMenuClick }: HeaderProps) {
           
           <NotificationCenter />
           
-          <Button variant="ghost" size="icon" className="hidden sm:flex w-8 h-8 sm:w-9 sm:h-9">
-            <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+          <Button variant="ghost" size="icon" className="hidden sm:flex w-9 h-9">
+            <HelpCircle className="w-4 h-4" />
           </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-1 sm:gap-2 ml-1 sm:ml-2 pl-1 sm:pl-2 border-l border-gray-200 hover:opacity-80 transition-opacity">
+              <button className="flex items-center gap-2 ml-2 pl-2 border-l border-gray-200 hover:opacity-80 transition-opacity">
                 <div className="hidden sm:block text-right">
-                  <p className="text-xs sm:text-sm">{user?.name || 'User'}</p>
-                  <p className="text-[10px] sm:text-xs text-gray-500">{user?.organization?.name || 'Organization'}</p>
+                  <p className="text-sm">{user?.name || 'User'}</p>
+                  <p className="text-xs text-gray-500">{user?.organization?.name || 'Organization'}</p>
                 </div>
-                <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-indigo-600 cursor-pointer">
-                  <AvatarFallback className="bg-indigo-600 text-white text-xs sm:text-sm">
+                <Avatar className="w-8 h-8 bg-indigo-600 cursor-pointer">
+                  <AvatarFallback className="bg-indigo-600 text-white text-sm">
                     {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                   </AvatarFallback>
                 </Avatar>
@@ -159,11 +170,11 @@ export function Header({ onMenuClick }: HeaderProps) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile')}>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/settings?tab=profile')}>
                 <User className="w-4 h-4 mr-2" />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/settings')}>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/settings?tab=system')}>
                 <Settings className="w-4 h-4 mr-2" />
                 Settings
               </DropdownMenuItem>

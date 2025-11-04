@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { StatCard } from "../cards/StatCard";
 import { PageHeader } from "../PageHeader";
+import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Switch } from "../ui/switch";
@@ -182,43 +183,45 @@ export function AIAssistantPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        icon={<Sparkles className="w-7 h-7 text-white" />}
-        title="AI Assistant"
-        description="Configure and manage your intelligent chatbot assistant"
-        onRefresh={handleRefresh}
-        actions={
-          <>
-            <Badge
-              variant="outline"
-              className="hidden sm:flex bg-purple-50 text-purple-700 border-purple-200"
-            >
-              BETA
-            </Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="hidden sm:flex"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-            <Button
-              onClick={handleSave}
-              size="sm"
-              className="bg-indigo-600 hover:bg-indigo-700 text-white"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              Save
-            </Button>
-          </>
-        }
-      />
-
-      {/* Main Content */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-7xl mx-auto space-y-6">
+          {/* Page Title */}
+          <PageTitle
+            icon={<Sparkles className="w-6 h-6 text-white" />}
+            title="AI Assistant"
+            description="Configure and manage your intelligent chatbot assistant"
+            actions={
+              <>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  className="hidden sm:flex"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refresh
+                </Button>
+                <Badge
+                  variant="outline"
+                  className="hidden sm:flex bg-purple-50 text-purple-700 border-purple-200"
+                >
+                  BETA
+                </Badge>
+                <Button
+                  onClick={handleSave}
+                  size="sm"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save
+                </Button>
+              </>
+            }
+          />
+
+          {/* Main Content */}
+          <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+            <div className="max-w-7xl mx-auto space-y-6">
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {stats.map((stat, index) => {
@@ -622,6 +625,8 @@ export function AIAssistantPage() {
               </Card>
             </TabsContent>
           </Tabs>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -81,8 +81,11 @@ export function AppointmentsSummaryCard({
               <span className="text-gray-600">Confirmation Rate</span>
               <span className="font-semibold text-gray-900">{confirmationRate}%</span>
             </div>
-            <div className="relative">
-              <Progress value={confirmationRate} className="h-2" />
+            <div className="relative w-full">
+              <Progress 
+                value={confirmationRate} 
+                className="h-2"
+              />
             </div>
             <p className="text-xs text-gray-500">
               {confirmedAppointments} out of {totalAppointments} appointments confirmed
