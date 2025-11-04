@@ -31,6 +31,7 @@ import {
   UserPlus,
   Shield,
   Unlink,
+  Terminal,
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiClient } from "../../services/api";
@@ -730,9 +731,7 @@ export function BotManagementPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-        <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 py-6" style={{ animation: 'none', transition: 'none' }}>
           {/* Page Title */}
           <PageTitle
             icon={<Bot className="w-6 h-6 text-white" />}
@@ -761,170 +760,122 @@ export function BotManagementPage() {
               </>
             }
           />
-          {/* Status Cards Row */}
+          {/* Status Overview */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Bot Active Card */}
-            <Card className={`p-5 border-l-4 ${
-              botActive 
-                ? "border-emerald-500 bg-gradient-to-br from-white to-emerald-50/30" 
-                : "border-red-500 bg-gradient-to-br from-white to-red-50/30"
-            } hover:shadow-md transition-shadow`}>
-              <div className="flex items-start gap-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                  botActive ? "bg-emerald-100" : "bg-red-100"
+            <Card className="p-5">
+              <div className="flex items-start gap-3">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                  botActive ? 'bg-emerald-100' : 'bg-gray-100'
                 }`}>
-                  {botActive ? (
-                    <CheckCircle className="w-6 h-6 text-emerald-600" />
-                  ) : (
-                    <AlertCircle className="w-6 h-6 text-red-600" />
-                  )}
+                  <Power className={`w-5 h-5 ${botActive ? 'text-emerald-600' : 'text-gray-400'}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="font-semibold text-gray-900">
-                      {botActive ? t('botManagement.botActive') : t('botManagement.botInactive')}
-                    </h3>
-                    <Badge
-                      variant={botActive ? "default" : "destructive"}
-                      className={`text-xs px-2 py-0.5 ${
-                        botActive 
-                          ? "bg-emerald-500 text-white" 
-                          : "bg-red-500 text-white"
-                      }`}
-                    >
-                      {botActive ? t('botManagement.botWorking') : t('botManagement.botNotWorking')}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    {botActive 
-                      ? t('botManagement.botReady') 
-                      : t('botManagement.botNeedsActivation')}
+                  <p className="text-sm text-gray-600">Status</p>
+                  <p className="font-medium text-gray-900">
+                    {botActive ? "Active" : "Inactive"}
                   </p>
                 </div>
-                <div
-                  className={`w-3 h-3 rounded-full flex-shrink-0 mt-1.5 ${
-                    botActive 
-                      ? "bg-emerald-500 animate-pulse" 
-                      : "bg-red-500"
-                  }`}
-                />
+                {botActive && (
+                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mt-2" />
+                )}
               </div>
             </Card>
 
-            {/* Organization Card */}
-            <Card className="p-5 border-l-4 border-blue-500 bg-gradient-to-br from-white to-blue-50/30 hover:shadow-md transition-shadow">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-6 h-6 text-blue-600" />
+            <Card className="p-5">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-indigo-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 mb-1">{t('botManagement.organization')}</h3>
-                  <p className="text-sm text-gray-600">{organizationName || user?.organization?.name || t('common.loading')}</p>
+                  <p className="text-sm text-gray-600">Bot</p>
+                  <p className="font-medium text-gray-900 truncate">{botUsername || t('common.loading')}</p>
                 </div>
               </div>
             </Card>
 
-            {/* Bot Link Card */}
-            <Card className="p-5 border-l-4 border-indigo-500 bg-gradient-to-br from-white to-indigo-50/30 hover:shadow-md transition-shadow">
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <LinkIcon className="w-6 h-6 text-indigo-600" />
+            <Card className="p-5">
+              <div className="flex items-start gap-3">
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                  adminLinked ? 'bg-purple-100' : 'bg-amber-100'
+                }`}>
+                  <Shield className={`w-5 h-5 ${adminLinked ? 'text-purple-600' : 'text-amber-600'}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 mb-1">{t('botManagement.botLink')}</h3>
-                  <p className="text-sm text-gray-600 truncate">{botLink}</p>
+                  <p className="text-sm text-gray-600">Admin</p>
+                  <p className="font-medium text-gray-900">
+                    {adminLinked ? 'Linked' : 'Not Linked'}
+                  </p>
                 </div>
               </div>
             </Card>
           </div>
 
-          {/* Progress Card */}
-          <Card className="p-6 bg-white">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">{t('botManagement.setupProgress')}</h3>
-              {setupProgress === 100 && (
-                <span className="text-sm text-emerald-600 font-medium">
-                  {t('botManagement.setupComplete')}
-                </span>
-              )}
-            </div>
-            <Progress value={setupProgress} className="h-2.5 mb-3" />
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">{setupProgress}% {t('botManagement.completed')}</span>
-              {setupProgress === 100 && (
-                <div className="flex items-center gap-1.5 text-emerald-600">
-                  <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">{t('botManagement.setupComplete')}</span>
+          {/* Admin Not Linked Alert */}
+          {!adminLinked && botActive && (
+            <Alert className="border-amber-200 bg-amber-50">
+              <AlertCircle className="h-4 w-4 text-amber-600" />
+              <AlertDescription className="text-amber-900">
+                <div className="flex items-center justify-between">
+                  <span>
+                    <strong>Action Required:</strong> Admin account not linked. Complete Step 3 to authorize admin access.
+                  </span>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setActiveTab("admin-link")}
+                    className="ml-4 border-amber-300 hover:bg-amber-100"
+                  >
+                    Link Admin
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
                 </div>
-              )}
-              {setupProgress > 0 && setupProgress < 100 && (
-                <div className="flex items-center gap-1.5 text-blue-600">
-                  <RefreshCw className="w-4 h-4" />
-                  <span className="text-sm font-medium">{t('botManagement.inProgress')}</span>
-                </div>
-              )}
-            </div>
-          </Card>
+              </AlertDescription>
+            </Alert>
+          )}
 
           {/* Main Tabs - Step-by-Step Setup */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full grid grid-cols-4 bg-white border border-gray-200 p-1 h-auto shadow-sm">
-              <TabsTrigger
-                value="instructions"
-                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
-              >
-                <div className="flex items-center gap-2">
-                  {botName ? (
-                    <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
-                  ) : (
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400">
-                      1
-                    </div>
-                  )}
-                  <BookOpen className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t('botManagement.instructions')}</span>
-                </div>
+            <TabsList className="grid w-full grid-cols-4 h-auto p-1 bg-gray-100">
+              <TabsTrigger value="instructions" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+                {botName ? (
+                  <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                ) : (
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400 data-[state=active]:border-white data-[state=active]:text-white">
+                    1
+                  </div>
+                )}
+                <span className="hidden sm:inline">1. Create Bot</span>
+                <span className="sm:hidden">1</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="activation"
-                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
-              >
-                <div className="flex items-center gap-2">
-                  {botActive ? (
-                    <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
-                  ) : (
-                    <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400">
-                      2
-                    </div>
-                  )}
-                  <Key className="w-4 h-4" />
-                  <span className="hidden sm:inline">{t('botManagement.activation')}</span>
-                </div>
+              
+              <TabsTrigger value="activation" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+                {botActive ? (
+                  <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                ) : (
+                  <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400 data-[state=active]:border-white data-[state=active]:text-white">
+                    2
+                  </div>
+                )}
+                <span className="hidden sm:inline">2. Add Token</span>
+                <span className="sm:hidden">2</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="admin-link"
-                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
-              >
-                <div className="flex items-center gap-2">
-                  {adminLinked ? (
-                    <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
-                  ) : (
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-xs ${
-                      botActive ? "border-amber-500 text-amber-500" : "border-gray-400 text-gray-400"
-                    }`}>
-                      3
-                    </div>
-                  )}
-                  <Shield className="w-4 h-4" />
-                  <span className="hidden sm:inline">Link Admin</span>
-                </div>
+              
+              <TabsTrigger value="admin-link" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+                {adminLinked ? (
+                  <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                ) : (
+                  <div className="w-5 h-5 rounded-full border-2 border-amber-500 flex items-center justify-center text-xs text-amber-500 data-[state=active]:border-white data-[state=active]:text-white">
+                    3
+                  </div>
+                )}
+                <span className="hidden sm:inline">3. Link Admin</span>
+                <span className="sm:hidden">3</span>
               </TabsTrigger>
-              <TabsTrigger
-                value="settings"
-                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
-              >
+
+              <TabsTrigger value="settings" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                 <SettingsIcon className="w-4 h-4" />
                 <span className="hidden sm:inline">{t('botManagement.settings')}</span>
+                <span className="sm:hidden">Settings</span>
               </TabsTrigger>
             </TabsList>
 
@@ -1661,6 +1612,48 @@ export function BotManagementPage() {
                         </p>
                       </div>
                     </div>
+
+                    {/* Admin Commands Reference */}
+                    <Card className="p-6 bg-gray-50">
+                      <div className="flex items-center gap-3 mb-4">
+                        <Terminal className="w-5 h-5 text-indigo-600" />
+                        <h3 className="font-medium text-gray-900">Available Admin Commands</h3>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-4">
+                        These commands are only available when your Telegram account is linked and the bot is active:
+                      </p>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {[
+                          { cmd: "/admin", desc: "Open admin panel (Web App)" },
+                          { cmd: "/stats", desc: "View appointment statistics" },
+                          { cmd: "/appointments", desc: "List all appointments" },
+                          { cmd: "/confirm <id>", desc: "Confirm appointment by ID" },
+                          { cmd: "/reject <id>", desc: "Reject appointment by ID" },
+                        ].map(({ cmd, desc }) => (
+                          <div
+                            key={cmd}
+                            className="flex items-center justify-between p-3 bg-white rounded-lg group hover:bg-gray-50 transition-colors"
+                          >
+                            <div>
+                              <code className="text-sm font-medium text-indigo-600">{cmd}</code>
+                              <p className="text-xs text-gray-600 mt-0.5">{desc}</p>
+                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                navigator.clipboard.writeText(cmd);
+                                toast.success(`Copied: ${cmd}`);
+                              }}
+                              className="opacity-0 group-hover:opacity-100 transition-opacity h-7 w-7 p-0"
+                            >
+                              <Copy className="w-3.5 h-3.5" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    </Card>
                   </div>
                 ) : (
                   <div className="space-y-6">
@@ -1799,8 +1792,6 @@ export function BotManagementPage() {
               </Card>
             </TabsContent>
           </Tabs>
-        </div>
-      </div>
 
       {/* Unlink Admin Dialog */}
       <AlertDialog open={showUnlinkDialog} onOpenChange={setShowUnlinkDialog}>

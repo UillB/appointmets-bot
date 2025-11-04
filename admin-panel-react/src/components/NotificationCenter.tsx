@@ -43,21 +43,25 @@ export function NotificationCenter() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
+  const [defaultTabSet, setDefaultTabSet] = useState(false);
 
   useEffect(() => {
     loadNotifications();
     loadStats();
   }, []);
 
-  // Set default tab based on unread count when stats load
+  // Set default tab based on unread count when stats load - ALWAYS set a default
   useEffect(() => {
-    if (stats && activeTab === 'all') {
-      // Only switch to unread if there are unread notifications and we're still on 'all'
+    if (stats && !defaultTabSet) {
+      // Always set default tab: if there are unread, show unread, otherwise show all
       if ((stats.unread || 0) > 0) {
         setActiveTab('unread');
+      } else {
+        setActiveTab('all');
       }
+      setDefaultTabSet(true);
     }
-  }, [stats]);
+  }, [stats, defaultTabSet]);
 
   const processedEventsRef = useRef<Set<string>>(new Set());
 
@@ -564,6 +568,7 @@ export function NotificationCenter() {
                       variant="outline"
                       size="sm"
                       onClick={markAllAsRead}
+                      onFocus={(e) => e.currentTarget.blur()}
                       className="flex-1 border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
                     >
                       <CheckCheck className="w-4 h-4 mr-2" />

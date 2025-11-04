@@ -8,7 +8,33 @@
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Notification Center & UI Improvements ✅
+### Latest Session (January 18, 2025) - UI/UX Fixes & Animation Improvements ✅
+
+#### Critical UI/UX Fixes
+- ✅ **NotificationCenter Default Tab** - Исправлена проблема с дефолтной табой: теперь всегда устанавливается активная таба при открытии (Unread если есть непрочитанные, иначе All)
+- ✅ **Mark All Read Button Focus** - Убран автоматический фокус с кнопки "Mark all read" при открытии нотификаций
+- ✅ **Dropdown Animations Removed** - Убраны все slide анимации из Select компонента - дропдауны теперь просто появляются на месте без "перелета" с края экрана
+- ✅ **Page Loading Animation Removed** - Убрана анимация сжатия контента на страницах Analytics и Bot Management после загрузки (используется `animation: 'none', transition: 'none'`)
+
+#### Key Technical Changes:
+- NotificationCenter использует флаг `defaultTabSet` для установки табы только один раз при загрузке stats
+- Кнопка "Mark all read" использует `onFocus={(e) => e.currentTarget.blur()}` для предотвращения автофокуса
+- Select компонент больше не использует `slide-in-from-*` анимации - только появление на месте
+- Главные контейнеры AnalyticsPage и BotManagementPage используют inline стили для отключения анимаций
+
+#### Files Modified:
+- `admin-panel-react/src/components/NotificationCenter.tsx` - Добавлен `defaultTabSet` флаг, убран фокус с кнопки
+- `admin-panel-react/src/components/ui/select.tsx` - Убраны все slide анимации из SelectContent
+- `admin-panel-react/src/components/pages/AnalyticsPage.tsx` - Добавлен `style={{ animation: 'none', transition: 'none' }}`
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Добавлен `style={{ animation: 'none', transition: 'none' }}`
+
+#### Current Status:
+- ✅ **NotificationCenter Default Tab** - Всегда устанавливается правильная таба при открытии
+- ✅ **No Auto-Focus** - Кнопка "Mark all read" не получает фокус автоматически
+- ✅ **Dropdowns Appear Instantly** - Дропдауны появляются там где нажато без анимации перелета
+- ✅ **No Page Compression** - Страницы Analytics и Bot Management не сжимаются после загрузки
+
+### Previous Session (January 18, 2025) - Notification Center & UI Improvements ✅
 
 #### Notification Center Fixes & Enhancements
 - ✅ **Fixed Scroll in NotificationCenter** - Исправлен скролл в нотификациях: добавлена обертка с `flex-1 overflow-hidden`, `min-h-0` для правильной работы flex, `p-0` в TabsContent

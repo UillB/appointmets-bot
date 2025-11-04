@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart3,
   TrendingUp,
@@ -38,12 +38,36 @@ import {
   Cell,
 } from "recharts";
 import { toastNotifications } from "../toast-notifications";
+import { apiClient } from "../../services/api";
 
 export function AnalyticsPage() {
-  const [timePeriod, setTimePeriod] = useState("week");
+  const [timePeriod, setTimePeriod] = useState<"week" | "month" | "year">("week");
   const [selectedMetric, setSelectedMetric] = useState("appointments");
+  const [loading, setLoading] = useState(true);
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadAnalytics = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiClient.getAnalytics({ timePeriod });
+      setAnalyticsData(data);
+    } catch (err: any) {
+      console.error("Error loading analytics:", err);
+      setError(err.message || "Failed to load analytics");
+      toastNotifications.errors.loadFailed("Analytics data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [timePeriod]);
 
   const handleRefresh = () => {
+    loadAnalytics();
     toastNotifications.system.refreshed("Analytics");
   };
 
@@ -51,90 +75,116 @@ export function AnalyticsPage() {
     toastNotifications.system.exported("Analytics report");
   };
 
-  // Stats
-  const stats = [
+  // Prepare data from analytics
+  const stats: Array<{
+    icon: typeof Calendar;
+    iconBg: string;
+    iconColor: string;
+    title: string;
+    value: string | number;
+    subtitle: string;
+    trend: number;
+  }> = analyticsData ? [
     {
       icon: Calendar,
       iconBg: "bg-blue-50",
       iconColor: "text-blue-600",
       title: "Total Bookings",
-      value: 142,
-      subtitle: "This month",
-      trend: 12,
+      value: (analyticsData.totalAppointments || 0) as string | number,
+      subtitle: `This ${timePeriod}`,
+      trend: analyticsData.growthRate || 0,
     },
     {
       icon: TrendingUp,
       iconBg: "bg-emerald-50",
       iconColor: "text-emerald-600",
       title: "Growth Rate",
-      value: "+23%",
-      subtitle: "vs last month",
-      trend: 23,
+      value: `${analyticsData.growthRate >= 0 ? '+' : ''}${analyticsData.growthRate || 0}%`,
+      subtitle: `vs last ${timePeriod}`,
+      trend: analyticsData.growthRate || 0,
     },
     {
       icon: Users,
       iconBg: "bg-purple-50",
       iconColor: "text-purple-600",
       title: "Active Clients",
-      value: 87,
+      value: (analyticsData.activeClients || 0) as string | number,
       subtitle: "Unique clients",
-      trend: 8,
+      trend: 0,
     },
     {
       icon: Clock,
       iconBg: "bg-amber-50",
       iconColor: "text-amber-600",
       title: "Avg. Duration",
-      value: "45m",
+      value: `${analyticsData.averageDuration || 0}m`,
       subtitle: "Per appointment",
       trend: 0,
     },
-  ];
+  ] : [];
 
   // Appointments over time data
-  const appointmentsData = [
-    { day: "Mon", appointments: 12, revenue: 240 },
-    { day: "Tue", appointments: 19, revenue: 380 },
-    { day: "Wed", appointments: 15, revenue: 300 },
-    { day: "Thu", appointments: 22, revenue: 440 },
-    { day: "Fri", appointments: 28, revenue: 560 },
-    { day: "Sat", appointments: 31, revenue: 620 },
-    { day: "Sun", appointments: 15, revenue: 300 },
-  ];
+  const appointmentsData = analyticsData?.dailyBookings?.map((item: any) => ({
+    day: item.dayShort || item.day || "",
+    appointments: item.appointments || item.bookings || 0,
+    revenue: item.revenue || 0,
+  })) || [];
 
-  // Top services data
-  const servicesData = [
-    { name: "Haircut", bookings: 45, color: "#4F46E5" },
-    { name: "Massage", bookings: 38, color: "#7C3AED" },
-    { name: "Consultation", bookings: 32, color: "#2563EB" },
-    { name: "Manicure", bookings: 27, color: "#0891B2" },
-  ];
+  // Top services data with colors
+  const serviceColors = ["#4F46E5", "#7C3AED", "#2563EB", "#0891B2", "#EC4899", "#F59E0B"];
+  const servicesData = analyticsData?.topServices?.slice(0, 4).map((service: any, index: number) => ({
+    name: service.serviceName,
+    bookings: service.bookings || 0,
+    color: serviceColors[index % serviceColors.length],
+  })) || [];
 
   // Peak hours data
-  const peakHoursData = [
-    { hour: "9AM", bookings: 5 },
-    { hour: "10AM", bookings: 8 },
-    { hour: "11AM", bookings: 12 },
-    { hour: "12PM", bookings: 15 },
-    { hour: "1PM", bookings: 10 },
-    { hour: "2PM", bookings: 18 },
-    { hour: "3PM", bookings: 22 },
-    { hour: "4PM", bookings: 20 },
-    { hour: "5PM", bookings: 16 },
-    { hour: "6PM", bookings: 12 },
-  ];
+  const peakHoursData = analyticsData?.peakHours?.map((item: any) => ({
+    hour: item.hourLabel,
+    bookings: item.bookings || 0,
+  })) || [];
 
-  // Status distribution
-  const statusData = [
-    { name: "Confirmed", value: 85, color: "#10B981" },
-    { name: "Pending", value: 10, color: "#F59E0B" },
-    { name: "Cancelled", value: 5, color: "#EF4444" },
-  ];
+  // Status distribution with colors
+  const statusColors: Record<string, string> = {
+    "Confirmed": "#10B981",
+    "Pending": "#F59E0B",
+    "Cancelled": "#EF4444",
+  };
+  const statusData = analyticsData?.statusDistribution?.map((status: any) => ({
+    name: status.name,
+    value: status.value || 0,
+    color: statusColors[status.name] || "#6B7280",
+    count: status.count || 0,
+  })) || [];
+
+  // Quick insights
+  const insights = analyticsData?.insights || {};
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <Button onClick={loadAnalytics}>Retry</Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!analyticsData) {
+    return null;
+  }
 
   return (
-    <div className="space-y-6">
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-        <div className="max-w-7xl mx-auto space-y-6">
+    <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 py-6" style={{ animation: 'none', transition: 'none' }}>
           {/* Page Title */}
           <PageTitle
             icon={<BarChart3 className="w-6 h-6 text-white" />}
@@ -167,7 +217,17 @@ export function AnalyticsPage() {
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {stats.map((stat) => (
-              <StatCard key={stat.title} {...stat} />
+              // @ts-expect-error - key is a React prop, not part of StatCardProps
+              <StatCard
+                key={stat.title}
+                icon={stat.icon}
+                iconBg={stat.iconBg}
+                iconColor={stat.iconColor}
+                title={stat.title}
+                value={stat.value}
+                subtitle={stat.subtitle}
+                trend={stat.trend}
+              />
             ))}
           </div>
 
@@ -275,7 +335,9 @@ export function AnalyticsPage() {
                       <div
                         className="h-2 rounded-full transition-all"
                         style={{
-                          width: `${(service.bookings / servicesData[0].bookings) * 100}%`,
+                          width: `${servicesData.length > 0 && servicesData[0].bookings > 0 
+                            ? (service.bookings / servicesData[0].bookings) * 100 
+                            : 0}%`,
                           backgroundColor: service.color,
                         }}
                       />
@@ -365,39 +427,79 @@ export function AnalyticsPage() {
           <Card className="p-6">
             <h3 className="text-gray-900 mb-4">Quick Insights</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-start gap-3 p-4 bg-emerald-50 rounded-lg">
-                <div className="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
-                  <ArrowUp className="w-5 h-5 text-emerald-600" />
+              {insights.bestDay ? (
+                <div className="flex items-start gap-3 p-4 bg-emerald-50 rounded-lg">
+                  <div className="flex-shrink-0 w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center">
+                    <ArrowUp className="w-5 h-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-emerald-900">Best Day</p>
+                    <p className="text-xs text-emerald-700 mt-1">
+                      {insights.bestDay.day} with {insights.bestDay.bookings} bookings
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-emerald-900">Best Day</p>
-                  <p className="text-xs text-emerald-700 mt-1">Saturday with 31 bookings</p>
+              ) : (
+                <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Best Day</p>
+                    <p className="text-xs text-gray-600 mt-1">No data available</p>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
-                <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-blue-600" />
+              {insights.peakTime ? (
+                <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
+                  <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-blue-900">Peak Time</p>
+                    <p className="text-xs text-blue-700 mt-1">
+                      {insights.peakTime.hour} with {insights.peakTime.bookings} bookings
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-blue-900">Peak Time</p>
-                  <p className="text-xs text-blue-700 mt-1">3PM with 22 bookings</p>
+              ) : (
+                <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Peak Time</p>
+                    <p className="text-xs text-gray-600 mt-1">No data available</p>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className="flex items-start gap-3 p-4 bg-purple-50 rounded-lg">
-                <div className="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-purple-600" />
+              {insights.topService ? (
+                <div className="flex items-start gap-3 p-4 bg-purple-50 rounded-lg">
+                  <div className="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                    <TrendingUp className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-purple-900">Top Service</p>
+                    <p className="text-xs text-purple-700 mt-1">
+                      {insights.topService.serviceName} with {insights.topService.bookings} bookings
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-purple-900">Top Service</p>
-                  <p className="text-xs text-purple-700 mt-1">Haircut with 45 bookings</p>
+              ) : (
+                <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                  <div className="flex-shrink-0 w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Wrench className="w-5 h-5 text-gray-400" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Top Service</p>
+                    <p className="text-xs text-gray-600 mt-1">No data available</p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </Card>
-        </div>
-      </div>
     </div>
   );
 }
