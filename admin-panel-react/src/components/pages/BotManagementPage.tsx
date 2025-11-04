@@ -27,11 +27,15 @@ import {
   Mail,
   ArrowRight,
   CheckCircle2 as CheckCircle2Icon,
+  PlayCircle,
+  UserPlus,
+  Shield,
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { useLanguage } from "../../i18n";
+import { useWebSocket } from "../../hooks/useWebSocket";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
@@ -42,11 +46,13 @@ import { Badge } from "../ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card } from "../ui/card";
 import { PageHeader } from "../PageHeader";
+import { Alert, AlertDescription } from "../ui/alert";
 import QRCode from "qrcode";
 
 export function BotManagementPage() {
   const { user } = useAuth();
   const { t, language } = useLanguage();
+  const { events } = useWebSocket();
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // Debug: log when language changes
@@ -69,6 +75,10 @@ export function BotManagementPage() {
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const qrCodeCanvasRef = useRef<HTMLCanvasElement>(null);
   const [activeTab, setActiveTab] = useState<string>("instructions");
+  const [adminLinked, setAdminLinked] = useState(false);
+  const [adminLink, setAdminLink] = useState<string | null>(null);
+  const [adminLinkQRCode, setAdminLinkQRCode] = useState<string | null>(null);
+  const [isGeneratingAdminLink, setIsGeneratingAdminLink] = useState(false);
 
   // Update time every second
   useEffect(() => {
@@ -78,18 +88,56 @@ export function BotManagementPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Load bot status on mount
+  // Load bot status ONLY on mount - no automatic reloads
+  const hasLoadedInitialStatus = useRef(false);
   useEffect(() => {
-    loadBotStatus();
-  }, []);
-
-  // Set default tab based on bot status
-  useEffect(() => {
-    if (!isLoading) {
-      // If bot is active, show settings tab, otherwise show instructions
-      setActiveTab(botActive ? "settings" : "instructions");
+    if (!hasLoadedInitialStatus.current && user?.organizationId) {
+      hasLoadedInitialStatus.current = true;
+      loadBotStatus();
     }
-  }, [botActive, isLoading]);
+  }, [user?.organizationId]); // Only load when user or organizationId changes
+
+  // Don't poll - rely on WebSocket events for updates instead
+  // Polling causes unnecessary reloads and performance issues
+
+  // Handle real-time WebSocket events for admin link - NO automatic reloads
+  const processedEventIds = useRef<Set<string>>(new Set());
+  
+  useEffect(() => {
+    if (events.length === 0) return;
+
+    // Process only new events to avoid duplicates
+    const latestEvent = events[0];
+    
+    // Skip if already processed
+    if (processedEventIds.current.has(latestEvent.id)) {
+      return;
+    }
+    
+    if (latestEvent.type === 'admin.linked' || latestEvent.type === 'admin_linked') {
+      processedEventIds.current.add(latestEvent.id);
+      
+      // Update admin linked status immediately from event data - NO API call
+      setAdminLinked(true);
+      
+      toast.success("Администратор успешно привязан!", {
+        description: "Ваш Telegram аккаунт теперь связан с панелью управления"
+      });
+    }
+    
+    // Don't reload bot status for any events - rely on user actions or initial load only
+    // This prevents unnecessary API calls and page reloads
+  }, [events]);
+
+  // Set default tab based on bot status - only once on initial load
+  const hasSetInitialTab = useRef(false);
+  useEffect(() => {
+    if (!isLoading && !hasSetInitialTab.current) {
+      // Show instructions by default, then user can navigate
+      setActiveTab("instructions");
+      hasSetInitialTab.current = true;
+    }
+  }, [isLoading]);
 
   // Update progress based on bot status
   useEffect(() => {
@@ -172,6 +220,13 @@ export function BotManagementPage() {
           setBotName("");
           setBotUsername("");
           setBotLink("");
+        }
+        
+        // Check admin link status from response
+        if (response.botStatus?.adminLinked !== undefined) {
+          setAdminLinked(response.botStatus.adminLinked);
+        } else if (response.adminLinked !== undefined) {
+          setAdminLinked(response.adminLinked);
         }
       } else {
         // No bot configured
@@ -432,6 +487,66 @@ export function BotManagementPage() {
     toast.success(t('botManagement.shareToEmail'));
   };
 
+  const handleGenerateAdminLink = async () => {
+    if (!botActive) {
+      toast.error("Бот должен быть активирован для генерации ссылки администратора");
+      return;
+    }
+
+    try {
+      setIsGeneratingAdminLink(true);
+      const result = await apiClient.generateAdminLink();
+      
+      if (result.success && result.adminLink) {
+        setAdminLink(result.adminLink);
+        
+        // Generate QR code for admin link
+        try {
+          const qrDataUrl = await QRCode.toDataURL(result.adminLink, {
+            width: 300,
+            margin: 2,
+            color: {
+              dark: '#000000',
+              light: '#FFFFFF'
+            }
+          });
+          setAdminLinkQRCode(qrDataUrl);
+        } catch (qrError) {
+          console.error('Failed to generate admin link QR code:', qrError);
+        }
+        
+        toast.success("Ссылка администратора сгенерирована", {
+          description: "Ссылка действительна в течение 1 часа"
+        });
+      } else {
+        toast.error(result.error || "Не удалось сгенерировать ссылку администратора");
+      }
+    } catch (error: any) {
+      console.error('Failed to generate admin link:', error);
+      toast.error(error.message || "Ошибка при генерации ссылки администратора");
+    } finally {
+      setIsGeneratingAdminLink(false);
+    }
+  };
+
+  const handleCopyAdminLink = () => {
+    if (!adminLink) {
+      toast.error("Сначала сгенерируйте ссылку администратора");
+      return;
+    }
+    navigator.clipboard.writeText(adminLink);
+    toast.success("Ссылка администратора скопирована в буфер обмена");
+  };
+
+  const handleOpenAdminLink = () => {
+    if (!adminLink) {
+      toast.error("Сначала сгенерируйте ссылку администратора");
+      return;
+    }
+    window.open(adminLink, "_blank");
+    toast.info("Откройте ссылку в Telegram и нажмите 'Start' для привязки аккаунта");
+  };
+
 
 
   // Show loading if user is not loaded yet
@@ -451,6 +566,111 @@ export function BotManagementPage() {
                 <p className="text-gray-500">{t('botManagement.loadingUser')}</p>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          icon={<Bot className="w-7 h-7 text-white" />}
+          title={t('botManagement.title')}
+          description={t('botManagement.description')}
+        />
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <RefreshCw className="w-8 h-8 animate-spin text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-500">{t('botManagement.loading')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty State - No bot configured yet
+  if (!botActive && !botName && !botUsername && !isLoading) {
+    return (
+      <div className="space-y-6">
+        <PageHeader
+          icon={<Bot className="w-7 h-7 text-white" />}
+          title={t('botManagement.title')}
+          description={t('botManagement.description')}
+        />
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+          <div className="max-w-5xl mx-auto">
+            <Card className="p-8 sm:p-12">
+              <div className="text-center max-w-2xl mx-auto">
+                <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Bot className="w-10 h-10 text-indigo-600" />
+                </div>
+                
+                <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+                  {t('botManagement.emptyState.title')}
+                </h2>
+                <p className="text-gray-600 mb-8">
+                  {t('botManagement.emptyState.description')}
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                  <div className="p-4 bg-indigo-50 rounded-lg border-2 border-transparent hover:border-indigo-200 transition-colors text-center">
+                    <div className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                      1
+                    </div>
+                    <p className="text-sm font-medium text-gray-900 mb-1">
+                      {t('botManagement.emptyState.step1.title')}
+                    </p>
+                    <p className="text-xs text-gray-600">
+                      {t('botManagement.emptyState.step1.description')}
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-purple-50 rounded-lg border-2 border-transparent hover:border-purple-200 transition-colors text-center">
+                    <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                      2
+                    </div>
+                    <p className="text-sm font-medium text-gray-900 mb-1">
+                      {t('botManagement.emptyState.step2.title')}
+                    </p>
+                    <p className="text-xs text-gray-600">
+                      {t('botManagement.emptyState.step2.description')}
+                    </p>
+                  </div>
+
+                  <div className="p-4 bg-pink-50 rounded-lg border-2 border-transparent hover:border-pink-200 transition-colors text-center">
+                    <div className="w-8 h-8 bg-pink-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                      3
+                    </div>
+                    <p className="text-sm font-medium text-gray-900 mb-1">
+                      {t('botManagement.emptyState.step3.title')}
+                    </p>
+                    <p className="text-xs text-gray-600">
+                      {t('botManagement.emptyState.step3.description')}
+                    </p>
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => setActiveTab("instructions")}
+                  size="lg"
+                  className="bg-indigo-600 hover:bg-indigo-700 h-12 px-8"
+                >
+                  <PlayCircle className="w-5 h-5 mr-2" />
+                  {t('botManagement.emptyState.startButton')}
+                </Button>
+
+                <p className="text-sm text-gray-500 mt-4">
+                  {t('botManagement.emptyState.footer')}
+                </p>
+              </div>
+            </Card>
           </div>
         </div>
       </div>
@@ -596,22 +816,58 @@ export function BotManagementPage() {
             </div>
           </Card>
 
-          {/* Main Tabs */}
+          {/* Main Tabs - Step-by-Step Setup */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="w-full grid grid-cols-3 bg-white border border-gray-200 p-1 h-auto shadow-sm">
+            <TabsList className="w-full grid grid-cols-4 bg-white border border-gray-200 p-1 h-auto shadow-sm">
               <TabsTrigger
                 value="instructions"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
               >
-                <BookOpen className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('botManagement.instructions')}</span>
+                <div className="flex items-center gap-2">
+                  {botName ? (
+                    <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400">
+                      1
+                    </div>
+                  )}
+                  <BookOpen className="w-4 h-4" />
+                  <span className="hidden sm:inline">{t('botManagement.instructions')}</span>
+                </div>
               </TabsTrigger>
               <TabsTrigger
                 value="activation"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
               >
-                <Key className="w-4 h-4" />
-                <span className="hidden sm:inline">{t('botManagement.activation')}</span>
+                <div className="flex items-center gap-2">
+                  {botActive ? (
+                    <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400">
+                      2
+                    </div>
+                  )}
+                  <Key className="w-4 h-4" />
+                  <span className="hidden sm:inline">{t('botManagement.activation')}</span>
+                </div>
+              </TabsTrigger>
+              <TabsTrigger
+                value="admin-link"
+                className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
+              >
+                <div className="flex items-center gap-2">
+                  {adminLinked ? (
+                    <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                  ) : (
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-xs ${
+                      botActive ? "border-amber-500 text-amber-500" : "border-gray-400 text-gray-400"
+                    }`}>
+                      3
+                    </div>
+                  )}
+                  <Shield className="w-4 h-4" />
+                  <span className="hidden sm:inline">Link Admin</span>
+                </div>
               </TabsTrigger>
               <TabsTrigger
                 value="settings"
@@ -1272,6 +1528,209 @@ export function BotManagementPage() {
                     </div>
                   </div>
                 </div>
+              </Card>
+
+            </TabsContent>
+
+            {/* Step 3: Link Admin Account Tab */}
+            <TabsContent value="admin-link" className="mt-6">
+              <Card className="p-8 bg-white">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-semibold text-lg">
+                    3
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900">Link Admin Account</h2>
+                    <p className="text-gray-600">Authorize your Telegram account as administrator</p>
+                  </div>
+                </div>
+
+                {!botActive ? (
+                  <div className="space-y-4">
+                    <Alert className="border-amber-200 bg-amber-50">
+                      <AlertCircle className="h-4 w-4 text-amber-600" />
+                      <AlertDescription className="text-amber-900 text-sm">
+                        <strong>Bot must be activated first:</strong> Please complete Step 2 (Activation) before linking your admin account.
+                      </AlertDescription>
+                    </Alert>
+                    <Button
+                      variant="outline"
+                      onClick={() => setActiveTab("activation")}
+                      className="w-full"
+                    >
+                      <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+                      Go to Step 2: Activation
+                    </Button>
+                  </div>
+                ) : adminLinked ? (
+                  <div className="space-y-6">
+                    <Alert className="border-emerald-200 bg-emerald-50">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      <AlertDescription className="text-emerald-900">
+                        <strong>Success!</strong> Your admin account has been linked. You now have full access to the bot management panel.
+                      </AlertDescription>
+                    </Alert>
+
+                    <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg border border-emerald-200 text-center">
+                      <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle2 className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-gray-900 mb-2">Setup Complete!</h3>
+                      <p className="text-gray-600 mb-4">
+                        Your Telegram bot is fully configured and ready to use.
+                      </p>
+                      
+                      <div className="grid grid-cols-2 gap-3 max-w-md mx-auto mt-6">
+                        <Button
+                          variant="outline"
+                          onClick={handleOpenBot}
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Open Bot
+                        </Button>
+                        <Button
+                          onClick={handleCopyLink}
+                          className="bg-indigo-600 hover:bg-indigo-700"
+                        >
+                          <Copy className="w-4 h-4 mr-2" />
+                          Share Bot
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <Alert className="border-amber-200 bg-amber-50">
+                      <AlertCircle className="h-4 w-4 text-amber-600" />
+                      <AlertDescription className="text-amber-900 text-sm">
+                        <strong>Important:</strong> Only authorized admins can access this management panel. Complete this step to enable admin access.
+                      </AlertDescription>
+                    </Alert>
+
+                    <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border-2 border-dashed border-indigo-200">
+                      <h3 className="font-medium text-gray-900 mb-4 text-center">Scan QR Code or Click Button</h3>
+                      
+                      {/* QR Code */}
+                      {adminLinkQRCode ? (
+                        <div className="flex flex-col items-center mb-4">
+                          <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3">
+                            <img 
+                              src={adminLinkQRCode} 
+                              alt="Admin Link QR Code" 
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          <p className="text-sm text-gray-600 text-center mt-3">
+                            Scan with Telegram mobile app
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center mb-4">
+                          <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3 flex items-center justify-center">
+                            <QrCode className="w-24 h-24 text-gray-300" />
+                          </div>
+                          <p className="text-sm text-gray-600 text-center mt-3">
+                            QR code will appear after generating link
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="relative my-6">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                          <span className="px-4 bg-gradient-to-br from-indigo-50 to-purple-50 text-gray-600">or</span>
+                        </div>
+                      </div>
+
+                      {/* Authorization Buttons */}
+                      <div className="space-y-3">
+                        {!adminLink ? (
+                          <Button
+                            onClick={handleGenerateAdminLink}
+                            disabled={isGeneratingAdminLink}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 h-12"
+                          >
+                            {isGeneratingAdminLink ? (
+                              <>
+                                <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
+                                Generating link...
+                              </>
+                            ) : (
+                              <>
+                                <UserPlus className="w-5 h-5 mr-2" />
+                                Generate Admin Link
+                              </>
+                            )}
+                          </Button>
+                        ) : (
+                          <>
+                            <div className="space-y-2">
+                              <Label className="mb-2 block">Authorization Link</Label>
+                              <div className="flex gap-2">
+                                <Input
+                                  value={adminLink}
+                                  readOnly
+                                  className="flex-1 bg-gray-50 h-11 font-mono text-xs"
+                                />
+                                <Button
+                                  variant="outline"
+                                  onClick={handleCopyAdminLink}
+                                  className="h-11 px-4"
+                                >
+                                  <Copy className="w-4 h-4" />
+                                </Button>
+                              </div>
+                              <p className="text-xs text-gray-500 mt-1">
+                                Link expires in 1 hour
+                              </p>
+                            </div>
+                            <Button
+                              onClick={handleOpenAdminLink}
+                              className="w-full bg-indigo-600 hover:bg-indigo-700 h-12"
+                            >
+                              <ExternalLink className="w-5 h-5 mr-2" />
+                              Open in Telegram
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={handleGenerateAdminLink}
+                              disabled={isGeneratingAdminLink}
+                              className="w-full h-12"
+                            >
+                              <RefreshCw className={`w-4 h-4 mr-2 ${isGeneratingAdminLink ? 'animate-spin' : ''}`} />
+                              Generate New Link
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <h4 className="font-medium text-blue-900 mb-2">How it works:</h4>
+                      <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
+                        <li>Click "Generate Admin Link" button</li>
+                        <li>Scan the QR code or copy the link</li>
+                        <li>Open the link in Telegram</li>
+                        <li>Click "Start" in the bot conversation</li>
+                        <li>Your account will be linked automatically</li>
+                      </ol>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-4 border-t">
+                      <Button
+                        variant="outline"
+                        onClick={() => setActiveTab("activation")}
+                      >
+                        <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+                        Back
+                      </Button>
+                      
+                      <p className="text-sm text-gray-500">Complete authorization to continue</p>
+                    </div>
+                  </div>
+                )}
               </Card>
             </TabsContent>
           </Tabs>

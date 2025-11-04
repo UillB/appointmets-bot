@@ -1,10 +1,71 @@
 import { Context, Markup, Telegraf } from "telegraf";
 import { ENV } from "../../lib/env";
 import { prisma } from "../../lib/prisma";
+import jwt from 'jsonwebtoken';
 
 export const handleStart = (organizationId?: number) => async (ctx: Context) => {
-  // deep link: /start book_{serviceId} → сразу открыть календарь
+  // deep link: /start link_<token> → привязка админа
   const payload = (ctx as any).startPayload as string | undefined;
+  
+  if (payload && payload.startsWith('link_')) {
+    const linkToken = payload.replace('link_', '');
+    const telegramId = ctx.from?.id;
+    
+    if (!telegramId) {
+      await ctx.reply(ctx.tt("errors.telegramIdRequired") || "Telegram ID is required");
+      return;
+    }
+
+    try {
+      // Verify and decode the token
+      const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key';
+      
+      const decoded = jwt.verify(linkToken, JWT_SECRET) as any;
+      
+      if (decoded.type !== 'admin_link' || !decoded.userId) {
+        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Invalid link token");
+        return;
+      }
+
+      // Update user's telegramId
+      await prisma.user.update({
+        where: { id: decoded.userId },
+        data: { telegramId: String(telegramId) }
+      });
+
+      await ctx.reply(
+        ctx.tt("admin.linkSuccess") || "✅ Ваш Telegram аккаунт успешно привязан! Теперь вы можете использовать бота для управления записями.",
+        Markup.inlineKeyboard([
+          [Markup.button.callback("📅 " + (ctx.tt("menu.book") || "Записаться"), "main_book")],
+          [Markup.button.callback("⚙️ " + (ctx.tt("menu.adminPanel") || "Админ панель"), "main_admin")]
+        ])
+      );
+      
+      // Emit WebSocket event for admin link
+      try {
+        const botEmitter = (global as any).botEmitter;
+        if (botEmitter) {
+          await botEmitter.emitAdminLinked(decoded.userId, decoded.organizationId, telegramId);
+        }
+      } catch (wsError) {
+        console.error('Failed to emit admin linked event:', wsError);
+      }
+      
+      return;
+    } catch (error: any) {
+      console.error('Admin link error:', error);
+      if (error.name === 'TokenExpiredError') {
+        await ctx.reply(ctx.tt("errors.linkTokenExpired") || "❌ Ссылка истекла. Пожалуйста, сгенерируйте новую ссылку.");
+      } else if (error.name === 'JsonWebTokenError') {
+        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Неверная ссылка. Пожалуйста, используйте правильную ссылку.");
+      } else {
+        await ctx.reply(ctx.tt("errors.linkFailed") || "❌ Ошибка при привязке аккаунта. Попробуйте позже.");
+      }
+      return;
+    }
+  }
+  
+  // deep link: /start book_{serviceId} → сразу открыть календарь
   if (payload && /^book_(\d+)$/.test(payload)) {
     const serviceId = Number(payload.match(/^book_(\d+)$/)![1]);
     

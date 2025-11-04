@@ -115,33 +115,54 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
       revenue: service.appointments.reduce((sum, apt) => sum + (apt.service.price || 0), 0)
     }));
 
-    // Get daily bookings
-    const dailyBookings = await prisma.$queryRaw`
-      SELECT 
-        DATE(created_at) as date,
-        COUNT(*) as bookings,
-        SUM(s.price) as revenue
-      FROM "Appointment" a
-      JOIN "Service" s ON a."serviceId" = s.id
-      WHERE a.created_at >= ${start} AND a.created_at <= ${end}
-      ${role !== 'SUPER_ADMIN' ? `AND s."organizationId" = ${organizationId}` : ''}
-      GROUP BY DATE(created_at)
-      ORDER BY date ASC
-    `;
+    // Get daily bookings - using Prisma ORM instead of raw SQL for SQLite compatibility
+    const dailyBookingsData = await prisma.appointment.findMany({
+      where: {
+        ...whereClause,
+        createdAt: {
+          gte: start,
+          lte: end
+        }
+      },
+      include: {
+        service: {
+          select: {
+            price: true,
+            organizationId: true
+          }
+        }
+      }
+    });
 
-    // Get monthly trends
-    const monthlyTrends = await prisma.$queryRaw`
-      SELECT 
-        DATE_TRUNC('month', created_at) as month,
-        COUNT(*) as bookings,
-        SUM(s.price) as revenue
-      FROM "Appointment" a
-      JOIN "Service" s ON a."serviceId" = s.id
-      WHERE a.created_at >= ${start} AND a.created_at <= ${end}
-      ${role !== 'SUPER_ADMIN' ? `AND s."organizationId" = ${organizationId}` : ''}
-      GROUP BY DATE_TRUNC('month', created_at)
-      ORDER BY month ASC
-    `;
+    // Group by date manually
+    const dailyMap = new Map<string, { bookings: number; revenue: number }>();
+    dailyBookingsData.forEach(apt => {
+      const date = apt.createdAt.toISOString().split('T')[0];
+      const existing = dailyMap.get(date) || { bookings: 0, revenue: 0 };
+      dailyMap.set(date, {
+        bookings: existing.bookings + 1,
+        revenue: existing.revenue + (apt.service.price || 0)
+      });
+    });
+
+    const dailyBookings = Array.from(dailyMap.entries())
+      .map(([date, data]) => ({ date, bookings: data.bookings, revenue: data.revenue }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+
+    // Get monthly trends - using Prisma ORM instead of raw SQL
+    const monthlyMap = new Map<string, { bookings: number; revenue: number }>();
+    dailyBookingsData.forEach(apt => {
+      const month = apt.createdAt.toISOString().slice(0, 7); // YYYY-MM
+      const existing = monthlyMap.get(month) || { bookings: 0, revenue: 0 };
+      monthlyMap.set(month, {
+        bookings: existing.bookings + 1,
+        revenue: existing.revenue + (apt.service.price || 0)
+      });
+    });
+
+    const monthlyTrends = Array.from(monthlyMap.entries())
+      .map(([month, data]) => ({ month, bookings: data.bookings, revenue: data.revenue }))
+      .sort((a, b) => a.month.localeCompare(b.month));
 
     // Calculate average booking time (simplified)
     const averageBookingTime = 30; // This would need more complex calculation

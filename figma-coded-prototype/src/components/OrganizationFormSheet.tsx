@@ -1,295 +1,352 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "./ui/drawer";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "./ui/sheet";
-import { Separator } from "./ui/separator";
-import {
-  Building2,
-  Mail,
-  Phone,
-  MapPin,
-  Users,
-  Save,
-  Globe,
-} from "lucide-react";
-import { toast } from "sonner@2.0.3";
-
-interface Organization {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  description: string;
-  website?: string;
-  members: number;
-  activeAppointments: number;
-}
+import { Building2, X, Mail, Phone, MapPin, Globe } from "lucide-react";
+import { ScrollArea } from "./ui/scroll-area";
+import { toastNotifications } from "./toast-notifications";
+import { StepIndicator } from "./StepIndicator";
 
 interface OrganizationFormSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  organization?: Organization | null;
-  onSave: (organization: Partial<Organization>) => void;
 }
 
 export function OrganizationFormSheet({
   open,
   onOpenChange,
-  organization,
-  onSave,
 }: OrganizationFormSheetProps) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [description, setDescription] = useState("");
-  const [website, setWebsite] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    country: "",
+    timezone: "UTC",
+    website: "",
+  });
 
-  const isEditMode = !!organization;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    if (organization) {
-      setName(organization.name);
-      setEmail(organization.email);
-      setPhone(organization.phone);
-      setAddress(organization.address);
-      setDescription(organization.description);
-      setWebsite(organization.website || "");
-    } else {
-      resetForm();
+    // Validation
+    if (!formData.name || !formData.email || !formData.phone) {
+      toastNotifications.errors.validation("Please fill in all required fields");
+      return;
     }
-  }, [organization, open]);
 
-  const resetForm = () => {
-    setName("");
-    setEmail("");
-    setPhone("");
-    setAddress("");
-    setDescription("");
-    setWebsite("");
+    // Handle form submission
+    toastNotifications.organizations.created(formData.name);
+    onOpenChange(false);
+
+    // Reset form
+    setFormData({
+      name: "",
+      description: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      country: "",
+      timezone: "UTC",
+      website: "",
+    });
   };
 
-  const handleSubmit = () => {
-    if (!name || !email || !phone || !address) {
-      toast.error("Please fill all required fields");
-      return;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast.error("Please enter a valid email address");
-      return;
-    }
-
-    const orgData: Partial<Organization> = {
-      ...(organization?.id && { id: organization.id }),
-      name,
-      email,
-      phone,
-      address,
-      description,
-      website,
-      ...(!organization && {
-        members: 0,
-        activeAppointments: 0,
-      }),
-    };
-
-    onSave(orgData);
+  const handleCancel = () => {
     onOpenChange(false);
-    toast.success(
-      isEditMode
-        ? "Organization updated successfully"
-        : "Organization created successfully"
-    );
+    // Reset form
+    setFormData({
+      name: "",
+      description: "",
+      email: "",
+      phone: "",
+      address: "",
+      city: "",
+      country: "",
+      timezone: "UTC",
+      website: "",
+    });
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-2xl overflow-y-auto">
-        <SheetHeader>
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-white" />
+    <Drawer open={open} onOpenChange={onOpenChange} direction="right">
+      <DrawerContent className="w-full sm:max-w-lg flex flex-col h-screen">
+        {/* Header - Fixed */}
+        <DrawerHeader className="border-b bg-gradient-to-r from-indigo-50 to-purple-50 flex-shrink-0">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                <Building2 className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <DrawerTitle className="text-xl">Create New Organization</DrawerTitle>
+                <DrawerDescription>
+                  Follow the steps below to add a new organization
+                </DrawerDescription>
+              </div>
             </div>
-            <div>
-              <SheetTitle>
-                {isEditMode ? "Edit Organization" : "Add New Organization"}
-              </SheetTitle>
-              <SheetDescription>
-                {isEditMode
-                  ? "Update organization information"
-                  : "Create a new organization"}
-              </SheetDescription>
-            </div>
+            <DrawerClose asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <X className="w-4 h-4" />
+              </Button>
+            </DrawerClose>
           </div>
-        </SheetHeader>
+        </DrawerHeader>
 
-        <div className="space-y-6 py-6">
-          {/* Organization Name */}
-          <div className="space-y-2">
-            <Label htmlFor="name">
-              Organization Name <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Acme Corporation"
-                className="pl-10"
-              />
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief description of the organization..."
-              rows={3}
+        {/* Form Content - Scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6">
+          <form onSubmit={handleSubmit} id="organization-form" className="space-y-2">
+            {/* Step 1: Basic Information */}
+            <StepIndicator
+              stepNumber={1}
+              title="Basic Information"
+              description="Organization name and description"
             />
-          </div>
-
-          <Separator />
-
-          {/* Contact Information */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-medium text-gray-700">
-              Contact Information
-            </h3>
-
-            <div className="space-y-2">
-              <Label htmlFor="email">
-                Email Address <span className="text-red-500">*</span>
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <div className="pl-14 space-y-4 pb-6">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm">
+                  Organization Name <span className="text-red-500">*</span>
+                </Label>
                 <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="contact@example.com"
-                  className="pl-10"
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  placeholder="e.g., Beauty Salon Downtown"
+                  className="h-11"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-sm">
+                  Description
+                </Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
+                  placeholder="Brief description of your organization..."
+                  rows={3}
+                  className="resize-none"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="phone">
-                Phone Number <span className="text-red-500">*</span>
-              </Label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            {/* Step 2: Contact Information */}
+            <StepIndicator
+              stepNumber={2}
+              title="Contact Information"
+              description="Email, phone, and website"
+            />
+            <div className="pl-14 space-y-4 pb-6">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm">
+                  Email <span className="text-red-500">*</span>
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    placeholder="contact@example.com"
+                    className="pl-10 h-11"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone" className="text-sm">
+                  Phone <span className="text-red-500">*</span>
+                </Label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    placeholder="+1 (555) 000-0000"
+                    className="pl-10 h-11"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="website" className="text-sm">Website</Label>
+                <div className="relative">
+                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Input
+                    id="website"
+                    type="url"
+                    value={formData.website}
+                    onChange={(e) =>
+                      setFormData({ ...formData, website: e.target.value })
+                    }
+                    placeholder="https://example.com"
+                    className="pl-10 h-11"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Step 3: Location */}
+            <StepIndicator
+              stepNumber={3}
+              title="Location Details"
+              description="Address and geographical information"
+            />
+            <div className="pl-14 space-y-4 pb-6">
+              <div className="space-y-2">
+                <Label htmlFor="address" className="text-sm">Address</Label>
                 <Input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+1 (555) 123-4567"
-                  className="pl-10"
+                  id="address"
+                  value={formData.address}
+                  onChange={(e) =>
+                    setFormData({ ...formData, address: e.target.value })
+                  }
+                  placeholder="Street address"
+                  className="h-11"
                 />
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="website">Website (Optional)</Label>
-              <div className="relative">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <Input
-                  id="website"
-                  type="url"
-                  value={website}
-                  onChange={(e) => setWebsite(e.target.value)}
-                  placeholder="https://example.com"
-                  className="pl-10"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="city" className="text-sm">City</Label>
+                  <Input
+                    id="city"
+                    value={formData.city}
+                    onChange={(e) =>
+                      setFormData({ ...formData, city: e.target.value })
+                    }
+                    placeholder="City name"
+                    className="h-11"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="country" className="text-sm">Country</Label>
+                  <Select
+                    value={formData.country}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, country: value })
+                    }
+                  >
+                    <SelectTrigger id="country" className="h-11">
+                      <SelectValue placeholder="Select country" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="us">United States</SelectItem>
+                      <SelectItem value="uk">United Kingdom</SelectItem>
+                      <SelectItem value="ca">Canada</SelectItem>
+                      <SelectItem value="il">Israel</SelectItem>
+                      <SelectItem value="ru">Russia</SelectItem>
+                      <SelectItem value="de">Germany</SelectItem>
+                      <SelectItem value="fr">France</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-          </div>
 
-          <Separator />
-
-          {/* Address */}
-          <div className="space-y-2">
-            <Label htmlFor="address">
-              Address <span className="text-red-500">*</span>
-            </Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
-              <Textarea
-                id="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="123 Main Street, City, State, ZIP"
-                rows={3}
-                className="pl-10"
-              />
+            {/* Step 4: Settings */}
+            <StepIndicator
+              stepNumber={4}
+              title="Organization Settings"
+              description="Timezone configuration"
+              isLast
+            />
+            <div className="pl-14 space-y-2 pb-4">
+              <Label htmlFor="timezone" className="text-sm">Timezone</Label>
+              <Select
+                value={formData.timezone}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, timezone: value })
+                }
+              >
+                <SelectTrigger id="timezone" className="h-11">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="UTC">UTC (GMT+0)</SelectItem>
+                  <SelectItem value="America/New_York">
+                    Eastern Time (GMT-5)
+                  </SelectItem>
+                  <SelectItem value="America/Chicago">
+                    Central Time (GMT-6)
+                  </SelectItem>
+                  <SelectItem value="America/Los_Angeles">
+                    Pacific Time (GMT-8)
+                  </SelectItem>
+                  <SelectItem value="Europe/London">
+                    London (GMT+0)
+                  </SelectItem>
+                  <SelectItem value="Europe/Moscow">
+                    Moscow (GMT+3)
+                  </SelectItem>
+                  <SelectItem value="Asia/Jerusalem">
+                    Jerusalem (GMT+2)
+                  </SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-          </div>
-
-          {/* Summary */}
-          {name && email && (
-            <div className="p-4 bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 rounded-lg">
-              <div className="flex items-center gap-2 mb-3">
-                <Building2 className="w-5 h-5 text-purple-600" />
-                <span className="font-medium text-purple-900">
-                  Organization Summary
-                </span>
-              </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Name:</span>
-                  <span className="text-gray-900 font-medium">{name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Email:</span>
-                  <span className="text-gray-900">{email}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Phone:</span>
-                  <span className="text-gray-900">{phone}</span>
-                </div>
-                {website && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Website:</span>
-                    <span className="text-gray-900 truncate max-w-[200px]">
-                      {website}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Actions */}
-          <div className="flex gap-3 pt-4">
-            <Button
-              onClick={handleSubmit}
-              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              {isEditMode ? "Update Organization" : "Create Organization"}
-            </Button>
-            <Button variant="outline" onClick={() => onOpenChange(false)}>
-              Cancel
-            </Button>
+          </form>
           </div>
         </div>
-      </SheetContent>
-    </Sheet>
+
+        {/* Footer - Fixed */}
+        <DrawerFooter className="border-t bg-gray-50 flex-shrink-0">
+          <div className="flex gap-3 w-full">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancel}
+              className="flex-1 h-11"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              form="organization-form"
+              className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700"
+            >
+              Create Organization
+            </Button>
+          </div>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

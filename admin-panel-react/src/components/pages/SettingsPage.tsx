@@ -33,7 +33,8 @@ import {
 } from "lucide-react";
 import { StatCard } from "../cards/StatCard";
 import { PageHeader } from "../PageHeader";
-import { toast } from "sonner@2.0.3";
+import React from "react";
+import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Switch } from "../ui/switch";
 import { Separator } from "../ui/separator";

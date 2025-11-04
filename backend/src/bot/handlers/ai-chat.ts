@@ -2,6 +2,9 @@ import { Context } from 'telegraf';
 import { AIService } from '../../lib/ai/ai-service';
 import { AIConversation, AIScenario } from '../../lib/ai/types';
 
+// Get WebSocket emitters from global scope
+const getAppointmentEmitter = () => (global as any).appointmentEmitter;
+
 export class AIChatHandler {
   private aiService: AIService;
 
@@ -603,12 +606,39 @@ export class AIChatHandler {
 
         if (activeAppointment) {
           // Отменяем запись
-          await prisma.appointment.update({
+          const updatedAppointment = await prisma.appointment.update({
             where: { id: activeAppointment.id },
-            data: { status: 'cancelled' }
+            data: { status: 'cancelled' },
+            include: {
+              service: {
+                include: {
+                  organization: true
+                }
+              },
+              slot: true
+            }
           });
 
-          const slotStart = new Date(activeAppointment.slot.startAt);
+          // Emit real-time WebSocket notification for appointment cancellation
+          try {
+            const appointmentEmitter = getAppointmentEmitter();
+            if (appointmentEmitter) {
+              const chatId = String(ctx.chat?.id);
+              const customerInfo = {
+                chatId: chatId,
+                firstName: ctx.from?.first_name,
+                lastName: ctx.from?.last_name,
+                username: ctx.from?.username
+              };
+              await appointmentEmitter.emitAppointmentCancelled(updatedAppointment, customerInfo);
+              console.log('✅ WebSocket notification sent for appointment cancellation from AI chat');
+            }
+          } catch (error) {
+            console.error('❌ Failed to send WebSocket notification for appointment cancellation:', error);
+            // Don't fail the request if WebSocket notification fails
+          }
+
+          const slotStart = new Date(updatedAppointment.slot.startAt);
           const formattedDate = slotStart.toLocaleDateString('ru-RU', {
             weekday: 'short',
             day: '2-digit',
@@ -620,7 +650,7 @@ export class AIChatHandler {
           await ctx.reply(
             `❌ Запись отменена!\n\n` +
             `📅 Дата: ${formattedDate}\n` +
-            `💅 Услуга: ${activeAppointment.service.nameRu || activeAppointment.service.name}\n\n` +
+            `💅 Услуга: ${updatedAppointment.service.nameRu || updatedAppointment.service.name}\n\n` +
             `Если передумаете, можете записаться снова! 😊`
           );
         } else {

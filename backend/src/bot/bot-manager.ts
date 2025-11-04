@@ -37,7 +37,7 @@ class BotManager {
     console.log(`🤖 Bot Manager initialized with ${this.bots.size} bots`);
   }
 
-  async addBot(token: string, organizationId: number) {
+  async addBot(token: string, organizationId: number): Promise<void> {
     try {
       // Проверяем, не запущен ли уже бот с этим токеном
       if (this.bots.has(token)) {
@@ -64,19 +64,42 @@ class BotManager {
       // Настраиваем бота
       await this.setupBot(bot, organizationId);
 
-      // Запускаем бота с обработкой ошибок
-      await bot.launch({
-        dropPendingUpdates: true, // Игнорируем старые обновления
-        allowedUpdates: ['message', 'callback_query'] // Только нужные типы обновлений
-      });
-      
+      // Сохраняем бота в мапу ДО запуска, чтобы избежать дубликатов
       this.bots.set(token, bot);
-      console.log(`✅ Bot for organization ${organizationId} started successfully`);
       
-    } catch (error) {
+      // Запускаем бота асинхронно, не блокируя основной поток
+      // Используем setTimeout для гарантии, что код продолжит выполнение
+      setTimeout(async () => {
+        try {
+          console.log(`🚀 Launching bot for organization ${organizationId}...`);
+          
+          // Запускаем бота с обработкой ошибок и таймаутом
+          const launchPromise = bot.launch({
+            dropPendingUpdates: true, // Игнорируем старые обновления
+            allowedUpdates: ['message', 'callback_query'] // Только нужные типы обновлений
+          });
+          
+          // Таймаут на запуск бота (30 секунд) - увеличен для медленных соединений
+          const timeoutPromise = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Bot launch timeout')), 30000)
+          );
+          
+          await Promise.race([launchPromise, timeoutPromise]);
+          console.log(`✅ Bot for organization ${organizationId} started successfully`);
+        } catch (launchError: any) {
+          console.error(`❌ Failed to launch bot for organization ${organizationId}:`, launchError.message);
+          // Удаляем бота из мапы если запуск не удался
+          this.bots.delete(token);
+          // Не пробрасываем ошибку дальше - API должен продолжать работать
+        }
+      }, 0); // Запускаем в следующем тике event loop
+      
+      console.log(`✅ Bot for organization ${organizationId} queued for launch`);
+      
+    } catch (error: any) {
       console.error(`❌ Failed to start bot for organization ${organizationId}:`, error);
       // Если ошибка 409 (Conflict), пробуем остановить и перезапустить
-      if (error.message?.includes('409') || error.message?.includes('Conflict')) {
+      if (error?.message?.includes('409') || error?.message?.includes('Conflict')) {
         console.log(`🔄 Attempting to resolve conflict for organization ${organizationId}...`);
         await this.removeBot(token);
         // Небольшая задержка перед повторной попыткой

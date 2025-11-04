@@ -9,27 +9,27 @@ import {
   Clock,
   CheckCircle2,
   Sparkles,
-  LayoutDashboard,
-  RefreshCw,
-  Users,
-  TrendingUp,
-  TrendingDown,
-  Minus,
   ChevronLeft,
   ChevronRight,
-  Plus,
+  Bot,
+  Shield,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
+import { Alert, AlertDescription } from "../ui/alert";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { QuickActionCard } from "../cards/QuickActionCard";
 import { StatCard } from "../cards/StatCard";
 import { AppointmentCard } from "../cards/AppointmentCard";
+import { AppointmentsSummaryCard } from "../cards/AppointmentsSummaryCard";
 import { PageHeader } from "../PageHeader";
 import { toast } from "sonner";
 import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
+import { useWebSocket } from "../../hooks/useWebSocket";
+import { toastNotifications } from "../toast-notifications";
 import { formatTimeToLocal, isSameDay } from "../../utils/dateUtils";
 
 interface DashboardStats {
@@ -46,6 +46,7 @@ interface DashboardStats {
 export function Dashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { events } = useWebSocket();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [recentAppointments, setRecentAppointments] = useState([]);
@@ -53,19 +54,43 @@ export function Dashboard() {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [filteredAppointments, setFilteredAppointments] = useState([]);
   const [organizationsCount, setOrganizationsCount] = useState(0);
+  const [appointmentsStats, setAppointmentsStats] = useState({
+    confirmed: 0,
+    rejected: 0
+  });
+  const [botActive, setBotActive] = useState(false);
+  const [adminLinked, setAdminLinked] = useState(false);
 
   const loadDashboardData = async () => {
     try {
       setIsLoading(true);
-      const [statsData, appointmentsData, organizationsData] = await Promise.all([
+      const [statsData, appointmentsData, organizationsData, summaryStatsData, botStatusData] = await Promise.all([
         apiClient.getDashboardStats(),
         apiClient.getAppointments({ limit: 5 }),
-        apiClient.getOrganizations()
+        apiClient.getOrganizations(),
+        apiClient.getAppointmentsSummaryStats().catch(() => ({ totalAppointments: 0, confirmedAppointments: 0, pendingAppointments: 0, rejectedAppointments: 0 })), // Use new endpoint
+        user?.organizationId ? apiClient.getBotStatus(user.organizationId).catch(() => null) : Promise.resolve(null)
       ]);
       
       setStats(statsData);
       setRecentAppointments(appointmentsData.appointments);
       setOrganizationsCount(organizationsData.organizations.length);
+      
+      // Use summary stats from the new endpoint
+      setAppointmentsStats({ 
+        confirmed: summaryStatsData.confirmedAppointments, 
+        rejected: summaryStatsData.rejectedAppointments 
+      });
+      
+      // Update bot status
+      if (botStatusData?.success && botStatusData.botStatus) {
+        setBotActive(botStatusData.botStatus.botActive || botStatusData.botStatus.isActive || false);
+        // Use adminLinked from botStatus or check user telegramId as fallback
+        setAdminLinked(botStatusData.botStatus.adminLinked !== undefined ? botStatusData.botStatus.adminLinked : !!user?.telegramId);
+      } else {
+        setBotActive(false);
+        setAdminLinked(false);
+      }
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
       toast.error('Failed to load dashboard data');
@@ -77,6 +102,38 @@ export function Dashboard() {
   useEffect(() => {
     loadDashboardData();
   }, []);
+
+  // Handle real-time WebSocket events for appointments
+  useEffect(() => {
+    if (events.length === 0) return;
+
+    const latestEvent = events[0];
+    
+    if (latestEvent.type === 'appointment.created' || latestEvent.type === 'appointment_created') {
+      // Show toast notification
+      toastNotifications.appointments.created();
+      
+      // Reload dashboard data to get updated stats and appointments
+      setTimeout(() => {
+        loadDashboardData();
+      }, 500);
+    } else if (latestEvent.type === 'appointment.updated' || latestEvent.type === 'appointment_updated') {
+      toastNotifications.appointments.updated(latestEvent.data?.customerName);
+      setTimeout(() => {
+        loadDashboardData();
+      }, 500);
+    } else if (latestEvent.type === 'appointment.cancelled' || latestEvent.type === 'appointment_cancelled') {
+      toastNotifications.appointments.cancelled(latestEvent.data?.customerName);
+      setTimeout(() => {
+        loadDashboardData();
+      }, 500);
+    } else if (latestEvent.type === 'appointment.confirmed' || latestEvent.type === 'appointment_confirmed') {
+      toastNotifications.appointments.confirmed(latestEvent.data?.customerName);
+      setTimeout(() => {
+        loadDashboardData();
+      }, 500);
+    }
+  }, [events]);
 
   // Initialize filtered appointments when recentAppointments change
   useEffect(() => {
@@ -91,10 +148,6 @@ export function Dashboard() {
     }
   }, [recentAppointments, selectedDate]);
 
-  const handleRefresh = () => {
-    loadDashboardData();
-    toast.success("Dashboard refreshed");
-  };
 
   // Calendar functions
   const navigateMonth = (direction: 'prev' | 'next') => {
@@ -237,40 +290,60 @@ export function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Gradient Header */}
-      <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 px-6 py-6 rounded-lg">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-              <LayoutDashboard className="w-6 h-6 text-white" />
+      {/* Bot Status Alerts */}
+      {!botActive && (
+        <Alert className="border-red-200 bg-red-50">
+          <Bot className="h-5 w-5 text-red-600 flex-shrink-0" />
+          <AlertDescription className="text-red-900">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex-1">
+                <strong className="font-semibold">Telegram Bot Not Active</strong>
+                <p className="text-sm mt-1">Your bot is not configured yet. Set it up to start receiving appointments through Telegram.</p>
+              </div>
+              <Button
+                size="sm"
+                className="bg-red-600 hover:bg-red-700 flex-shrink-0 w-full sm:w-auto"
+                onClick={() => navigate("/bot-management")}
+              >
+                Setup Bot
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </Button>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white mb-1">Welcome back, {user?.name}! 👋</h1>
-              <p className="text-indigo-100">
-                {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {botActive && !adminLinked && (
+        <Alert className="border-amber-200 bg-amber-50">
+          <Shield className="h-5 w-5 text-amber-600 flex-shrink-0" />
+          <AlertDescription className="text-amber-900">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex-1">
+                <strong className="font-semibold">Admin Account Not Linked</strong>
+                <p className="text-sm mt-1">Complete the setup by linking your Telegram account as administrator.</p>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-amber-300 hover:bg-amber-100 flex-shrink-0 w-full sm:w-auto"
+                onClick={() => navigate("/bot-management")}
+              >
+                Link Admin
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </Button>
             </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-            <Button
-              onClick={() => {/* Navigate to appointments */}}
-              size="sm"
-              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-            >
-              <Plus className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">New Appointment</span>
-            </Button>
-          </div>
-        </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Welcome Section */}
+      <div>
+        <h1 className="text-gray-900 flex items-center gap-2">
+          Welcome back, {user?.name || 'User'}! <span className="text-2xl">👋</span>
+        </h1>
+        <p className="text-sm text-gray-600 mt-1">
+          {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        </p>
       </div>
 
       {/* Main Content */}
@@ -294,6 +367,16 @@ export function Dashboard() {
               return <QuickActionComponent key={action.title} />;
             })}
           </div>
+
+          {/* Appointments Summary - Highlighted */}
+          {stats && (
+            <AppointmentsSummaryCard 
+              totalAppointments={stats.totalAppointments}
+              confirmedAppointments={appointmentsStats.confirmed}
+              pendingAppointments={stats.pendingAppointments}
+              rejectedAppointments={appointmentsStats.rejected}
+            />
+          )}
 
           {/* Statistics & Overview */}
           <div className="flex items-center justify-between">

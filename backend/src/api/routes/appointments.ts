@@ -277,7 +277,16 @@ const appt = await prisma.appointment.create({
 try {
   const appointmentEmitter = getAppointmentEmitter();
   if (appointmentEmitter) {
-    await appointmentEmitter.emitAppointmentCreated(appt);
+    // Try to get customer info from request body if available
+    const customerInfo = req.body.customerInfo ? {
+      chatId: req.body.chatId || req.body.customerInfo.chatId,
+      firstName: req.body.customerInfo.firstName,
+      lastName: req.body.customerInfo.lastName,
+      username: req.body.customerInfo.username
+    } : {
+      chatId: appt.chatId
+    };
+    await appointmentEmitter.emitAppointmentCreated(appt, customerInfo);
     console.log('✅ WebSocket notification sent for appointment creation');
   }
 } catch (error) {
@@ -288,14 +297,67 @@ try {
 res.status(201).json(appt);
 });
 
+// GET /api/appointments/summary-stats - Get appointments summary statistics for AppointmentsSummaryCard
+// IMPORTANT: This route must be defined BEFORE /:id route to avoid route conflicts
+r.get("/summary-stats", verifyToken, async (req: any, res: any) => {
+  try {
+    const { role, organizationId } = req.user;
+    
+    // Build where clause for filtering by organization
+    const where: any = {};
+    
+    if (role !== 'SUPER_ADMIN') {
+      where.service = {
+        organizationId: organizationId
+      };
+    }
+    
+    // Get all appointments for the organization
+    const allAppointments = await prisma.appointment.findMany({
+      where,
+      select: {
+        status: true
+      }
+    });
+    
+    // Calculate statistics
+    const totalAppointments = allAppointments.length;
+    const confirmedAppointments = allAppointments.filter(a => a.status === 'confirmed').length;
+    const pendingAppointments = allAppointments.filter(a => a.status === 'pending').length;
+    const rejectedAppointments = allAppointments.filter(a => a.status === 'cancelled').length;
+    
+    res.json({
+      totalAppointments,
+      confirmedAppointments,
+      pendingAppointments,
+      rejectedAppointments
+    });
+  } catch (error) {
+    console.error('Error fetching appointments summary stats:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Получить запись по ID
 r.get("/:id", verifyToken, async (req: any, res: any) => {
   try {
     const { id } = req.params;
     const { role, organizationId } = req.user;
 
+    // Validate id parameter - must exist and be a valid number
+    if (!id || id === '' || id === 'undefined' || id === 'null') {
+      console.error('Error: appointment id is missing or invalid:', id);
+      return res.status(400).json({ error: "Invalid appointment id: id parameter is required" });
+    }
+
+    const appointmentId = Number(id);
+    if (isNaN(appointmentId) || appointmentId <= 0) {
+      console.error('Error: appointment id is not a valid number:', id);
+      return res.status(400).json({ error: `Invalid appointment id: "${id}" is not a valid number` });
+    }
+
     const appointment = await prisma.appointment.findUnique({
-      where: { id: Number(id) },
+      where: { id: appointmentId },
       include: { 
         service: {
           include: {
@@ -383,7 +445,11 @@ r.put("/:id/cancel", verifyToken, async (req: any, res: any) => {
     try {
       const appointmentEmitter = getAppointmentEmitter();
       if (appointmentEmitter) {
-        await appointmentEmitter.emitAppointmentCancelled(updatedAppointment);
+        // Customer info from appointment (chatId is available)
+        const customerInfo = {
+          chatId: updatedAppointment.chatId
+        };
+        await appointmentEmitter.emitAppointmentCancelled(updatedAppointment, customerInfo);
         console.log('✅ WebSocket notification sent for appointment cancellation');
       }
     } catch (error) {

@@ -2,6 +2,9 @@ import { Context, Markup, Telegraf } from "telegraf";
 import { prisma } from "../../lib/prisma";
 import { getLocalizedServiceName } from "../../lib/localization";
 
+// Get WebSocket emitters from global scope
+const getAppointmentEmitter = () => (global as any).appointmentEmitter;
+
 function fmt(dt: Date) {
   return new Date(dt).toLocaleString("ru-RU", {
     weekday: "short",
@@ -69,10 +72,36 @@ export function registerMyCallbacks(bot: Telegraf, organizationId?: number) {
     }
 
     // Мягкая отмена (статус), можно и удалить
-    await prisma.appointment.update({
+    const updatedAppointment = await prisma.appointment.update({
       where: { id },
       data: { status: "cancelled" },
+      include: {
+        service: {
+          include: {
+            organization: true
+          }
+        },
+        slot: true
+      }
     });
+
+    // Emit real-time WebSocket notification for appointment cancellation
+    try {
+      const appointmentEmitter = getAppointmentEmitter();
+      if (appointmentEmitter) {
+        const customerInfo = {
+          chatId: chatId,
+          firstName: ctx.from?.first_name,
+          lastName: ctx.from?.last_name,
+          username: ctx.from?.username
+        };
+        await appointmentEmitter.emitAppointmentCancelled(updatedAppointment, customerInfo);
+        console.log('✅ WebSocket notification sent for appointment cancellation from Telegram bot');
+      }
+    } catch (error) {
+      console.error('❌ Failed to send WebSocket notification for appointment cancellation:', error);
+      // Don't fail the request if WebSocket notification fails
+    }
 
     // Уведомления админу/в группу об отмене
     const who = `${ctx.from?.first_name || ""} ${ctx.from?.last_name || ""}`.trim();

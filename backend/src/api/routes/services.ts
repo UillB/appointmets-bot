@@ -448,6 +448,105 @@ router.get('/stats', verifyToken, async (req: any, res: Response) => {
   }
 });
 
+// GET /services/:id/deletion-check - Check if service can be deleted (MUST be before /:id route)
+router.get('/:id/deletion-check', verifyToken, async (req: any, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { role, organizationId } = req.user;
+
+    // Check if service exists
+    const existingService = await prisma.service.findUnique({
+      where: { id: parseInt(id) },
+      include: {
+        _count: {
+          select: {
+            slots: true,
+            appointments: true
+          }
+        },
+        appointments: {
+          where: {
+            slot: {
+              startAt: {
+                gt: new Date() // Only future appointments
+              }
+            }
+          },
+          include: {
+            slot: {
+              select: {
+                startAt: true,
+                endAt: true
+              }
+            }
+          },
+          orderBy: {
+            slot: {
+              startAt: 'asc'
+            }
+          },
+          take: 1
+        }
+      }
+    });
+
+    if (!existingService) {
+      return res.status(404).json({ error: 'Service not found' });
+    }
+
+    // Check if user has access to this service
+    if (role !== 'SUPER_ADMIN' && existingService.organizationId !== organizationId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    // Check for future appointments
+    const futureAppointments = existingService.appointments.filter(apt => 
+      new Date(apt.slot.startAt) > new Date()
+    );
+
+    if (futureAppointments.length > 0) {
+      const nextAppointment = futureAppointments[0];
+      const nextAppointmentDate = new Date(nextAppointment.slot.startAt);
+      
+      return res.status(200).json({ 
+        error: 'Cannot delete service with future appointments',
+        details: {
+          totalAppointments: existingService._count.appointments,
+          futureAppointments: futureAppointments.length,
+          nextAppointmentDate: nextAppointmentDate.toISOString(),
+          nextAppointmentTime: nextAppointmentDate.toLocaleString(),
+          message: `This service has ${futureAppointments.length} future appointment(s). The next one is scheduled for ${nextAppointmentDate.toLocaleDateString()} at ${nextAppointmentDate.toLocaleTimeString()}. Deleting this service will automatically cancel all future appointments.`
+        }
+      });
+    }
+
+    // Check if service has slots
+    if (existingService._count.slots > 0) {
+      return res.status(200).json({ 
+        error: 'Cannot delete service with existing slots',
+        details: {
+          totalSlots: existingService._count.slots,
+          message: 'This service has time slots that need to be removed first. Slots will be automatically deleted when you delete the service.'
+        }
+      });
+    }
+
+    // Service can be safely deleted
+    return res.status(200).json({
+      safeToDelete: true,
+      details: {
+        totalAppointments: existingService._count.appointments,
+        futureAppointments: 0,
+        totalSlots: existingService._count.slots,
+        message: 'This service can be safely deleted without affecting any appointments.'
+      }
+    });
+  } catch (error) {
+    console.error('Check deletion error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // GET /services/:id - Get specific service
 router.get('/:id', verifyToken, async (req: any, res: Response) => {
   try {
@@ -761,7 +860,7 @@ router.post('/:id/slots/renew', verifyToken, async (req: any, res: Response) => 
   }
 });
 
-// DELETE /services/:id - Delete service
+// DELETE /services/:id - Delete service (only if safe to delete, otherwise use force delete)
 router.delete('/:id', verifyToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;

@@ -5,9 +5,16 @@ import { verifyToken } from '../lib/auth';
 import { prisma } from '../lib/prisma';
 import { WebSocketEvent } from './events';
 
+interface ClientSession {
+  ws: WebSocket;
+  userId: number;
+  organizationId: number;
+  role: string;
+}
+
 export class WebSocketManager extends EventEmitter {
   private wss: WebSocketServer;
-  private clients: Map<string, WebSocket> = new Map();
+  private clients: Map<string, ClientSession> = new Map();
   private userSessions: Map<string, { userId: number, organizationId: number, role: string }> = new Map();
 
   constructor(server: Server) {
@@ -26,12 +33,23 @@ export class WebSocketManager extends EventEmitter {
       const token = this.extractToken(info.req.url);
       const decoded = await verifyToken(token);
       
+      if (!decoded.organizationId) {
+        console.error('WebSocket authentication failed: No organizationId in token', {
+          userId: decoded.userId,
+          email: decoded.email,
+          role: decoded.role
+        });
+        return false;
+      }
+      
       // Store user session
       this.userSessions.set(info.req.url, {
         userId: decoded.userId,
         organizationId: decoded.organizationId,
         role: decoded.role
       });
+      
+      console.log(`WebSocket client verified: User ${decoded.userId}, Org ${decoded.organizationId}, Role ${decoded.role}`);
       
       return true;
     } catch (error) {
@@ -55,9 +73,14 @@ export class WebSocketManager extends EventEmitter {
         return;
       }
 
-      // Store client connection
+      // Store client connection with session info
       const clientId = `${session.userId}_${session.organizationId}_${Date.now()}`;
-      this.clients.set(clientId, ws);
+      this.clients.set(clientId, {
+        ws,
+        userId: session.userId,
+        organizationId: session.organizationId,
+        role: session.role
+      });
 
       console.log(`WebSocket client connected: ${clientId} (User: ${session.userId}, Org: ${session.organizationId})`);
 
@@ -97,9 +120,9 @@ export class WebSocketManager extends EventEmitter {
   private handleClientMessage(clientId: string, message: any, session: { userId: number, organizationId: number, role: string }) {
     switch (message.type) {
       case 'ping':
-        const ws = this.clients.get(clientId);
-        if (ws) {
-          ws.send(JSON.stringify({ type: 'pong', timestamp: new Date() }));
+        const clientSession = this.clients.get(clientId);
+        if (clientSession && clientSession.ws.readyState === WebSocket.OPEN) {
+          clientSession.ws.send(JSON.stringify({ type: 'pong', timestamp: new Date() }));
         }
         break;
       case 'subscribe':
@@ -113,36 +136,64 @@ export class WebSocketManager extends EventEmitter {
 
   // Broadcast event to all clients in an organization
   public broadcastToOrganization(organizationId: number, event: WebSocketEvent) {
-    const clientsToNotify = Array.from(this.clients.entries()).filter(([clientId, ws]) => {
-      const sessionKey = Array.from(this.userSessions.entries())
-        .find(([key, session]) => session.userId === parseInt(clientId.split('_')[0]))?.[0];
-      
-      if (!sessionKey) return false;
-      
-      const session = this.userSessions.get(sessionKey);
-      return session && session.organizationId === organizationId;
+    const clientsToNotify = Array.from(this.clients.entries()).filter(([clientId, clientSession]) => {
+      // Direct check using stored organizationId
+      return clientSession.organizationId === organizationId;
     });
 
     console.log(`Broadcasting event ${event.type} to ${clientsToNotify.length} clients in organization ${organizationId}`);
+    
+    // Debug: log all connected clients
+    if (clientsToNotify.length === 0) {
+      const allClients = Array.from(this.clients.entries()).map(([id, session]) => ({
+        id,
+        userId: session.userId,
+        orgId: session.organizationId
+      }));
+      console.log(`Debug: All connected clients:`, allClients);
+      console.log(`Debug: Looking for organizationId: ${organizationId}`);
+    }
 
-    clientsToNotify.forEach(([clientId, ws]) => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify(event));
+    // Send event in the format expected by frontend
+    const message = {
+      type: 'event',
+      data: event,
+      timestamp: new Date()
+    };
+
+    clientsToNotify.forEach(([clientId, clientSession]) => {
+      if (clientSession.ws.readyState === WebSocket.OPEN) {
+        try {
+          clientSession.ws.send(JSON.stringify(message));
+        } catch (error) {
+          console.error(`Failed to send event to client ${clientId}:`, error);
+        }
       }
     });
   }
 
   // Broadcast event to specific user
   public broadcastToUser(userId: number, event: WebSocketEvent) {
-    const clientsToNotify = Array.from(this.clients.entries()).filter(([clientId, ws]) => {
-      return clientId.startsWith(`${userId}_`);
+    const clientsToNotify = Array.from(this.clients.entries()).filter(([clientId, clientSession]) => {
+      return clientSession.userId === userId;
     });
 
     console.log(`Broadcasting event ${event.type} to ${clientsToNotify.length} clients for user ${userId}`);
 
-    clientsToNotify.forEach(([clientId, ws]) => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify(event));
+    // Send event in the format expected by frontend
+    const message = {
+      type: 'event',
+      data: event,
+      timestamp: new Date()
+    };
+
+    clientsToNotify.forEach(([clientId, clientSession]) => {
+      if (clientSession.ws.readyState === WebSocket.OPEN) {
+        try {
+          clientSession.ws.send(JSON.stringify(message));
+        } catch (error) {
+          console.error(`Failed to send event to client ${clientId}:`, error);
+        }
       }
     });
   }
@@ -151,9 +202,20 @@ export class WebSocketManager extends EventEmitter {
   public broadcastToAll(event: WebSocketEvent) {
     console.log(`Broadcasting event ${event.type} to all ${this.clients.size} clients`);
 
-    this.clients.forEach((ws, clientId) => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify(event));
+    // Send event in the format expected by frontend
+    const message = {
+      type: 'event',
+      data: event,
+      timestamp: new Date()
+    };
+
+    this.clients.forEach((clientSession, clientId) => {
+      if (clientSession.ws.readyState === WebSocket.OPEN) {
+        try {
+          clientSession.ws.send(JSON.stringify(message));
+        } catch (error) {
+          console.error(`Failed to send event to client ${clientId}:`, error);
+        }
       }
     });
   }
@@ -179,8 +241,8 @@ export class WebSocketManager extends EventEmitter {
 
   // Close all connections
   public close() {
-    this.clients.forEach((ws) => {
-      ws.close();
+    this.clients.forEach((clientSession) => {
+      clientSession.ws.close();
     });
     this.wss.close();
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
@@ -55,9 +55,12 @@ import { format } from "date-fns";
 import { PageHeader } from "../PageHeader";
 import { toast } from "sonner";
 import { apiClient, Appointment } from "../../services/api";
+import { useWebSocket } from "../../hooks/useWebSocket";
+import { toastNotifications } from "../toast-notifications";
 import { formatDateToLocal, formatTimeToLocal } from "../../utils/dateUtils";
 
 export function AppointmentsPage() {
+  const { events } = useWebSocket();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -69,12 +72,8 @@ export function AppointmentsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [services, setServices] = useState<any[]>([]);
 
-  // Load data on component mount
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
+  // Load data function - wrapped in useCallback to avoid dependency issues
+  const loadData = useCallback(async () => {
     try {
       setIsLoading(true);
       const [appointmentsData, servicesData] = await Promise.all([
@@ -90,7 +89,49 @@ export function AppointmentsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  // Load data on component mount
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  // Handle real-time WebSocket events for appointments
+  const processedEventsRef = useRef<Set<string>>(new Set());
+  
+  useEffect(() => {
+    if (events.length === 0) return;
+
+    // Process all new events, not just the latest one
+    let hasNewEvents = false;
+    
+    events.forEach(event => {
+      // Skip if already processed
+      if (processedEventsRef.current.has(event.id)) return;
+      
+      hasNewEvents = true;
+      processedEventsRef.current.add(event.id);
+      
+      if (event.type === 'appointment.created' || event.type === 'appointment_created') {
+        // Show toast notification
+        toastNotifications.appointments.created();
+      } else if (event.type === 'appointment.updated' || event.type === 'appointment_updated') {
+        toastNotifications.appointments.updated(event.data?.customerName);
+      } else if (event.type === 'appointment.cancelled' || event.type === 'appointment_cancelled') {
+        toastNotifications.appointments.cancelled(event.data?.customerName);
+      } else if (event.type === 'appointment.confirmed' || event.type === 'appointment_confirmed') {
+        toastNotifications.appointments.confirmed(event.data?.customerName);
+      }
+    });
+
+    // Reload appointments if we processed any new appointment events
+    if (hasNewEvents) {
+      // Use requestAnimationFrame for smoother updates
+      requestAnimationFrame(() => {
+        loadData();
+      });
+    }
+  }, [events, loadData]);
 
   const stats = [
     {
@@ -122,8 +163,16 @@ export function AppointmentsPage() {
       iconBg: "bg-red-50",
       iconColor: "text-red-600",
       title: "Cancelled",
-      value: appointments?.filter(apt => apt.status === 'cancelled').length || 0,
+      value: appointments?.filter(apt => apt.status === 'cancelled' && !(apt as any).rejectionReason).length || 0,
       subtitle: "Cancelled bookings",
+    },
+    {
+      icon: XCircle,
+      iconBg: "bg-red-50",
+      iconColor: "text-red-600",
+      title: "Rejected",
+      value: appointments?.filter(apt => apt.status === 'cancelled' && (apt as any).rejectionReason).length || 0,
+      subtitle: "Rejected bookings",
     },
   ];
 
@@ -152,7 +201,16 @@ export function AppointmentsPage() {
   };
 
   const filteredAppointments = appointments?.filter((apt) => {
-    if (activeTab !== "all" && apt.status !== activeTab) return false;
+    // Handle rejected filter (cancelled with rejectionReason)
+    if (activeTab === "rejected") {
+      if (apt.status !== "cancelled" || !(apt as any).rejectionReason) return false;
+    } else if (activeTab === "cancelled") {
+      // For cancelled tab, show only cancelled WITHOUT rejectionReason
+      if (apt.status !== "cancelled" || (apt as any).rejectionReason) return false;
+    } else if (activeTab !== "all" && apt.status !== activeTab) {
+      return false;
+    }
+    
     if (searchQuery && 
         !(apt.chatId?.includes(searchQuery) || 
           apt.service?.name?.toLowerCase().includes(searchQuery.toLowerCase()))) {
@@ -180,6 +238,12 @@ export function AppointmentsPage() {
   const getTabCount = (tab: string) => {
     if (!appointments) return 0;
     if (tab === "all") return appointments.length;
+    if (tab === "rejected") {
+      return appointments.filter((apt) => apt.status === "cancelled" && (apt as any).rejectionReason).length;
+    }
+    if (tab === "cancelled") {
+      return appointments.filter((apt) => apt.status === "cancelled" && !(apt as any).rejectionReason).length;
+    }
     return appointments.filter((apt) => apt.status === tab).length;
   };
 
@@ -289,6 +353,12 @@ export function AppointmentsPage() {
                     className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white whitespace-nowrap"
                   >
                     Cancelled ({getTabCount("cancelled")})
+                  </TabsTrigger>
+                  <TabsTrigger 
+                    value="rejected" 
+                    className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white whitespace-nowrap"
+                  >
+                    Rejected ({getTabCount("rejected")})
                   </TabsTrigger>
                 </TabsList>
               </Tabs>

@@ -99,6 +99,29 @@ export class BotEmitter {
     await this.logEvent(event);
   }
 
+  async emitAdminLinked(userId: number, organizationId: number, telegramId: number) {
+    const event: WebSocketEvent = {
+      id: `admin_linked_${userId}_${Date.now()}`,
+      type: EventType.ADMIN_LINKED,
+      timestamp: new Date(),
+      organizationId,
+      userId,
+      data: {
+        userId,
+        telegramId,
+        organizationId
+      },
+      metadata: {
+        source: 'telegram',
+        userAgent: 'Telegram Bot'
+      }
+    };
+
+    await this.broadcastEvent(event);
+    await this.createNotification(event);
+    await this.logEvent(event);
+  }
+
   private async broadcastEvent(event: WebSocketEvent) {
     this.wsManager.broadcastToOrganization(event.organizationId, event);
   }
@@ -154,6 +177,8 @@ export class BotEmitter {
         return 'Booking Started';
       case EventType.BOT_BOOKING_COMPLETED:
         return 'Booking Completed';
+      case EventType.ADMIN_LINKED:
+        return 'Admin Account Linked';
       default:
         return 'Bot Activity';
     }
@@ -170,6 +195,8 @@ export class BotEmitter {
         return `${data.userName} started booking ${data.serviceName}`;
       case EventType.BOT_BOOKING_COMPLETED:
         return `${data.userName} completed booking for ${data.serviceName}`;
+      case EventType.ADMIN_LINKED:
+        return `Admin account linked successfully (Telegram ID: ${data.telegramId})`;
       default:
         return 'Bot activity detected';
     }

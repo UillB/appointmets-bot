@@ -3,6 +3,9 @@ import { prisma } from "../../lib/prisma";
 import { ENV } from "../../lib/env";
 import { getLocalizedServiceName } from "../../lib/localization";
 
+// Get WebSocket emitters from global scope
+const getAppointmentEmitter = () => (global as any).appointmentEmitter;
+
 // форматирование
 const fmtTime = (d: Date) => new Date(d).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" });
 const fmtFull = (d: Date) => new Date(d).toLocaleString("ru-RU", {
@@ -113,6 +116,14 @@ export function registerBookingCallbacks(bot: Telegraf, botUsername: string, org
         
         const appt = await tx.appointment.create({
           data: { chatId, serviceId: slot.serviceId, slotId: slot.id, status: "confirmed" },
+          include: {
+            service: {
+              include: {
+                organization: true
+              }
+            },
+            slot: true
+          }
         });
         return { appt, slot };
       });
@@ -121,6 +132,24 @@ export function registerBookingCallbacks(bot: Telegraf, botUsername: string, org
       await ctx.editMessageText(`${ctx.tt("confirm.ok")}\n\n` + ctx.tt("confirm.details", {
         service: getLocalizedServiceName(result.slot.service, ctx.lang), when
       }));
+
+      // Emit real-time WebSocket notification for appointment creation
+      try {
+        const appointmentEmitter = getAppointmentEmitter();
+        if (appointmentEmitter) {
+          const customerInfo = {
+            chatId: chatId,
+            firstName: ctx.from?.first_name,
+            lastName: ctx.from?.last_name,
+            username: ctx.from?.username
+          };
+          await appointmentEmitter.emitAppointmentCreated(result.appt, customerInfo);
+          console.log('✅ WebSocket notification sent for appointment creation from Telegram bot');
+        }
+      } catch (error) {
+        console.error('❌ Failed to send WebSocket notification for appointment creation:', error);
+        // Don't fail the request if WebSocket notification fails
+      }
 
       // уведомления админу/в группу (если указаны)
       const who = `${ctx.from?.first_name || ""} ${ctx.from?.last_name || ""}`.trim();

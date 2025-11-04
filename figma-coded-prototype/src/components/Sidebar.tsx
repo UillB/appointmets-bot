@@ -7,9 +7,12 @@ import {
   Sparkles, 
   Settings,
   LogOut,
-  BarChart3
+  BarChart3,
+  Shield,
+  CheckCircle2
 } from "lucide-react";
 import { Badge } from "./ui/badge";
+import { useWebSocket } from "../hooks/useWebSocket";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -19,6 +22,9 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProps) {
+  const { isConnected } = useWebSocket({ autoConnect: true });
+  const isAdminLinked = false; // This should come from your auth state
+  
   const navItems = [
     { icon: LayoutDashboard, label: "Dashboard", page: "dashboard" },
     { icon: Calendar, label: "Appointments", page: "appointments", badge: "5" },
@@ -104,8 +110,29 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
             ))}
           </nav>
 
-          {/* Stats */}
+          {/* Stats & Status */}
           <div className="p-4 space-y-3">
+            {/* Admin Status */}
+            <div className="px-3 py-2.5 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div className="flex items-center gap-2 mb-2">
+                <Shield className="w-4 h-4" />
+                <p className="text-xs font-medium">Admin Status</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {isAdminLinked ? (
+                  <>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
+                    <span className="text-xs text-white/90">Telegram Linked</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-3.5 h-3.5 rounded-full border-2 border-amber-300" />
+                    <span className="text-xs text-amber-200">Not Linked</span>
+                  </>
+                )}
+              </div>
+            </div>
+
             {stats.map((stat) => (
               <div 
                 key={stat.label}

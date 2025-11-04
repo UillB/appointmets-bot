@@ -13,6 +13,20 @@ import {
   Download,
   Filter,
 } from "lucide-react";
+import {
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+} from "recharts";
 import { apiClient } from "../../services/api";
 import { toast } from "sonner";
 import { format, subDays, startOfDay, endOfDay } from "date-fns";
@@ -62,13 +76,11 @@ export function AnalyticsPage() {
   const loadAnalytics = async () => {
     setIsLoading(true);
     try {
-      const response = await apiClient.get("/analytics", {
-        params: {
-          startDate: format(dateRange.start, "yyyy-MM-dd"),
-          endDate: format(dateRange.end, "yyyy-MM-dd"),
-        },
-      });
-      setAnalyticsData(response.data);
+      const startDate = format(dateRange.start, "yyyy-MM-dd");
+      const endDate = format(dateRange.end, "yyyy-MM-dd");
+      const endpoint = `/analytics?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+      const response = await apiClient.get<AnalyticsData>(endpoint);
+      setAnalyticsData(response);
     } catch (error) {
       console.error("Error loading analytics:", error);
       toast.error("Failed to load analytics data");
@@ -79,16 +91,23 @@ export function AnalyticsPage() {
 
   const exportAnalytics = async () => {
     try {
-      const response = await apiClient.get("/analytics/export", {
-        params: {
-          startDate: format(dateRange.start, "yyyy-MM-dd"),
-          endDate: format(dateRange.end, "yyyy-MM-dd"),
-          format: "csv",
+      const startDate = format(dateRange.start, "yyyy-MM-dd");
+      const endDate = format(dateRange.end, "yyyy-MM-dd");
+      const endpoint = `/analytics/export?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}&format=csv`;
+      
+      // Use fetch directly for blob response
+      const token = localStorage.getItem('accessToken');
+      const response = await fetch(`http://localhost:4000/api${endpoint}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
         },
-        responseType: "blob",
       });
 
-      const blob = new Blob([response.data], { type: "text/csv" });
+      if (!response.ok) {
+        throw new Error('Export failed');
+      }
+
+      const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -246,6 +265,83 @@ export function AnalyticsPage() {
           trend={15}
           color="purple"
         />
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Daily Bookings Trend */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Daily Bookings Trend</h3>
+              <p className="text-sm text-gray-600">Appointments over time</p>
+            </div>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={analyticsData.dailyBookings}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis 
+                  dataKey="date" 
+                  stroke="#6B7280"
+                  style={{ fontSize: "12px" }}
+                  tickFormatter={(value) => format(new Date(value), "MMM dd")}
+                />
+                <YAxis stroke="#6B7280" style={{ fontSize: "12px" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#fff",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: "8px",
+                  }}
+                  labelFormatter={(value) => format(new Date(value), "MMM dd, yyyy")}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="bookings"
+                  stroke="#4F46E5"
+                  strokeWidth={2}
+                  dot={{ fill: "#4F46E5", r: 4 }}
+                  activeDot={{ r: 6 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+
+        {/* Top Services Chart */}
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">Top Services</h3>
+              <p className="text-sm text-gray-600">Bookings by service</p>
+            </div>
+          </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={analyticsData.topServices.slice(0, 5)}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                <XAxis 
+                  dataKey="serviceName" 
+                  stroke="#6B7280"
+                  style={{ fontSize: "12px" }}
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                />
+                <YAxis stroke="#6B7280" style={{ fontSize: "12px" }} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#fff",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Bar dataKey="bookings" fill="#4F46E5" radius={[8, 8, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
       </div>
 
       {/* Top Services */}

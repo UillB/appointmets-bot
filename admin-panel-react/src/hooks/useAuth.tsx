@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 
 interface AuthContextType {
   user: User | null;
+  token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
@@ -17,6 +18,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
 
   // Initialize auth state from localStorage
   useEffect(() => {
@@ -26,25 +28,73 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const storedToken = localStorage.getItem('accessToken');
         
         if (storedUser && storedToken) {
-          const userData = JSON.parse(storedUser);
-          setUser(userData);
-          
-          // Verify token is still valid by making a test request
           try {
-            await apiClient.getDashboardStats();
-          } catch (error) {
-            // Token is invalid, try to refresh
+            const userData = JSON.parse(storedUser);
+            setUser(userData);
+            setToken(storedToken);
+            
+            // Verify token is still valid by making a test request with timeout
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Request timeout')), 3000)
+            );
+            
             try {
-              await apiClient.refreshToken();
-              // Token refreshed successfully, keep user logged in
-            } catch (refreshError) {
-              // Refresh failed, clear auth state
-              localStorage.removeItem('accessToken');
-              localStorage.removeItem('refreshToken');
-              localStorage.removeItem('user');
-              setUser(null);
+              await Promise.race([
+                apiClient.getDashboardStats(),
+                timeoutPromise
+              ]);
+              // Token is valid
+            } catch (error: any) {
+              console.log('Token validation failed:', error.message);
+              
+              // If it's a network error or timeout, don't try to refresh - just keep user logged in
+              const isNetworkError = error.message === 'Request timeout' || 
+                                    error.message?.includes('Failed to fetch') || 
+                                    error.message?.includes('NetworkError');
+              
+              if (!isNetworkError) {
+                // Token is invalid (not network error), try to refresh
+                try {
+                  const refreshTimeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error('Refresh timeout')), 3000)
+                  );
+                  
+                  await Promise.race([
+                    apiClient.refreshToken(),
+                    refreshTimeoutPromise
+                  ]);
+                  // Token refreshed successfully, keep user logged in
+                } catch (refreshError: any) {
+                  console.log('Token refresh failed:', refreshError.message);
+                  
+                  // If refresh also timed out, keep user logged in
+                  const isRefreshNetworkError = refreshError.message === 'Refresh timeout' || 
+                                                refreshError.message?.includes('Failed to fetch');
+                  
+                  if (!isRefreshNetworkError) {
+                    // Refresh failed for other reasons (invalid token), clear auth state
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    localStorage.removeItem('user');
+                    setUser(null);
+                    setToken(null);
+                  }
+                  // If network error, keep user logged in
+                }
+              }
+              // If network error during validation, keep user logged in
             }
+          } catch (parseError) {
+            console.error('Failed to parse user data:', parseError);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('user');
+            setUser(null);
           }
+        } else {
+          // No stored auth data, user is not authenticated
+          setUser(null);
+          setToken(null);
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
@@ -53,7 +103,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
         setUser(null);
+        setToken(null);
       } finally {
+        // Always set loading to false, even if there were errors
         setIsLoading(false);
       }
     };
@@ -84,6 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       const response: AuthResponse = await apiClient.login(email, password);
       setUser(response.user);
+      setToken(response.accessToken);
       toast.success('Login successful');
     } catch (error: any) {
       console.error('Login error:', error);
@@ -104,6 +157,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(true);
       const response: AuthResponse = await apiClient.register(email, password, name, organizationName);
       setUser(response.user);
+      setToken(response.accessToken);
       toast.success('Registration successful');
     } catch (error: any) {
       console.error('Registration error:', error);
@@ -123,8 +177,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Clear API client token
     apiClient.logout();
     
-    // Clear user state
+    // Clear user state and token
     setUser(null);
+    setToken(null);
     
     toast.info('Logged out successfully');
   };
@@ -132,6 +187,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshToken = async () => {
     try {
       await apiClient.refreshToken();
+      // Update token from localStorage after refresh
+      const newToken = localStorage.getItem('accessToken');
+      if (newToken) {
+        setToken(newToken);
+      }
     } catch (error) {
       console.error('Token refresh failed:', error);
       logout();
@@ -139,8 +199,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Sync token from localStorage when it changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedToken = localStorage.getItem('accessToken');
+      setToken(storedToken);
+    };
+
+    // Listen for storage changes
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also check periodically (in case token was updated in same window)
+    const interval = setInterval(() => {
+      const storedToken = localStorage.getItem('accessToken');
+      if (storedToken !== token) {
+        setToken(storedToken);
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [token]);
+
   const value: AuthContextType = {
     user,
+    token,
     isAuthenticated: !!user,
     isLoading,
     login,

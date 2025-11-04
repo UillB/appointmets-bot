@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
@@ -36,8 +36,11 @@ import { ScrollArea } from "../ui/scroll-area";
 import { PageHeader } from "../PageHeader";
 import { toast } from "sonner";
 import { apiClient } from "../../services/api";
+import { useWebSocket } from "../../hooks/useWebSocket";
+import { toastNotifications } from "../toast-notifications";
 
 export function ServicesPage() {
+  const { events } = useWebSocket();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -58,12 +61,46 @@ export function ServicesPage() {
     todayRevenue: 0
   });
   const [statsLoading, setStatsLoading] = useState(true);
+  const processedEventsRef = useRef<Set<string>>(new Set());
 
   // Load services and stats on mount
   useEffect(() => {
     loadData();
     loadStats();
   }, []);
+
+  // Handle real-time WebSocket events for services
+  useEffect(() => {
+    if (events.length === 0) return;
+
+    // Process all new events, not just the latest one
+    let hasNewEvents = false;
+    
+    events.forEach(event => {
+      // Skip if already processed
+      if (processedEventsRef.current.has(event.id)) return;
+      
+      hasNewEvents = true;
+      processedEventsRef.current.add(event.id);
+      
+      if (event.type === 'service.created' || event.type === 'service_created') {
+        // Show toast notification
+        toastNotifications.services.created(event.data?.serviceName);
+      } else if (event.type === 'service.updated' || event.type === 'service_updated') {
+        toastNotifications.services.updated(event.data?.serviceName);
+      } else if (event.type === 'service.deleted' || event.type === 'service_deleted') {
+        toastNotifications.services.deleted(event.data?.serviceName);
+      }
+    });
+
+    // Reload services if we processed any new service events
+    if (hasNewEvents) {
+      setTimeout(() => {
+        loadData();
+        loadStats();
+      }, 300);
+    }
+  }, [events]);
 
   const loadData = async () => {
     try {

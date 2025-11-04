@@ -29,18 +29,24 @@ async function main() {
   (global as any).botEmitter = botEmitter;
 
   // 1) Сначала поднимем HTTP — чтобы /health работал в любом случае
-  server.listen(ENV.PORT, "0.0.0.0", () => {
-    console.log(`API on http://127.0.0.1:${ENV.PORT}`);
-    console.log(`WebSocket server running on ws://127.0.0.1:${ENV.PORT}/ws`);
+  await new Promise<void>((resolve) => {
+    server.listen(ENV.PORT, "0.0.0.0", () => {
+      console.log(`API on http://127.0.0.1:${ENV.PORT}`);
+      console.log(`WebSocket server running on ws://127.0.0.1:${ENV.PORT}/ws`);
+      resolve();
+    });
   });
 
-  // 2) Инициализируем менеджер ботов
-  try {
-    await botManager.initialize();
-    console.log("🤖 Bot Manager initialized successfully");
-  } catch (e) {
-    console.error("❌ Bot Manager initialization failed:", e);
-  }
+  // 2) Инициализируем менеджер ботов (асинхронно, не блокируем сервер)
+  // Используем setTimeout чтобы гарантировать, что сервер запустится первым
+  setImmediate(() => {
+    botManager.initialize().then(() => {
+      console.log("🤖 Bot Manager initialized successfully");
+    }).catch((e) => {
+      console.error("❌ Bot Manager initialization failed:", e);
+      // Не падаем, продолжаем работать
+    });
+  });
 
   // 3) Потом пытаемся запустить основной бота (если есть токен в env), но без падения процесса
   // ОТКЛЮЧЕНО: используем только BotManager для управления ботами

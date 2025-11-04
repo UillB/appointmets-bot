@@ -6,7 +6,16 @@ import { v4 as uuidv4 } from 'uuid';
 export class AppointmentEmitter {
   constructor(private wsManager: WebSocketManager) {}
 
-  async emitAppointmentCreated(appointment: any) {
+  async emitAppointmentCreated(appointment: any, customerInfo?: { chatId?: string; firstName?: string; lastName?: string; username?: string }) {
+    const slotStart = new Date(appointment.slot.startAt);
+    const slotEnd = new Date(appointment.slot.endAt);
+    const serviceDuration = appointment.service.durationMin || 0;
+    const calculatedEnd = new Date(slotStart.getTime() + serviceDuration * 60 * 1000);
+    
+    const customerName = customerInfo 
+      ? `${customerInfo.firstName || ''} ${customerInfo.lastName || ''}`.trim() || customerInfo.username || customerInfo.chatId || 'Unknown'
+      : appointment.customerName || appointment.chatId || 'Unknown';
+
     const event: WebSocketEvent = {
       id: `appointment_${appointment.id}_${Date.now()}`,
       type: EventType.APPOINTMENT_CREATED,
@@ -16,8 +25,15 @@ export class AppointmentEmitter {
       data: {
         appointmentId: appointment.id,
         serviceName: appointment.service.name,
+        serviceId: appointment.service.id,
+        slotStart: appointment.slot.startAt,
+        slotEnd: appointment.slot.endAt,
         slotTime: appointment.slot.startAt,
-        customerName: appointment.customerName,
+        customerName: customerName,
+        customerChatId: customerInfo?.chatId || appointment.chatId,
+        customerUsername: customerInfo?.username,
+        customerFirstName: customerInfo?.firstName,
+        customerLastName: customerInfo?.lastName,
         status: appointment.status
       },
       metadata: {
@@ -57,7 +73,16 @@ export class AppointmentEmitter {
     await this.logEvent(event);
   }
 
-  async emitAppointmentCancelled(appointment: any) {
+  async emitAppointmentCancelled(appointment: any, customerInfo?: { chatId?: string; firstName?: string; lastName?: string; username?: string }) {
+    const slotStart = new Date(appointment.slot.startAt);
+    const slotEnd = new Date(appointment.slot.endAt);
+    const serviceDuration = appointment.service.durationMin || 0;
+    const calculatedEnd = new Date(slotStart.getTime() + serviceDuration * 60 * 1000);
+    
+    const customerName = customerInfo 
+      ? `${customerInfo.firstName || ''} ${customerInfo.lastName || ''}`.trim() || customerInfo.username || customerInfo.chatId || 'Unknown'
+      : appointment.customerName || appointment.chatId || 'Unknown';
+
     const event: WebSocketEvent = {
       id: `appointment_${appointment.id}_${Date.now()}`,
       type: EventType.APPOINTMENT_CANCELLED,
@@ -67,8 +92,15 @@ export class AppointmentEmitter {
       data: {
         appointmentId: appointment.id,
         serviceName: appointment.service.name,
+        serviceId: appointment.service.id,
+        slotStart: appointment.slot.startAt,
+        slotEnd: appointment.slot.endAt,
         slotTime: appointment.slot.startAt,
-        customerName: appointment.customerName,
+        customerName: customerName,
+        customerChatId: customerInfo?.chatId || appointment.chatId,
+        customerUsername: customerInfo?.username,
+        customerFirstName: customerInfo?.firstName,
+        customerLastName: customerInfo?.lastName,
         status: appointment.status
       },
       metadata: {
@@ -171,15 +203,70 @@ export class AppointmentEmitter {
 
   private getNotificationMessage(event: WebSocketEvent): string {
     const data = event.data;
+    const slotStart = new Date(data.slotStart || data.slotTime);
+    // Use slotEnd if available, otherwise calculate from service duration
+    let slotEnd: Date;
+    if (data.slotEnd) {
+      slotEnd = new Date(data.slotEnd);
+    } else {
+      // Fallback: use slotStart + 1 hour if no duration info
+      slotEnd = new Date(slotStart.getTime() + 60 * 60 * 1000);
+    }
+    
+    // Format date and time
+    const dateStr = slotStart.toLocaleDateString('ru-RU', { 
+      weekday: 'short', 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric' 
+    });
+    const timeStartStr = slotStart.toLocaleTimeString('ru-RU', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+    const timeEndStr = slotEnd.toLocaleTimeString('ru-RU', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+    
+    // Customer info
+    const customerInfo = [];
+    if (data.customerName && data.customerName !== 'Unknown') {
+      customerInfo.push(data.customerName);
+    }
+    if (data.customerUsername) {
+      customerInfo.push(`@${data.customerUsername}`);
+    }
+    if (data.customerChatId && !customerInfo.length) {
+      customerInfo.push(`ID: ${data.customerChatId}`);
+    }
+    const customerStr = customerInfo.length > 0 ? customerInfo.join(' ') : 'Unknown customer';
+    
     switch (event.type) {
       case EventType.APPOINTMENT_CREATED:
-        return `New appointment created for ${data.serviceName} at ${new Date(data.slotTime).toLocaleString()}`;
+        return `📅 Новая запись\n\n` +
+               `🏥 Сервис: ${data.serviceName}\n` +
+               `📆 Дата: ${dateStr}\n` +
+               `⏰ Время: ${timeStartStr} - ${timeEndStr}\n` +
+               `👤 Клиент: ${customerStr}`;
       case EventType.APPOINTMENT_UPDATED:
-        return `Appointment for ${data.serviceName} has been updated`;
+        return `📝 Запись обновлена\n\n` +
+               `🏥 Сервис: ${data.serviceName}\n` +
+               `📆 Дата: ${dateStr}\n` +
+               `⏰ Время: ${timeStartStr} - ${timeEndStr}\n` +
+               `👤 Клиент: ${customerStr}`;
       case EventType.APPOINTMENT_CANCELLED:
-        return `Appointment for ${data.serviceName} has been cancelled`;
+        return `❌ Запись отменена\n\n` +
+               `🏥 Сервис: ${data.serviceName}\n` +
+               `📆 Дата: ${dateStr}\n` +
+               `⏰ Время: ${timeStartStr} - ${timeEndStr}\n` +
+               `👤 Клиент: ${customerStr}`;
       case EventType.APPOINTMENT_CONFIRMED:
-        return `Appointment for ${data.serviceName} has been confirmed`;
+        return `✅ Запись подтверждена\n\n` +
+               `🏥 Сервис: ${data.serviceName}\n` +
+               `📆 Дата: ${dateStr}\n` +
+               `⏰ Время: ${timeStartStr} - ${timeEndStr}\n` +
+               `👤 Клиент: ${customerStr}`;
       default:
         return 'Appointment status updated';
     }

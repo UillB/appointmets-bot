@@ -10,15 +10,26 @@ import {
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
+  Bot,
+  AlertCircle,
+  ArrowRight,
+  Shield,
 } from "lucide-react";
 import { QuickActionCard } from "./QuickActionCard";
 import { StatCard } from "./StatCard";
 import { AppointmentCard } from "./AppointmentCard";
+import { AppointmentsSummaryCard } from "./AppointmentsSummaryCard";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
+import { Alert, AlertDescription } from "./ui/alert";
 import { toastNotifications } from "./toast-notifications";
+import { useState } from "react";
 
 export function Dashboard() {
+  // Mock bot status - в реальном приложении будет из API/state
+  const [botActive, setBotActive] = useState(false);
+  const [adminLinked, setAdminLinked] = useState(false);
+
   const handleRefresh = () => {
     toastNotifications.system.refreshed("Dashboard");
   };
@@ -141,6 +152,94 @@ export function Dashboard() {
         </h1>
         <p className="text-sm text-gray-600 mt-1">Tuesday, November 4, 2025</p>
       </div>
+
+      {/* Bot Status Alerts */}
+      {!botActive && (
+        <Alert className="border-red-200 bg-red-50">
+          <Bot className="h-5 w-5 text-red-600 flex-shrink-0" />
+          <AlertDescription className="text-red-900">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex-1">
+                <strong className="font-semibold">Telegram Bot Not Active</strong>
+                <p className="text-sm mt-1">Your bot is not configured yet. Set it up to start receiving appointments through Telegram.</p>
+              </div>
+              <Button
+                size="sm"
+                className="bg-red-600 hover:bg-red-700 flex-shrink-0 w-full sm:w-auto"
+                onClick={() => {
+                  // В реальном приложении будет навигация
+                  window.location.hash = '#/bot-management';
+                }}
+              >
+                Setup Bot
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {botActive && !adminLinked && (
+        <Alert className="border-amber-200 bg-amber-50">
+          <Shield className="h-5 w-5 text-amber-600 flex-shrink-0" />
+          <AlertDescription className="text-amber-900">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div className="flex-1">
+                <strong className="font-semibold">Admin Account Not Linked</strong>
+                <p className="text-sm mt-1">Complete the setup by linking your Telegram account as administrator.</p>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-amber-300 hover:bg-amber-100 flex-shrink-0 w-full sm:w-auto"
+                onClick={() => {
+                  window.location.hash = '#/bot-management';
+                }}
+              >
+                Link Admin
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Demo Toggle - Remove in production */}
+      <Card className="p-4 bg-purple-50 border-purple-200">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-medium text-purple-900">Demo Controls</p>
+            <p className="text-sm text-purple-700">Toggle bot status for testing</p>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setBotActive(!botActive)}
+              className="border-purple-300"
+            >
+              Bot: {botActive ? "Active" : "Inactive"}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setAdminLinked(!adminLinked)}
+              className="border-purple-300"
+              disabled={!botActive}
+            >
+              Admin: {adminLinked ? "Linked" : "Not Linked"}
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      {/* Appointments Summary - Highlighted */}
+      <AppointmentsSummaryCard 
+        totalAppointments={156}
+        confirmedAppointments={124}
+        pendingAppointments={18}
+        rejectedAppointments={14}
+      />
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

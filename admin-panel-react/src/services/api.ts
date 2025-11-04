@@ -452,27 +452,31 @@ class ApiClient {
     });
   }
 
-  // Service deletion with safety checks
+  // Service deletion with safety checks (check only, doesn't delete)
   async deleteServiceWithCheck(serviceId: number): Promise<{
+    safeToDelete?: boolean;
     error?: string;
     details?: {
       totalAppointments: number;
       futureAppointments: number;
-      nextAppointmentDate: string;
-      nextAppointmentTime: string;
+      nextAppointmentDate?: string;
+      nextAppointmentTime?: string;
+      totalSlots?: number;
       message: string;
     };
   }> {
-    try {
-      return await this.request(`/services/${serviceId}`, {
-        method: 'DELETE',
-      });
-    } catch (error: any) {
-      if (error.status === 400) {
-        return error.data;
-      }
-      throw error;
-    }
+    return await this.request(`/services/${serviceId}/deletion-check`, {
+      method: 'GET',
+    });
+  }
+
+  // Actually delete service (safe delete - only if no future appointments)
+  async deleteService(serviceId: number): Promise<{
+    message: string;
+  }> {
+    return await this.request(`/services/${serviceId}`, {
+      method: 'DELETE',
+    });
   }
 
   async forceDeleteService(serviceId: number): Promise<{
@@ -543,6 +547,12 @@ class ApiClient {
 
   async testBot(): Promise<{ message: string; success: boolean }> {
     return this.request('/bot/test', {
+      method: 'POST',
+    });
+  }
+
+  async generateAdminLink(): Promise<{ success: boolean; adminLink?: string; linkToken?: string; expiresIn?: number; botUsername?: string; error?: string }> {
+    return this.request('/bot/generate-admin-link', {
       method: 'POST',
     });
   }
@@ -692,6 +702,16 @@ class ApiClient {
       totalRevenue: servicesStats.totalRevenue,
       todayRevenue: servicesStats.todayRevenue
     };
+  }
+
+  // Appointments summary stats for AppointmentsSummaryCard
+  async getAppointmentsSummaryStats(): Promise<{
+    totalAppointments: number;
+    confirmedAppointments: number;
+    pendingAppointments: number;
+    rejectedAppointments: number;
+  }> {
+    return this.request('/appointments/summary-stats');
   }
 }
 

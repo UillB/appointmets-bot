@@ -1,5 +1,6 @@
 // Card Components
 export { AppointmentCard } from './AppointmentCard';
+export { AppointmentsSummaryCard } from './AppointmentsSummaryCard';
 export { MobileAppointmentCard } from './MobileAppointmentCard';
 export { OrganizationCard } from './OrganizationCard';
 export { QuickActionCard } from './QuickActionCard';

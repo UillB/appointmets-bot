@@ -45,7 +45,7 @@ export function useWebSocket() {
       wsRef.current = new WebSocket(wsUrl);
 
       wsRef.current.onopen = () => {
-        console.log('WebSocket connected');
+        console.log('✅ WebSocket connected successfully');
         setIsConnected(true);
         setConnectionStatus('connected');
         
@@ -128,11 +128,12 @@ export function useWebSocket() {
         // Heartbeat response - connection is alive
         break;
       case 'connection':
-        console.log('WebSocket connection established:', message.message);
+        console.log('✅ WebSocket connection established:', message.message);
         break;
       case 'event':
         // Handle real-time events
         if (message.data) {
+          console.log('📨 WebSocket event received:', message.data.type, message.data);
           setEvents(prev => {
             const newEvent = {
               ...message.data,
@@ -161,9 +162,13 @@ export function useWebSocket() {
 
   // Connect when authenticated
   useEffect(() => {
+    console.log('🔌 WebSocket connection check:', { isAuthenticated, hasToken: !!token, tokenLength: token?.length });
+    
     if (isAuthenticated && token) {
+      console.log('🔌 Attempting WebSocket connection...');
       connect();
     } else {
+      console.log('🔌 WebSocket not connecting:', { isAuthenticated, hasToken: !!token });
       disconnect();
     }
 

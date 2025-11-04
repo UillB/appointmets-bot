@@ -9,7 +9,9 @@ import {
   Sparkles, 
   Settings,
   LogOut,
-  Clock
+  Clock,
+  Shield,
+  CheckCircle2
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -27,7 +29,7 @@ interface SidebarProps {
 export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { events } = useWebSocket();
   const [stats, setStats] = useState({
     todayAppointments: 0,
@@ -36,58 +38,115 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
     totalAppointments: 0
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [isAdminLinked, setIsAdminLinked] = useState(false);
 
-  // Load sidebar statistics
+  // Load sidebar statistics and admin status
   useEffect(() => {
     const loadStats = async () => {
       try {
         setIsLoading(true);
-        const dashboardStats = await apiClient.getDashboardStats();
+        const [dashboardStats, botStatusData] = await Promise.all([
+          apiClient.getDashboardStats(),
+          user?.organizationId ? apiClient.getBotStatus(user.organizationId).catch(() => null) : Promise.resolve(null)
+        ]);
+        
         setStats({
           todayAppointments: dashboardStats.todayAppointments,
           weekAppointments: dashboardStats.weekAppointments,
           totalServices: dashboardStats.totalServices,
           totalAppointments: dashboardStats.totalAppointments
         });
+
+        // Check admin link status
+        if (botStatusData?.success && botStatusData.botStatus) {
+          setIsAdminLinked(botStatusData.botStatus.adminLinked !== undefined ? botStatusData.botStatus.adminLinked : !!user?.telegramId);
+        } else {
+          setIsAdminLinked(!!user?.telegramId);
+        }
       } catch (error) {
         console.error('Failed to load sidebar stats:', error);
+        // Fallback to user telegramId
+        setIsAdminLinked(!!user?.telegramId);
       } finally {
         setIsLoading(false);
       }
     };
 
     loadStats();
-  }, []);
+  }, [user]);
 
   // Handle real-time WebSocket events for live updates
   useEffect(() => {
-    events.forEach(event => {
-      if (event.type === 'appointment.created') {
-        setStats(prev => ({
-          ...prev,
-          totalAppointments: prev.totalAppointments + 1,
-          todayAppointments: prev.todayAppointments + 1,
-          weekAppointments: prev.weekAppointments + 1
-        }));
-      } else if (event.type === 'appointment.cancelled') {
-        setStats(prev => ({
-          ...prev,
-          totalAppointments: Math.max(0, prev.totalAppointments - 1),
-          todayAppointments: Math.max(0, prev.todayAppointments - 1),
-          weekAppointments: Math.max(0, prev.weekAppointments - 1)
-        }));
-      } else if (event.type === 'service.created') {
-        setStats(prev => ({
-          ...prev,
-          totalServices: prev.totalServices + 1
-        }));
-      } else if (event.type === 'service.deleted') {
-        setStats(prev => ({
-          ...prev,
-          totalServices: Math.max(0, prev.totalServices - 1)
-        }));
-      }
-    });
+    if (events.length === 0) return;
+
+    // Process only the latest events to avoid duplicates
+    const latestEvent = events[0];
+    
+    if (latestEvent.type === 'appointment.created' || latestEvent.type === 'appointment_created') {
+      setStats(prev => ({
+        ...prev,
+        totalAppointments: prev.totalAppointments + 1,
+        todayAppointments: prev.todayAppointments + 1,
+        weekAppointments: prev.weekAppointments + 1
+      }));
+      // Reload stats to get accurate data
+      setTimeout(() => {
+        apiClient.getDashboardStats().then(data => {
+          setStats(prev => ({
+            ...prev,
+            totalAppointments: data.totalAppointments,
+            todayAppointments: data.todayAppointments,
+            weekAppointments: data.weekAppointments
+          }));
+        }).catch(console.error);
+      }, 500);
+    } else if (latestEvent.type === 'appointment.cancelled' || latestEvent.type === 'appointment_cancelled') {
+      setStats(prev => ({
+        ...prev,
+        totalAppointments: Math.max(0, prev.totalAppointments - 1),
+        todayAppointments: Math.max(0, prev.todayAppointments - 1),
+        weekAppointments: Math.max(0, prev.weekAppointments - 1)
+      }));
+      // Reload stats to get accurate data
+      setTimeout(() => {
+        apiClient.getDashboardStats().then(data => {
+          setStats(prev => ({
+            ...prev,
+            totalAppointments: data.totalAppointments,
+            todayAppointments: data.todayAppointments,
+            weekAppointments: data.weekAppointments
+          }));
+        }).catch(console.error);
+      }, 500);
+    } else if (latestEvent.type === 'service.created' || latestEvent.type === 'service_created') {
+      setStats(prev => ({
+        ...prev,
+        totalServices: prev.totalServices + 1
+      }));
+      // Reload stats to get accurate data
+      setTimeout(() => {
+        apiClient.getDashboardStats().then(data => {
+          setStats(prev => ({
+            ...prev,
+            totalServices: data.totalServices
+          }));
+        }).catch(console.error);
+      }, 500);
+    } else if (latestEvent.type === 'service.deleted' || latestEvent.type === 'service_deleted') {
+      setStats(prev => ({
+        ...prev,
+        totalServices: Math.max(0, prev.totalServices - 1)
+      }));
+      // Reload stats to get accurate data
+      setTimeout(() => {
+        apiClient.getDashboardStats().then(data => {
+          setStats(prev => ({
+            ...prev,
+            totalServices: data.totalServices
+          }));
+        }).catch(console.error);
+      }, 500);
+    }
   }, [events]);
 
   const navItems = [
@@ -182,8 +241,29 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
             ))}
           </nav>
 
-          {/* Stats and Logout - Fixed at bottom */}
+          {/* Stats & Status - Fixed at bottom */}
           <div className="p-3 sm:p-4 space-y-2 sm:space-y-3 flex-shrink-0">
+            {/* Admin Status */}
+            <div className="px-2 sm:px-3 py-2 sm:py-2.5 bg-white/10 rounded-lg backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
+                <p className="text-[10px] sm:text-xs font-medium">Admin Status</p>
+              </div>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {isAdminLinked ? (
+                  <>
+                    <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-300 flex-shrink-0" />
+                    <span className="text-[10px] sm:text-xs text-white/90">Telegram Linked</span>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border-2 border-amber-300 flex-shrink-0" />
+                    <span className="text-[10px] sm:text-xs text-amber-200">Not Linked</span>
+                  </>
+                )}
+              </div>
+            </div>
+
             <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/10 rounded-lg backdrop-blur-sm">
               <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
               <div className="flex-1 min-w-0">

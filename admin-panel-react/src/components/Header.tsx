@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Moon, Globe, Bell, HelpCircle, Menu, LogOut, Check } from "lucide-react";
+import { Moon, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback } from "./ui/avatar";
@@ -7,11 +7,15 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { useAuth } from "../hooks/useAuth";
 import { useLanguage, Language } from "../i18n";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { NotificationCenter } from "./NotificationCenter";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -20,6 +24,8 @@ interface HeaderProps {
 export function Header({ onMenuClick }: HeaderProps) {
   const { logout, user } = useAuth();
   const { language, setLanguage, t } = useLanguage();
+  const navigate = useNavigate();
+  const [notificationOpen, setNotificationOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -125,39 +131,49 @@ export function Header({ onMenuClick }: HeaderProps) {
             </DropdownMenuContent>
           </DropdownMenu>
           
-          <Button variant="ghost" size="icon" className="relative w-8 h-8 sm:w-9 sm:h-9">
-            <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <Badge className="absolute -top-0.5 -right-0.5 w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center p-0 bg-red-500 text-white text-[8px] sm:text-[10px] border-2 border-white">
-              3
-            </Badge>
-          </Button>
+          <NotificationCenter />
           
           <Button variant="ghost" size="icon" className="hidden sm:flex w-8 h-8 sm:w-9 sm:h-9">
             <HelpCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </Button>
           
-          {/* Logout Button - Always accessible */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={handleLogout}
-            className="w-8 h-8 sm:w-9 sm:h-9 text-red-600 hover:text-red-700 hover:bg-red-50"
-            title="Logout"
-          >
-            <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          </Button>
-          
-          <div className="flex items-center gap-1 sm:gap-2 ml-1 sm:ml-2 pl-1 sm:pl-2 border-l border-gray-200">
-            <div className="hidden sm:block text-right">
-              <p className="text-xs sm:text-sm">{user?.name || 'User'}</p>
-              <p className="text-[10px] sm:text-xs text-gray-500">{user?.organization?.name || 'Organization'}</p>
-            </div>
-            <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-indigo-600">
-              <AvatarFallback className="bg-indigo-600 text-white text-xs sm:text-sm">
-                {user?.name?.charAt(0)?.toUpperCase() || 'U'}
-              </AvatarFallback>
-            </Avatar>
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex items-center gap-1 sm:gap-2 ml-1 sm:ml-2 pl-1 sm:pl-2 border-l border-gray-200 hover:opacity-80 transition-opacity">
+                <div className="hidden sm:block text-right">
+                  <p className="text-xs sm:text-sm">{user?.name || 'User'}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{user?.organization?.name || 'Organization'}</p>
+                </div>
+                <Avatar className="w-7 h-7 sm:w-8 sm:h-8 bg-indigo-600 cursor-pointer">
+                  <AvatarFallback className="bg-indigo-600 text-white text-xs sm:text-sm">
+                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                  </AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium">{user?.name || 'User'}</p>
+                  <p className="text-xs text-gray-500">{user?.email || 'user@example.com'}</p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/profile')}>
+                <User className="w-4 h-4 mr-2" />
+                Profile
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onClick={() => navigate('/settings')}>
+                <Settings className="w-4 h-4 mr-2" />
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>

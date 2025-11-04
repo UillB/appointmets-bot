@@ -1,8 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Bell, Check, X, Archive, Trash2, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Bell, Check, X, Archive, Trash2, AlertCircle, Clock, Calendar, Users, Sparkles, CheckCircle2, AlertTriangle, Info, BellOff, CheckCheck } from 'lucide-react';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { apiClient } from '../services/api';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { Badge } from './ui/badge';
+import { ScrollArea } from './ui/scroll-area';
+import { Button } from './ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from './ui/sheet';
 
 interface Notification {
   id: string;
@@ -30,19 +41,47 @@ export function NotificationCenter() {
   const [stats, setStats] = useState<NotificationStats | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
 
   useEffect(() => {
     loadNotifications();
     loadStats();
   }, []);
 
+  const processedEventsRef = useRef<Set<string>>(new Set());
+
   useEffect(() => {
-    // Process real-time events
+    if (events.length === 0) return;
+    
+    // Process real-time events - handle all event types
+    // Use a ref to track processed events to avoid duplicates
+    let hasNewEvents = false;
+    
     events.forEach(event => {
-      if (event.type.startsWith('appointment.') || event.type.startsWith('bot.')) {
+      // Skip if already processed
+      if (processedEventsRef.current.has(event.id)) return;
+      
+      if (event.type.startsWith('appointment.') || 
+          event.type.startsWith('appointment_') ||
+          event.type === 'appointment.created' ||
+          event.type === 'appointment_created' ||
+          event.type.startsWith('service.') || 
+          event.type.startsWith('service_') ||
+          event.type.startsWith('bot.') ||
+          event.type.startsWith('slot.')) {
+        processedEventsRef.current.add(event.id);
+        hasNewEvents = true;
         addNotificationFromEvent(event);
       }
     });
+    
+    // Reload notifications to get latest from server if we processed any events
+    if (hasNewEvents) {
+      setTimeout(() => {
+        loadNotifications();
+        loadStats();
+      }, 300);
+    }
   }, [events]);
 
   const loadNotifications = async () => {
@@ -147,18 +186,36 @@ export function NotificationCenter() {
   };
 
   const getEventTitle = (eventType: string): string => {
-    switch (eventType) {
+    // Handle both dot and underscore formats
+    const normalizedType = eventType.replace('_', '.');
+    
+    switch (normalizedType) {
       case 'appointment.created':
+      case 'appointment_created':
         return 'New Appointment';
       case 'appointment.updated':
+      case 'appointment_updated':
         return 'Appointment Updated';
       case 'appointment.cancelled':
+      case 'appointment_cancelled':
         return 'Appointment Cancelled';
       case 'appointment.confirmed':
+      case 'appointment_confirmed':
         return 'Appointment Confirmed';
+      case 'service.created':
+      case 'service_created':
+        return 'New Service';
+      case 'service.updated':
+      case 'service_updated':
+        return 'Service Updated';
+      case 'service.deleted':
+      case 'service_deleted':
+        return 'Service Deleted';
       case 'bot.message.received':
+      case 'bot_message_received':
         return 'Bot Message';
       case 'bot.booking.completed':
+      case 'bot_booking_completed':
         return 'Booking Completed';
       default:
         return 'System Event';
@@ -167,19 +224,36 @@ export function NotificationCenter() {
 
   const getEventMessage = (event: any): string => {
     const data = event.data;
-    switch (event.type) {
+    const normalizedType = event.type.replace('_', '.');
+    
+    switch (normalizedType) {
       case 'appointment.created':
-        return `New appointment created for ${data.serviceName}`;
+      case 'appointment_created':
+        return `New appointment created for ${data?.serviceName || 'service'}`;
       case 'appointment.updated':
-        return `Appointment for ${data.serviceName} has been updated`;
+      case 'appointment_updated':
+        return `Appointment for ${data?.serviceName || 'service'} has been updated`;
       case 'appointment.cancelled':
-        return `Appointment for ${data.serviceName} has been cancelled`;
+      case 'appointment_cancelled':
+        return `Appointment for ${data?.serviceName || 'service'} has been cancelled`;
       case 'appointment.confirmed':
-        return `Appointment for ${data.serviceName} has been confirmed`;
+      case 'appointment_confirmed':
+        return `Appointment for ${data?.serviceName || 'service'} has been confirmed`;
+      case 'service.created':
+      case 'service_created':
+        return `New service "${data?.serviceName || 'service'}" has been created`;
+      case 'service.updated':
+      case 'service_updated':
+        return `Service "${data?.serviceName || 'service'}" has been updated`;
+      case 'service.deleted':
+      case 'service_deleted':
+        return `Service "${data?.serviceName || 'service'}" has been deleted`;
       case 'bot.message.received':
-        return `Message from ${data.userName}: ${data.messageText?.substring(0, 50)}...`;
+      case 'bot_message_received':
+        return `Message from ${data?.userName || 'user'}: ${data?.messageText?.substring(0, 50) || ''}...`;
       case 'bot.booking.completed':
-        return `${data.userName} completed booking for ${data.serviceName}`;
+      case 'bot_booking_completed':
+        return `${data?.userName || 'User'} completed booking for ${data?.serviceName || 'service'}`;
       default:
         return 'System event occurred';
     }
@@ -187,129 +261,299 @@ export function NotificationCenter() {
 
   const getNotificationIcon = (type: string) => {
     if (type.startsWith('appointment.')) {
-      return <AlertCircle className="h-4 w-4 text-blue-500" />;
+      return <Calendar className="h-4 w-4 text-blue-500" />;
     } else if (type.startsWith('bot.')) {
       return <Bell className="h-4 w-4 text-green-500" />;
+    } else if (type.includes('service')) {
+      return <Sparkles className="h-4 w-4 text-purple-500" />;
+    } else if (type.includes('user')) {
+      return <Users className="h-4 w-4 text-indigo-500" />;
     }
     return <Bell className="h-4 w-4 text-gray-500" />;
+  };
+
+  const getTimeAgo = (timestamp: string) => {
+    const now = new Date();
+    const date = new Date(timestamp);
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 1000 / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 1) return "Just now";
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    if (days < 7) return `${days}d ago`;
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const groupNotificationsByDate = (notifs: Notification[]) => {
+    const today: Notification[] = [];
+    const yesterday: Notification[] = [];
+    const earlier: Notification[] = [];
+
+    const now = new Date();
+    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterdayStart = new Date(todayStart);
+    yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+
+    notifs.forEach((notif) => {
+      const notifDate = new Date(notif.createdAt);
+      if (notifDate >= todayStart) {
+        today.push(notif);
+      } else if (notifDate >= yesterdayStart) {
+        yesterday.push(notif);
+      } else {
+        earlier.push(notif);
+      }
+    });
+
+    return { today, yesterday, earlier };
+  };
+
+  const filteredNotifications = activeTab === 'unread'
+    ? notifications.filter(n => !n.isRead)
+    : notifications;
+
+  const { today, yesterday, earlier } = groupNotificationsByDate(filteredNotifications);
+
+  const renderNotificationGroup = (
+    notifications: Notification[],
+    title: string
+  ) => {
+    if (notifications.length === 0) return null;
+
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-2 px-2">
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            {title}
+          </h3>
+          <div className="flex-1 h-px bg-gray-200" />
+        </div>
+        {notifications.map(notification => (
+          <div
+            key={notification.id}
+            className={`p-3 border-b hover:bg-gray-50 transition-colors ${
+              !notification.isRead ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
+            }`}
+          >
+            <div className="flex items-start justify-between">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center space-x-2 mb-1">
+                  {getNotificationIcon(notification.type)}
+                  <h4 className="font-medium text-gray-900 truncate">
+                    {notification.title}
+                  </h4>
+                  {!notification.isRead && (
+                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                  )}
+                </div>
+                <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                  {notification.message}
+                </p>
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Clock className="w-3 h-3" />
+                  <span>{getTimeAgo(notification.createdAt)}</span>
+                </div>
+              </div>
+              <div className="flex space-x-1 ml-2 flex-shrink-0">
+                {!notification.isRead && (
+                  <button
+                    onClick={() => markAsRead(notification.id)}
+                    className="p-1 text-green-600 hover:text-green-800 hover:bg-green-100 rounded transition-colors"
+                    title="Mark as read"
+                  >
+                    <Check className="h-4 w-4" />
+                  </button>
+                )}
+                <button
+                  onClick={() => archiveNotification(notification.id)}
+                  className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
+                  title="Archive"
+                >
+                  <Archive className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const unreadCount = stats?.unread || 0;
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
+    <>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="relative w-8 h-8 sm:w-9 sm:h-9"
+        onClick={() => setIsOpen(true)}
       >
-        <Bell className="h-6 w-6" />
+        <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
-            {unreadCount > 99 ? '99+' : unreadCount}
-          </span>
+          <>
+            <Badge className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center p-0 bg-red-500 text-white text-[10px] border-2 border-white animate-pulse">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </Badge>
+            <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 rounded-full animate-ping" />
+          </>
         )}
-      </button>
+      </Button>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-lg border z-50 max-h-96 flex flex-col">
-          <div className="p-4 border-b bg-gray-50 rounded-t-lg">
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="w-full sm:max-w-md p-0 flex flex-col" side="right">
+          <SheetHeader className="px-6 py-4 border-b bg-gradient-to-br from-indigo-50 to-purple-50">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
-              <div className="flex space-x-2">
-                <button
-                  onClick={markAllAsRead}
-                  className="text-sm text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  Mark all read
-                </button>
-                <button
-                  onClick={clearAll}
-                  className="text-sm text-red-600 hover:text-red-800 transition-colors"
-                >
-                  Clear all
-                </button>
-              </div>
-            </div>
-            {stats && (
-              <div className="mt-2 text-sm text-gray-600">
-                {stats.total} total, {stats.unread} unread
-              </div>
-            )}
-          </div>
-
-          <div className="flex-1 overflow-y-auto">
-            {isLoading ? (
-              <div className="p-4 text-center text-gray-500">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600 mx-auto"></div>
-                <div className="mt-2">Loading notifications...</div>
-              </div>
-            ) : notifications.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">
-                <Bell className="h-8 w-8 mx-auto mb-2 text-gray-300" />
-                <div>No notifications</div>
-              </div>
-            ) : (
-              notifications.map(notification => (
-                <div
-                  key={notification.id}
-                  className={`p-4 border-b hover:bg-gray-50 transition-colors ${
-                    !notification.isRead ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2 mb-1">
-                        {getNotificationIcon(notification.type)}
-                        <h4 className="font-medium text-gray-900 truncate">
-                          {notification.title}
-                        </h4>
-                        {!notification.isRead && (
-                          <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
-                        )}
-                      </div>
-                      <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                        {notification.message}
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        {new Date(notification.createdAt).toLocaleString()}
-                      </p>
-                    </div>
-                    <div className="flex space-x-1 ml-2 flex-shrink-0">
-                      {!notification.isRead && (
-                        <button
-                          onClick={() => markAsRead(notification.id)}
-                          className="p-1 text-green-600 hover:text-green-800 hover:bg-green-100 rounded transition-colors"
-                          title="Mark as read"
-                        >
-                          <Check className="h-4 w-4" />
-                        </button>
-                      )}
-                      <button
-                        onClick={() => archiveNotification(notification.id)}
-                        className="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
-                        title="Archive"
-                      >
-                        <Archive className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Bell className="w-5 h-5 text-white" />
                 </div>
-              ))
-            )}
-          </div>
-
-          {notifications.length > 0 && (
-            <div className="p-3 border-t bg-gray-50 rounded-b-lg">
-              <button
-                onClick={loadNotifications}
-                className="w-full text-sm text-indigo-600 hover:text-indigo-800 transition-colors"
-              >
-                Refresh notifications
-              </button>
+                <div>
+                  <SheetTitle className="text-left">Notifications</SheetTitle>
+                  {unreadCount > 0 && (
+                    <SheetDescription className="text-left">
+                      {unreadCount} unread notification{unreadCount > 1 ? "s" : ""}
+                    </SheetDescription>
+                  )}
+                </div>
+              </div>
+              {unreadCount > 0 && (
+                <Badge className="bg-indigo-600 text-white hover:bg-indigo-700">
+                  {unreadCount}
+                </Badge>
+              )}
             </div>
+          </SheetHeader>
+
+          {isLoading ? (
+            <div className="flex-1 flex items-center justify-center p-8">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600 mx-auto"></div>
+                <div className="mt-2 text-gray-500">Loading notifications...</div>
+              </div>
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="flex-1 flex items-center justify-center p-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BellOff className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="font-medium text-gray-900 mb-2">No notifications</h3>
+                <p className="text-sm text-gray-500 max-w-[200px]">
+                  You're all caught up! Check back later for updates.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Tabs */}
+              <Tabs
+                value={activeTab}
+                onValueChange={(v) => setActiveTab(v as 'all' | 'unread')}
+                className="flex-1 flex flex-col"
+              >
+                <div className="border-b bg-gray-50 px-4 pt-3">
+                  <TabsList className="w-full grid grid-cols-2">
+                    <TabsTrigger value="all" className="relative">
+                      All
+                      <Badge
+                        variant="outline"
+                        className="ml-2 bg-white text-gray-600 border-gray-300"
+                      >
+                        {notifications.length}
+                      </Badge>
+                    </TabsTrigger>
+                    <TabsTrigger value="unread" className="relative">
+                      Unread
+                      {unreadCount > 0 && (
+                        <Badge className="ml-2 bg-indigo-600 text-white hover:bg-indigo-700">
+                          {unreadCount}
+                        </Badge>
+                      )}
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="px-4 py-3 flex gap-2 border-b bg-gray-50">
+                  {unreadCount > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={markAllAsRead}
+                      className="flex-1 border-indigo-200 text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700"
+                    >
+                      <CheckCheck className="w-4 h-4 mr-2" />
+                      Mark all read
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={clearAll}
+                    className="flex-1 text-red-600 hover:text-red-700 border-red-200 hover:bg-red-50 hover:border-red-300"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Clear all
+                  </Button>
+                </div>
+
+                {/* Notifications List */}
+                <TabsContent value="all" className="flex-1 mt-0 overflow-hidden">
+                  <ScrollArea className="h-full">
+                    <div className="p-4 space-y-4">
+                      {renderNotificationGroup(today, "Today")}
+                      {renderNotificationGroup(yesterday, "Yesterday")}
+                      {renderNotificationGroup(earlier, "Earlier")}
+                    </div>
+                  </ScrollArea>
+                </TabsContent>
+
+                <TabsContent value="unread" className="flex-1 mt-0 overflow-hidden">
+                  {filteredNotifications.length === 0 ? (
+                    <div className="flex-1 flex items-center justify-center p-8">
+                      <div className="text-center">
+                        <div className="w-16 h-16 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+                        </div>
+                        <h3 className="font-medium text-gray-900 mb-2">All caught up!</h3>
+                        <p className="text-sm text-gray-500 max-w-[200px]">
+                          No unread notifications. Great job staying on top of things!
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <ScrollArea className="h-full">
+                      <div className="p-4 space-y-4">
+                        {renderNotificationGroup(today, "Today")}
+                        {renderNotificationGroup(yesterday, "Yesterday")}
+                        {renderNotificationGroup(earlier, "Earlier")}
+                      </div>
+                    </ScrollArea>
+                  )}
+                </TabsContent>
+              </Tabs>
+
+              {notifications.length > 0 && (
+                <div className="p-3 border-t bg-gray-50 rounded-b-lg">
+                  <button
+                    onClick={loadNotifications}
+                    className="w-full text-sm text-indigo-600 hover:text-indigo-800 transition-colors"
+                  >
+                    Refresh notifications
+                  </button>
+                </div>
+              )}
+            </>
           )}
-        </div>
-      )}
-    </div>
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }

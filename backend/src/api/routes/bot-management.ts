@@ -386,14 +386,17 @@ router.get('/status/:organizationId', authenticateToken, async (req: Authenticat
     }
 
     let botStatus = null;
+    let botActive = false;
     if (organization.botToken) {
       try {
         const response = await fetch(`https://api.telegram.org/bot${organization.botToken}/getMe`);
         const data = await response.json();
         
         if (data.ok) {
+          botActive = true;
           botStatus = {
             isActive: true,
+            botActive: true,
             username: data.result.username,
             firstName: data.result.first_name,
             canJoinGroups: data.result.can_join_groups,
@@ -402,16 +405,35 @@ router.get('/status/:organizationId', authenticateToken, async (req: Authenticat
             botLink: `https://t.me/${data.result.username}`
           };
         } else {
+          botActive = false;
           botStatus = {
             isActive: false,
+            botActive: false,
             error: 'Bot token is invalid or expired'
           };
         }
       } catch (error) {
+        botActive = false;
         botStatus = {
           isActive: false,
+          botActive: false,
           error: 'Failed to check bot status'
         };
+      }
+    }
+
+    // Check if admin is linked (user has telegramId)
+    let adminLinked = false;
+    if (req.user!.userId) {
+      try {
+        const user = await prisma.user.findUnique({
+          where: { id: req.user!.userId },
+          select: { telegramId: true }
+        });
+        adminLinked = !!user?.telegramId;
+      } catch (error) {
+        console.error('Error checking admin link status:', error);
+        // Continue with adminLinked = false
       }
     }
 
@@ -423,7 +445,15 @@ router.get('/status/:organizationId', authenticateToken, async (req: Authenticat
         botToken: organization.botToken ? '***' + organization.botToken.slice(-4) : null,
         botUsername: organization.botUsername
       },
-      botStatus
+      botStatus: botStatus ? {
+        ...botStatus,
+        botActive,
+        adminLinked
+      } : {
+        isActive: false,
+        botActive: false,
+        adminLinked
+      }
     });
   } catch (error) {
     console.error('Bot status check error:', error);
@@ -467,5 +497,51 @@ async function setupBot(token: string, organization: any) {
     throw error;
   }
 }
+
+// POST /api/bot/generate-admin-link - Generate admin link token
+router.post('/generate-admin-link', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+    const organizationId = req.user!.organizationId;
+
+    // Get organization to get bot username
+    const organization = await prisma.organization.findUnique({
+      where: { id: organizationId },
+      select: { botUsername: true, botToken: true }
+    });
+
+    if (!organization || !organization.botToken) {
+      return res.status(404).json({
+        success: false,
+        error: 'Bot not found for this organization'
+      });
+    }
+
+    // Generate unique token that expires in 1 hour
+    const linkToken = jwt.sign(
+      { userId, organizationId, type: 'admin_link' },
+      JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // Create admin link URL
+    const botUsername = organization.botUsername || 'bot';
+    const adminLink = `https://t.me/${botUsername.replace('@', '')}?start=link_${linkToken}`;
+
+    res.json({
+      success: true,
+      adminLink,
+      linkToken,
+      expiresIn: 3600, // 1 hour in seconds
+      botUsername: organization.botUsername
+    });
+  } catch (error) {
+    console.error('Generate admin link error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
 
 export default router;

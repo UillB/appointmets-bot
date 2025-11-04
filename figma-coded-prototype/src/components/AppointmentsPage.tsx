@@ -44,7 +44,6 @@ import {
   Download,
 } from "lucide-react";
 import { StatCard } from "./StatCard";
-import { AppointmentDialog } from "./AppointmentDialog";
 import { AppointmentFormSheet } from "./AppointmentFormSheet";
 import { MobileAppointmentCard } from "./MobileAppointmentCard";
 import { TablePagination } from "./TablePagination";
@@ -59,7 +58,6 @@ import { toastNotifications } from "./toast-notifications";
 interface AppointmentsPageProps {}
 
 export function AppointmentsPage({}: AppointmentsPageProps) {
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
@@ -244,7 +242,7 @@ export function AppointmentsPage({}: AppointmentsPageProps) {
               <Download className="w-4 h-4 sm:hidden" />
             </Button>
             <Button
-              onClick={() => setDialogOpen(true)}
+              onClick={() => setSheetOpen(true)}
               size="sm"
               className="bg-indigo-600 hover:bg-indigo-700"
             >
@@ -554,8 +552,7 @@ export function AppointmentsPage({}: AppointmentsPageProps) {
             )}
           </Card>
 
-      {/* Dialogs */}
-      <AppointmentDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      {/* Appointment Form Drawer */}
       <AppointmentFormSheet open={sheetOpen} onOpenChange={setSheetOpen} />
     </div>
   );
