@@ -498,6 +498,21 @@ async function setupBot(token: string, organization: any) {
   }
 }
 
+// In-memory storage for short tokens (expires after 1 hour)
+// Format: { shortToken: { userId, organizationId, expiresAt } }
+// Export this so bot handlers can access it
+export const adminLinkTokens = new Map<string, { userId: number; organizationId: number; expiresAt: number }>();
+
+// Clean up expired tokens every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [token, data] of adminLinkTokens.entries()) {
+    if (data.expiresAt < now) {
+      adminLinkTokens.delete(token);
+    }
+  }
+}, 5 * 60 * 1000);
+
 // POST /api/bot/generate-admin-link - Generate admin link token
 router.post('/generate-admin-link', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
@@ -517,26 +532,106 @@ router.post('/generate-admin-link', authenticateToken, async (req: Authenticated
       });
     }
 
-    // Generate unique token that expires in 1 hour
-    const linkToken = jwt.sign(
-      { userId, organizationId, type: 'admin_link' },
-      JWT_SECRET,
-      { expiresIn: '1h' }
-    );
+    // Generate SHORT random token (8-12 characters) instead of long JWT
+    // This is critical - Telegram has limits on start parameter length
+    const crypto = require('crypto');
+    const shortToken = crypto.randomBytes(8).toString('base64url').substring(0, 12); // 12 chars max
+    
+    // Store token in memory with expiration (1 hour)
+    const expiresAt = Date.now() + (60 * 60 * 1000); // 1 hour
+    adminLinkTokens.set(shortToken, { userId, organizationId, expiresAt });
 
-    // Create admin link URL
+    // Create admin link URL with SHORT token
     const botUsername = organization.botUsername || 'bot';
-    const adminLink = `https://t.me/${botUsername.replace('@', '')}?start=link_${linkToken}`;
+    const cleanUsername = botUsername.replace('@', '');
+    const startParam = shortToken; // Just the short token, no prefix needed
+    
+    // Основная ссылка - используется для QR кода и веб
+    const adminLink = `https://t.me/${cleanUsername}?start=${startParam}`;
+
+    console.log(`🔗 [Org ${organizationId}] Generated admin link for user ${userId}:`);
+    console.log(`🔗 [Org ${organizationId}] Bot username: ${botUsername}`);
+    console.log(`🔗 [Org ${organizationId}] Admin link: ${adminLink}`);
+    console.log(`🔗 [Org ${organizationId}] Short token: ${shortToken} (${shortToken.length} chars)`);
+    console.log(`🔗 [Org ${organizationId}] Token expires at: ${new Date(expiresAt).toISOString()}`);
 
     res.json({
       success: true,
       adminLink,
-      linkToken,
+      deepLink: adminLink, // Same format
+      linkToken: shortToken, // Short token for reference
       expiresIn: 3600, // 1 hour in seconds
       botUsername: organization.botUsername
     });
   } catch (error) {
     console.error('Generate admin link error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    });
+  }
+});
+
+// POST /api/bot/unlink-admin - Unlink admin Telegram account
+router.post('/unlink-admin', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const userId = req.user!.userId;
+    const organizationId = req.user!.organizationId;
+
+    // Get user to check if they have telegramId
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { telegramId: true, organizationId: true }
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    if (!user.telegramId) {
+      return res.status(400).json({
+        success: false,
+        error: 'User is not linked to Telegram'
+      });
+    }
+
+    // Check that user belongs to the correct organization
+    if (user.organizationId !== organizationId) {
+      return res.status(403).json({
+        success: false,
+        error: 'Access denied to this organization'
+      });
+    }
+
+    const telegramId = user.telegramId;
+
+    // Unlink user by setting telegramId to null
+    await prisma.user.update({
+      where: { id: userId },
+      data: { telegramId: null }
+    });
+
+    console.log(`🔗 [Org ${organizationId}] Admin unlinked. User ${userId} unlinked from Telegram ${telegramId}`);
+
+    // Emit WebSocket event for admin unlink
+    try {
+      const botEmitter = (global as any).botEmitter;
+      if (botEmitter) {
+        await botEmitter.emitAdminUnlinked(userId, organizationId, telegramId);
+      }
+    } catch (wsError) {
+      console.error('Failed to emit admin unlinked event:', wsError);
+    }
+
+    res.json({
+      success: true,
+      message: 'Admin account unlinked successfully'
+    });
+  } catch (error) {
+    console.error('Unlink admin error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error'

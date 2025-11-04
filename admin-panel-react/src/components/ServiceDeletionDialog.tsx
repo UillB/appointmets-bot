@@ -119,14 +119,14 @@ export function ServiceDeletionDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {!deletionInfo && (
-            <div className="text-center py-8">
+            <div className="text-center py-10">
               <Button 
                 onClick={handleCheckDeletion} 
                 disabled={isChecking}
                 variant="outline"
-                className="border-2 border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 font-medium px-6 py-2"
+                className="border-2 border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 font-medium px-8 py-3 h-auto"
               >
                 {isChecking ? (
                   <>
@@ -145,7 +145,7 @@ export function ServiceDeletionDialog({
 
           {deletionInfo?.error && (
             <Card className="border-red-200 bg-red-50">
-              <div className="p-4">
+              <div className="p-6">
                 <div className="flex items-start gap-3">
                   <X className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
@@ -190,7 +190,7 @@ export function ServiceDeletionDialog({
 
           {showForceDelete && (
             <Card className="border-yellow-200 bg-yellow-50">
-              <div className="p-4">
+              <div className="p-6">
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
@@ -201,21 +201,21 @@ export function ServiceDeletionDialog({
                       This will permanently delete the service and ALL associated data:
                     </p>
 
-                    <div className="space-y-2 mb-4">
+                    <div className="space-y-3 mb-6">
                       <div className="flex items-center gap-2 text-sm">
-                        <Trash2 className="h-4 w-4 text-yellow-600" />
+                        <Trash2 className="h-4 w-4 text-yellow-600 flex-shrink-0" />
                         <span className="text-yellow-700">
                           • All time slots will be deleted
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4 text-yellow-600" />
+                        <Calendar className="h-4 w-4 text-yellow-600 flex-shrink-0" />
                         <span className="text-yellow-700">
                           • All appointments will be cancelled
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-sm">
-                        <Users className="h-4 w-4 text-yellow-600" />
+                        <Users className="h-4 w-4 text-yellow-600 flex-shrink-0" />
                         <span className="text-yellow-700">
                           • Customers will lose their bookings
                         </span>
@@ -236,7 +236,14 @@ export function ServiceDeletionDialog({
                         />
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex gap-3">
+                        <Button
+                          variant="outline"
+                          onClick={handleClose}
+                          className="flex-1"
+                        >
+                          Cancel
+                        </Button>
                         <Button
                           onClick={handleForceDelete}
                           disabled={confirmText !== "DELETE" || isDeleting}
@@ -265,48 +272,16 @@ export function ServiceDeletionDialog({
 
           {deletionInfo && !deletionInfo.error && deletionInfo.safeToDelete && (
             <Card className="border-green-200 bg-green-50">
-              <div className="p-4">
+              <div className="p-6">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
                     <h3 className="font-semibold text-green-900 mb-2">
                       Safe to Delete
                     </h3>
-                    <p className="text-green-700 text-sm mb-4">
+                    <p className="text-green-700 text-sm">
                       {deletionInfo.details?.message || 'This service can be safely deleted without affecting any appointments.'}
                     </p>
-                    <Button
-                      onClick={async () => {
-                        try {
-                          setIsDeleting(true);
-                          await apiClient.deleteService(service.id);
-                          toast.success('Service deleted successfully');
-                          onServiceDeleted?.();
-                          onOpenChange(false);
-                          setDeletionInfo(null);
-                        } catch (error) {
-                          console.error('Failed to delete service:', error);
-                          toast.error('Failed to delete service');
-                        } finally {
-                          setIsDeleting(false);
-                        }
-                      }}
-                      disabled={isDeleting}
-                      variant="destructive"
-                      className="w-full"
-                    >
-                      {isDeleting ? (
-                        <>
-                          <Clock className="h-4 w-4 mr-2 animate-spin" />
-                          Deleting...
-                        </>
-                      ) : (
-                        <>
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Delete Service
-                        </>
-                      )}
-                    </Button>
                   </div>
                 </div>
               </div>
@@ -314,10 +289,43 @@ export function ServiceDeletionDialog({
           )}
         </div>
 
-        <div className="flex justify-end gap-2 pt-4 border-t">
+        <div className="flex justify-end gap-3 pt-6 mt-6 border-t">
           <Button variant="outline" onClick={handleClose}>
             Cancel
           </Button>
+          {deletionInfo && !deletionInfo.error && deletionInfo.safeToDelete && (
+            <Button
+              onClick={async () => {
+                try {
+                  setIsDeleting(true);
+                  await apiClient.deleteService(service.id);
+                  toast.success('Service deleted successfully');
+                  onServiceDeleted?.();
+                  onOpenChange(false);
+                  setDeletionInfo(null);
+                } catch (error) {
+                  console.error('Failed to delete service:', error);
+                  toast.error('Failed to delete service');
+                } finally {
+                  setIsDeleting(false);
+                }
+              }}
+              disabled={isDeleting}
+              variant="destructive"
+            >
+              {isDeleting ? (
+                <>
+                  <Clock className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="h-4 w-4 mr-2" />
+                  Delete Service
+                </>
+              )}
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

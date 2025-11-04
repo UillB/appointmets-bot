@@ -17,7 +17,11 @@
     "webappDate": "⚠️ Could not get date from the web app.",
     "webappService": "⚠️ serviceId is missing.",
     "slotTaken": "❌ This slot is already taken, choose another one.",
-    "slotNotFound": "Slot not found or no longer available."
+    "slotNotFound": "Slot not found or no longer available.",
+    "telegramIdRequired": "Telegram ID is required",
+    "invalidLinkToken": "❌ Invalid link. Please use the correct link.",
+    "linkTokenExpired": "❌ The link has expired. Please generate a new link.",
+    "linkFailed": "❌ Error linking account. Please try again later."
   },
   "lang": {
     "usage": "Usage: /lang ru|en|he",
@@ -72,6 +76,7 @@
   },
   "admin": {
     "openPanel": "Open admin panel",
-    "accessDenied": "Access denied. Admin privileges required."
+    "accessDenied": "Access denied. Admin privileges required.",
+    "linkSuccess": "✅ Your Telegram account has been successfully linked! You can now use the bot to manage appointments."
   }
 }

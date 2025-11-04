@@ -122,6 +122,29 @@ export class BotEmitter {
     await this.logEvent(event);
   }
 
+  async emitAdminUnlinked(userId: number, organizationId: number, telegramId: number) {
+    const event: WebSocketEvent = {
+      id: `admin_unlinked_${userId}_${Date.now()}`,
+      type: EventType.ADMIN_UNLINKED,
+      timestamp: new Date(),
+      organizationId,
+      userId,
+      data: {
+        userId,
+        telegramId,
+        organizationId
+      },
+      metadata: {
+        source: 'admin_panel',
+        userAgent: 'Admin Panel'
+      }
+    };
+
+    await this.broadcastEvent(event);
+    await this.createNotification(event);
+    await this.logEvent(event);
+  }
+
   private async broadcastEvent(event: WebSocketEvent) {
     this.wsManager.broadcastToOrganization(event.organizationId, event);
   }
@@ -179,6 +202,8 @@ export class BotEmitter {
         return 'Booking Completed';
       case EventType.ADMIN_LINKED:
         return 'Admin Account Linked';
+      case EventType.ADMIN_UNLINKED:
+        return 'Admin Account Unlinked';
       default:
         return 'Bot Activity';
     }
@@ -197,6 +222,8 @@ export class BotEmitter {
         return `${data.userName} completed booking for ${data.serviceName}`;
       case EventType.ADMIN_LINKED:
         return `Admin account linked successfully (Telegram ID: ${data.telegramId})`;
+      case EventType.ADMIN_UNLINKED:
+        return `Admin account unlinked (Telegram ID: ${data.telegramId})`;
       default:
         return 'Bot activity detected';
     }

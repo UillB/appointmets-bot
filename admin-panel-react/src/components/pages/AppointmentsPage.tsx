@@ -162,17 +162,9 @@ export function AppointmentsPage() {
       icon: XCircle,
       iconBg: "bg-red-50",
       iconColor: "text-red-600",
-      title: "Cancelled",
-      value: appointments?.filter(apt => apt.status === 'cancelled' && !(apt as any).rejectionReason).length || 0,
-      subtitle: "Cancelled bookings",
-    },
-    {
-      icon: XCircle,
-      iconBg: "bg-red-50",
-      iconColor: "text-red-600",
-      title: "Rejected",
-      value: appointments?.filter(apt => apt.status === 'cancelled' && (apt as any).rejectionReason).length || 0,
-      subtitle: "Rejected bookings",
+      title: "Cancelled & Rejected",
+      value: appointments?.filter(apt => apt.status === 'cancelled').length || 0,
+      subtitle: "Cancelled and rejected bookings",
     },
   ];
 
@@ -319,7 +311,7 @@ export function AppointmentsPage() {
 
           {/* Loading State */}
           {isLoading && (
-            <div className="flex items-center justify-center py-12">
+            <div className="flex items-center justify-center min-h-[calc(100vh-300px)]">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
             </div>
           )}

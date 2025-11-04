@@ -280,10 +280,8 @@ export function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex flex-col min-h-0 bg-gray-50">
-        <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-        </div>
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }

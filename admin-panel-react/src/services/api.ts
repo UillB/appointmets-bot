@@ -551,8 +551,14 @@ class ApiClient {
     });
   }
 
-  async generateAdminLink(): Promise<{ success: boolean; adminLink?: string; linkToken?: string; expiresIn?: number; botUsername?: string; error?: string }> {
+  async generateAdminLink(): Promise<{ success: boolean; adminLink?: string; deepLink?: string; linkToken?: string; expiresIn?: number; botUsername?: string; error?: string }> {
     return this.request('/bot/generate-admin-link', {
+      method: 'POST',
+    });
+  }
+
+  async unlinkAdmin(): Promise<{ success: boolean; message?: string; error?: string }> {
+    return this.request('/bot/unlink-admin', {
       method: 'POST',
     });
   }

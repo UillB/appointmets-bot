@@ -3,35 +3,179 @@ import { ENV } from "../../lib/env";
 import { prisma } from "../../lib/prisma";
 import jwt from 'jsonwebtoken';
 
+// Import adminLinkTokens from bot-management route
+// Note: This is a workaround - in production consider using Redis or database
+let adminLinkTokens: Map<string, { userId: number; organizationId: number; expiresAt: number }> | null = null;
+
+// Function to get adminLinkTokens (will be set by bot-manager)
+export function setAdminLinkTokensMap(tokensMap: Map<string, { userId: number; organizationId: number; expiresAt: number }>) {
+  adminLinkTokens = tokensMap;
+}
+
 export const handleStart = (organizationId?: number) => async (ctx: Context) => {
   // deep link: /start link_<token> → привязка админа
-  const payload = (ctx as any).startPayload as string | undefined;
+  // Получаем payload из команды /start <payload>
+  let payload: string | undefined;
   
-  if (payload && payload.startsWith('link_')) {
-    const linkToken = payload.replace('link_', '');
+  // Логируем весь контекст для отладки
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] ========== START COMMAND RECEIVED ==========`);
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] Update ID: ${ctx.update.update_id}`);
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] Update Type: ${ctx.updateType}`);
+  
+  // Проверяем все возможные способы получения параметра
+  const startParam = (ctx as any).startParam;
+  const startPayload = (ctx as any).startPayload;
+  const messageText = ctx.message && 'text' in ctx.message ? ctx.message.text : null;
+  const match = (ctx as any).match;
+  
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] startParam:`, startParam || 'undefined');
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] startPayload:`, startPayload || 'undefined');
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] message.text:`, messageText || 'undefined');
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] match:`, match ? JSON.stringify(match) : 'undefined');
+  
+  // Если есть message, логируем его полностью
+  if (ctx.message && 'text' in ctx.message) {
+    console.log(`🔗 [Org ${organizationId || 'unknown'}] Full message text: "${ctx.message.text}"`);
+    if ((ctx.message as any).entities) {
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] Message entities:`, JSON.stringify((ctx.message as any).entities));
+    }
+  }
+  
+  // Способ 1: через startParam (Telegraf 4.x) - это правильный способ для deep links
+  // В Telegraf при открытии ссылки https://t.me/bot?start=param параметр доступен через startParam
+  if (startParam) {
+    payload = startParam as string;
+    console.log(`🔗 [Org ${organizationId || 'unknown'}] ✅ Got payload from startParam:`, payload.substring(0, 50) + '...');
+  }
+  // Способ 2: через startPayload (старый способ, может работать в некоторых версиях)
+  else if (startPayload) {
+    payload = startPayload as string;
+    console.log(`🔗 [Org ${organizationId || 'unknown'}] ✅ Got payload from startPayload:`, payload.substring(0, 50) + '...');
+  }
+  // Способ 3: через match (если используется regex, например hears)
+  else if (match && Array.isArray(match) && match[1]) {
+    payload = match[1] as string;
+    console.log(`🔗 [Org ${organizationId || 'unknown'}] ✅ Got payload from match:`, payload.substring(0, 50) + '...');
+  }
+  // Способ 4: через message.text (самый надежный способ - всегда работает)
+  // Когда пользователь открывает ссылку, Telegram отправляет команду /start <payload>
+  else if (messageText) {
+    console.log(`🔗 [Org ${organizationId || 'unknown'}] Processing messageText: "${messageText}"`);
+    // Проверяем формат /start <payload>
+    if (messageText.startsWith('/start ')) {
+      payload = messageText.substring(7).trim(); // Убираем '/start '
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] ✅ Got payload from message.text:`, payload.substring(0, 50) + '...');
+    } else if (messageText === '/start') {
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] ⚠️ Received /start without payload`);
+    } else {
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] ⚠️ Message text doesn't match /start pattern`);
+    }
+  }
+  // Способ 5: напрямую из update объекта (последняя попытка)
+  else if (ctx.update && 'message' in ctx.update && ctx.update.message && 'text' in ctx.update.message) {
+    const text = ctx.update.message.text;
+    if (text && text.startsWith('/start ')) {
+      payload = text.substring(7).trim();
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] ✅ Got payload from update.message.text:`, payload.substring(0, 50) + '...');
+    }
+  }
+  
+  if (!payload) {
+    console.log(`🔗 [Org ${organizationId || 'unknown'}] ⚠️ No payload found in any location!`);
+  }
+  
+  console.log(`🔗 [Org ${organizationId || 'unknown'}] Final payload:`, payload || 'undefined');
+  
+  // Обрабатываем payload - теперь это короткий токен (8-12 символов)
+  // Старый формат с JWT токенами тоже поддерживается для обратной совместимости
+  let linkToken: string | undefined;
+  let shortToken: string | undefined;
+  
+  if (payload) {
+    // Проверяем длину токена
+    if (payload.length <= 20) {
+      // Короткий токен (новый формат)
+      shortToken = payload;
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] Short token detected (${payload.length} chars): ${payload}`);
+    } else if (payload.startsWith('link_')) {
+      // Старый формат с префиксом link_
+      linkToken = payload.replace('link_', '');
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] Payload has 'link_' prefix, extracted token`);
+    } else if (payload.includes('.') && payload.startsWith('eyJ')) {
+      // Старый формат JWT токен
+      linkToken = payload;
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] Payload is JWT token without prefix, using as-is`);
+    } else {
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] ⚠️ Unknown payload format: length=${payload.length}`);
+    }
+  }
+  
+  // Обрабатываем короткий токен (новый формат)
+  if (shortToken && adminLinkTokens) {
     const telegramId = ctx.from?.id;
     
+    console.log(`🔗 [Org ${organizationId || 'unknown'}] Processing admin link with short token: ${shortToken}, TelegramId: ${telegramId}`);
+    
     if (!telegramId) {
+      console.error(`❌ [Org ${organizationId || 'unknown'}] Admin link failed: Telegram ID is required`);
       await ctx.reply(ctx.tt("errors.telegramIdRequired") || "Telegram ID is required");
       return;
     }
 
     try {
-      // Verify and decode the token
-      const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key';
+      // Получаем данные токена из памяти
+      const tokenData = adminLinkTokens.get(shortToken);
       
-      const decoded = jwt.verify(linkToken, JWT_SECRET) as any;
-      
-      if (decoded.type !== 'admin_link' || !decoded.userId) {
-        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Invalid link token");
+      if (!tokenData) {
+        console.error(`❌ [Org ${organizationId || 'unknown'}] Short token not found: ${shortToken}`);
+        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Неверная ссылка. Пожалуйста, используйте правильную ссылку.");
+        return;
+      }
+
+      // Проверяем срок действия токена
+      if (tokenData.expiresAt < Date.now()) {
+        console.error(`❌ [Org ${organizationId || 'unknown'}] Short token expired: ${shortToken}`);
+        adminLinkTokens.delete(shortToken); // Удаляем истекший токен
+        await ctx.reply(ctx.tt("errors.linkTokenExpired") || "❌ Ссылка истекла. Пожалуйста, сгенерируйте новую ссылку.");
+        return;
+      }
+
+      const { userId, organizationId: tokenOrgId } = tokenData;
+      console.log(`🔗 [Org ${organizationId || 'unknown'}] Token data found. UserId: ${userId}, OrgId: ${tokenOrgId}`);
+
+      // Проверяем что пользователь существует и принадлежит правильной организации
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { organizationId: true, role: true }
+      });
+
+      if (!user) {
+        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ User not found");
+        return;
+      }
+
+      // Проверяем что organizationId из токена совпадает с organizationId пользователя
+      if (user.organizationId !== tokenOrgId) {
+        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Invalid organization");
+        return;
+      }
+
+      // Если organizationId передан в контексте бота, проверяем что он совпадает
+      if (organizationId && organizationId !== tokenOrgId) {
+        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Invalid organization for this bot");
         return;
       }
 
       // Update user's telegramId
       await prisma.user.update({
-        where: { id: decoded.userId },
+        where: { id: userId },
         data: { telegramId: String(telegramId) }
       });
+
+      // Удаляем использованный токен
+      adminLinkTokens.delete(shortToken);
+
+      console.log(`✅ [Org ${organizationId || tokenOrgId}] Admin link successful! User ${userId} linked to Telegram ${telegramId}`);
 
       await ctx.reply(
         ctx.tt("admin.linkSuccess") || "✅ Ваш Telegram аккаунт успешно привязан! Теперь вы можете использовать бота для управления записями.",
@@ -45,7 +189,7 @@ export const handleStart = (organizationId?: number) => async (ctx: Context) => 
       try {
         const botEmitter = (global as any).botEmitter;
         if (botEmitter) {
-          await botEmitter.emitAdminLinked(decoded.userId, decoded.organizationId, telegramId);
+          await botEmitter.emitAdminLinked(userId, tokenOrgId, telegramId);
         }
       } catch (wsError) {
         console.error('Failed to emit admin linked event:', wsError);
@@ -53,14 +197,8 @@ export const handleStart = (organizationId?: number) => async (ctx: Context) => 
       
       return;
     } catch (error: any) {
-      console.error('Admin link error:', error);
-      if (error.name === 'TokenExpiredError') {
-        await ctx.reply(ctx.tt("errors.linkTokenExpired") || "❌ Ссылка истекла. Пожалуйста, сгенерируйте новую ссылку.");
-      } else if (error.name === 'JsonWebTokenError') {
-        await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Неверная ссылка. Пожалуйста, используйте правильную ссылку.");
-      } else {
-        await ctx.reply(ctx.tt("errors.linkFailed") || "❌ Ошибка при привязке аккаунта. Попробуйте позже.");
-      }
+      console.error(`❌ [Org ${organizationId || 'unknown'}] Admin link error:`, error);
+      await ctx.reply(ctx.tt("errors.linkFailed") || "❌ Ошибка при привязке аккаунта. Попробуйте позже.");
       return;
     }
   }
@@ -201,15 +339,37 @@ export function registerLangCallbacks(bot: Telegraf, organizationId?: number) {
   // Главное меню - админ панель
   bot.action("main_admin", async (ctx) => {
     await ctx.answerCbQuery();
-    // Проверяем права: ищем пользователя по telegramId
+    
+    // Проверяем права: ищем пользователя по telegramId и organizationId
     const telegramId = ctx.from?.id;
     if (!telegramId) {
       await ctx.reply(ctx.tt("admin.accessDenied"));
       return;
     }
 
-    const user = await prisma.user.findFirst({ where: { telegramId: String(telegramId) } });
-    if (!user || (user.role !== 'SUPER_ADMIN' && user.role !== 'OWNER')) {
+    // Если organizationId не передан, ищем пользователя по telegramId (для совместимости)
+    let user;
+    if (organizationId) {
+      user = await prisma.user.findFirst({
+        where: {
+          telegramId: String(telegramId),
+          organizationId: organizationId
+        }
+      });
+    } else {
+      user = await prisma.user.findFirst({
+        where: { telegramId: String(telegramId) }
+      });
+    }
+
+    // Проверяем что пользователь существует, имеет telegramId и админскую роль
+    if (!user || !user.telegramId || (user.role !== 'SUPER_ADMIN' && user.role !== 'OWNER' && user.role !== 'MANAGER')) {
+      await ctx.reply(ctx.tt("admin.accessDenied"));
+      return;
+    }
+
+    // Если organizationId передан, проверяем что пользователь принадлежит этой организации
+    if (organizationId && user.organizationId !== organizationId) {
       await ctx.reply(ctx.tt("admin.accessDenied"));
       return;
     }

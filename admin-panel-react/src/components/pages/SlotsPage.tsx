@@ -249,9 +249,8 @@ export function SlotsPage() {
                     </div>
 
           {isLoading ? (
-            <div className="flex items-center justify-center py-8">
-              <RefreshCw className="h-6 w-6 animate-spin mr-2" />
-              Loading slots...
+            <div className="flex items-center justify-center min-h-[calc(100vh-300px)]">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
             </div>
           ) : filteredSlots.length === 0 ? (
             <div className="text-center py-8">

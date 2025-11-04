@@ -30,6 +30,7 @@ import {
   PlayCircle,
   UserPlus,
   Shield,
+  Unlink,
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiClient } from "../../services/api";
@@ -47,6 +48,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card } from "../ui/card";
 import { PageHeader } from "../PageHeader";
 import { Alert, AlertDescription } from "../ui/alert";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 import QRCode from "qrcode";
 
 export function BotManagementPage() {
@@ -77,8 +88,11 @@ export function BotManagementPage() {
   const [activeTab, setActiveTab] = useState<string>("instructions");
   const [adminLinked, setAdminLinked] = useState(false);
   const [adminLink, setAdminLink] = useState<string | null>(null);
+  const [adminDeepLink, setAdminDeepLink] = useState<string | null>(null);
   const [adminLinkQRCode, setAdminLinkQRCode] = useState<string | null>(null);
   const [isGeneratingAdminLink, setIsGeneratingAdminLink] = useState(false);
+  const [showUnlinkDialog, setShowUnlinkDialog] = useState(false);
+  const [isUnlinking, setIsUnlinking] = useState(false);
 
   // Update time every second
   useEffect(() => {
@@ -117,11 +131,33 @@ export function BotManagementPage() {
     if (latestEvent.type === 'admin.linked' || latestEvent.type === 'admin_linked') {
       processedEventIds.current.add(latestEvent.id);
       
-      // Update admin linked status immediately from event data - NO API call
+      // Update admin linked status immediately from event data
       setAdminLinked(true);
       
-      toast.success("Администратор успешно привязан!", {
-        description: "Ваш Telegram аккаунт теперь связан с панелью управления"
+      // Also reload bot status to ensure everything is in sync
+      setTimeout(() => {
+        loadBotStatus();
+      }, 500);
+    }
+    
+    if (latestEvent.type === 'admin.unlinked' || latestEvent.type === 'admin_unlinked') {
+      processedEventIds.current.add(latestEvent.id);
+      
+      // Update admin linked status immediately from event data
+      setAdminLinked(false);
+      
+      // Clear admin link data
+      setAdminLink(null);
+      setAdminDeepLink(null);
+      setAdminLinkQRCode(null);
+      
+      // Also reload bot status to ensure everything is in sync
+      setTimeout(() => {
+        loadBotStatus();
+      }, 500);
+      
+      toast.success("Admin account unlinked", {
+        description: "Your Telegram account has been unlinked from the bot"
       });
     }
     
@@ -499,10 +535,15 @@ export function BotManagementPage() {
       
       if (result.success && result.adminLink) {
         setAdminLink(result.adminLink);
+        setAdminDeepLink(result.deepLink || null);
         
         // Generate QR code for admin link
+        // Используем deep link для мобильных устройств (tg://) - гарантирует открытие в Telegram
+        // Для веб-браузеров используем обычную ссылку (https://t.me/)
+        const qrLink = result.deepLink || result.adminLink;
+        
         try {
-          const qrDataUrl = await QRCode.toDataURL(result.adminLink, {
+          const qrDataUrl = await QRCode.toDataURL(qrLink, {
             width: 300,
             margin: 2,
             color: {
@@ -543,8 +584,46 @@ export function BotManagementPage() {
       toast.error("Сначала сгенерируйте ссылку администратора");
       return;
     }
-    window.open(adminLink, "_blank");
-    toast.info("Откройте ссылку в Telegram и нажмите 'Start' для привязки аккаунта");
+    // Используем deep link для нативных приложений (открывается в Telegram)
+    // Если deep link не доступен, используем обычную ссылку
+    const linkToOpen = adminDeepLink || adminLink;
+    
+    // Для deep link (tg://) просто открываем напрямую
+    if (linkToOpen.startsWith('tg://')) {
+      window.location.href = linkToOpen;
+    } else {
+      // Для обычных ссылок открываем в новой вкладке
+      window.open(linkToOpen, "_blank");
+    }
+  };
+
+  const handleUnlinkAdmin = async () => {
+    try {
+      setIsUnlinking(true);
+      const result = await apiClient.unlinkAdmin();
+      
+      if (result.success) {
+        setAdminLinked(false);
+        setAdminLink(null);
+        setAdminDeepLink(null);
+        setAdminLinkQRCode(null);
+        setShowUnlinkDialog(false);
+        
+        toast.success("Admin account unlinked successfully", {
+          description: "Your Telegram account has been unlinked from the bot"
+        });
+        
+        // Reload bot status to update UI
+        await loadBotStatus();
+      } else {
+        toast.error(result.error || "Failed to unlink admin account");
+      }
+    } catch (error: any) {
+      console.error('Failed to unlink admin:', error);
+      toast.error(error.message || "Error unlinking admin account");
+    } finally {
+      setIsUnlinking(false);
+    }
   };
 
 
@@ -552,22 +631,8 @@ export function BotManagementPage() {
   // Show loading if user is not loaded yet
   if (!user) {
     return (
-      <div className="space-y-6">
-        <PageHeader
-          icon={<Bot className="w-7 h-7 text-white" />}
-          title="Bot Management"
-          description="Create and configure Telegram bot for automatic client booking"
-        />
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <RefreshCw className="w-8 h-8 animate-spin text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500">{t('botManagement.loadingUser')}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -575,22 +640,8 @@ export function BotManagementPage() {
   // Show loading state
   if (isLoading) {
     return (
-      <div className="space-y-6">
-        <PageHeader
-          icon={<Bot className="w-7 h-7 text-white" />}
-          title={t('botManagement.title')}
-          description={t('botManagement.description')}
-        />
-        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center">
-                <RefreshCw className="w-8 h-8 animate-spin text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500">{t('botManagement.loading')}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
@@ -1596,6 +1647,20 @@ export function BotManagementPage() {
                           Share Bot
                         </Button>
                       </div>
+                      
+                      <div className="mt-4 pt-4 border-t border-emerald-200">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowUnlinkDialog(true)}
+                          className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                        >
+                          <Unlink className="w-4 h-4 mr-2" />
+                          Unlink Telegram Account
+                        </Button>
+                        <p className="text-xs text-gray-500 mt-2 text-center">
+                          Unlink your Telegram account to remove admin access from the bot
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ) : (
@@ -1711,10 +1776,11 @@ export function BotManagementPage() {
                       <h4 className="font-medium text-blue-900 mb-2">How it works:</h4>
                       <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
                         <li>Click "Generate Admin Link" button</li>
-                        <li>Scan the QR code or copy the link</li>
-                        <li>Open the link in Telegram</li>
-                        <li>Click "Start" in the bot conversation</li>
-                        <li>Your account will be linked automatically</li>
+                        <li>Click "Open in Telegram" button (this will open the link in Telegram app)</li>
+                        <li><strong>Important:</strong> The link must be opened in Telegram app, not in browser</li>
+                        <li>When you open the link, Telegram should automatically send the /start command</li>
+                        <li>If you don't see a confirmation message, try typing /start manually in the bot chat</li>
+                        <li>You will receive a confirmation message when the link is successful</li>
                       </ol>
                     </div>
 
@@ -1736,6 +1802,73 @@ export function BotManagementPage() {
           </Tabs>
         </div>
       </div>
+
+      {/* Unlink Admin Dialog */}
+      <AlertDialog open={showUnlinkDialog} onOpenChange={setShowUnlinkDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <Unlink className="h-5 w-5 text-red-600" />
+              Unlink Telegram Account
+            </AlertDialogTitle>
+            <AlertDialogDescription className="pt-2">
+              Are you sure you want to unlink your Telegram account? This action will:
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          
+          <div className="py-4 space-y-3">
+            <div className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
+              <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-red-900 mb-1">
+                  You will lose access to admin commands in the bot
+                </p>
+                <p className="text-xs text-red-700">
+                  You won't be able to use commands like /admin, /stats, or manage appointments through Telegram
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
+              <LinkIcon className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-amber-900 mb-1">
+                  You can always link again later
+                </p>
+                <p className="text-xs text-amber-700">
+                  Just generate a new admin link and open it in Telegram to restore access
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <AlertDialogFooter className="flex-row gap-3 sm:justify-end">
+            <AlertDialogCancel 
+              disabled={isUnlinking}
+              className="flex-1 sm:flex-initial min-w-[100px]"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleUnlinkAdmin}
+              disabled={isUnlinking}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600 text-white flex-1 sm:flex-initial min-w-[120px] inline-flex items-center justify-center"
+            >
+              {isUnlinking ? (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                  Unlinking...
+                </>
+              ) : (
+                <>
+                  <Unlink className="w-4 h-4 mr-2" />
+                  Unlink Account
+                </>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

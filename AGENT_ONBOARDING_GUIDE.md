@@ -1,14 +1,78 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 3.3  
-**Last Updated:** January 18, 2025 (Latest Session - WebSocket Real-time Fixes & UI Auto-Update)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional
+**Version:** 3.4  
+**Last Updated:** January 18, 2025 (Latest Session - Loader Unification & UI Consistency)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements
 
 > **This is the ONLY document you need to read to start working on this project.**
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - WebSocket Real-time Fixes & UI Auto-Update ✅
+### Latest Session (January 18, 2025) - Loader Unification & UI Consistency ✅
+
+#### Loader Standardization Across All Pages
+- ✅ **Unified Loader Design** - Все лоадеры на всех страницах теперь одинаковые и используют простой спиннер без текста и переводов
+- ✅ **Fixed Loader Positioning** - Лоадеры центрированы в области контента, не упираются в хедер, хедер и сайдбар остаются видимыми
+- ✅ **Removed i18n from Loaders** - Убраны переводы из лоадеров BotManagementPage, теперь используется простой спиннер как в Dashboard
+- ✅ **Consistent Loading States** - Все страницы используют одинаковый стиль: `animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600`
+- ✅ **Proper Centering** - Лоадеры используют `min-h-[calc(100vh-200px)]` или `min-h-[calc(100vh-300px)]` для правильного центрирования в области контента
+
+#### Key Technical Changes:
+- Все лоадеры теперь используют простой спиннер без иконок RefreshCw и текста
+- Убраны все переводы (i18n) из лоадеров
+- Лоадеры центрированы в области контента, оставляя хедер и сайдбар видимыми
+- Единый стиль лоадера применен ко всем страницам: Dashboard, BotManagementPage, AppointmentsPage, SlotsPage, SlotsManagementPage
+
+#### Files Modified:
+- `admin-panel-react/src/components/pages/Dashboard.tsx` - Лоадер уже был правильным, используется как эталон
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Убраны переводы, заменен RefreshCw на простой спиннер, исправлено позиционирование
+- `admin-panel-react/src/components/pages/AppointmentsPage.tsx` - Исправлено позиционирование лоадера
+- `admin-panel-react/src/components/pages/SlotsPage.tsx` - Заменен RefreshCw и текст на простой спиннер, исправлено позиционирование
+- `admin-panel-react/src/components/pages/SlotsManagementPage.tsx` - Заменен RefreshCw и текст на простой спиннер, исправлено позиционирование
+
+#### Current Status:
+- ✅ **All Loaders Unified** - Все лоадеры используют одинаковый простой дизайн
+- ✅ **Proper Positioning** - Лоадеры центрированы в области контента, хедер и сайдбар остаются видимыми
+- ✅ **No Translations in Loaders** - Все лоадеры без текста и переводов
+- ✅ **Consistent UX** - Единый пользовательский опыт на всех страницах
+
+### Previous Session (January 18, 2025) - Admin Linking & Unlinking System ✅
+
+#### Admin Account Management System
+- ✅ **Admin Linking via Deep Links** - Система привязки Telegram аккаунта администратора через QR код/ссылку
+- ✅ **Short Token System** - Использование коротких токенов (8-12 символов) вместо длинных JWT для обхода лимита Telegram на длину start параметра (200+ символов)
+- ✅ **Admin Unlinking** - Механизм отвязки админа с кастомной модалкой (AlertDialog) вместо нативного window.confirm
+- ✅ **Role-Based Bot Commands** - Команды `/admin` доступны только для OWNER/MANAGER/SUPER_ADMIN с привязанным Telegram аккаунтом
+- ✅ **WebSocket Events** - События `admin.linked` и `admin.unlinked` для real-time обновлений UI в admin панели
+- ✅ **Multi-Admin Support** - Несколько администраторов могут привязать свои Telegram аккаунты к одной организации независимо
+
+#### Key Technical Implementation:
+- **Short Tokens:** Генерация через `crypto.randomBytes(8).toString('base64url')` для обхода лимита Telegram (200+ chars → 8-12 chars)
+- **In-Memory Token Storage:** Map `adminLinkTokens` с автоматической очисткой истекших токенов каждые 5 минут
+- **Deep Link Processing:** Обработка `/start <shortToken>` команды в `handleStart` с поддержкой коротких токенов и обратной совместимостью с JWT
+- **Admin Middleware:** `isAdmin.ts` проверяет role (OWNER/MANAGER/SUPER_ADMIN) И наличие telegramId в базе данных
+- **UI Components:** Кастомная AlertDialog для подтверждения отвязки, QR код генерация для ссылок, WebSocket listeners для обновлений
+
+#### Files Modified:
+- `backend/src/api/routes/bot-management.ts` - Endpoints для генерации ссылок (`generate-admin-link`) и отвязки (`unlink-admin`), хранение токенов в Map
+- `backend/src/bot/handlers/start.ts` - Обработка deep links для привязки админа, поддержка коротких токенов и JWT
+- `backend/src/bot/mw/isAdmin.ts` - Middleware для проверки прав доступа к admin командам (role + telegramId)
+- `backend/src/bot/bot-manager.ts` - Регистрация admin команды `/admin`, передача adminLinkTokens в handlers через `setAdminLinkTokensMap`
+- `backend/src/websocket/events.ts` - Добавлены события `ADMIN_LINKED` и `ADMIN_UNLINKED`
+- `backend/src/websocket/emitters/bot-emitter.ts` - Методы `emitAdminLinked` и `emitAdminUnlinked` для отправки событий
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - UI для генерации ссылок, QR кодов, отвязки, WebSocket listeners
+- `admin-panel-react/src/components/ui/alert-dialog.tsx` - Кастомная модалка для подтверждения отвязки (React.forwardRef, стили)
+- `admin-panel-react/src/services/api.ts` - API методы `generateAdminLink()` и `unlinkAdmin()`
+- `backend/src/i18n/lang/*.json` - Добавлены переводы для `admin.linkSuccess`, `errors.telegramIdRequired`, `errors.invalidLinkToken`, etc.
+
+#### Current Status:
+- ✅ **Admin Linking** - Работает через QR код и ссылки, короткие токены генерируются корректно, deep links обрабатываются
+- ✅ **Admin Unlinking** - Кастомная модалка работает, отвязка происходит через API, WebSocket события отправляются
+- ✅ **Admin Commands** - Команда `/admin` доступна только для linked админов с правильной ролью
+- ✅ **WebSocket Events** - События linking/unlinking отправляются и обрабатываются в UI автоматически
+- ✅ **Multi-Admin** - Несколько админов могут независимо привязать свои Telegram аккаунты к одной организации
+
+### Previous Session (January 18, 2025) - WebSocket Real-time Fixes & UI Auto-Update ✅
 
 #### Critical WebSocket & Real-time Updates Fixes
 - ✅ **Fixed WebSocket Connection Issue** - Исправлена проблема с отсутствием token в useAuth hook - теперь token возвращается из контекста
@@ -442,10 +506,12 @@ PUT    /api/organizations/:id      # Update organization
 
 ### Bot Management
 ```
-GET    /api/bot/status            # Bot status
-POST   /api/bot/start             # Start bot
-POST   /api/bot/stop              # Stop bot
-POST   /api/bot/restart           # Restart bot
+GET    /api/bot/status               # Bot status (includes botActive, adminLinked)
+POST   /api/bot/start                # Start bot
+POST   /api/bot/stop                 # Stop bot
+POST   /api/bot/restart              # Restart bot
+POST   /api/bot/generate-admin-link  # Generate admin link token (returns URL, QR code)
+POST   /api/bot/unlink-admin         # Unlink admin Telegram account
 ```
 
 ### AI Configuration
@@ -466,21 +532,90 @@ POST   /api/ai/test               # Test AI integration
 - **Bot Manager:** Manages multiple bots simultaneously
 
 ### Bot Commands
+
+#### Regular User Commands
 ```
-/start - Start bot interaction
+/start - Start bot interaction (with optional deep link payload)
 /help - Show help
 /book - Book appointment
 /my - My appointments
 /slots - View available slots
-/admin - Admin panel (Web App)
 /lang - Change language
 ```
+
+#### Admin-Only Commands (require linked Telegram account)
+```
+/admin - Admin panel (Web App) - Only for OWNER/MANAGER/SUPER_ADMIN with linked Telegram
+```
+
+**Admin Command Access:**
+- User must have role: `OWNER`, `MANAGER`, or `SUPER_ADMIN`
+- User must have `telegramId` set in database (linked via admin link)
+- Middleware `isAdmin.ts` checks both role and telegramId before allowing access
+
+### Admin Linking System
+
+**Purpose:** Link admin user's Telegram account to their web account for admin bot commands
+
+**How It Works:**
+1. Admin clicks "Generate Admin Link" in Bot Management page (admin panel)
+2. Backend generates **short token** (8-12 characters) and stores in memory Map with expiration (1 hour)
+3. Admin receives link: `https://t.me/BotUsername?start=<shortToken>` and QR code
+4. Admin opens link in Telegram or scans QR code
+5. Bot receives `/start <shortToken>` command
+6. Bot verifies token (exists, not expired, matches user/organization)
+7. Bot updates user's `telegramId` in database
+8. Bot sends confirmation message
+9. WebSocket event `admin.linked` is emitted
+10. Admin panel updates to show "Linked" status
+
+**Technical Details:**
+- **Short Tokens:** Used instead of JWT to avoid Telegram's start parameter length limit (200+ chars → 8-12 chars)
+- **Token Storage:** In-memory `Map<string, { userId, organizationId, expiresAt }>` in `bot-management.ts`
+- **Token Cleanup:** Expired tokens are cleaned up every 5 minutes
+- **Security:** Token expires in 1 hour, can only be used once, tied to specific userId and organizationId
+- **Multi-Admin Support:** Multiple admins per organization can each link their own Telegram account
+
+**API Endpoints:**
+- `POST /api/bot/generate-admin-link` - Generate admin link token (returns URL and QR code data)
+- `POST /api/bot/unlink-admin` - Unlink admin Telegram account (sets telegramId to null)
+
+**WebSocket Events:**
+- `admin.linked` - Emitted when admin successfully links Telegram account
+- `admin.unlinked` - Emitted when admin unlinks Telegram account
+
+**Files:**
+- `backend/src/api/routes/bot-management.ts` - Token generation and unlinking endpoints
+- `backend/src/bot/handlers/start.ts` - Deep link processing for admin linking
+- `backend/src/bot/mw/isAdmin.ts` - Middleware to check admin access
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - UI for linking/unlinking
+
+### Admin Unlinking System
+
+**Purpose:** Allow admins to unlink their Telegram account from web account
+
+**How It Works:**
+1. Admin clicks "Unlink Telegram Account" button in Bot Management page
+2. Custom modal dialog appears (replaces native browser `window.confirm`)
+3. Admin confirms unlinking
+4. Backend sets user's `telegramId` to `null` in database
+5. WebSocket event `admin.unlinked` is emitted
+6. Admin panel updates to show "Not Linked" status
+7. Admin can no longer use admin commands in bot until re-linked
+
+**UI Features:**
+- Custom `AlertDialog` component from shadcn/ui
+- Visual warnings about losing admin access
+- Loading state during unlinking process
+- Toast notifications for success/failure
 
 ### Features
 - Complete booking flow (service → date/time → confirmation)
 - Multi-language interface (RU, EN, HE)
 - Web App integration for admins
 - AI assistant for answering questions
+- **Admin linking/unlinking** - Link Telegram account to admin user for bot commands
+- **Role-based bot commands** - Different commands for admins vs regular users
 
 ---
 
@@ -2164,7 +2299,43 @@ echo "PUBLIC_BASE_URL=https://[new-ngrok-url]" >> .env
 
 ### What Was Done (All Recent Sessions - January 18, 2025):
 
-#### Latest Session: WebSocket Real-time Updates & Performance Fixes ✅
+#### Latest Session: Loader Unification & UI Consistency ✅
+1. **Loader Standardization:**
+   - Унифицированы все лоадеры на всех страницах
+   - Убраны переводы (i18n) из лоадеров
+   - Заменены RefreshCw иконки на простой спиннер
+   - Исправлено позиционирование - лоадеры центрированы в области контента
+   - Хедер и сайдбар остаются видимыми во время загрузки
+
+2. **Files Modified:**
+   - `admin-panel-react/src/components/pages/Dashboard.tsx` - Эталонный лоадер
+   - `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Убраны переводы, исправлено позиционирование
+   - `admin-panel-react/src/components/pages/AppointmentsPage.tsx` - Исправлено позиционирование
+   - `admin-panel-react/src/components/pages/SlotsPage.tsx` - Заменен RefreshCw на спиннер
+   - `admin-panel-react/src/components/pages/SlotsManagementPage.tsx` - Заменен RefreshCw на спиннер
+
+#### Previous Session: Admin Linking & Unlinking System ✅
+1. **Admin Account Management:**
+   - Реализована система привязки Telegram аккаунта администратора через deep links
+   - Короткие токены (8-12 символов) вместо длинных JWT для обхода лимита Telegram
+   - Система отвязки админа с кастомной модалкой
+   - Role-based bot commands - команда `/admin` только для linked админов
+   - WebSocket события для real-time обновлений UI
+
+2. **Technical Implementation:**
+   - In-memory Map для хранения токенов с автоматической очисткой
+   - Обработка deep links в `/start` команде с поддержкой коротких токенов
+   - Admin middleware для проверки прав доступа
+   - QR код генерация для быстрого доступа к боту
+
+3. **Files Modified:**
+   - `backend/src/api/routes/bot-management.ts` - Token generation, unlinking endpoints
+   - `backend/src/bot/handlers/start.ts` - Deep link processing
+   - `backend/src/bot/mw/isAdmin.ts` - Admin access middleware
+   - `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Linking/unlinking UI
+   - `admin-panel-react/src/components/ui/alert-dialog.tsx` - Custom unlink modal
+
+#### Previous Session: WebSocket Real-time Updates & Performance Fixes ✅
 1. **Critical Bug Fixes:**
    - Убран polling для Bot Status который вызывал запросы каждые несколько секунд
    - Вернута страница настроек бота (Settings tab)
@@ -2313,5 +2484,5 @@ cd backend && npm run dev
 ---
 
 *Agent Onboarding Guide - Complete guide for AI agents working on Appointments Bot*  
-*Version: 3.3 | Last Updated: January 18, 2025 (Latest Session - WebSocket Real-time Fixes & UI Auto-Update)*  
-*Status: Production Ready - All Critical Features Complete (100%) + WebSocket Real-time System Fully Functional*
+*Version: 3.4 | Last Updated: January 18, 2025 (Latest Session - Loader Unification & UI Consistency)*  
+*Status: Production Ready - All Critical Features Complete (100%) + WebSocket Real-time System Fully Functional + UI Consistency Improvements*

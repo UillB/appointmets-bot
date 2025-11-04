@@ -21,6 +21,7 @@ export enum EventType {
   BOT_BOOKING_STARTED = 'bot.booking.started',
   BOT_BOOKING_COMPLETED = 'bot.booking.completed',
   ADMIN_LINKED = 'admin.linked',
+  ADMIN_UNLINKED = 'admin.unlinked',
   
   // User Events
   USER_LOGIN = 'user.login',

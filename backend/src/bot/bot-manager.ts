@@ -1,7 +1,8 @@
 import { Telegraf, session } from "telegraf";
 import { PrismaClient } from '@prisma/client';
 import { i18nMw } from "./mw/i18n";
-import { handleStart, handleLang, handleHelp, registerLangCallbacks } from "./handlers/start";
+import { handleStart, handleLang, handleHelp, registerLangCallbacks, setAdminLinkTokensMap } from "./handlers/start";
+import { adminLinkTokens } from "../api/routes/bot-management";
 import { handleBookingFlow, registerBookingCallbacks } from "./handlers/bookingInline";
 import { handleMy, registerMyCallbacks } from "./handlers/my";
 import { handleSlots, registerSlotsCallbacks } from "./handlers/slots";
@@ -16,7 +17,10 @@ class BotManager {
   private isInitialized = false;
 
   async initialize() {
-    if (this.isInitialized) return;
+    if (this.isInitialized) {
+      console.log('⚠️ Bot Manager already initialized, skipping');
+      return;
+    }
     
     console.log('🤖 Initializing Bot Manager...');
     
@@ -27,33 +31,82 @@ class BotManager {
       }
     });
 
+    console.log(`📋 Found ${organizations.length} organizations with bot tokens`);
+
     for (const org of organizations) {
       if (org.botToken) {
+        console.log(`📋 Processing organization ${org.id} (${org.name || 'unnamed'})`);
         await this.addBot(org.botToken, org.id);
       }
     }
 
     this.isInitialized = true;
-    console.log(`🤖 Bot Manager initialized with ${this.bots.size} bots`);
+    console.log(`✅ Bot Manager initialized with ${this.bots.size} bots`);
   }
 
   async addBot(token: string, organizationId: number): Promise<void> {
     try {
+      console.log(`🔧 [Org ${organizationId}] addBot called, token: ${token.substring(0, 10)}...`);
+      
       // Проверяем, не запущен ли уже бот с этим токеном
       if (this.bots.has(token)) {
-        console.log(`🤖 Bot with token ${token.slice(0, 10)}... already running`);
+        console.log(`⚠️ [Org ${organizationId}] Bot with token ${token.slice(0, 10)}... already running, skipping`);
         return;
       }
 
-      console.log(`🤖 Starting bot for organization ${organizationId}...`);
+      console.log(`🚀 [Org ${organizationId}] Starting bot for organization ${organizationId}...`);
       
       const bot = new Telegraf(token);
 
-      // Логгер с улучшенной информацией
+      // Логгер с улучшенной информацией - логируем ВСЕ обновления
       bot.use(async (ctx, next) => {
         const chatId = ctx.chat?.id || 'unknown';
         const userId = ctx.from?.id || 'unknown';
-        console.log(`🤖 [Org ${organizationId}] [Chat:${chatId}] [User:${userId}] ${ctx.updateType}`);
+        const updateType = ctx.updateType;
+        
+        // Логируем ВСЕ входящие обновления для диагностики
+        console.log(`📥 [Org ${organizationId}] Received update: type=${updateType}, chatId=${chatId}, userId=${userId}, updateId=${ctx.update.update_id}`);
+        
+        // Детальное логирование для команд
+        if (updateType === 'message' && ctx.message && 'text' in ctx.message) {
+          const text = ctx.message.text || '';
+          console.log(`🤖 [Org ${organizationId}] [Chat:${chatId}] [User:${userId}] Message: ${text.substring(0, 200)}`);
+          
+          // Если это команда /start, логируем весь update для отладки
+          if (text.startsWith('/start')) {
+            console.log(`🔗 [Org ${organizationId}] ========== /START COMMAND DETECTED ==========`);
+            console.log(`🔗 [Org ${organizationId}] Full message text: "${text}"`);
+            console.log(`🔗 [Org ${organizationId}] Update ID: ${ctx.update.update_id}`);
+            console.log(`🔗 [Org ${organizationId}] Full update object:`, JSON.stringify(ctx.update, null, 2));
+            
+            // Проверяем все возможные способы получения payload
+            const startPayload = (ctx as any).startPayload;
+            const startParam = (ctx as any).startParam;
+            console.log(`🔗 [Org ${organizationId}] ctx.startPayload:`, startPayload || 'undefined');
+            console.log(`🔗 [Org ${organizationId}] ctx.startParam:`, startParam || 'undefined');
+            
+            // Если payload в тексте сообщения
+            if (text.includes(' ')) {
+              const parts = text.split(' ');
+              console.log(`🔗 [Org ${organizationId}] Message parts (split by space):`, parts);
+              if (parts.length > 1) {
+                const payloadFromText = parts.slice(1).join(' ');
+                console.log(`🔗 [Org ${organizationId}] Payload from text (after /start):`, payloadFromText);
+                console.log(`🔗 [Org ${organizationId}] Payload length:`, payloadFromText.length);
+                console.log(`🔗 [Org ${organizationId}] Payload starts with 'link_':`, payloadFromText.startsWith('link_'));
+              }
+            } else {
+              console.log(`🔗 [Org ${organizationId}] ⚠️ /start command without parameters!`);
+            }
+          }
+        } else if (updateType === 'callback_query') {
+          const data = (ctx.callbackQuery && 'data' in ctx.callbackQuery) ? ctx.callbackQuery.data : 'N/A';
+          console.log(`🤖 [Org ${organizationId}] [Chat:${chatId}] [User:${userId}] Callback: ${data}`);
+        } else {
+          // Логируем другие типы обновлений тоже
+          console.log(`🤖 [Org ${organizationId}] [Chat:${chatId}] [User:${userId}] ${updateType}`);
+        }
+        
         return next();
       });
 
@@ -63,36 +116,65 @@ class BotManager {
 
       // Настраиваем бота
       await this.setupBot(bot, organizationId);
+      
+      // Передаем adminLinkTokens в обработчик start
+      setAdminLinkTokensMap(adminLinkTokens);
 
       // Сохраняем бота в мапу ДО запуска, чтобы избежать дубликатов
       this.bots.set(token, bot);
       
+      // Проверяем валидность токена перед запуском
+      try {
+        console.log(`🔍 [Org ${organizationId}] Validating bot token...`);
+        const me = await bot.telegram.getMe();
+        console.log(`✅ [Org ${organizationId}] Bot token valid. Bot username: @${me.username}`);
+      } catch (tokenError: any) {
+        console.error(`❌ [Org ${organizationId}] Bot token validation failed:`, tokenError.message);
+        this.bots.delete(token);
+        return;
+      }
+      
       // Запускаем бота асинхронно, не блокируя основной поток
-      // Используем setTimeout для гарантии, что код продолжит выполнение
-      setTimeout(async () => {
+      // ВАЖНО: bot.launch() в polling режиме НЕ завершается - промис продолжает работать бесконечно
+      // Это нормальное поведение - бот слушает обновления в фоне
+      (async () => {
         try {
-          console.log(`🚀 Launching bot for organization ${organizationId}...`);
+          console.log(`🚀 [Org ${organizationId}] Launching bot...`);
+          console.log(`🚀 [Org ${organizationId}] Bot token (first 10): ${token.substring(0, 10)}...`);
           
-          // Запускаем бота с обработкой ошибок и таймаутом
-          const launchPromise = bot.launch({
+          // Запускаем бота с обработкой ошибок
+          // bot.launch() начинает polling и промис НЕ завершается - это нормально
+          bot.launch({
             dropPendingUpdates: true, // Игнорируем старые обновления
-            allowedUpdates: ['message', 'callback_query'] // Только нужные типы обновлений
+            allowedUpdates: ['message', 'callback_query', 'inline_query'] // Добавляем inline_query для полноты
+          }).catch((launchError: any) => {
+            // Ошибки при запуске будут пойманы здесь
+            console.error(`❌ [Org ${organizationId}] Bot launch error:`, launchError.message);
+            console.error(`❌ [Org ${organizationId}] Launch error details:`, launchError);
+            this.bots.delete(token);
           });
           
-          // Таймаут на запуск бота (30 секунд) - увеличен для медленных соединений
-          const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Bot launch timeout')), 30000)
-          );
+          // Даем боту немного времени для инициализации
+          await new Promise(resolve => setTimeout(resolve, 1000));
           
-          await Promise.race([launchPromise, timeoutPromise]);
-          console.log(`✅ Bot for organization ${organizationId} started successfully`);
-        } catch (launchError: any) {
-          console.error(`❌ Failed to launch bot for organization ${organizationId}:`, launchError.message);
+          // Проверяем что бот действительно запустился
+          try {
+            const botInfo = await bot.telegram.getMe();
+            console.log(`✅ [Org ${organizationId}] Bot started successfully!`);
+            console.log(`✅ [Org ${organizationId}] Bot info: @${botInfo.username} (${botInfo.first_name})`);
+            console.log(`✅ [Org ${organizationId}] Bot is ready to receive messages`);
+          } catch (infoError: any) {
+            console.error(`❌ [Org ${organizationId}] Bot launch failed - cannot get bot info:`, infoError.message);
+            this.bots.delete(token);
+          }
+        } catch (error: any) {
+          console.error(`❌ [Org ${organizationId}] Failed to launch bot:`, error.message);
+          console.error(`❌ [Org ${organizationId}] Error stack:`, error.stack);
           // Удаляем бота из мапы если запуск не удался
           this.bots.delete(token);
           // Не пробрасываем ошибку дальше - API должен продолжать работать
         }
-      }, 0); // Запускаем в следующем тике event loop
+      })();
       
       console.log(`✅ Bot for organization ${organizationId} queued for launch`);
       
@@ -150,11 +232,34 @@ class BotManager {
 
     // Команды
     bot.start(handleStart(organizationId));
+    // Также обрабатываем /start с параметрами через hears (для надежности)
+    bot.hears(/^\/start (.+)$/, handleStart(organizationId));
     bot.command("help", handleHelp(organizationId));
     bot.command("lang", handleLang(organizationId));
     bot.command("book", handleBookingFlow(organizationId));
     bot.command("slots", handleSlots(organizationId));
     bot.command("my", handleMy(organizationId));
+    
+    // Admin команда - только для админов
+    bot.command("admin", async (ctx) => {
+      const { isTelegramAdmin } = await import("./mw/isAdmin");
+      const { ENV } = await import("../lib/env");
+      
+      const isAdmin = await isTelegramAdmin(ctx, organizationId);
+      if (!isAdmin) {
+        return; // isTelegramAdmin уже отправил сообщение об ошибке
+      }
+
+      const url = `${ENV.PUBLIC_BASE_URL}/webapp/admin?lang=${(ctx as any).lang || 'ru'}`;
+      await ctx.reply(
+        ctx.tt("admin.openPanel"),
+        {
+          reply_markup: {
+            inline_keyboard: [[{ text: "🔧 " + ctx.tt("admin.openPanel"), web_app: { url } }]]
+          }
+        }
+      );
+    });
     
     // AI команды
     bot.command("ai", async (ctx) => {
