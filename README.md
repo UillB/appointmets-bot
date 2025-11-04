@@ -1,49 +1,48 @@
 # 🎯 Appointments Bot
 
-Полнофункциональная система управления записями на прием с Telegram ботом и веб-панелью администратора.
+Full-featured multi-tenant appointment booking system with Telegram bot integration and web-based admin panel.
 
-## 🏗️ Архитектура
+## 🏗️ Architecture
 
 ```
 appointments-bot/
 ├── backend/          # Node.js + Express + Prisma + Telegram Bot
-├── admin-panel-react/ # React Admin Panel (Main)
-├── admin-panel/       # Angular 20 Admin Panel (Legacy)
-├── landing/          # Next.js Landing Page (многоязычный)
-├── scripts/          # Автоматизация и скрипты развертывания
-├── docs/             # Документация проекта
-└── docker-compose.yml # Docker конфигурация для продакшена
+├── admin-panel-react/ # React Admin Panel
+├── landing/          # Next.js Landing Page (multi-language)
+├── scripts/          # Automation and deployment scripts
+├── docs/             # Project documentation
+└── docker-compose.yml # Docker configuration for production
 ```
 
-## 🚀 Быстрый старт
+## 🚀 Quick Start
 
-### Предварительные требования
+### Prerequisites
 
-- Node.js 20+ [[memory:2591400]]
+- Node.js 20+
 - npm
 - Git
 
-### Установка и запуск
+### Installation & Setup
 
-1. **Клонирование репозитория:**
+1. **Clone repository:**
    ```bash
    git clone <repository-url>
    cd appointments-bot
    ```
 
-2. **Автоматическая настройка:**
+2. **Automated setup:**
    ```bash
    chmod +x scripts/setup.sh
    ./scripts/setup.sh
    ```
 
-3. **Запуск в режиме разработки:**
+3. **Start development:**
    ```bash
    chmod +x scripts/dev.sh
    ./scripts/dev.sh
    ```
 
-### Ручная настройка
+### Manual Setup
 
 1. **Backend:**
    ```bash
@@ -55,193 +54,189 @@ appointments-bot/
    npm run dev
    ```
 
-2. **React Admin Panel (Main):**
+2. **React Admin Panel:**
    ```bash
    cd admin-panel-react
    npm install
    npm run dev
    ```
 
-3. **Angular Admin Panel (Legacy):**
-   ```bash
-   cd admin-panel
-   npm install
-   npm run dev
-   ```
-
-4. **Landing Page:**
+3. **Landing Page:**
    ```bash
    cd landing
    npm install
    npm run dev
    ```
 
-## 🌐 Доступные сервисы
+## 🌐 Available Services
 
 - **Backend API:** http://localhost:4000
 - **React Admin Panel:** http://localhost:4200
-- **Angular Admin Panel:** http://localhost:4201 (if running)
 - **Landing Page:** http://localhost:3000
 - **API Health Check:** http://localhost:4000/api/health
 
-## 🔐 Аутентификация
+## 🔐 Authentication
 
-### Супер-администратор
+### Super Administrator
+
 - **Email:** admin@system.com
 - **Password:** admin123
 
-### Роли пользователей
-- `SUPER_ADMIN` - полный доступ ко всем функциям
-- `ADMIN` - управление организациями и услугами
-- `USER` - просмотр записей
+### User Roles
+
+- `SUPER_ADMIN` - Full access to all functions
+- `OWNER` - Organization owner with full access
+- `MANAGER` - Organization manager with management access
 
 ## 📱 Telegram Bot
 
-Бот интегрирован с системой и позволяет:
-- Просматривать доступные услуги
-- Записываться на прием
-- Управлять своими записями
-- Получать уведомления
+The bot is integrated with the system and provides:
+- View available services
+- Book appointments
+- Manage bookings
+- Receive notifications
 
-### Настройка бота
+### Bot Setup
 
-1. Создайте бота через [@BotFather](https://t.me/botfather)
-2. Получите токен бота
-3. Добавьте токен в `.env` файл:
+1. Create a bot via [@BotFather](https://t.me/botfather)
+2. Get bot token
+3. Add token to `.env` file:
    ```env
    TELEGRAM_BOT_TOKEN=your_bot_token_here
    ```
 
-## 🗄️ База данных
+## 🗄️ Database
 
-Система использует SQLite с Prisma ORM. Основные сущности:
+The system uses SQLite with Prisma ORM. Main entities:
 
-- **Organizations** - организации
-- **Services** - услуги
-- **Appointments** - записи на прием
-- **TimeSlots** - временные слоты
-- **Users** - пользователи системы
+- **Organizations** - organizations
+- **Services** - services
+- **Appointments** - appointment bookings
+- **TimeSlots** - time slots
+- **Users** - system users
 
-### Миграции
+### Migrations
 
 ```bash
 cd backend
-npx prisma migrate dev    # Создание новой миграции
-npx prisma migrate deploy # Применение миграций в продакшене
-npx prisma studio        # GUI для работы с БД
+npx prisma migrate dev    # Create new migration
+npx prisma migrate deploy # Apply migrations in production
+npx prisma studio        # GUI for database
 ```
 
-## 🐳 Docker развертывание
+## 🐳 Docker Deployment
 
-### Продакшен
+### Production
 
 ```bash
-# Настройте .env файл
+# Configure .env file
 cp .env.example .env
 
-# Запустите развертывание
+# Start deployment
 chmod +x scripts/deploy.sh
 ./scripts/deploy.sh
 ```
 
-### Ручной запуск
+### Manual Start
 
 ```bash
 docker-compose up -d
 ```
 
-## 🌍 Многоязычность
+## 🌍 Multi-language
 
-Система поддерживает:
-- 🇷🇺 Русский
-- 🇺🇸 Английский  
-- 🇮🇱 Иврит
+The system supports:
+- 🇷🇺 Russian
+- 🇺🇸 English  
+- 🇮🇱 Hebrew
 
-Переключение языков доступно в веб-панели и Telegram боте.
+Language switching is available in the web panel and Telegram bot.
 
-## 🎨 Темы
+## 🎨 Themes
 
-- Светлая тема (по умолчанию)
-- Темная тема
-- Автоматическое переключение по системным настройкам
+- Light theme (default)
+- Dark theme
+- Automatic switching based on system settings
 
-## 📊 Функциональность
+## 📊 Features
 
-### React Admin Panel (Main)
-- 📈 Dashboard с аналитикой и статистикой
-- 📅 Управление записями с фильтрацией
-- 🏢 Управление организациями
-- 🔧 Управление услугами
-- 🤖 AI Assistant с настройками
-- ⚙️ Настройки системы
-- 👤 Профиль пользователя
-- 🎨 Современный UI с Tailwind CSS
+### React Admin Panel
+- 📈 Dashboard with analytics and statistics
+- 📅 Appointment management with filtering
+- 🏢 Organization management
+- 🔧 Service management
+- 🤖 AI Assistant with settings
+- ⚙️ System settings
+- 👤 User profile
+- 🎨 Modern UI with Tailwind CSS
 
 ### API Endpoints
-- `GET /api/health` - проверка здоровья
-- `POST /api/auth/login` - аутентификация
-- `GET /api/appointments` - список записей
-- `POST /api/appointments` - создание записи
-- `GET /api/services` - список услуг
-- `GET /api/organizations` - список организаций
+- `GET /api/health` - Health check
+- `POST /api/auth/login` - Authentication
+- `GET /api/appointments` - List appointments
+- `POST /api/appointments` - Create appointment
+- `GET /api/services` - List services
+- `GET /api/organizations` - List organizations
 
-## 🛠️ Разработка
+## 🛠️ Development
 
-### Структура проекта
+### Project Structure
 
-- **Backend:** Express.js с TypeScript, Prisma ORM, JWT аутентификация
-- **Frontend:** React с Tailwind CSS (Main), Angular 20 с Material Design (Legacy)
-- **Bot:** Telegram Bot API с многоязычной поддержкой
-- **Database:** SQLite с возможностью миграции на PostgreSQL
+- **Backend:** Express.js with TypeScript, Prisma ORM, JWT authentication
+- **Frontend:** React with Tailwind CSS
+- **Bot:** Telegram Bot API with multi-language support
+- **Database:** SQLite with migration to PostgreSQL support
 
-### Полезные команды
+### Useful Commands
 
 ```bash
-# Генерация слотов
+# Generate slots
 cd backend && npm run generate-slots
 
-# Создание супер-админа
+# Create super admin
 cd backend && npm run create-super-admin
 
-# Создание тестовых данных
+# Create test data
 cd backend && npm run create-test-data
 
-# Проверка слотов
+# Check slots
 cd backend && npm run check-slots
 ```
 
-## 📚 Документация
+## 📚 Documentation
 
-Дополнительная документация находится в папке `docs/`:
-- [🚨 **Critical Features Roadmap**](docs/CRITICAL_FEATURES_ROADMAP.md) - **КРИТИЧЕСКИ ВАЖНО** - функции для MVP
-- [📊 Project Status](docs/PROJECT_CHECKPOINT_2025.md) - текущий статус проекта
-- [💼 Business Documentation](docs/business/) - бизнес-планы и стратегия
-- [🔧 Development Guides](docs/development/) - руководства по разработке
-- [🚀 Deployment Guide](docs/deployment/) - инструкции по развертыванию
-- [🏗️ Architecture](docs/architecture/) - архитектура системы
-- [🔌 API Documentation](docs/api/) - документация API
-- [🤖 Agent Prompts](docs/agent-prompts/) - промпты для AI агентов
+Additional documentation is available in the `docs/` folder:
+- [🚨 **Critical Features Roadmap**](docs/CRITICAL_FEATURES_ROADMAP.md) - **CRITICAL** - MVP features
+- [📊 Project Status](docs/PROJECT_CHECKPOINT_2025.md) - Current project status
+- [💼 Business Documentation](docs/business/) - Business plans and strategy
+- [🔧 Development Guides](docs/development/) - Development guides
+- [🚀 Deployment Guide](docs/deployment/) - Deployment instructions
+- [🏗️ Architecture](docs/architecture/) - System architecture
+- [🔌 API Documentation](docs/api/) - API documentation
+- [🤖 Agent Prompts](docs/agent-prompts/) - Prompts for AI agents
+- [📋 **Detailed Specification**](docs/PROJECT_DETAILED_SPECIFICATION.md) - Complete project specification
+- [🤖 **Agent Onboarding**](AGENT_ONBOARDING_GUIDE.md) - Agent onboarding guide
 
-## 🤝 Вклад в проект
+## 🤝 Contributing
 
-1. Форкните репозиторий
-2. Создайте ветку для новой функции (`git checkout -b feature/amazing-feature`)
-3. Зафиксируйте изменения (`git commit -m 'Add amazing feature'`)
-4. Отправьте в ветку (`git push origin feature/amazing-feature`)
-5. Откройте Pull Request
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 📄 Лицензия
+## 📄 License
 
-Этот проект распространяется под лицензией MIT. См. файл `LICENSE` для получения дополнительной информации.
+This project is distributed under the MIT license. See the `LICENSE` file for more information.
 
-## 🆘 Поддержка
+## 🆘 Support
 
-Если у вас возникли вопросы или проблемы:
+If you have questions or issues:
 
-1. Проверьте [документацию](docs/)
-2. Создайте [Issue](https://github.com/your-repo/issues)
-3. Свяжитесь с командой разработки
+1. Check the [documentation](docs/)
+2. Create an [Issue](https://github.com/your-repo/issues)
+3. Contact the development team
 
 ---
 
-**Статус проекта:** ✅ Полностью функциональная система готова к продакшену
+**Project Status:** ✅ Fully functional system ready for production

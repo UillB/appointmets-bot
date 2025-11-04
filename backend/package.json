@@ -11,6 +11,7 @@
     "slots:custom": "tsx scripts/generateSlots.ts --days=31 --start=10 --end=18 --step=20 --cap=2",
     "slots:refresh": "tsx scripts/refreshSlots.ts",
     "bot:commands": "tsx scripts/setBotCommands.ts",
+    "create-system-admin": "tsx scripts/createSystemAdmin.ts",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio"

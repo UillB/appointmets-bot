@@ -25,9 +25,21 @@ export async function POST(request: NextRequest) {
     })
 
     if (!response.ok) {
-      const error = await response.json()
+      let errorMessage = 'Ошибка входа'
+      try {
+        const error = await response.json()
+        // Backend возвращает { error: '...' } или { message: '...' }
+        errorMessage = error.error || error.message || 'Ошибка входа'
+      } catch (e) {
+        // Если ответ не JSON, используем статус код
+        if (response.status === 401) {
+          errorMessage = 'Неверный email или пароль'
+        } else if (response.status === 400) {
+          errorMessage = 'Неверные данные'
+        }
+      }
       return NextResponse.json(
-        { message: error.message || 'Ошибка входа' },
+        { message: errorMessage },
         { status: response.status }
       )
     }

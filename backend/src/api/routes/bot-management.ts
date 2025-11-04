@@ -114,11 +114,15 @@ router.post('/validate-token', async (req: Request, res: Response) => {
 // POST /api/bot/activate - Активация бота
 router.post('/activate', authenticateToken, async (req: AuthenticatedRequest, res: Response) => {
   try {
+    console.log('🔄 Bot activation request received');
     const validatedData = activateBotSchema.parse(req.body);
     const { token, organizationId } = validatedData;
 
+    console.log(`🔄 Activating bot for organization ${organizationId}`);
+
     // Проверяем права доступа к организации
     if (req.user!.role !== 'SUPER_ADMIN' && req.user!.organizationId !== organizationId) {
+      console.error(`❌ Access denied: user ${req.user!.userId} attempted to access org ${organizationId}`);
       return res.status(403).json({
         success: false,
         error: 'Access denied to this organization'
@@ -163,8 +167,16 @@ router.post('/activate', authenticateToken, async (req: AuthenticatedRequest, re
     // Настраиваем бота
     await setupBot(token, organization);
 
+    // Останавливаем предыдущий бот для этой организации (если был)
+    await botManager.removeBotByOrganizationId(organizationId);
+    
+    // Небольшая задержка перед запуском нового бота
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     // Запускаем бота через менеджер
+    console.log(`🤖 Starting bot for organization ${organizationId}...`);
     await botManager.addBot(token, organizationId);
+    console.log(`✅ Bot started successfully for organization ${organizationId}`);
 
     res.json({
       success: true,
@@ -177,6 +189,7 @@ router.post('/activate', authenticateToken, async (req: AuthenticatedRequest, re
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
+      console.error('❌ Validation error:', error.issues);
       return res.status(400).json({
         success: false,
         error: 'Validation error',
@@ -184,10 +197,11 @@ router.post('/activate', authenticateToken, async (req: AuthenticatedRequest, re
       });
     }
 
-    console.error('Bot activation error:', error);
+    console.error('❌ Bot activation error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     res.status(500).json({
       success: false,
-      error: 'Internal server error'
+      error: errorMessage
     });
   }
 });

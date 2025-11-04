@@ -62,7 +62,7 @@ class BotManager {
       this.aiHandlers.set(organizationId, aiHandler);
 
       // Настраиваем бота
-      this.setupBot(bot, organizationId);
+      await this.setupBot(bot, organizationId);
 
       // Запускаем бота с обработкой ошибок
       await bot.launch({
@@ -120,7 +120,7 @@ class BotManager {
     }
   }
 
-  private setupBot(bot: Telegraf, organizationId: number) {
+  private async setupBot(bot: Telegraf, organizationId: number) {
       // Middleware
       bot.use(session());
       bot.use(i18nMw);
@@ -160,16 +160,36 @@ class BotManager {
       }
     });
 
-    // Callbacks
+    // Получаем username бота для диплинков СНАЧАЛА (синхронно)
+    // Это важно для правильной регистрации booking callbacks
+    let botUsername: string | null = null;
+    try {
+      const me = await bot.telegram.getMe();
+      botUsername = me.username || null;
+    } catch (error) {
+      console.error(`❌ Failed to get bot username for organization ${organizationId}:`, error);
+    }
+
+    // Callbacks - регистрируем в правильном порядке
+    // WebApp data handler должен быть ЗА регистрацией booking callbacks
     registerMyCallbacks(bot, organizationId);
     registerLangCallbacks(bot, organizationId);
     registerSlotsCallbacks(bot, organizationId);
+    
+    // Booking callbacks регистрируем СНАЧАЛА
+    if (botUsername) {
+      registerBookingCallbacks(bot, botUsername, organizationId);
+    } else {
+      // Если не получили username, пробуем через промис (fallback)
+      bot.telegram.getMe().then((me) => {
+        registerBookingCallbacks(bot, me.username!, organizationId);
+      }).catch(err => {
+        console.error(`❌ Failed to register booking callbacks for org ${organizationId}:`, err);
+      });
+    }
+    
+    // WebApp data handler регистрируем ПОСЛЕДНИМ (он должен обрабатывать web_app_data)
     registerWebappDataHandler(bot, organizationId);
-
-    // Получаем username бота для диплинков
-    bot.telegram.getMe().then((me) => {
-      registerBookingCallbacks(bot, me.username!, organizationId);
-    });
   }
 
   async stopAll() {

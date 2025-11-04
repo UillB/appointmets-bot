@@ -10,8 +10,10 @@ export function registerWebappDataHandler(bot: Telegraf, organizationId?: number
     const m: any = ctx.message;
     if (m?.web_app_data?.data) {
       try {
+        console.log(`📱 WebApp data received for org ${organizationId || 'unknown'}:`, m.web_app_data.data);
         const raw: string = m.web_app_data.data;
         const { date, serviceId } = JSON.parse(raw || "{}");
+        console.log(`📅 Parsed: date=${date}, serviceId=${serviceId}`);
 
         await ctx.reply(ctx.tt("progress.dateReceived"), Markup.removeKeyboard());
         if (!date) return ctx.reply(ctx.tt("errors.webappDate"));
@@ -38,11 +40,18 @@ export function registerWebappDataHandler(bot: Telegraf, organizationId?: number
           orderBy: { startAt: "asc" }, take: 40,
         });
 
+        if (!slots.length) {
+          return ctx.reply(ctx.tt("book.noSlotsDay", { date: fmtDate(dayStart) }));
+        }
+
+        // Получаем organizationId из первого слота (все слоты одной услуги имеют одинаковый organizationId)
+        const serviceOrganizationId = slots[0].service.organizationId;
+
         // Получаем все активные записи в организации для проверки конфликтов
         const activeAppointments = await prisma.appointment.findMany({
           where: {
             service: {
-              organizationId: slots[0]?.service?.organizationId
+              organizationId: serviceOrganizationId
             },
             status: { not: 'cancelled' }
           },
@@ -91,10 +100,12 @@ export function registerWebappDataHandler(bot: Telegraf, organizationId?: number
           })
         );
 
+        console.log(`✅ Showing ${filtered.length} available slots for ${fmtDate(dayStart)}`);
         await ctx.reply(ctx.tt("book.chooseTime", { date: fmtDate(dayStart) }), kb);
         return;
       } catch (e) {
-        console.error("web_app_data parse error:", e);
+        console.error("❌ web_app_data parse error:", e);
+        console.error("Error details:", e instanceof Error ? e.stack : e);
         await ctx.reply(ctx.tt("errors.generic"), Markup.removeKeyboard());
         return;
       }

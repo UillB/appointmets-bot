@@ -17,11 +17,6 @@ The Appointments Bot is a comprehensive multi-tenant appointment booking system 
 - **Port:** 4200 (development)
 - **Features:** Modern React-based admin interface
 
-#### Admin Panel (Angular)
-- **URL:** `https://your-domain.com/admin-panel`
-- **Port:** 4201 (development)
-- **Features:** Legacy Angular-based admin interface
-
 #### API Endpoints
 - **Base URL:** `https://your-domain.com/api`
 - **Port:** 4000 (development)

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
+import { LanguageProvider, useLanguage } from "./i18n";
 import { 
   Sidebar, 
   Header, 
@@ -19,6 +20,7 @@ import { Toaster } from "./components/ui/sonner";
 
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
+  const { language } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Show loading spinner while checking authentication
@@ -59,7 +61,7 @@ function AppContent() {
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />
                 <Route path="/organizations" element={<OrganizationsPage />} />
-                <Route path="/bot-management" element={<BotManagementPage />} />
+                <Route path="/bot-management" element={<BotManagementPage key={language} />} />
                 <Route path="/ai" element={<AIAssistantPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
@@ -75,12 +77,14 @@ function AppContent() {
 function App() {
   return (
     <Router>
-      <AuthProvider children={
-        <div>
-          <AppContent />
-          <Toaster />
-        </div>
-      } />
+      <LanguageProvider>
+        <AuthProvider>
+          <div>
+            <AppContent />
+            <Toaster />
+          </div>
+        </AuthProvider>
+      </LanguageProvider>
     </Router>
   );
 }

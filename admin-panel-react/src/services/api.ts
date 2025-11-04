@@ -170,8 +170,26 @@ class ApiClient {
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `HTTP ${response.status}`);
+      let errorMessage = `HTTP ${response.status}`;
+      try {
+        const errorData = await response.json();
+        // Backend возвращает { error: '...' } или { message: '...' }
+        errorMessage = errorData.error || errorData.message || errorMessage;
+        // Для 401 делаем сообщение более понятным
+        if (response.status === 401) {
+          errorMessage = errorData.error === 'Invalid credentials' 
+            ? 'Неверный email или пароль' 
+            : (errorData.error || errorData.message || 'Неверный email или пароль');
+        }
+      } catch (e) {
+        // Если ответ не JSON, используем статус код
+        if (response.status === 401) {
+          errorMessage = 'Неверный email или пароль';
+        } else if (response.status === 400) {
+          errorMessage = 'Неверные данные';
+        }
+      }
+      throw new Error(errorMessage);
     }
 
     return response.json();

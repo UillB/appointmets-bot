@@ -186,7 +186,7 @@ r.get("/calendar", (req: any, res: any) => {
   `);
 });
 
-// Admin WebApp wrapper: initializes Telegram WebApp and redirects to Angular app
+// Admin WebApp wrapper: initializes Telegram WebApp and redirects to React app
 r.get("/admin", (req: any, res: any) => {
   const lang = detectLang(req.query.lang as string);
   // IMPORTANT: Use same-origin path for Telegram iOS webview to avoid cross-origin redirects
@@ -218,7 +218,7 @@ r.get("/admin", (req: any, res: any) => {
         var tg = window.Telegram && window.Telegram.WebApp;
         if (tg) { tg.ready(); tg.expand(); }
       } catch (e) { /* no-op */ }
-      // Redirect to same-origin Angular build served by backend
+      // Redirect to same-origin React build served by backend (MAIN panel)
       window.location.replace('${frontendUrl}');
     })();
   </script>

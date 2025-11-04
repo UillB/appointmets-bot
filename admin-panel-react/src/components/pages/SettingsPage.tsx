@@ -38,9 +38,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Switch } from "../ui/switch";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
+import { useLanguage } from "../../i18n";
 
 export function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
+  const { language, setLanguage } = useLanguage();
   
   // User Profile State
   const [fullName, setFullName] = useState("Vladi");
@@ -52,8 +54,7 @@ export function SettingsPage() {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // System Settings State
-  const [language, setLanguage] = useState("en");
+  // System Settings State (language is now from global context)
   const [theme, setTheme] = useState("light");
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
@@ -465,7 +466,7 @@ export function SettingsPage() {
                       <Label htmlFor="language">Language</Label>
                       <div className="relative">
                         <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
-                        <Select value={language} onValueChange={setLanguage}>
+                        <Select value={language} onValueChange={(value) => setLanguage(value as 'ru' | 'en' | 'he')}>
                           <SelectTrigger id="language" className="pl-10">
                             <SelectValue />
                           </SelectTrigger>

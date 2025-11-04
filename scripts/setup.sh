@@ -36,17 +36,11 @@ cd backend
 npm install
 echo "✅ Backend dependencies installed"
 
-# Install React admin panel dependencies (Main)
+# Install React admin panel dependencies
 echo "📦 Installing React admin panel dependencies..."
 cd ../admin-panel-react
 npm install
 echo "✅ React admin panel dependencies installed"
-
-# Install Angular admin panel dependencies (Legacy)
-echo "📦 Installing Angular admin panel dependencies..."
-cd ../admin-panel
-npm install
-echo "✅ Angular admin panel dependencies installed"
 
 # Generate Prisma client
 echo "🔧 Generating Prisma client..."
@@ -77,9 +71,7 @@ echo "Next steps:"
 echo "1. Configure your .env file in the backend directory"
 echo "2. Start the backend: cd backend && npm run dev"
 echo "3. Start React admin panel: cd admin-panel-react && npm run dev"
-echo "4. (Optional) Start Angular admin panel: cd admin-panel && npm run dev"
 echo ""
 echo "Backend will be available at: http://localhost:4000"
-echo "React Admin Panel (Main): http://localhost:4200"
-echo "Angular Admin Panel (Legacy): http://localhost:4201"
+echo "React Admin Panel: http://localhost:4200"
 echo ""

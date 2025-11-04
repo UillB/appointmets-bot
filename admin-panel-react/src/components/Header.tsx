@@ -1,9 +1,17 @@
-import React from "react";
-import { Moon, Globe, Bell, HelpCircle, Menu, LogOut } from "lucide-react";
+import React, { useState } from "react";
+import { Moon, Globe, Bell, HelpCircle, Menu, LogOut, Check } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage, Language } from "../i18n";
+import { toast } from "sonner";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -11,6 +19,7 @@ interface HeaderProps {
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { logout, user } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
 
   const handleLogout = async () => {
     try {
@@ -18,6 +27,38 @@ export function Header({ onMenuClick }: HeaderProps) {
     } catch (error) {
       console.error('Logout error:', error);
     }
+  };
+
+  const handleLanguageChange = (lang: Language) => {
+    if (lang === language) {
+      return; // Already selected
+    }
+    
+    console.log('Changing language from', language, 'to', lang);
+    
+    // Change language first
+    setLanguage(lang);
+    
+    // Get language names for toast
+    const langNames: Record<Language, string> = {
+      ru: 'Русский',
+      en: 'English',
+      he: 'עברית',
+    };
+    
+    // Show toast after a short delay to ensure language is changed
+    setTimeout(() => {
+      const messages: Record<Language, { changed: string; switch: string }> = {
+        ru: { changed: `Язык изменен на ${langNames[lang]}`, switch: 'Переключение языка' },
+        en: { changed: `Language changed to ${langNames[lang]}`, switch: 'Language Switch' },
+        he: { changed: `השפה שונתה ל-${langNames[lang]}`, switch: 'החלפת שפה' },
+      };
+      
+      toast.success(messages[lang].changed, {
+        description: messages[lang].switch,
+        duration: 2000,
+      });
+    }, 100);
   };
 
   return (
@@ -52,10 +93,37 @@ export function Header({ onMenuClick }: HeaderProps) {
             <Moon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </Button>
           
-          <Button variant="ghost" className="hidden md:flex h-8 sm:h-9 px-2 sm:px-3 gap-1 sm:gap-2">
-            <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            <span className="text-xs sm:text-sm">EN</span>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="hidden md:flex h-8 sm:h-9 px-2 sm:px-3 gap-1 sm:gap-2">
+                <Globe className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm uppercase">{language}</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('ru')}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                <span>🇷🇺 Русский</span>
+                {language === 'ru' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('en')}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                <span>🇬🇧 English</span>
+                {language === 'en' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('he')}
+                className="flex items-center justify-between cursor-pointer"
+              >
+                <span>🇮🇱 עברית</span>
+                {language === 'he' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           
           <Button variant="ghost" size="icon" className="relative w-8 h-8 sm:w-9 sm:h-9">
             <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

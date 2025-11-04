@@ -4,8 +4,8 @@ provider = "prisma-client-js"
 
 
 datasource db {
-provider = "sqlite"
-url = env("DATABASE_URL")
+  provider = "sqlite"
+  url = env("DATABASE_URL")
 }
 
 

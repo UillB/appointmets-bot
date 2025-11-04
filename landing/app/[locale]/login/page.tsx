@@ -25,6 +25,7 @@ export default function LoginPage() {
   
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   
   const {
     register,
@@ -34,6 +35,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true)
+    setErrorMessage(null) // Сбрасываем предыдущую ошибку
     
     try {
       // Здесь будет интеграция с API основного проекта
@@ -52,18 +54,39 @@ export default function LoginPage() {
         const result = await response.json()
         
         // Сохраняем токен
-        localStorage.setItem('token', result.token)
-        localStorage.setItem('user', JSON.stringify(result.user))
-        
-        toast.success(tSuccess('login'))
-        // После логина перенаправляем в админку и передаем токен
-        router.push(`http://localhost:4200/auth/login-token?token=${encodeURIComponent(result.token)}`)
+        if (result.token) {
+          localStorage.setItem('token', result.token)
+          localStorage.setItem('user', JSON.stringify(result.user))
+          
+          toast.success(tSuccess('login'))
+          // После логина перенаправляем в админку и передаем токен
+          router.push(`http://localhost:4200/auth/login-token?token=${encodeURIComponent(result.token)}`)
+        } else {
+          toast.error(tErrors('login_failed'))
+        }
       } else {
-        const error = await response.json()
-        toast.error(error.message || tErrors('login_failed'))
+        // Обрабатываем ошибку - пытаемся получить сообщение из ответа
+        let errorMessage = tErrors('login_failed')
+        try {
+          const error = await response.json()
+          // API route возвращает { message: '...' }
+          errorMessage = error.message || tErrors('login_failed')
+        } catch (e) {
+          // Если ответ не JSON, используем статус код
+          if (response.status === 401) {
+            errorMessage = 'Неверный email или пароль'
+          } else if (response.status === 400) {
+            errorMessage = 'Неверные данные'
+          }
+        }
+        // Показываем ошибку в UI и в toast
+        setErrorMessage(errorMessage)
+        toast.error(errorMessage)
       }
     } catch (error) {
-      toast.error(tErrors('network_error'))
+      const networkError = tErrors('network_error')
+      setErrorMessage(networkError)
+      toast.error(networkError)
     } finally {
       setIsLoading(false)
     }
@@ -96,6 +119,18 @@ export default function LoginPage() {
               {t('subtitle')}
             </p>
           </div>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-sm text-red-600 flex items-center">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                {errorMessage}
+              </p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Email Field */}

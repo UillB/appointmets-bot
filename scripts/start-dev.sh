@@ -29,7 +29,6 @@ mkdir -p logs
 
 # Kill existing processes
 echo "🔄 Stopping existing services..."
-pkill -f "ng serve" 2>/dev/null || true
 pkill -f "npm run dev" 2>/dev/null || true
 pkill -f "next dev" 2>/dev/null || true
 pkill -f "ngrok" 2>/dev/null || true
@@ -45,13 +44,37 @@ start_service "admin-panel-react" "admin-panel-react" "npm run dev" "4200"
 # Start Landing Page (Port 3000)
 start_service "landing" "landing" "npm run dev" "3000"
 
-# Start NG Rock Tunnel (Port 4040)
-echo "🌐 Starting NG Rock tunnel for TWA testing..."
+# Start Ngrok Tunnel for HTTPS (Port 4040)
+# ⚠️ IMPORTANT: Telegram WebApp requires HTTPS, so we tunnel backend (port 4000)
+echo "🌐 Starting Ngrok tunnel for HTTPS (backend port 4000)..."
 cd "$(dirname "$0")/.." || exit 1
-nohup ngrok http 4200 > "logs/ngrok.log" 2>&1 &
-echo $! > "logs/ngrok.pid"
-echo "✅ NG Rock tunnel started"
-echo "📄 Logs: logs/ngrok.log"
+
+# Check if ngrok is installed
+if ! command -v ngrok &> /dev/null; then
+    echo "⚠️  Ngrok not installed. Install with: brew install ngrok/ngrok/ngrok"
+    echo "⚠️  Or run manually: ngrok http 4000"
+else
+    nohup ngrok http 4000 --log=stdout > "logs/ngrok.log" 2>&1 &
+    NGROK_PID=$!
+    echo $NGROK_PID > "logs/ngrok.pid"
+    sleep 3
+    
+    # Get ngrok URL
+    NGROK_URL=$(curl -s http://localhost:4040/api/tunnels 2>/dev/null | jq -r '.tunnels[] | select(.proto=="https") | .public_url' | head -1)
+    
+    if [ -n "$NGROK_URL" ]; then
+        echo "✅ Ngrok tunnel started (PID: $NGROK_PID)"
+        echo "📄 Logs: logs/ngrok.log"
+        echo "🌐 HTTPS URL: $NGROK_URL"
+        echo ""
+        echo "⚠️  IMPORTANT: Update backend/.env with PUBLIC_BASE_URL:"
+        echo "   echo 'PUBLIC_BASE_URL=$NGROK_URL' >> backend/.env"
+        echo "   Then restart backend!"
+    else
+        echo "✅ Ngrok started, but URL not yet available"
+        echo "   Check logs/ngrok.log or run: curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[] | select(.proto==\"https\") | .public_url'"
+    fi
+fi
 
 echo ""
 echo "🎉 All services started successfully!"
@@ -60,9 +83,20 @@ echo "📊 Service Status:"
 echo "   🔧 Backend API:     http://localhost:4000"
 echo "   🎨 React Admin Panel: http://localhost:4200"
 echo "   🌐 Landing Page:    http://localhost:3000"
-echo "   🚀 NG Rock Tunnel:  https://[tunnel-url].ngrok.io"
+if [ -n "$NGROK_URL" ]; then
+    echo "   🚀 Ngrok HTTPS:     $NGROK_URL"
+    echo ""
+    echo "⚠️  IMPORTANT: Update backend/.env with PUBLIC_BASE_URL=$NGROK_URL"
+    echo "   Then restart backend for Telegram WebApp to work!"
+else
+    echo "   🚀 Ngrok Tunnel:    https://[tunnel-url].ngrok.io"
+fi
 echo ""
 echo "📄 Logs are available in the 'logs/' directory"
 echo "🛑 To stop all services, run: ./scripts/stop-dev.sh"
 echo ""
-echo "💡 For TWA testing, use the NG Rock URL for React admin panel"
+echo "💡 For Telegram WebApp testing:"
+echo "   1. Ngrok provides HTTPS tunnel for backend (port 4000)"
+echo "   2. Update backend/.env: PUBLIC_BASE_URL=https://[ngrok-url].ngrok-free.dev"
+echo "   3. Restart backend"
+echo "   4. Telegram WebApp buttons will use HTTPS URL"

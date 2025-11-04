@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Bot,
   Eye,
@@ -23,10 +23,15 @@ import {
   AtSign,
   Share2,
   QrCode,
+  MessageCircle,
+  Mail,
+  ArrowRight,
+  CheckCircle2 as CheckCircle2Icon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
+import { useLanguage } from "../../i18n";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
@@ -37,10 +42,17 @@ import { Badge } from "../ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Card } from "../ui/card";
 import { PageHeader } from "../PageHeader";
+import QRCode from "qrcode";
 
 export function BotManagementPage() {
   const { user } = useAuth();
+  const { t, language } = useLanguage();
   const [currentTime, setCurrentTime] = useState(new Date());
+  
+  // Debug: log when language changes
+  useEffect(() => {
+    console.log('[BotManagementPage] Language changed to:', language);
+  }, [language]);
   const [showToken, setShowToken] = useState(false);
   const [token, setToken] = useState("");
   const [botActive, setBotActive] = useState(false);
@@ -54,6 +66,9 @@ export function BotManagementPage() {
   const [botStatus, setBotStatus] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [organizationName, setOrganizationName] = useState("");
+  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+  const qrCodeCanvasRef = useRef<HTMLCanvasElement>(null);
+  const [activeTab, setActiveTab] = useState<string>("instructions");
 
   // Update time every second
   useEffect(() => {
@@ -68,6 +83,14 @@ export function BotManagementPage() {
     loadBotStatus();
   }, []);
 
+  // Set default tab based on bot status
+  useEffect(() => {
+    if (!isLoading) {
+      // If bot is active, show settings tab, otherwise show instructions
+      setActiveTab(botActive ? "settings" : "instructions");
+    }
+  }, [botActive, isLoading]);
+
   // Update progress based on bot status
   useEffect(() => {
     if (botActive && botName && botUsername) {
@@ -80,6 +103,34 @@ export function BotManagementPage() {
       setSetupProgress(0);
     }
   }, [botActive, botName, botUsername]);
+
+  // Generate QR code when bot link is available
+  useEffect(() => {
+    if (botLink && botLink !== "https://t.me/") {
+      generateQRCode();
+    } else {
+      setQrCodeDataUrl(null);
+    }
+  }, [botLink]);
+
+  const generateQRCode = async () => {
+    if (!botLink || botLink === "https://t.me/") return;
+    
+    try {
+      const qrDataUrl = await QRCode.toDataURL(botLink, {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF',
+        },
+      });
+      setQrCodeDataUrl(qrDataUrl);
+    } catch (error) {
+      console.error('Failed to generate QR code:', error);
+      toast.error(t('botManagement.failedToGenerateQR'));
+    }
+  };
 
   const loadBotStatus = async () => {
     if (!user?.organizationId) {
@@ -133,7 +184,7 @@ export function BotManagementPage() {
       console.error('Failed to load bot status:', error);
       setBotActive(false);
       setSetupProgress(0);
-      toast.error('Failed to load bot status');
+      toast.error(t('botManagement.failedToLoadStatus'));
     } finally {
       setIsLoading(false);
     }
@@ -159,12 +210,12 @@ export function BotManagementPage() {
 
   const handleRefreshStatus = () => {
     loadBotStatus();
-    toast.success("Статус обновлен");
+    toast.success(t('botManagement.statusUpdated'));
   };
 
   const handleValidateToken = async () => {
     if (!token.trim()) {
-      toast.error("Введите токен бота");
+      toast.error(t('botManagement.enterBotToken'));
       return;
     }
 
@@ -177,13 +228,13 @@ export function BotManagementPage() {
         setBotUsername(`@${result.bot.username}`);
         setBotLink(`https://t.me/${result.bot.username}`);
         setSetupProgress(50);
-        toast.success("Токен валиден! Бот найден.");
+        toast.success(t('botManagement.tokenValid'));
       } else {
-        toast.error(result.error || "Неверный токен бота");
+        toast.error(result.error || t('botManagement.invalidToken'));
       }
     } catch (error) {
       console.error('Token validation error:', error);
-      toast.error("Ошибка при проверке токена");
+      toast.error(t('botManagement.tokenValidationError'));
     } finally {
       setIsValidating(false);
     }
@@ -191,37 +242,47 @@ export function BotManagementPage() {
 
   const handleActivateBot = async () => {
     if (!token.trim()) {
-      toast.error("Введите токен бота");
+      toast.error(t('botManagement.enterBotToken'));
       return;
     }
 
     if (!user?.organizationId) {
-      toast.error("Ошибка: не найден ID организации");
+      toast.error(t('botManagement.organizationIdError'));
       return;
     }
 
+    setIsActivating(true);
     try {
-      setIsActivating(true);
+      console.log('🔄 Activating bot with token:', token.substring(0, 10) + '...');
       const result = await apiClient.activateBot(token, user.organizationId);
+      console.log('📥 Activation result:', result);
 
-      if (result.success) {
+      if (result && result.success) {
         setBotActive(true);
-        toast.success("Бот успешно активирован!");
-        loadBotStatus();
+        setToken(""); // Очищаем токен после успешной активации
+        toast.success(t('botManagement.botActivated'));
+        // Обновляем статус через небольшую задержку
+        setTimeout(() => {
+          loadBotStatus();
+        }, 1000);
       } else {
-        toast.error(result.error || "Ошибка при активации бота");
+        const errorMsg = result?.error || t('botManagement.botActivationError');
+        console.error('❌ Activation failed:', errorMsg);
+        toast.error(errorMsg);
       }
-    } catch (error) {
-      console.error('Bot activation error:', error);
-      toast.error("Ошибка при активации бота");
+    } catch (error: any) {
+      console.error('❌ Bot activation error:', error);
+      const errorMsg = error?.message || error?.error || t('botManagement.botActivationError');
+      toast.error(errorMsg);
     } finally {
+      // Всегда сбрасываем состояние загрузки
       setIsActivating(false);
     }
   };
 
   const handleUpdateBotSettings = async () => {
     if (!user?.organizationId) {
-      toast.error("Ошибка: не найден ID организации");
+      toast.error(t('botManagement.organizationIdError'));
       return;
     }
 
@@ -233,14 +294,14 @@ export function BotManagementPage() {
       });
 
       if (result.success) {
-        toast.success("Настройки бота обновлены!");
+        toast.success(t('botManagement.botSettingsUpdated'));
         loadBotStatus();
       } else {
-        toast.error(result.error || "Ошибка при обновлении настроек");
+        toast.error(result.error || t('botManagement.botSettingsUpdateError'));
       }
     } catch (error) {
       console.error('Bot settings update error:', error);
-      toast.error("Ошибка при обновлении настроек бота");
+      toast.error(t('botManagement.botSettingsUpdateError'));
     } finally {
       setIsActivating(false);
     }
@@ -248,30 +309,129 @@ export function BotManagementPage() {
 
 
   const handleHelp = () => {
-    toast.info("Открытие справки");
+    setActiveTab("instructions");
+    toast.info(t('botManagement.instructionsOpened'), {
+      description: t('botManagement.instructionsDescription'),
+      duration: 3000,
+    });
   };
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(botLink);
-    toast.success("Ссылка скопирована в буфер обмена");
+    toast.success(t('botManagement.linkCopied'));
   };
 
   const handleOpenBot = () => {
     window.open(botLink, "_blank");
-    toast.info("Открытие бота в Telegram");
+    toast.info(t('botManagement.openingBot'));
   };
 
-  const handleShare = () => {
-    toast.info("Функция поделиться");
+
+  const handleDownloadQR = async () => {
+    if (!qrCodeDataUrl) {
+      toast.error("QR-код не сгенерирован");
+      return;
+    }
+
+    try {
+      const link = document.createElement('a');
+      link.download = `bot-qr-${botUsername.replace('@', '') || 'code'}.png`;
+      link.href = qrCodeDataUrl;
+      link.click();
+      toast.success(t('botManagement.qrCodeDownloaded'), {
+        description: t('botManagement.qrCodeDownloadedDescription'),
+      });
+    } catch (error) {
+      console.error('Failed to download QR code:', error);
+      toast.error(t('botManagement.qrCodeCopyFailed'));
+    }
   };
 
-  const handleDownloadQR = () => {
-    toast.success("QR код загружен");
+  const handleCopyQRCode = async () => {
+    if (!qrCodeDataUrl) {
+      toast.error("QR-код не сгенерирован");
+      return;
+    }
+
+    try {
+      // Convert data URL to blob
+      const response = await fetch(qrCodeDataUrl);
+      const blob = await response.blob();
+      
+      // Copy to clipboard using Clipboard API
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob })
+      ]);
+      
+      toast.success(t('botManagement.qrCodeCopied'), {
+        description: t('botManagement.qrCodeCopiedDescription'),
+        duration: 3000,
+      });
+    } catch (error) {
+      console.error('Failed to copy QR code:', error);
+      // Fallback: try to copy as image element
+      try {
+        const img = new Image();
+        img.src = qrCodeDataUrl;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob(async (blob) => {
+              if (blob) {
+                await navigator.clipboard.write([
+                  new ClipboardItem({ 'image/png': blob })
+                ]);
+                toast.success(t('botManagement.qrCodeCopied'), {
+                  description: t('botManagement.qrCodeCopiedDescription'),
+                  duration: 3000,
+                });
+              }
+            });
+          }
+        };
+      } catch (fallbackError) {
+        toast.error(t('botManagement.qrCodeCopyFailed'), {
+          description: t('botManagement.qrCodeCopyFailedDescription'),
+        });
+      }
+    }
   };
 
-  const handleUpdateSettings = () => {
-    toast.success("Настройки обновлены успешно!");
+  const handleShareToTelegram = () => {
+    if (!botLink) {
+      toast.error(t('botManagement.botLinkNotAvailable'));
+      return;
+    }
+    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(botLink)}&text=${encodeURIComponent(`Проверьте нашего Telegram бота: ${botUsername || 'бот'}`)}`;
+    window.open(telegramUrl, '_blank');
+    toast.success(t('botManagement.shareToTelegram'));
   };
+
+  const handleShareToWhatsApp = () => {
+    if (!botLink) {
+      toast.error(t('botManagement.botLinkNotAvailable'));
+      return;
+    }
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Проверьте нашего Telegram бота: ${botLink}`)}`;
+    window.open(whatsappUrl, '_blank');
+    toast.success(t('botManagement.shareToWhatsApp'));
+  };
+
+  const handleShareToEmail = () => {
+    if (!botLink) {
+      toast.error(t('botManagement.botLinkNotAvailable'));
+      return;
+    }
+    const subject = encodeURIComponent(`Telegram бот для записи`);
+    const body = encodeURIComponent(`Привет!\n\nПроверьте нашего Telegram бота для записи на прием:\n${botLink}\n\nИспользуйте QR-код для быстрого доступа.`);
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    toast.success(t('botManagement.shareToEmail'));
+  };
+
 
 
   // Show loading if user is not loaded yet
@@ -288,7 +448,7 @@ export function BotManagementPage() {
             <div className="flex items-center justify-center h-64">
               <div className="text-center">
                 <RefreshCw className="w-8 h-8 animate-spin text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500">Загрузка пользователя...</p>
+                <p className="text-gray-500">{t('botManagement.loadingUser')}</p>
               </div>
             </div>
           </div>
@@ -301,8 +461,8 @@ export function BotManagementPage() {
     <div className="space-y-6">
       <PageHeader
         icon={<Bot className="w-7 h-7 text-white" />}
-        title="Bot Management"
-        description="Create and configure Telegram bot for automatic client booking"
+        title={t('botManagement.title')}
+        description={t('botManagement.description')}
         onRefresh={handleRefreshStatus}
         actions={
           <>
@@ -314,15 +474,15 @@ export function BotManagementPage() {
               disabled={isLoading}
             >
               <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              Refresh Status
+              {t('botManagement.refreshStatus')}
             </Button>
             <Button
               size="sm"
               onClick={handleHelp}
               className="bg-indigo-600 hover:bg-indigo-700 text-white"
             >
-              <HelpCircle className="w-4 h-4 sm:mr-2" />
-              <span className="hidden sm:inline">Help</span>
+              <BookOpen className="w-4 h-4 sm:mr-2" />
+              <span className="hidden sm:inline">{t('botManagement.instructions')}</span>
             </Button>
           </>
         }
@@ -334,20 +494,48 @@ export function BotManagementPage() {
           {/* Status Cards Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Bot Active Card */}
-            <Card className="p-5 border-l-4 border-emerald-500 bg-gradient-to-br from-white to-emerald-50/30 hover:shadow-md transition-shadow">
+            <Card className={`p-5 border-l-4 ${
+              botActive 
+                ? "border-emerald-500 bg-gradient-to-br from-white to-emerald-50/30" 
+                : "border-red-500 bg-gradient-to-br from-white to-red-50/30"
+            } hover:shadow-md transition-shadow`}>
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <CheckCircle className="w-6 h-6 text-emerald-600" />
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                  botActive ? "bg-emerald-100" : "bg-red-100"
+                }`}>
+                  {botActive ? (
+                    <CheckCircle className="w-6 h-6 text-emerald-600" />
+                  ) : (
+                    <AlertCircle className="w-6 h-6 text-red-600" />
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 mb-1">Бот активен</h3>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h3 className="font-semibold text-gray-900">
+                      {botActive ? t('botManagement.botActive') : t('botManagement.botInactive')}
+                    </h3>
+                    <Badge
+                      variant={botActive ? "default" : "destructive"}
+                      className={`text-xs px-2 py-0.5 ${
+                        botActive 
+                          ? "bg-emerald-500 text-white" 
+                          : "bg-red-500 text-white"
+                      }`}
+                    >
+                      {botActive ? t('botManagement.botWorking') : t('botManagement.botNotWorking')}
+                    </Badge>
+                  </div>
                   <p className="text-sm text-gray-600">
-                    {botActive ? "Telegram бот готов к работе" : "Бот не активен"}
+                    {botActive 
+                      ? t('botManagement.botReady') 
+                      : t('botManagement.botNeedsActivation')}
                   </p>
                 </div>
                 <div
                   className={`w-3 h-3 rounded-full flex-shrink-0 mt-1.5 ${
-                    botActive ? "bg-emerald-500 animate-pulse" : "bg-gray-300"
+                    botActive 
+                      ? "bg-emerald-500 animate-pulse" 
+                      : "bg-red-500"
                   }`}
                 />
               </div>
@@ -360,8 +548,8 @@ export function BotManagementPage() {
                   <Building2 className="w-6 h-6 text-blue-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 mb-1">Организация</h3>
-                  <p className="text-sm text-gray-600">{organizationName || user?.organization?.name || "Загрузка..."}</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">{t('botManagement.organization')}</h3>
+                  <p className="text-sm text-gray-600">{organizationName || user?.organization?.name || t('common.loading')}</p>
                 </div>
               </div>
             </Card>
@@ -373,7 +561,7 @@ export function BotManagementPage() {
                   <LinkIcon className="w-6 h-6 text-indigo-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 mb-1">Ссылка на бота</h3>
+                  <h3 className="font-semibold text-gray-900 mb-1">{t('botManagement.botLink')}</h3>
                   <p className="text-sm text-gray-600 truncate">{botLink}</p>
                 </div>
               </div>
@@ -383,54 +571,54 @@ export function BotManagementPage() {
           {/* Progress Card */}
           <Card className="p-6 bg-white">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-gray-900">Прогресс настройки бота</h3>
+              <h3 className="font-semibold text-gray-900">{t('botManagement.setupProgress')}</h3>
               {setupProgress === 100 && (
                 <span className="text-sm text-emerald-600 font-medium">
-                  Настройка завершена
+                  {t('botManagement.setupComplete')}
                 </span>
               )}
             </div>
             <Progress value={setupProgress} className="h-2.5 mb-3" />
             <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">{setupProgress}% завершено</span>
+              <span className="text-sm text-gray-600">{setupProgress}% {t('botManagement.completed')}</span>
               {setupProgress === 100 && (
                 <div className="flex items-center gap-1.5 text-emerald-600">
                   <CheckCircle className="w-4 h-4" />
-                  <span className="text-sm font-medium">Настройка завершена</span>
+                  <span className="text-sm font-medium">{t('botManagement.setupComplete')}</span>
                 </div>
               )}
               {setupProgress > 0 && setupProgress < 100 && (
                 <div className="flex items-center gap-1.5 text-blue-600">
                   <RefreshCw className="w-4 h-4" />
-                  <span className="text-sm font-medium">В процессе</span>
+                  <span className="text-sm font-medium">{t('botManagement.inProgress')}</span>
                 </div>
               )}
             </div>
           </Card>
 
           {/* Main Tabs */}
-          <Tabs defaultValue="settings" className="w-full">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="w-full grid grid-cols-3 bg-white border border-gray-200 p-1 h-auto shadow-sm">
               <TabsTrigger
                 value="instructions"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
               >
                 <BookOpen className="w-4 h-4" />
-                <span className="hidden sm:inline">Инструкция</span>
+                <span className="hidden sm:inline">{t('botManagement.instructions')}</span>
               </TabsTrigger>
               <TabsTrigger
                 value="activation"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
               >
                 <Key className="w-4 h-4" />
-                <span className="hidden sm:inline">Активация</span>
+                <span className="hidden sm:inline">{t('botManagement.activation')}</span>
               </TabsTrigger>
               <TabsTrigger
                 value="settings"
                 className="data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700 data-[state=active]:shadow-sm py-3 gap-2"
               >
                 <SettingsIcon className="w-4 h-4" />
-                <span className="hidden sm:inline">Настройки</span>
+                <span className="hidden sm:inline">{t('botManagement.settings')}</span>
               </TabsTrigger>
             </TabsList>
 
@@ -439,78 +627,137 @@ export function BotManagementPage() {
               <Card className="p-8 bg-white">
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-8">
-                    <div className="text-7xl mb-4">📚</div>
-                    <h2 className="text-3xl text-gray-900 mb-3">
-                      Как создать Telegram бота
+                    <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <BookOpen className="w-10 h-10 text-indigo-600" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                      {t('botManagement.howToCreateBot')}
                     </h2>
-                    <p className="text-gray-600">
-                      Простое пошаговое руководство для начинающих
+                    <p className="text-gray-600 text-lg">
+                      {t('botManagement.stepByStepGuide')}
                     </p>
                   </div>
 
                   <div className="space-y-6">
                     {/* Step 1 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
-                      <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
+                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
                         1
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 mb-2">
-                          Откройте Telegram и найдите @BotFather
-                        </h4>
-                        <p className="text-sm text-gray-700 leading-relaxed">
-                          BotFather — это официальный бот Telegram для создания новых ботов.
-                          Просто введите <code className="bg-white px-2 py-0.5 rounded text-indigo-600">@BotFather</code> в
-                          поиске и откройте чат.
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold text-gray-900">
+                            {t('botManagement.step1Title')}
+                          </h4>
+                          <CheckCircle2Icon className="w-5 h-5 text-indigo-600" />
+                        </div>
+                        <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                          {t('botManagement.step1Description')}
                         </p>
+                        <div className="mt-3 p-3 bg-white rounded-lg border border-indigo-200">
+                          <p className="text-xs text-gray-600 font-medium mb-1">{t('botManagement.step1HowTo')}</p>
+                          <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                            <li>{t('botManagement.step1List1')}</li>
+                            <li>{t('botManagement.step1List2')}</li>
+                            <li>{t('botManagement.step1List3')}</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
 
                     {/* Step 2 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
-                      <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
+                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
                         2
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 mb-2">
-                          Отправьте команду /newbot
-                        </h4>
-                        <p className="text-sm text-gray-700 leading-relaxed">
-                          BotFather попросит указать имя бота и его username. Username должен
-                          заканчиваться на "bot" (например, MyAwesomeBot).
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold text-gray-900">
+                            {t('botManagement.step2Title')}
+                          </h4>
+                          <CheckCircle2Icon className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                          {t('botManagement.step2Description')}
                         </p>
+                        <div className="mt-3 p-3 bg-white rounded-lg border border-blue-200">
+                          <p className="text-xs text-gray-600 font-medium mb-1">{t('botManagement.step2HowTo')}</p>
+                          <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                            <li>{t('botManagement.step2List1')}</li>
+                            <li>{t('botManagement.step2List2')}</li>
+                            <li>{t('botManagement.step2List3')}</li>
+                            <li>{t('botManagement.step2List4')}</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
 
                     {/* Step 3 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
-                      <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
+                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
                         3
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900 mb-2">
-                          Получите токен доступа
-                        </h4>
-                        <p className="text-sm text-gray-700 leading-relaxed">
-                          После создания бота BotFather отправит вам токен. Скопируйте его и
-                          используйте во вкладке "Активация" для подключения бота.
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="font-semibold text-gray-900">
+                            {t('botManagement.step3Title')}
+                          </h4>
+                          <CheckCircle2Icon className="w-5 h-5 text-purple-600" />
+                        </div>
+                        <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                          {t('botManagement.step3Description')}
                         </p>
+                        <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
+                          <p className="text-xs text-gray-600 font-medium mb-1">{t('botManagement.step3Format')}</p>
+                          <code className="block text-xs bg-gray-900 text-green-400 px-3 py-2 rounded font-mono mt-2">
+                            123456789:ABCdefGHijKlMNOpqrsTUVwxyz
+                          </code>
+                          <div className="flex items-start gap-2 mt-2">
+                            <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
+                            <p className="text-xs text-gray-600">
+                              <span className="font-semibold text-red-600">{t('common.error')}:</span> {t('botManagement.step3Important')}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-3 flex items-center gap-2">
+                          <ArrowRight className="w-4 h-4 text-purple-600" />
+                          <Button
+                            onClick={() => setActiveTab("activation")}
+                            variant="outline"
+                            size="sm"
+                            className="text-xs hover:bg-purple-50 hover:border-purple-300"
+                          >
+                            {t('botManagement.step3GoToActivation')}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Warning Alert */}
-                  <div className="mt-8 p-5 bg-amber-50 border border-amber-200 rounded-xl">
+                  <div className="mt-8 p-5 bg-amber-50 border-2 border-amber-200 rounded-xl">
                     <div className="flex gap-3">
-                      <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                      <div>
-                        <h4 className="font-semibold text-amber-900 mb-2">
-                          ⚠️ Важно: Безопасность токена
+                      <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <AlertCircle className="w-6 h-6 text-amber-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
+                          <AlertCircle className="w-5 h-5 text-amber-600" />
+                          {t('botManagement.securityWarning')}
                         </h4>
-                        <ul className="text-sm text-amber-800 space-y-1">
-                          <li>• Никогда не делитесь токеном с посторонними</li>
-                          <li>• Не публикуйте токен в открытом доступе</li>
-                          <li>• Храните токен в безопасном месте</li>
+                        <ul className="text-sm text-amber-800 space-y-1.5">
+                          <li className="flex items-start gap-2">
+                            <span className="text-amber-600 mt-0.5">•</span>
+                            <span>{t('botManagement.securityWarning1')}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-amber-600 mt-0.5">•</span>
+                            <span>{t('botManagement.securityWarning2')}</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <span className="text-amber-600 mt-0.5">•</span>
+                            <span>{t('botManagement.securityWarning3')}</span>
+                          </li>
                         </ul>
                       </div>
                     </div>
@@ -521,20 +768,30 @@ export function BotManagementPage() {
 
             {/* Activation Tab */}
             <TabsContent value="activation" className="mt-6">
-              <Card className="p-8 bg-white">
+              <Card className="p-8 bg-white border-2 border-indigo-100 shadow-lg">
                 <div className="max-w-2xl mx-auto">
                   <div className="text-center mb-8">
-                    <div className="text-7xl mb-4">🔑</div>
-                    <h2 className="text-3xl text-gray-900 mb-3">Активация бота</h2>
-                    <p className="text-gray-600">
-                      Введите токен вашего Telegram бота для активации
+                    <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Key className="w-10 h-10 text-indigo-600" />
+                    </div>
+                    <h2 className="text-3xl font-bold text-gray-900 mb-3">{t('botManagement.activationTitle')}</h2>
+                    <p className="text-gray-600 text-lg">
+                      {t('botManagement.activationDescription')}
                     </p>
+                    {!botActive && (
+                      <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                        <AlertCircle className="w-4 h-4 text-amber-600" />
+                        <span className="text-sm text-amber-800">
+                          {t('botManagement.botNotActiveAlert')}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-6">
                     <div>
                       <Label htmlFor="bot-token" className="text-base mb-3 block">
-                        Токен бота *
+                        {t('botManagement.botToken')}
                       </Label>
                       <div className="relative">
                         <Input
@@ -542,7 +799,7 @@ export function BotManagementPage() {
                           type={showToken ? "text" : "password"}
                           value={token}
                           onChange={(e) => setToken(e.target.value)}
-                          placeholder="123456789:ABCdefGHijKlMNOpqrsTUVwxyz"
+                          placeholder={t('botManagement.botTokenPlaceholder')}
                           className="pr-12 h-12 font-mono text-sm"
                         />
                         <Button
@@ -561,49 +818,90 @@ export function BotManagementPage() {
                       </div>
                     </div>
 
+                    {/* Help Link */}
+                    <div className="flex items-center justify-center">
+                      <Button
+                        variant="ghost"
+                        onClick={() => setActiveTab("instructions")}
+                        className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                      >
+                        <HelpCircle className="w-4 h-4 mr-2" />
+                        {t('botManagement.dontKnowHowToActivate')}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+
                     {/* Info Card */}
                     <div className="p-5 bg-blue-50 border border-blue-200 rounded-xl">
                       <div className="flex gap-3">
-                        <div className="text-2xl">ℹ️</div>
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <HelpCircle className="w-5 h-5 text-blue-600" />
+                        </div>
                         <div className="flex-1">
                           <h4 className="font-semibold text-blue-900 mb-2">
-                            Формат токена
+                            {t('botManagement.tokenFormat')}
                           </h4>
                           <p className="text-sm text-blue-800 mb-2">
-                            Токен должен иметь следующий формат:
+                            {t('botManagement.tokenFormatDescription')}
                           </p>
-                          <code className="block text-xs bg-white px-3 py-2 rounded border border-blue-200 text-blue-700">
+                          <code className="block text-xs bg-white px-3 py-2 rounded border border-blue-200 text-blue-700 font-mono">
                             123456789:ABCdefGHijKlMNOpqrsTUVwxyz
                           </code>
                           <p className="text-sm text-blue-800 mt-3">
-                            Получите токен у @BotFather после создания бота
+                            {t('botManagement.tokenFormatGetFrom')}
                           </p>
                         </div>
                       </div>
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-3 pt-2">
-                      <Button
-                        variant="outline"
-                        onClick={() => setToken("")}
-                        disabled={!token}
-                        className="flex-1 h-11"
-                      >
-                        Очистить
-                      </Button>
-                      <Button
-                        onClick={handleValidateToken}
-                        disabled={!token || isValidating}
-                        className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700 text-white"
-                      >
-                        {isValidating ? (
-                          <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                        ) : (
-                          <Sparkles className="w-4 h-4 mr-2" />
-                        )}
-                        {isValidating ? "Проверка..." : "Проверить токен"}
-                      </Button>
+                    <div className="space-y-3 pt-2">
+                      <div className="flex gap-3">
+                        <Button
+                          variant="outline"
+                          onClick={() => setToken("")}
+                          disabled={!token}
+                          className="flex-1 h-12"
+                        >
+                          {t('botManagement.clear')}
+                        </Button>
+                        <Button
+                          onClick={handleValidateToken}
+                          disabled={!token || isValidating}
+                          className="flex-1 h-12 bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg transition-shadow"
+                        >
+                          {isValidating ? (
+                            <>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              {t('botManagement.validating')}
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles className="w-4 h-4 mr-2" />
+                              {t('botManagement.validateToken')}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                      {botName && botUsername && !botActive && (
+                        <Button
+                          onClick={handleActivateBot}
+                          disabled={!token || isActivating || isValidating}
+                          className="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-shadow font-semibold"
+                        >
+                          {isActivating ? (
+                            <>
+                              <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
+                              {t('botManagement.activating')}
+                            </>
+                          ) : (
+                            <>
+                              <Power className="w-5 h-5 mr-2" />
+                              {t('botManagement.activateBot')}
+                            </>
+                          )}
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -612,6 +910,29 @@ export function BotManagementPage() {
 
             {/* Settings Tab */}
             <TabsContent value="settings" className="mt-6 space-y-6">
+              {!botActive && (
+                <Card className="p-6 bg-amber-50 border-2 border-amber-200">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-amber-900 mb-2">
+                        Бот не активирован
+                      </h3>
+                      <p className="text-sm text-amber-800 mb-4">
+                        Для использования настроек бота необходимо сначала активировать его во вкладке "Активация".
+                      </p>
+                      <Button
+                        onClick={() => setActiveTab("activation")}
+                        variant="outline"
+                        className="bg-white hover:bg-amber-100 border-amber-300 text-amber-900"
+                      >
+                        Перейти к активации
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              )}
               {/* Bot Status Section */}
               <Card className="p-6 bg-white">
                 <div className="flex items-center gap-3 mb-6">
@@ -825,23 +1146,61 @@ export function BotManagementPage() {
 
                   {/* QR Code */}
                   <div className="flex flex-col items-center py-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
-                    <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3 mb-4">
-                      {/* Placeholder QR Code - In real app, use a QR library */}
-                      <div className="w-full h-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded flex items-center justify-center">
-                        <QrCode className="w-24 h-24 text-white" />
+                    {qrCodeDataUrl ? (
+                      <>
+                        <div className="relative w-48 h-48 bg-white rounded-lg shadow-md p-3 mb-4 group">
+                          <img 
+                            src={qrCodeDataUrl} 
+                            alt="QR Code" 
+                            className="w-full h-full object-contain"
+                          />
+                          {/* Copy QR overlay on hover */}
+                          <div className="absolute inset-0 bg-black/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <Button
+                              onClick={handleCopyQRCode}
+                              size="sm"
+                              className="bg-white text-gray-900 hover:bg-gray-100"
+                            >
+                              <Copy className="w-4 h-4 mr-2" />
+                              Копировать
+                            </Button>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4 text-center">
+                          Отсканируйте QR код для быстрого доступа к боту
+                        </p>
+                        <p className="text-xs text-gray-500 mb-4 text-center">
+                          Наведите курсор на QR-код для копирования
+                        </p>
+                      </>
+                    ) : botLink && botLink !== "https://t.me/" ? (
+                      <div className="flex flex-col items-center">
+                        <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3 mb-4 flex items-center justify-center">
+                          <RefreshCw className="w-8 h-8 text-gray-400 animate-spin" />
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4">
+                          Генерация QR-кода...
+                        </p>
                       </div>
-                    </div>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Отсканируйте QR код для быстрого доступа к боту
-                    </p>
+                    ) : (
+                      <>
+                        <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3 mb-4 flex items-center justify-center">
+                          <QrCode className="w-24 h-24 text-gray-300" />
+                        </div>
+                        <p className="text-sm text-gray-600 mb-4 text-center">
+                          QR-код будет доступен после активации бота
+                        </p>
+                      </>
+                    )}
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <Button
                       variant="outline"
                       onClick={handleOpenBot}
                       className="h-11"
+                      disabled={!botLink || botLink === "https://t.me/"}
                     >
                       <ExternalLink className="w-4 h-4 sm:mr-2" />
                       <span className="hidden sm:inline">Открыть</span>
@@ -850,38 +1209,67 @@ export function BotManagementPage() {
                       variant="outline"
                       onClick={handleDownloadQR}
                       className="h-11"
+                      disabled={!qrCodeDataUrl}
                     >
                       <Download className="w-4 h-4 sm:mr-2" />
-                      <span className="hidden sm:inline">Скачать</span>
+                      <span className="hidden sm:inline">Скачать QR</span>
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={handleShare}
+                      onClick={handleCopyQRCode}
                       className="h-11"
+                      disabled={!qrCodeDataUrl}
                     >
-                      <Share2 className="w-4 h-4 sm:mr-2" />
-                      <span className="hidden sm:inline">Поделиться</span>
+                      <Copy className="w-4 h-4 sm:mr-2" />
+                      <span className="hidden sm:inline">Копировать QR</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleCopyLink}
+                      className="h-11"
+                      disabled={!botLink || botLink === "https://t.me/"}
+                    >
+                      <LinkIcon className="w-4 h-4 sm:mr-2" />
+                      <span className="hidden sm:inline">Копировать ссылку</span>
                     </Button>
                   </div>
 
                   <Separator />
 
-                  <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      onClick={handleShare}
-                      className="flex-1 h-11"
-                    >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Поделиться
-                    </Button>
-                    <Button
-                      onClick={handleCopyLink}
-                      className="flex-1 h-11 bg-indigo-600 hover:bg-indigo-700"
-                    >
-                      <Copy className="w-4 h-4 mr-2" />
-                      Копировать ссылку
-                    </Button>
+                  {/* Share Options */}
+                  <div>
+                    <Label className="mb-3 block text-sm font-medium text-gray-700">
+                      Поделиться ботом
+                    </Label>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <Button
+                        variant="outline"
+                        onClick={handleShareToTelegram}
+                        className="h-11"
+                        disabled={!botLink || botLink === "https://t.me/"}
+                      >
+                        <MessageCircle className="w-4 h-4 mr-2" />
+                        Telegram
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleShareToWhatsApp}
+                        className="h-11"
+                        disabled={!botLink || botLink === "https://t.me/"}
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        WhatsApp
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={handleShareToEmail}
+                        className="h-11"
+                        disabled={!botLink || botLink === "https://t.me/"}
+                      >
+                        <Mail className="w-4 h-4 mr-2" />
+                        Email
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </Card>

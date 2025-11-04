@@ -5,10 +5,13 @@ Welcome to the comprehensive documentation for the Appointments Bot project. Thi
 ## 🎯 Quick Navigation
 
 ### 🚨 [Critical Features Roadmap](./CRITICAL_FEATURES_ROADMAP.md)
-**КРИТИЧЕСКИ ВАЖНО** - Список функций для MVP с приоритетами и ссылками на документацию.
+**CRITICAL** - List of MVP features with priorities and documentation links.
 
 ### 📊 [Project Status](./PROJECT_CHECKPOINT_2025.md)
 Current project status, achievements, and next steps.
+
+### 📋 [Detailed Specification](./PROJECT_DETAILED_SPECIFICATION.md)
+Complete project specification with architecture, deployment, and production details.
 
 ### 🚀 [Deployment Guide](./deployment/)
 Complete deployment instructions for different environments.
@@ -38,12 +41,15 @@ API endpoints, authentication, and integration guides.
 
 ### 🔧 Development & Technical
 - **[Telegram Web App Integration](./development/TELEGRAM_WEBAPP_INTEGRATION_GUIDE.md)** - Complete implementation guide
+- **[WebSocket Real-time System](./development/WEBSOCKET_REALTIME_SYSTEM_PLAN.md)** - Real-time system implementation
 
 ### 🚀 Deployment & Operations
 - **[Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md)** - Production deployment instructions
+- **[Production Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)** - Complete production deployment guide
 
 ### 🤖 AI Agent Assistance
 - **[Agent Prompts](./agent-prompts/)** - Ready-to-use prompts for development assistance
+- **[Agent Handoff Algorithm](./agent-prompts/AGENT_HANDOFF_ALGORITHM.md)** - Agent handoff system
 
 ### 🏗️ System Architecture
 - **[Architecture Overview](./architecture/)** - System design and technical specifications
@@ -57,7 +63,7 @@ API endpoints, authentication, and integration guides.
 
 ### For Developers
 1. Start with [Project Status](./PROJECT_CHECKPOINT_2025.md) to understand current state
-2. Review [Architecture](./architecture/) for system design
+2. Review [Detailed Specification](./PROJECT_DETAILED_SPECIFICATION.md) for complete project details
 3. Follow [Development Guides](./development/) for implementation
 4. Use [Agent Prompts](./agent-prompts/) for AI assistance
 
@@ -68,8 +74,9 @@ API endpoints, authentication, and integration guides.
 
 ### For DevOps/Deployment
 1. Follow [Deployment Guide](./deployment/DEPLOYMENT_GUIDE.md)
-2. Review [Architecture](./architecture/) for infrastructure requirements
-3. Check [API Documentation](./api/) for service integration
+2. Review [Production Deployment Guide](./PRODUCTION_DEPLOYMENT_GUIDE.md)
+3. Check [Architecture](./architecture/) for infrastructure requirements
+4. Check [API Documentation](./api/) for service integration
 
 ---
 
@@ -81,11 +88,12 @@ API endpoints, authentication, and integration guides.
 
 ### Key Achievements
 - ✅ Fully functional appointment booking system
-- ✅ Beautiful Angular admin panel with Material Design
+- ✅ Modern React admin panel with Tailwind CSS
 - ✅ Complete Telegram bot integration
 - ✅ Multi-language support (RU, EN, HE)
 - ✅ Modern UI/UX with responsive design
 - ✅ Comprehensive documentation structure
+- ✅ Production deployment ready
 
 ---
 
@@ -95,7 +103,7 @@ This documentation is actively maintained and updated with each major release. F
 
 ### Last Updated
 - **Date:** January 18, 2025
-- **Version:** 1.1
+- **Version:** 2.0
 - **Status:** Updated and Validated
 
 ---

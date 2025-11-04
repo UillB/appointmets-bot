@@ -1,227 +1,229 @@
 # 🚨 Critical Features Roadmap - Appointments Bot
 
-**Статус:** В разработке  
-**Приоритет:** КРИТИЧЕСКИ ВАЖНО  
-**Дата обновления:** 18 января 2025
-
-## 📋 Обзор
-
-Этот документ содержит список критически важных функций, которые необходимо реализовать для полноценного запуска продукта. Все функции отсортированы по приоритету и содержат ссылки на существующую документацию.
+**Status:** In Development  
+**Priority:** CRITICAL  
+**Last Updated:** January 18, 2025
 
 ---
 
-## 🎯 Критически важные функции (MVP)
+## 📋 Overview
 
-### 1. 🤖 **Критический бот-создание флоу**
-**Приоритет:** 🔴 КРИТИЧЕСКИЙ  
-**Статус:** В разработке
-
-**Описание:** Автоматизированный процесс создания Telegram бота для организации в реальном времени с подробными инструкциями.
-
-**Требования:**
-- Пошаговые инструкции создания бота через @BotFather
-- Автоматическая настройка webhook'ов
-- Интеграция с существующей системой организаций
-- Валидация токена бота
-- Настройка команд и описания бота
-
-**Существующая документация:**
-- 📄 [Critical Bot Creation Flow](business/CRITICAL_BOT_CREATION_FLOW.md) - Детальный план реализации
-- 📄 [Strategic Development Plan](business/STRATEGIC_DEVELOPMENT_PLAN.md) - Бизнес-стратегия
-- 📄 [Architecture Documentation](architecture/README.md) - Техническая архитектура
-
-**Связанные компоненты:**
-- Backend API для управления ботами
-- Admin Panel для настройки
-- Telegram Bot API интеграция
+This document contains a list of critical features that need to be implemented for a full product launch. All features are sorted by priority and include links to existing documentation.
 
 ---
 
-### 2. 🧠 **AI Ассистент для бота**
-**Приоритет:** 🔴 КРИТИЧЕСКИЙ  
-**Статус:** Планируется
+## 🎯 Critical Features (MVP)
 
-**Описание:** Интеллектуальный ассистент, встроенный в бота, способный отвечать на вопросы клиентов и предоставлять информацию об организации.
+### 1. 🤖 **Bot Creation Flow** (CRITICAL)
+**Priority:** 🔴 CRITICAL  
+**Status:** In Development
 
-**Требования:**
-- Настраиваемые промпты для каждой организации
-- Форма с параметрами организации:
-  - Адрес и контакты
-  - Название и описание компании
-  - Часы работы
-  - Стоимость услуг и их длительность
-  - Специальные предложения
-- Интеграция с OpenAI/Claude API
-- Контекстные ответы на основе данных организации
+**Description:** Automated process for creating Telegram bots for organizations with detailed instructions.
 
-**Существующая документация:**
-- 📄 [Agent Prompts](agent-prompts/README.md) - Готовые промпты для AI
-- 📄 [API Documentation](api/README.md) - Endpoints для интеграции
+**Requirements:**
+- Step-by-step instructions for creating bot via @BotFather
+- Automatic webhook setup
+- Integration with existing organization system
+- Bot token validation
+- Bot commands and description setup
 
-**Связанные компоненты:**
-- AI API интеграция
-- Конфигурация промптов в Admin Panel
+**Documentation:**
+- 📄 [Critical Bot Creation Flow](business/CRITICAL_BOT_CREATION_FLOW.md) - Detailed implementation plan
+- 📄 [Strategic Development Plan](business/STRATEGIC_DEVELOPMENT_PLAN.md) - Business strategy
+- 📄 [Architecture Documentation](architecture/README.md) - Technical architecture
+
+**Components:**
+- Backend API for bot management
+- Admin Panel for configuration
+- Telegram Bot API integration
+
+---
+
+### 2. 🧠 **AI Assistant for Bot** (CRITICAL)
+**Priority:** 🔴 CRITICAL  
+**Status:** Planned
+
+**Description:** Intelligent assistant integrated into the bot, capable of answering client questions and providing organization information.
+
+**Requirements:**
+- Configurable prompts for each organization
+- Form with organization parameters:
+  - Address and contacts
+  - Company name and description
+  - Working hours
+  - Service pricing and duration
+  - Special offers
+- Integration with OpenAI/Claude API
+- Contextual responses based on organization data
+
+**Documentation:**
+- 📄 [Agent Prompts](agent-prompts/README.md) - Ready-to-use AI prompts
+- 📄 [API Documentation](api/README.md) - Integration endpoints
+
+**Components:**
+- AI API integration
+- Prompt configuration in Admin Panel
 - Telegram Bot handlers
 
 ---
 
-### 3. 🌐 **Презентационный веб-сайт**
-**Приоритет:** 🟡 ВЫСОКИЙ  
-**Статус:** Планируется
+### 3. 🌐 **Marketing Website** (HIGH)
+**Priority:** 🟡 HIGH  
+**Status:** Planned
 
-**Описание:** Профессиональный веб-сайт, объясняющий продукт и предоставляющий два пути для клиентов.
+**Description:** Professional website explaining the product and providing two paths for clients.
 
-**Требования:**
-- Четкое объяснение use case'ов
-- Два пути для клиентов:
-  1. **Самостоятельное создание:** Подробная инструкция после регистрации
-  2. **Персональная помощь:** Связь с Customer Success Manager для 15-минутного звонка
-- Landing page с преимуществами
-- Форма регистрации/контактов
-- Интеграция с системой записи на звонки
+**Requirements:**
+- Clear explanation of use cases
+- Two client paths:
+  1. **Self-service:** Detailed instructions after registration
+  2. **Personal assistance:** Contact Customer Success Manager for 15-minute call
+- Landing page with benefits
+- Registration/contact form
+- Integration with call booking system
 
-**Существующая документация:**
-- 📄 [Business Documentation](business/README.md) - Маркетинговая стратегия
-- 📄 [Strategic Development Plan](business/STRATEGIC_DEVELOPMENT_PLAN.md) - Целевая аудитория
+**Documentation:**
+- 📄 [Business Documentation](business/README.md) - Marketing strategy
+- 📄 [Strategic Development Plan](business/STRATEGIC_DEVELOPMENT_PLAN.md) - Target audience
 
-**Связанные компоненты:**
-- Отдельный веб-сайт (React/Next.js)
-- CRM интеграция для лидов
-- Календарь для записи на звонки
+**Components:**
+- Separate website (React/Next.js)
+- CRM integration for leads
+- Calendar for call booking
 
 ---
 
-### 4. 📱 **Telegram Web App для админов**
-**Приоритет:** 🟡 ВЫСОКИЙ  
-**Статус:** В разработке
+### 4. 📱 **Telegram Web App for Admins** (HIGH)
+**Priority:** 🟡 HIGH  
+**Status:** 85% Complete
 
-**Описание:** Telegram приложение, позволяющее администраторам управлять системой прямо из бота.
+**Description:** Telegram application allowing administrators to manage the system directly from the bot.
 
-**Требования:**
-- Полный функционал Admin Panel в Telegram Web App
-- Управление записями, услугами, слотами
-- Аналитика и отчеты
-- Настройки бота и организации
-- Responsive дизайн для мобильных устройств
+**Requirements:**
+- Full Admin Panel functionality in Telegram Web App
+- Appointment, service, and slot management
+- Analytics and reports
+- Bot and organization settings
+- Responsive design for mobile devices
 
-**Существующая документация:**
-- 📄 [Telegram Web App Integration Guide](development/TELEGRAM_WEBAPP_INTEGRATION_GUIDE.md) - Детальное руководство
-- 📄 [Development Documentation](development/README.md) - Технические детали
+**Documentation:**
+- 📄 [Telegram Web App Integration Guide](development/TELEGRAM_WEBAPP_INTEGRATION_GUIDE.md) - Detailed guide
+- 📄 [Development Documentation](development/README.md) - Technical details
 - 📄 [API Documentation](api/README.md) - Backend endpoints
 
-**Связанные компоненты:**
-- Существующий Angular Admin Panel
+**Components:**
+- Existing React Admin Panel
 - Telegram Web App API
-- Backend API адаптация
+- Backend API adaptation
 
 ---
 
-### 5. 🚀 **Production Deployment**
-**Приоритет:** 🟢 СРЕДНИЙ (только после MVP)  
-**Статус:** Готово к реализации
+### 5. 🚀 **Production Deployment** (MEDIUM)
+**Priority:** 🟢 MEDIUM (after MVP)  
+**Status:** Ready for Implementation
 
-**Описание:** Полноценное развертывание системы в продакшене с расчетом стоимости хостинга.
+**Description:** Full system deployment in production with hosting cost calculation.
 
-**Требования:**
-- Docker контейнеризация
-- PostgreSQL база данных
-- SSL сертификаты
-- Мониторинг и логирование
-- Backup стратегия
-- CDN для статических файлов
+**Requirements:**
+- Docker containerization
+- PostgreSQL database
+- SSL certificates
+- Monitoring and logging
+- Backup strategy
+- CDN for static files
 
-**Существующая документация:**
-- 📄 [Deployment Guide](deployment/DEPLOYMENT_GUIDE.md) - Полное руководство по развертыванию
-- 📄 [Architecture Documentation](architecture/README.md) - Production архитектура
+**Documentation:**
+- 📄 [Deployment Guide](deployment/DEPLOYMENT_GUIDE.md) - Complete deployment guide
+- 📄 [Architecture Documentation](architecture/README.md) - Production architecture
 
-**Связанные компоненты:**
-- Docker Compose конфигурация
+**Components:**
+- Docker Compose configuration
 - CI/CD pipeline
 - Cloud infrastructure (AWS/DigitalOcean)
 
 ---
 
-## 🔮 Дополнительные функции (Future)
+## 🔮 Additional Features (Future)
 
-### 6. 📱 **Мобильные приложения**
-**Приоритет:** 🟢 НИЗКИЙ  
-**Статус:** Планируется
+### 6. 📱 **Mobile Applications**
+**Priority:** 🟢 LOW  
+**Status:** Planned
 
-**Описание:** Нативные мобильные приложения для iOS и Android.
+**Description:** Native mobile applications for iOS and Android.
 
-**Рекомендация:** React Native для кроссплатформенной разработки
+**Recommendation:** React Native for cross-platform development
 
-### 7. 💳 **Платежная интеграция**
-**Приоритет:** 🟡 ВЫСОКИЙ  
-**Статус:** Планируется
+### 7. 💳 **Payment Integration**
+**Priority:** 🟡 HIGH  
+**Status:** Planned
 
-**Описание:** Интеграция с платежными системами для онлайн оплаты услуг.
+**Description:** Integration with payment systems for online service payment.
 
-### 8. 📊 **Расширенная аналитика**
-**Приоритет:** 🟢 СРЕДНИЙ  
-**Статус:** Планируется
+### 8. 📊 **Advanced Analytics**
+**Priority:** 🟢 MEDIUM  
+**Status:** Planned
 
-**Описание:** Детальная аналитика и отчеты для бизнеса.
-
----
-
-## 📋 План реализации
-
-### Фаза 1: Core MVP (Критически важно)
-1. ✅ **Критический бот-создание флоу** - В разработке
-2. 🔄 **AI Ассистент** - Планируется
-3. 🔄 **Telegram Web App** - В разработке
-
-### Фаза 2: Marketing & Growth
-1. 🔄 **Презентационный веб-сайт** - Планируется
-2. 🔄 **Customer Success процесс** - Планируется
-
-### Фаза 3: Production & Scale
-1. 🔄 **Production Deployment** - Готово к реализации
-2. 🔄 **Мониторинг и поддержка** - Планируется
+**Description:** Detailed analytics and reports for business.
 
 ---
 
-## 🎯 Критерии готовности MVP
+## 📋 Implementation Plan
 
-### ✅ Готово к запуску когда:
-- [ ] Организация может создать бота за 5 минут
-- [ ] AI ассистент отвечает на базовые вопросы
-- [ ] Админ может управлять системой из Telegram
-- [ ] Есть рабочий веб-сайт с инструкциями
-- [ ] Система стабильно работает в продакшене
+### Phase 1: Core MVP (Critical)
+1. 🔄 **Bot Creation Flow** - In Development
+2. 📋 **AI Assistant** - Planned
+3. 🔄 **Telegram Web App** - 85% Complete
 
-### 🚫 НЕ деплоить до тех пор пока:
-- [ ] Нет полного функционала создания ботов
-- [ ] Нет AI ассистента
-- [ ] Нет Telegram Web App
-- [ ] Нет презентационного сайта
+### Phase 2: Marketing & Growth
+1. 📋 **Marketing Website** - Planned
+2. 📋 **Customer Success Process** - Planned
 
----
-
-## 📚 Связанная документация
-
-### Техническая документация:
-- 📄 [Architecture](architecture/README.md) - Системная архитектура
-- 📄 [Development](development/README.md) - Руководства по разработке
-- 📄 [API](api/README.md) - API документация
-- 📄 [Deployment](deployment/README.md) - Развертывание
-
-### Бизнес документация:
-- 📄 [Business Strategy](business/README.md) - Бизнес-стратегия
-- 📄 [Strategic Plan](business/STRATEGIC_DEVELOPMENT_PLAN.md) - Стратегический план
-- 📄 [Bot Creation Flow](business/CRITICAL_BOT_CREATION_FLOW.md) - Критический флоу
-
-### AI и автоматизация:
-- 📄 [Agent Prompts](agent-prompts/README.md) - Промпты для AI агентов
+### Phase 3: Production & Scale
+1. ✅ **Production Deployment** - Ready for Implementation
+2. 📋 **Monitoring & Support** - Planned
 
 ---
 
-## 🔄 Обновления
+## 🎯 MVP Readiness Criteria
 
-**Последнее обновление:** 18 января 2025  
-**Следующий пересмотр:** 25 января 2025
+### ✅ Ready to Launch When:
+- [ ] Organization can create bot in 5 minutes
+- [ ] AI assistant answers basic questions
+- [ ] Admin can manage system from Telegram
+- [ ] Working website with instructions exists
+- [ ] System runs stably in production
+
+### 🚫 Do NOT Deploy Until:
+- [ ] Full bot creation functionality exists
+- [ ] AI assistant is implemented
+- [ ] Telegram Web App is complete
+- [ ] Marketing website is ready
 
 ---
 
-*Critical Features Roadmap - Путь к успешному запуску продукта* 🚀
+## 📚 Related Documentation
+
+### Technical Documentation:
+- 📄 [Architecture](architecture/README.md) - System architecture
+- 📄 [Development](development/README.md) - Development guides
+- 📄 [API](api/README.md) - API documentation
+- 📄 [Deployment](deployment/README.md) - Deployment
+
+### Business Documentation:
+- 📄 [Business Strategy](business/README.md) - Business strategy
+- 📄 [Strategic Plan](business/STRATEGIC_DEVELOPMENT_PLAN.md) - Strategic plan
+- 📄 [Bot Creation Flow](business/CRITICAL_BOT_CREATION_FLOW.md) - Critical flow
+
+### AI & Automation:
+- 📄 [Agent Prompts](agent-prompts/README.md) - AI agent prompts
+
+---
+
+## 🔄 Updates
+
+**Last Updated:** January 18, 2025  
+**Next Review:** January 25, 2025
+
+---
+
+*Critical Features Roadmap - Path to successful product launch* 🚀

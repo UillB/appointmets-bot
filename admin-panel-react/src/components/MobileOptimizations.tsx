@@ -235,8 +235,7 @@ export const MobileOptimizedWrapper: React.FC<{
     <div 
       className={`${className} ${isMobile ? 'mobile-optimized' : ''} ${isTouchDevice ? 'touch-optimized' : ''}`}
       style={{
-        minHeight: isMobile ? '100vh' : 'auto',
-        minHeight: isMobile ? '100dvh' : 'auto', // Dynamic viewport height
+        minHeight: isMobile ? '100dvh' : 'auto', // Dynamic viewport height for mobile
       }}
     >
       {children}

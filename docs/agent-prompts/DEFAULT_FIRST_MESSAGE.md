@@ -13,7 +13,7 @@
 
 **PROJECT STRUCTURE:**
 - Backend: Node.js + Express + Prisma (Port 4000)
-- Frontend: React Admin Panel (Port 4200) + Angular Legacy (Port 4201)
+- Frontend: React Admin Panel (Port 4200)
 - Landing: Next.js marketing site (Port 3000)
 - Database: SQLite with PostgreSQL migration planned
 
@@ -38,7 +38,7 @@
 
 **TECHNOLOGY STACK:**
 - Backend: Node.js 20, Express.js, Prisma ORM, Telegraf.js
-- Frontend: React 18, Angular 20, Material Design 3
+- Frontend: React 18, Tailwind CSS
 - Database: SQLite (dev) → PostgreSQL (prod)
 - Bot: Telegraf.js with multi-language support (RU, EN, HE)
 - Deployment: Docker, Docker Compose

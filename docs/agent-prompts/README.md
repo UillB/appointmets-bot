@@ -8,10 +8,10 @@ This directory contains ready-to-use prompts for AI agents to assist with develo
 
 #### Telegram Web App Integration
 ```markdown
-Ты работаешь над интеграцией существующего Angular admin panel в Telegram Web App. 
+Ты работаешь над интеграцией React admin panel в Telegram Web App. 
 
 ПРОЕКТ: Система управления записями с Telegram ботом и веб-админкой
-ТЕКУЩИЙ СТАТУС: Полнофункциональный Angular admin panel + Telegram bot + Backend API
+ТЕКУЩИЙ СТАТУС: Полнофункциональный React admin panel + Telegram bot + Backend API
 ЦЕЛЬ: Создать Telegram Web App версию админки для управления ботом из Telegram
 
 ПРОЧТИ ЭТОТ ДОКУМЕНТ ПОЛНОСТЬЮ и начни реализацию по плану ниже.
@@ -35,7 +35,7 @@ This directory contains ready-to-use prompts for AI agents to assist with develo
 ```markdown
 Ты работаешь над исправлением багов в системе Appointments Bot.
 
-ПРОЕКТ: Angular admin panel + Node.js backend + Telegram bot
+ПРОЕКТ: React admin panel + Node.js backend + Telegram bot
 ТЕКУЩИЙ СТАТУС: Production ready система
 ЗАДАЧА: Исправить [ОПИСАНИЕ БАГА]
 
@@ -44,10 +44,10 @@ This directory contains ready-to-use prompts for AI agents to assist with develo
 
 #### UI/UX Improvements
 ```markdown
-Ты работаешь над улучшением UI/UX в Angular admin panel.
+Ты работаешь над улучшением UI/UX в React admin panel.
 
 ПРОЕКТ: Appointments Bot admin panel
-ТЕХНОЛОГИИ: Angular 20 + Material Design 3
+ТЕХНОЛОГИИ: React 18 + Tailwind CSS
 ЗАДАЧА: [ОПИСАНИЕ УЛУЧШЕНИЯ]
 
 Сохрани консистентность дизайна и не ломай существующую функциональность.
@@ -59,7 +59,7 @@ This directory contains ready-to-use prompts for AI agents to assist with develo
 ```markdown
 Проведи код-ревью для Appointments Bot проекта.
 
-ПРОЕКТ: Node.js + Angular + Telegram Bot
+ПРОЕКТ: Node.js + React + Telegram Bot
 ФОКУС: [ОБЛАСТЬ ДЛЯ РЕВЬЮ]
 
 Проверь:
@@ -75,7 +75,7 @@ This directory contains ready-to-use prompts for AI agents to assist with develo
 
 КОМПОНЕНТЫ:
 - Backend API (Node.js + Express)
-- Frontend (Angular 20)
+- Frontend (React 18)
 - Database (SQLite + Prisma)
 - Telegram Bot (Telegraf.js)
 
