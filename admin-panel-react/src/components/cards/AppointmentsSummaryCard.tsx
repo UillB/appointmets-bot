@@ -24,7 +24,7 @@ export function AppointmentsSummaryCard({
     <Card className="p-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 border-indigo-200">
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
         {/* Left: Total Appointments */}
-        <div className="flex items-start gap-4">
+        <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-lg">
             <Calendar className="w-8 h-8 text-white" />
           </div>
@@ -78,13 +78,14 @@ export function AppointmentsSummaryCard({
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">Confirmation Rate</span>
+              <span className="text-gray-600 font-medium">Confirmation Rate</span>
               <span className="font-semibold text-gray-900">{confirmationRate}%</span>
             </div>
             <div className="relative w-full">
               <Progress 
                 value={confirmationRate} 
-                className="h-2"
+                className="h-2.5 bg-gray-200"
+                indicatorClassName="bg-gradient-to-r from-emerald-500 to-emerald-600"
               />
             </div>
             <p className="text-xs text-gray-500">

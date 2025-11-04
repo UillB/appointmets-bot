@@ -105,7 +105,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="bg-white border shadow-lg">
+      <DrawerContent className="bg-white border shadow-lg flex flex-col h-full">
         <DrawerHeader className="border-b bg-gradient-to-r from-indigo-50 to-purple-50 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -134,9 +134,10 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
           </div>
         </DrawerHeader>
 
-        <div className="flex-1 overflow-y-auto">
-          <div className="p-6">
-            <form onSubmit={handleSubmit} id="service-form" className="space-y-2">
+        <div className="flex-1 overflow-hidden min-h-0">
+          <ScrollArea className="h-full">
+            <div className="p-6">
+              <form onSubmit={handleSubmit} id="service-form" className="space-y-2">
             {/* Step 1: Basic Information */}
             {!isEdit ? (
               <>
@@ -386,28 +387,31 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
             )}
 
 
-              
-              {/* Submit and Cancel buttons inside the form */}
-              <div className="flex gap-4 pt-6">
-                <Button
-                  type="submit" 
-                  disabled={isLoading}
-                  className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
-                >
-                  {isLoading ? "Saving..." : (isEdit ? "Update Service" : "Create Service")}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => onOpenChange(false)}
-                  className="flex-1 h-12 text-base font-semibold border-gray-300 hover:bg-gray-50"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </div>
+              </form>
+            </div>
+          </ScrollArea>
         </div>
+
+        <DrawerFooter className="border-t bg-white flex-shrink-0 p-6">
+          <div className="flex gap-4">
+            <Button
+              type="submit" 
+              form="service-form"
+              disabled={isLoading}
+              className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
+            >
+              {isLoading ? "Saving..." : (isEdit ? "Update Service" : "Create Service")}
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              className="flex-1 h-12 text-base font-semibold border-gray-300 hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+          </div>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

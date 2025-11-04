@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bell, Check, X, Archive, Trash2, AlertCircle, Clock, Calendar, Users, Sparkles, CheckCircle2, AlertTriangle, Info, BellOff, CheckCheck, User } from 'lucide-react';
+import { Bell, Check, X, Trash2, AlertCircle, Clock, Calendar, Users, Sparkles, CheckCircle2, AlertTriangle, Info, BellOff, CheckCheck, User } from 'lucide-react';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { apiClient } from '../services/api';
 import { toast } from 'sonner';
@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
 import { Button } from './ui/button';
+import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
 import {
   Sheet,
   SheetContent,
@@ -47,6 +48,16 @@ export function NotificationCenter() {
     loadNotifications();
     loadStats();
   }, []);
+
+  // Set default tab based on unread count when stats load
+  useEffect(() => {
+    if (stats && activeTab === 'all') {
+      // Only switch to unread if there are unread notifications and we're still on 'all'
+      if ((stats.unread || 0) > 0) {
+        setActiveTab('unread');
+      }
+    }
+  }, [stats]);
 
   const processedEventsRef = useRef<Set<string>>(new Set());
 
@@ -169,21 +180,6 @@ export function NotificationCenter() {
     }
   };
 
-  const archiveNotification = async (notificationId: string) => {
-    try {
-      await apiClient.post(`/notifications/${notificationId}/archive`);
-      setNotifications(prev => prev.filter(n => n.id !== notificationId));
-      setStats(prev => prev ? {
-        ...prev,
-        total: Math.max(0, prev.total - 1),
-        unread: Math.max(0, prev.unread - (notifications.find(n => n.id === notificationId)?.isRead ? 0 : 1))
-      } : null);
-      toast.success('Notification archived');
-    } catch (error) {
-      console.error('Failed to archive notification:', error);
-      toast.error('Failed to archive notification');
-    }
-  };
 
   const getEventTitle = (eventType: string): string => {
     // Handle both dot and underscore formats
@@ -446,21 +442,20 @@ export function NotificationCenter() {
                     
                     <div className="flex space-x-1">
                       {!notification.isRead && (
-                        <button
-                          onClick={() => markAsRead(notification.id)}
-                          className="p-1.5 text-green-600 hover:text-green-800 hover:bg-green-100 rounded transition-colors"
-                          title="Mark as read"
-                        >
-                          <Check className="h-4 w-4" />
-                        </button>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <button
+                              onClick={() => markAsRead(notification.id)}
+                              className="p-1.5 text-green-600 hover:text-green-800 hover:bg-green-100 rounded transition-colors"
+                            >
+                              <Check className="h-4 w-4" />
+                            </button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Пометить как прочитанное</p>
+                          </TooltipContent>
+                        </Tooltip>
                       )}
-                      <button
-                        onClick={() => archiveNotification(notification.id)}
-                        className="p-1.5 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors"
-                        title="Archive"
-                      >
-                        <Archive className="h-4 w-4" />
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -494,7 +489,7 @@ export function NotificationCenter() {
       </Button>
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent className="w-full sm:max-w-md p-0 flex flex-col" side="right">
+        <SheetContent className="w-full sm:max-w-md p-0 flex flex-col h-full" side="right">
           <SheetHeader className="px-6 py-4 border-b bg-gradient-to-br from-indigo-50 to-purple-50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -510,11 +505,6 @@ export function NotificationCenter() {
                   )}
                 </div>
               </div>
-              {unreadCount > 0 && (
-                <Badge className="bg-indigo-600 text-white hover:bg-indigo-700">
-                  {unreadCount}
-                </Badge>
-              )}
             </div>
           </SheetHeader>
 
@@ -543,7 +533,7 @@ export function NotificationCenter() {
               <Tabs
                 value={activeTab}
                 onValueChange={(v) => setActiveTab(v as 'all' | 'unread')}
-                className="flex-1 flex flex-col"
+                className="flex-1 flex flex-col min-h-0"
               >
                 <div className="border-b bg-gray-50 px-4 pt-3 flex-shrink-0">
                   <TabsList className="w-full grid grid-cols-2">
@@ -592,17 +582,19 @@ export function NotificationCenter() {
                 </div>
 
                 {/* Notifications List */}
-                <TabsContent value="all" className="flex-1 mt-0 overflow-hidden">
-                  <ScrollArea className="h-full">
-                    <div className="p-4 space-y-4">
-                      {renderNotificationGroup(today, "Today")}
-                      {renderNotificationGroup(yesterday, "Yesterday")}
-                      {renderNotificationGroup(earlier, "Earlier")}
-                    </div>
-                  </ScrollArea>
+                <TabsContent value="all" className="flex-1 mt-0 overflow-hidden flex flex-col min-h-0 p-0">
+                  <div className="flex-1 overflow-hidden">
+                    <ScrollArea className="h-full">
+                      <div className="p-4 space-y-4">
+                        {renderNotificationGroup(today, "Today")}
+                        {renderNotificationGroup(yesterday, "Yesterday")}
+                        {renderNotificationGroup(earlier, "Earlier")}
+                      </div>
+                    </ScrollArea>
+                  </div>
                 </TabsContent>
 
-                <TabsContent value="unread" className="flex-1 mt-0 overflow-hidden">
+                <TabsContent value="unread" className="flex-1 mt-0 overflow-hidden flex flex-col min-h-0 p-0">
                   {filteredNotifications.length === 0 ? (
                     <div className="flex-1 flex items-center justify-center p-8">
                       <div className="text-center">
@@ -616,13 +608,15 @@ export function NotificationCenter() {
                       </div>
                     </div>
                   ) : (
-                    <ScrollArea className="h-full">
-                      <div className="p-4 space-y-4">
-                        {renderNotificationGroup(today, "Today")}
-                        {renderNotificationGroup(yesterday, "Yesterday")}
-                        {renderNotificationGroup(earlier, "Earlier")}
-                      </div>
-                    </ScrollArea>
+                    <div className="flex-1 overflow-hidden">
+                      <ScrollArea className="h-full">
+                        <div className="p-4 space-y-4">
+                          {renderNotificationGroup(today, "Today")}
+                          {renderNotificationGroup(yesterday, "Yesterday")}
+                          {renderNotificationGroup(earlier, "Earlier")}
+                        </div>
+                      </ScrollArea>
+                    </div>
                   )}
                 </TabsContent>
               </Tabs>

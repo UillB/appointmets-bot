@@ -1,14 +1,53 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 3.5  
-**Last Updated:** January 18, 2025 (Latest Session - Forms Redesign, UI Consistency & Navigation Improvements)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign
+**Version:** 3.6  
+**Last Updated:** January 18, 2025 (Latest Session - Notification Center & UI Improvements)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes
 
 > **This is the ONLY document you need to read to start working on this project.**
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Forms Redesign, UI Consistency & Navigation Improvements ✅
+### Latest Session (January 18, 2025) - Notification Center & UI Improvements ✅
+
+#### Notification Center Fixes & Enhancements
+- ✅ **Fixed Scroll in NotificationCenter** - Исправлен скролл в нотификациях: добавлена обертка с `flex-1 overflow-hidden`, `min-h-0` для правильной работы flex, `p-0` в TabsContent
+- ✅ **Sheet Animation** - Улучшена анимация появления Sheet: используется `transition-all` для плавного появления
+- ✅ **Close Button Enhancement** - Улучшена кнопка закрытия: убран Badge с числом который налезал на кнопку, добавлен красивый ховер с `hover:scale-110`, фон `bg-gray-100`, тени `shadow-sm hover:shadow-md`
+- ✅ **Default Active Tab** - Добавлен автоматический выбор активного таба: если есть непрочитанные уведомления, автоматически выбирается таб "Unread", иначе "All"
+- ✅ **Archive Button Removed** - Убрана кнопка архивирования из нотификаций, оставлена только кнопка "Mark as read" с тултипом "Пометить как прочитанное"
+
+#### Dashboard & Forms Improvements
+- ✅ **AppointmentsSummaryCard Progress Bar** - Добавлен красивый прогресс-бар для Confirmation Rate с градиентом `from-emerald-500 to-emerald-600`, высота 2.5, фон `bg-gray-200`
+- ✅ **Icon Centering** - Исправлено центрирование иконки календаря в AppointmentsSummaryCard: `flex items-start` → `flex items-center`
+- ✅ **ServiceDialog Scroll Fix** - Исправлен скролл в форме создания сервиса: кнопки фиксированы внизу через `DrawerFooter`, контент скроллится через `ScrollArea` с `flex-1`
+
+#### BotManagementPage Fixes
+- ✅ **Animation Fix** - Убрана анимация которая срезала правый и левый верхние углы страницы после загрузки
+
+#### Key Technical Changes:
+- NotificationCenter использует правильную структуру flex для скролла: `Tabs` → `TabsContent` (flex-1, min-h-0) → `div` (flex-1, overflow-hidden) → `ScrollArea` (h-full)
+- ServiceDialog использует структуру: `DrawerContent` (flex-col, h-full) → `DrawerHeader` (flex-shrink-0) → `div` (flex-1, overflow-hidden, min-h-0) → `ScrollArea` (h-full) → `DrawerFooter` (flex-shrink-0)
+- Sheet кнопка закрытия имеет z-10 для правильного позиционирования поверх контента
+- Автоматический выбор таба работает через useEffect который отслеживает изменения stats
+
+#### Files Modified:
+- `admin-panel-react/src/components/NotificationCenter.tsx` - Исправлен скролл, убран Badge, улучшена кнопка закрытия, добавлен автоматический выбор таба
+- `admin-panel-react/src/components/ui/sheet.tsx` - Улучшена кнопка закрытия с ховер эффектами
+- `admin-panel-react/src/components/cards/AppointmentsSummaryCard.tsx` - Добавлен прогресс-бар, исправлено центрирование иконки
+- `admin-panel-react/src/components/dialogs/ServiceDialog.tsx` - Исправлен скролл, кнопки в DrawerFooter
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Убрана анимация срезающая углы
+
+#### Current Status:
+- ✅ **NotificationCenter Scroll** - Скролл работает корректно, можно прокручивать все нотификации
+- ✅ **Sheet Animation** - Плавная анимация появления
+- ✅ **Close Button** - Красивый ховер, не конфликтует с другими элементами
+- ✅ **Default Tab** - Автоматически выбирается правильный таб
+- ✅ **ServiceDialog** - Кнопки фиксированы внизу, скролл работает
+- ✅ **Dashboard** - Прогресс-бар отображается корректно, иконка центрирована
+- ✅ **BotManagementPage** - Нет срезанных углов
+
+### Previous Session (January 18, 2025) - Forms Redesign, UI Consistency & Navigation Improvements ✅
 
 #### Forms Redesign to Figma Style
 - ✅ **AppointmentDialog Redesign** - Полностью переработан в стиле Figma с StepIndicator, фиксированным header/footer, скроллируемым контентом
