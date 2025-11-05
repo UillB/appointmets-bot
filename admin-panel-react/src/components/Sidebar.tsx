@@ -176,30 +176,35 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
       {/* Mobile overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 dark:bg-black/70 z-40 lg:hidden"
           onClick={onClose}
         />
       )}
       
-      {/* Sidebar */}
+      {/* Sidebar - fixed on mobile (overlay), relative on desktop (in flow) */}
       <aside 
         className={`
-          w-64 sm:w-72 bg-gradient-to-b from-[#5B4FE9] to-[#4338CA] 
+          w-64 sm:w-72 
+          bg-gradient-to-b from-[#5B4FE9] to-[#4338CA] 
+          dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-950
           text-white transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-          ${isOpen ? 'fixed top-0 left-0 h-screen z-50' : 'lg:relative lg:z-auto lg:h-screen'}
+          fixed lg:relative
+          top-0 left-0 h-screen z-50 lg:z-auto
+          lg:flex-shrink-0
+          ${!isOpen ? 'pointer-events-none lg:pointer-events-auto' : ''}
         `}
       >
         <div className="flex flex-col h-full">
           {/* Logo */}
           <div className="p-4 sm:p-6 flex-shrink-0">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 dark:bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
                 <Calendar className="w-4 h-4 sm:w-6 sm:h-6" />
               </div>
               <div>
                 <h1 className="font-semibold text-sm sm:text-base">Appointments</h1>
-                <p className="text-[10px] sm:text-xs text-white/70">Business Manager</p>
+                <p className="text-[10px] sm:text-xs text-white/70 dark:text-white/60">Business Manager</p>
               </div>
             </div>
           </div>
@@ -216,8 +221,8 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
                 className={`
                   w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg transition-all
                   ${location.pathname === `/${item.page}`
-                    ? 'bg-white/20 backdrop-blur-sm shadow-sm' 
-                    : 'hover:bg-white/10'
+                    ? 'bg-white/20 dark:bg-white/10 backdrop-blur-sm shadow-sm' 
+                    : 'hover:bg-white/10 dark:hover:bg-white/5'
                   }
                 `}
               >
@@ -244,7 +249,7 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
           {/* Stats & Status - Fixed at bottom */}
           <div className="p-3 sm:p-4 space-y-2 sm:space-y-3 flex-shrink-0">
             {/* Admin Status */}
-            <div className="px-2 sm:px-3 py-2 sm:py-2.5 bg-white/10 rounded-lg backdrop-blur-sm">
+            <div className="px-2 sm:px-3 py-2 sm:py-2.5 bg-white/10 dark:bg-white/5 rounded-lg backdrop-blur-sm">
               <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
                 <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
                 <p className="text-[10px] sm:text-xs font-medium">Admin Status</p>
@@ -252,31 +257,31 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
               <div className="flex items-center gap-1.5 sm:gap-2">
                 {isAdminLinked ? (
                   <>
-                    <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-300 flex-shrink-0" />
-                    <span className="text-[10px] sm:text-xs text-white/90">Telegram Linked</span>
+                    <CheckCircle2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-300 dark:text-emerald-400 flex-shrink-0" />
+                    <span className="text-[10px] sm:text-xs text-white/90 dark:text-white/80">Telegram Linked</span>
                   </>
                 ) : (
                   <>
-                    <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border-2 border-amber-300 flex-shrink-0" />
-                    <span className="text-[10px] sm:text-xs text-amber-200">Not Linked</span>
+                    <div className="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded-full border-2 border-amber-300 dark:border-amber-400 flex-shrink-0" />
+                    <span className="text-[10px] sm:text-xs text-amber-200 dark:text-amber-300">Not Linked</span>
                   </>
                 )}
               </div>
             </div>
 
-            <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+            <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/10 dark:bg-white/5 rounded-lg backdrop-blur-sm">
               <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] sm:text-xs text-white/70">Today</p>
+                <p className="text-[10px] sm:text-xs text-white/70 dark:text-white/60">Today</p>
                 <p className="text-xs sm:text-sm font-medium truncate">
                   {isLoading ? "..." : `${stats.todayAppointments || 0} appts`}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/10 rounded-lg backdrop-blur-sm">
+            <div className="flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/10 dark:bg-white/5 rounded-lg backdrop-blur-sm">
               <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-[10px] sm:text-xs text-white/70">This Week</p>
+                <p className="text-[10px] sm:text-xs text-white/70 dark:text-white/60">This Week</p>
                 <p className="text-xs sm:text-sm font-medium truncate">
                   {isLoading ? "..." : `${stats.weekAppointments || 0} appts`}
                 </p>
@@ -286,7 +291,7 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
             {/* Logout */}
             <button 
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm hover:bg-white/10 rounded-lg transition-all"
+              className="w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm hover:bg-white/10 dark:hover:bg-white/5 rounded-lg transition-all"
             >
               <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
               <span>Logout</span>

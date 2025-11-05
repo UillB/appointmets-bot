@@ -291,8 +291,8 @@ export function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
       </div>
     );
   }
@@ -301,17 +301,17 @@ export function Dashboard() {
     <div className="space-y-6">
       {/* Bot Status Alerts */}
       {!botActive && (
-        <Alert className="border-red-200 bg-red-50">
-          <Bot className="h-5 w-5 text-red-600 flex-shrink-0" />
-          <AlertDescription className="text-red-900">
+        <Alert className="border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950">
+          <Bot className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+          <AlertDescription className="text-red-900 dark:text-red-100">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex-1">
-                <strong className="font-semibold">Telegram Bot Not Active</strong>
-                <p className="text-sm mt-1">Your bot is not configured yet. Set it up to start receiving appointments through Telegram.</p>
+                <strong className="font-semibold dark:text-red-50">Telegram Bot Not Active</strong>
+                <p className="text-sm mt-1 dark:text-red-100">Your bot is not configured yet. Set it up to start receiving appointments through Telegram.</p>
               </div>
               <Button
                 size="sm"
-                className="bg-red-600 hover:bg-red-700 flex-shrink-0 w-full sm:w-auto"
+                className="bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 flex-shrink-0 w-full sm:w-auto"
                 onClick={() => navigate("/bot-management")}
               >
                 Setup Bot
@@ -323,18 +323,18 @@ export function Dashboard() {
       )}
 
       {botActive && !adminLinked && (
-        <Alert className="border-amber-200 bg-amber-50">
-          <Shield className="h-5 w-5 text-amber-600 flex-shrink-0" />
-          <AlertDescription className="text-amber-900">
+        <Alert className="border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950">
+          <Shield className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+          <AlertDescription className="text-amber-900 dark:text-amber-100">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex-1">
-                <strong className="font-semibold">Admin Account Not Linked</strong>
-                <p className="text-sm mt-1">Complete the setup by linking your Telegram account as administrator.</p>
+                <strong className="font-semibold dark:text-amber-50">Admin Account Not Linked</strong>
+                <p className="text-sm mt-1 dark:text-amber-100">Complete the setup by linking your Telegram account as administrator.</p>
               </div>
               <Button
                 size="sm"
                 variant="outline"
-                className="border-amber-300 hover:bg-amber-100 flex-shrink-0 w-full sm:w-auto"
+                className="border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/50 flex-shrink-0 w-full sm:w-auto"
                 onClick={() => navigate("/bot-management")}
               >
                 Link Admin
@@ -347,10 +347,10 @@ export function Dashboard() {
 
       {/* Welcome Section */}
       <div>
-        <h1 className="text-gray-900 flex items-center gap-2">
+        <h1 className="text-gray-900 dark:text-gray-100 flex items-center gap-2">
           Welcome back, {user?.name || 'User'}! <span className="text-2xl">👋</span>
         </h1>
-        <p className="text-sm text-gray-600 mt-1">
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
           {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </p>
       </div>
@@ -359,7 +359,19 @@ export function Dashboard() {
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-7xl mx-auto space-y-6">
 
-          {/* Quick Actions */}
+          {/* Appointments Summary - Highlighted (FIRST, like in Figma) */}
+          {stats && (
+            <AppointmentsSummaryCard 
+              totalAppointments={stats.totalAppointments}
+              confirmedAppointments={appointmentsStats.confirmed}
+              pendingAppointments={stats.pendingAppointments}
+              rejectedAppointments={appointmentsStats.rejected}
+              botActive={botActive}
+              adminLinked={adminLinked}
+            />
+          )}
+
+          {/* Quick Actions (AFTER Appointments Summary, like in Figma) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {quickActions.map((action) => {
               const QuickActionComponent = () => (
@@ -377,20 +389,10 @@ export function Dashboard() {
             })}
           </div>
 
-          {/* Appointments Summary - Highlighted */}
-          {stats && (
-            <AppointmentsSummaryCard 
-              totalAppointments={stats.totalAppointments}
-              confirmedAppointments={appointmentsStats.confirmed}
-              pendingAppointments={stats.pendingAppointments}
-              rejectedAppointments={appointmentsStats.rejected}
-            />
-          )}
-
           {/* Statistics & Overview */}
           <div className="flex items-center justify-between">
-            <h2 className="text-gray-900">Statistics & Overview</h2>
-            <Button variant="link" className="text-indigo-600 hover:text-indigo-700 p-0 h-auto">
+            <h2 className="text-gray-900 dark:text-gray-100">Statistics & Overview</h2>
+            <Button variant="link" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 p-0 h-auto">
               View All →
             </Button>
           </div>
@@ -415,17 +417,17 @@ export function Dashboard() {
           {/* Calendar and Appointments */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Calendar */}
-            <Card className="p-6">
+            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-2 mb-6">
-                <CalendarDays className="w-5 h-5 text-indigo-600" />
-                <h3 className="text-gray-900">Calendar</h3>
+                <CalendarDays className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <h3 className="text-gray-900 dark:text-gray-100">Calendar</h3>
               </div>
 
               <div className="space-y-4">
                 {/* Month selector */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-lg">
+                    <span className="font-medium text-lg text-gray-900 dark:text-gray-100">
                       {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                     </span>
                   </div>
@@ -433,7 +435,7 @@ export function Dashboard() {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 hover:bg-gray-100"
+                      className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
                       onClick={() => navigateMonth('prev')}
                     >
                       <ChevronLeft className="w-4 h-4" />
@@ -441,7 +443,7 @@ export function Dashboard() {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="h-8 w-8 hover:bg-gray-100"
+                      className="h-8 w-8 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
                       onClick={() => navigateMonth('next')}
                     >
                       <ChevronRight className="w-4 h-4" />
@@ -453,7 +455,7 @@ export function Dashboard() {
                 <div className="grid grid-cols-7 gap-1">
                   {/* Day headers */}
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, idx) => (
-                    <div key={idx} className="text-center text-sm text-gray-500 py-2 font-medium">
+                    <div key={idx} className="text-center text-sm text-gray-500 dark:text-gray-400 py-2 font-medium">
                       {day}
                     </div>
                   ))}
@@ -475,17 +477,17 @@ export function Dashboard() {
                           w-8 h-8 flex flex-col items-center justify-center text-sm rounded-md relative
                           transition-all duration-200 hover:scale-105
                           ${isToday(day)
-                            ? "bg-indigo-600 text-white font-semibold shadow-md"
+                            ? "bg-indigo-600 dark:bg-indigo-500 text-white font-semibold shadow-md"
                             : isSelected(day)
-                            ? "bg-indigo-100 text-indigo-700 font-semibold border-2 border-indigo-300"
-                            : "hover:bg-gray-100 text-gray-700 hover:text-gray-900"
+                            ? "bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 font-semibold border-2 border-indigo-300 dark:border-indigo-700"
+                            : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
                           }
                         `}
                       >
                         <span>{day}</span>
                         {hasAppts && (
                           <div className={`absolute bottom-0.5 w-1 h-1 rounded-full ${
-                            isToday(day) ? "bg-white" : "bg-indigo-600"
+                            isToday(day) ? "bg-white" : "bg-indigo-600 dark:bg-indigo-400"
                           }`} />
                         )}
                       </button>
@@ -495,10 +497,10 @@ export function Dashboard() {
 
                 {/* Selected date info */}
                 {selectedDate && (
-                  <div className="mt-4 p-3 bg-indigo-50 rounded-lg border border-indigo-200">
+                  <div className="mt-4 p-3 bg-indigo-50 dark:bg-indigo-950/30 rounded-lg border border-indigo-200 dark:border-indigo-800">
                     <div className="flex items-center gap-2">
-                      <CalendarDays className="w-4 h-4 text-indigo-600" />
-                      <span className="text-sm font-medium text-indigo-900">
+                      <CalendarDays className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      <span className="text-sm font-medium text-indigo-900 dark:text-indigo-100">
                         Selected: {selectedDate.toLocaleDateString('en-US', { 
                           weekday: 'long', 
                           month: 'long', 
@@ -513,15 +515,15 @@ export function Dashboard() {
             </Card>
 
             {/* Selected Date Appointments */}
-            <Card className="p-6">
+            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
                 <div className="flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-indigo-600" />
-                  <h3 className="text-gray-900">
+                  <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  <h3 className="text-gray-900 dark:text-gray-100">
                     {selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select a date'}
                   </h3>
                 </div>
-                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white h-8 px-3 text-sm whitespace-nowrap">
+                <Button className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white h-8 px-3 text-sm whitespace-nowrap">
                   New Appointment
                 </Button>
               </div>
@@ -541,8 +543,8 @@ export function Dashboard() {
                     return <AppointmentComponent key={idx} />;
                   })
                 ) : (
-                  <div className="text-center py-8 text-gray-500">
-                    <Clock className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <Clock className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" />
                     <p>No appointments for selected date</p>
                     <p className="text-sm">Click on a date in the calendar to view appointments</p>
                   </div>

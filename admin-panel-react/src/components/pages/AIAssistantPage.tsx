@@ -14,25 +14,17 @@ import {
 import {
   Sparkles,
   RefreshCw,
-  Download,
   Save,
   TestTube,
-  Key,
   Zap,
   Brain,
-  BarChart3,
   Settings as SettingsIcon,
   Info,
-  Check,
-  AlertCircle,
-  FileDown,
-  RotateCcw,
+  CheckCircle2,
+  MessageSquare,
 } from "lucide-react";
-import { StatCard } from "../cards/StatCard";
-import { PageHeader } from "../PageHeader";
 import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { Switch } from "../ui/switch";
 import { Slider } from "../ui/slider";
 import { Badge } from "../ui/badge";
@@ -40,7 +32,6 @@ import { Separator } from "../ui/separator";
 import { apiClient, AIConfig } from "../../services/api";
 
 export function AIAssistantPage() {
-  const [activeTab, setActiveTab] = useState("overview");
   const [aiEnabled, setAiEnabled] = useState(true);
   const [autoReply, setAutoReply] = useState(false);
   const [instructions, setInstructions] = useState("");
@@ -64,48 +55,25 @@ export function AIAssistantPage() {
       setIsLoading(true);
       const config = await apiClient.getAIConfig();
       if (config) {
-        setProvider(config.provider);
-        setApiKey(config.apiKey);
-        setModel(config.model);
-        setMaxTokens([config.maxTokens]);
-        setTemperature([config.temperature]);
-        setInstructions(config.instructions);
-        setApiKeyVerified(true);
+        setProvider(config.provider || "openai");
+        setApiKey(config.apiKey || "");
+        setModel(config.model || "gpt-4");
+        setMaxTokens([config.maxTokens || 1000]);
+        setTemperature([config.temperature || 0.7]);
+        setInstructions(config.instructions || "");
+        setAiEnabled(config.isActive !== undefined ? config.isActive : true);
+        setApiKeyVerified(!!config.apiKey);
       }
     } catch (error) {
       console.error('Failed to load AI config:', error);
       // Don't show error toast as config might not exist yet
+      // Set defaults if config doesn't exist
+      setInstructions("");
+      setAiEnabled(true);
     } finally {
       setIsLoading(false);
     }
   };
-
-  const stats = [
-    {
-      icon: Zap,
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-600",
-      title: "Total Requests",
-      value: 30,
-      subtitle: "Last 30 days",
-    },
-    {
-      icon: Brain,
-      iconBg: "bg-purple-50",
-      iconColor: "text-purple-600",
-      title: "Tokens Used",
-      value: "44.0K",
-      subtitle: "Total consumed",
-    },
-    {
-      icon: BarChart3,
-      iconBg: "bg-emerald-50",
-      iconColor: "text-emerald-600",
-      title: "Avg Tokens/Request",
-      value: "1,466",
-      subtitle: "Average usage",
-    },
-  ];
 
   const providers = [
     { id: "openai", name: "OpenAI (ChatGPT)", models: ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"] },
@@ -203,7 +171,7 @@ export function AIAssistantPage() {
                 </Button>
                 <Badge
                   variant="outline"
-                  className="hidden sm:flex bg-purple-50 text-purple-700 border-purple-200"
+                  className="hidden sm:flex bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800"
                 >
                   BETA
                 </Badge>
@@ -219,62 +187,29 @@ export function AIAssistantPage() {
             }
           />
 
-          {/* Main Content */}
-          <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
-            <div className="max-w-7xl mx-auto space-y-6">
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {stats.map((stat, index) => {
-              const StatCardComponent = () => (
-                <StatCard 
-                  icon={stat.icon}
-                  iconBg={stat.iconBg}
-                  iconColor={stat.iconColor}
-                  title={stat.title}
-                  value={stat.value}
-                  subtitle={stat.subtitle}
-                />
-              );
-              return <StatCardComponent key={stat.title} />;
-            })}
-          </div>
-
-          {/* Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="overview" className="gap-2">
-                <Sparkles className="w-4 h-4" />
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="configuration" className="gap-2">
-                <SettingsIcon className="w-4 h-4" />
-                Configuration
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Overview Tab */}
-            <TabsContent value="overview" className="mt-0 space-y-6">
-              {/* Activation Card */}
-              <Card className="p-6 bg-white">
+          {/* Main Content - Like in Figma (no tabs, no stats) */}
+          <div className="max-w-5xl mx-auto space-y-6">
+            {/* Activation Card - Like in Figma */}
+            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg mb-2 flex items-center gap-2">
-                      <Zap className="w-5 h-5 text-indigo-600" />
-                      Activation
+                    <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                      <Zap className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                      AI Assistant Controls
                     </h3>
-                    <p className="text-sm text-gray-500">
-                      Enable or disable AI assistant features
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Enable and configure AI-powered responses
                     </p>
                   </div>
 
-                  <Separator />
+                  <Separator className="bg-gray-200 dark:bg-gray-700" />
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div className="flex-1">
-                        <Label className="text-base">Enable AI Assistant</Label>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Activate AI-powered responses for client inquiries
+                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">Enable AI Assistant</Label>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          Turn on AI-powered responses for client inquiries
                         </p>
                       </div>
                       <Switch
@@ -284,11 +219,11 @@ export function AIAssistantPage() {
                       />
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div className="flex-1">
-                        <Label className="text-base">Auto-Reply Mode</Label>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Automatically respond to messages in Telegram
+                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">Auto-Reply Mode</Label>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          Automatically respond to all Telegram messages
                         </p>
                       </div>
                       <Switch
@@ -300,14 +235,13 @@ export function AIAssistantPage() {
                   </div>
 
                   {aiEnabled && (
-                    <div className="pt-4 border-t bg-blue-50 border-blue-100 rounded-lg p-4">
+                    <div className="pt-4 border-t border-gray-200 dark:border-gray-700 bg-emerald-50 dark:bg-emerald-950 border-emerald-100 dark:border-emerald-900 rounded-lg p-4">
                       <div className="flex items-start gap-3">
-                        <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                        <div className="text-sm text-blue-700">
+                        <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+                        <div className="text-sm text-emerald-700 dark:text-emerald-300">
                           <p className="font-medium mb-1">AI Assistant is Active</p>
                           <p>
-                            After activation, the AI assistant will automatically respond to
-                            clients in your Telegram bot based on the configured instructions.
+                            Your AI assistant is now ready to help clients in your Telegram bot based on the instructions below.
                           </p>
                         </div>
                       </div>
@@ -316,316 +250,143 @@ export function AIAssistantPage() {
                 </div>
               </Card>
 
-              {/* Instructions Card */}
-              <Card className="p-6 bg-white">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg mb-2 flex items-center gap-2">
-                      <Brain className="w-5 h-5 text-purple-600" />
-                      Custom Instructions for AI
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      Add custom instructions to define AI behavior. Core functions
-                      (service info, booking, payments) are handled automatically.
-                    </p>
+            {/* AI Configuration - Like in Figma */}
+            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                    <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                    AI Configuration
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Configure AI model and behavior
+                  </p>
+                </div>
+
+                <Separator className="bg-gray-200 dark:bg-gray-700" />
+
+                {/* LLM Model */}
+                <div className="space-y-2">
+                  <Label htmlFor="model" className="text-gray-900 dark:text-gray-100">LLM Model</Label>
+                  <Select value={model} onValueChange={setModel}>
+                    <SelectTrigger id="model" className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+                      <SelectItem value="gpt-4">GPT-4 (Most Intelligent)</SelectItem>
+                      <SelectItem value="gpt-4-turbo">GPT-4 Turbo (Fast & Smart)</SelectItem>
+                      <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo (Fast & Economical)</SelectItem>
+                      <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
+                      <SelectItem value="claude-3-sonnet">Claude 3 Sonnet</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    More advanced models provide better responses but cost more
+                  </p>
+                </div>
+
+                {/* Temperature */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="temperature" className="text-gray-900 dark:text-gray-100">Temperature</Label>
+                    <Badge variant="outline" className="text-xs border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
+                      {temperature[0]?.toFixed(1) || '0.0'}
+                    </Badge>
                   </div>
-
-                  <Separator />
-
-                  <div className="space-y-2">
-                    <Label htmlFor="instructions">
-                      Additional Instructions
-                      <span className="text-gray-400 text-sm ml-2">(Optional)</span>
-                    </Label>
-                    <Textarea
-                      id="instructions"
-                      placeholder="Example: You are a friendly assistant named David. You should be cheerful, helpful, and respond in a casual tone..."
-                      value={instructions}
-                      onChange={(e) => setInstructions(e.target.value)}
-                      rows={6}
-                      className="resize-none"
-                    />
-                    <p className="text-xs text-gray-500">
-                      {instructions?.length || 0} characters
-                    </p>
+                  <Slider
+                    id="temperature"
+                    min={0}
+                    max={2}
+                    step={0.1}
+                    value={temperature}
+                    onValueChange={setTemperature}
+                    className="py-2"
+                  />
+                  <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                    <span>Precise (0)</span>
+                    <span>Balanced (1)</span>
+                    <span>Creative (2)</span>
                   </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Lower = more focused and consistent. Higher = more creative and varied.
+                  </p>
+                </div>
+              </div>
+            </Card>
 
-                  <div className="bg-amber-50 border border-amber-100 rounded-lg p-4">
-                    <div className="flex items-start gap-3">
-                      <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm text-amber-700">
-                        <p className="font-medium mb-1">Best Practices</p>
-                        <ul className="list-disc list-inside space-y-1">
-                          <li>Be clear and specific about AI personality and tone</li>
-                          <li>Define response language preferences</li>
-                          <li>Set boundaries for what AI can and cannot do</li>
-                          <li>Test thoroughly before enabling auto-reply</li>
-                        </ul>
-                      </div>
+            {/* Custom Instructions - Like in Figma */}
+            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                    <MessageSquare className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                    Custom Instructions
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Teach the AI how to communicate - define personality, tone, and style
+                  </p>
+                </div>
+
+                <Separator className="bg-gray-200 dark:bg-gray-700" />
+
+                <div className="space-y-2">
+                  <Label htmlFor="instructions" className="text-gray-900 dark:text-gray-100">
+                    Prompt / Instructions
+                    <span className="text-gray-400 dark:text-gray-500 text-sm ml-2">(Optional)</span>
+                  </Label>
+                  <Textarea
+                    id="instructions"
+                    placeholder="Example: You are David, a friendly and professional assistant. You should be cheerful, helpful, and respond in a casual but respectful tone. Always greet clients warmly and use their name when possible..."
+                    value={instructions}
+                    onChange={(e) => setInstructions(e.target.value)}
+                    rows={8}
+                    className="resize-none border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {(instructions || "").length} characters • Think of this as training a new employee
+                  </p>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-950 border border-blue-100 dark:border-blue-900 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                    <div className="text-sm text-blue-700 dark:text-blue-300">
+                      <p className="font-medium mb-2">Instruction Tips</p>
+                      <ul className="space-y-1.5 list-disc list-inside">
+                        <li>Define the AI's name and personality</li>
+                        <li>Specify tone: formal, casual, friendly, etc.</li>
+                        <li>Set language and regional preferences</li>
+                        <li>Mention any specific policies or guidelines</li>
+                        <li>Keep it clear and concise</li>
+                      </ul>
                     </div>
                   </div>
                 </div>
-              </Card>
+              </div>
+            </Card>
 
-              {/* Test Card */}
-              <Card className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100">
-                <div className="flex flex-col sm:flex-row items-center gap-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
-                    <TestTube className="w-7 h-7 text-white" />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h3 className="text-lg mb-1">Test AI Assistant</h3>
-                    <p className="text-sm text-gray-600">
-                      Send a test message to verify AI configuration and responses
-                    </p>
-                  </div>
-                  <Button
-                    onClick={handleTest}
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                    disabled={!aiEnabled}
-                  >
-                    <TestTube className="w-4 h-4 mr-2" />
-                    Run Test
-                  </Button>
+            {/* Test AI - Like in Figma */}
+            <Card className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-900">
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <TestTube className="w-7 h-7 text-white" />
                 </div>
-              </Card>
-            </TabsContent>
-
-            {/* Configuration Tab */}
-            <TabsContent value="configuration" className="mt-0">
-              <Card className="p-6 bg-white">
-                <div className="max-w-3xl mx-auto">
-                  {/* Header */}
-                  <div className="text-center mb-8">
-                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <SettingsIcon className="w-8 h-8 text-white" />
-                    </div>
-                    <h2 className="text-2xl mb-2">AI Assistant Configuration</h2>
-                    <p className="text-gray-500">
-                      Set up AI assistant for automated client responses
-                    </p>
-                  </div>
-
-                  {/* Quick Actions */}
-                  <div className="flex flex-wrap gap-2 mb-6 pb-6 border-b">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleRefresh}
-                      className="flex-1 sm:flex-none"
-                    >
-                      <RefreshCw className="w-4 h-4 mr-2" />
-                      Refresh
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleReset}
-                      className="flex-1 sm:flex-none text-amber-600 hover:text-amber-700 border-amber-200 hover:border-amber-300"
-                    >
-                      <RotateCcw className="w-4 h-4 mr-2" />
-                      Reset
-                    </Button>
-                  </div>
-
-                  {/* Form */}
-                  <div className="space-y-6">
-                    {/* Basic Settings */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <SettingsIcon className="w-5 h-5 text-indigo-600" />
-                        <h3 className="text-lg">Basic Settings</h3>
-                      </div>
-
-                      {/* Provider */}
-                      <div className="space-y-2">
-                        <Label htmlFor="provider">
-                          AI Provider <span className="text-red-500">*</span>
-                        </Label>
-                        <Select value={provider} onValueChange={(val) => {
-                          setProvider(val);
-                          setModel(providers.find(p => p.id === val)?.models[0] || "");
-                          setApiKeyVerified(false);
-                        }}>
-                          <SelectTrigger id="provider">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {providers.map((p) => (
-                              <SelectItem key={p.id} value={p.id}>
-                                {p.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      {/* API Key */}
-                      <div className="space-y-2">
-                        <Label htmlFor="api-key">
-                          API Key <span className="text-red-500">*</span>
-                        </Label>
-                        <div className="flex gap-2">
-                          <div className="relative flex-1">
-                            <Input
-                              id="api-key"
-                              type="password"
-                              placeholder="sk-..."
-                              value={apiKey}
-                              onChange={(e) => {
-                                setApiKey(e.target.value);
-                                setApiKeyVerified(false);
-                              }}
-                              className={
-                                apiKeyVerified
-                                  ? "border-emerald-300 pr-10"
-                                  : ""
-                              }
-                            />
-                            {apiKeyVerified && (
-                              <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-emerald-600" />
-                            )}
-                          </div>
-                          <Button
-                            variant="outline"
-                            onClick={handleVerifyKey}
-                            disabled={!apiKey}
-                            className="whitespace-nowrap"
-                          >
-                            <Key className="w-4 h-4 mr-2" />
-                            Verify
-                          </Button>
-                        </div>
-                        <p className="text-xs text-gray-500">
-                          Enter your API key from {selectedProvider?.name}
-                        </p>
-                      </div>
-
-                      {/* Model */}
-                      <div className="space-y-2">
-                        <Label htmlFor="model">
-                          Model <span className="text-red-500">*</span>
-                        </Label>
-                        <Select value={model} onValueChange={setModel}>
-                          <SelectTrigger id="model">
-                            <SelectValue placeholder="Select model" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {selectedProvider?.models.map((m) => (
-                              <SelectItem key={m} value={m}>
-                                {m}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <p className="text-xs text-gray-500">
-                          Choose the model for AI responses
-                        </p>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Advanced Settings */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <Zap className="w-5 h-5 text-purple-600" />
-                        <h3 className="text-lg">Advanced Settings</h3>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {/* Max Tokens */}
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <Label>Maximum Tokens</Label>
-                            <span className="text-sm font-medium text-indigo-600">
-                              {maxTokens[0] || 0}
-                            </span>
-                          </div>
-                          <Slider
-                            value={maxTokens}
-                            onValueChange={setMaxTokens}
-                            min={100}
-                            max={4000}
-                            step={100}
-                            className="w-full"
-                          />
-                          <p className="text-xs text-gray-500">
-                            Maximum response length
-                          </p>
-                        </div>
-
-                        {/* Temperature */}
-                        <div className="space-y-3">
-                          <div className="flex items-center justify-between">
-                            <Label>Temperature</Label>
-                            <span className="text-sm font-medium text-indigo-600">
-                              {temperature[0]?.toFixed(1) || '0.0'}
-                            </span>
-                          </div>
-                          <Slider
-                            value={temperature}
-                            onValueChange={setTemperature}
-                            min={0}
-                            max={2}
-                            step={0.1}
-                            className="w-full"
-                          />
-                          <p className="text-xs text-gray-500">
-                            Response creativity (0-2)
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Custom Instructions */}
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2">
-                        <Brain className="w-5 h-5 text-blue-600" />
-                        <h3 className="text-lg">Custom Instructions</h3>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="config-instructions">
-                          Additional Instructions
-                          <span className="text-gray-400 text-sm ml-2">(Optional)</span>
-                        </Label>
-                        <Textarea
-                          id="config-instructions"
-                          placeholder="Define AI personality, tone, language preferences, and behavior..."
-                          value={instructions}
-                          onChange={(e) => setInstructions(e.target.value)}
-                          rows={5}
-                          className="resize-none"
-                        />
-                        <p className="text-xs text-gray-500">
-                          Core booking functions are configured automatically
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Save Button */}
-                    <div className="pt-6 flex gap-3">
-                      <Button
-                        onClick={handleSave}
-                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
-                      >
-                        <Save className="w-4 h-4 mr-2" />
-                        Save Configuration
-                      </Button>
-                      <Button variant="outline" onClick={handleTest}>
-                        <TestTube className="w-4 h-4 mr-2" />
-                        Test
-                      </Button>
-                    </div>
-                  </div>
+                <div className="flex-1 text-center sm:text-left">
+                  <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Test AI Assistant</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    Send a test message to verify AI configuration and responses
+                  </p>
                 </div>
-              </Card>
-            </TabsContent>
-          </Tabs>
-            </div>
+                <Button
+                  onClick={handleTest}
+                  className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white"
+                  disabled={!aiEnabled}
+                >
+                  <TestTube className="w-4 h-4 mr-2" />
+                  Run Test
+                </Button>
+              </div>
+            </Card>
           </div>
         </div>
       </div>

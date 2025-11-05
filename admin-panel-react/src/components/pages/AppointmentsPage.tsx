@@ -269,7 +269,7 @@ export function AppointmentsPage() {
                   variant="outline"
                   size="sm"
                   onClick={handleRefresh}
-                  className="hidden sm:flex"
+                  className="hidden sm:flex border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Refresh
@@ -277,7 +277,7 @@ export function AppointmentsPage() {
                 <Button
                   onClick={() => setDialogOpen(true)}
                   size="sm"
-                  className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 text-white"
+                  className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   New Appointment
@@ -285,7 +285,7 @@ export function AppointmentsPage() {
                 <Button
                   onClick={() => setSheetOpen(true)}
                   size="sm"
-                  className="sm:hidden bg-indigo-600 hover:bg-indigo-700 text-white"
+                  className="sm:hidden bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white"
                 >
                   <Plus className="w-4 h-4" />
                 </Button>
@@ -311,44 +311,44 @@ export function AppointmentsPage() {
 
           {/* Loading State */}
           {isLoading && (
-            <div className="flex items-center justify-center min-h-[calc(100vh-300px)]">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className="flex items-center justify-center min-h-[calc(100vh-300px)] bg-white dark:bg-gray-900">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
             </div>
           )}
 
           {/* Main Content Card */}
-          <Card className="p-4 lg:p-6 bg-white">
+          <Card className="p-4 lg:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             {/* Tabs - Scrollable on mobile */}
             <ScrollArea className="w-full">
               <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4 lg:mb-6">
-                <TabsList className="bg-gray-100 inline-flex">
+                <TabsList className="bg-gray-100 dark:bg-gray-800 inline-flex">
                   <TabsTrigger 
                     value="all" 
-                    className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white whitespace-nowrap"
+                    className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
                     All ({getTabCount("all")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="confirmed" 
-                    className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white whitespace-nowrap"
+                    className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
                     Confirmed ({getTabCount("confirmed")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="pending" 
-                    className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white whitespace-nowrap"
+                    className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
                     Pending ({getTabCount("pending")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="cancelled" 
-                    className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white whitespace-nowrap"
+                    className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
                     Cancelled ({getTabCount("cancelled")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="rejected" 
-                    className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white whitespace-nowrap"
+                    className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
                     Rejected ({getTabCount("rejected")})
                   </TabsTrigger>
@@ -361,10 +361,10 @@ export function AppointmentsPage() {
               {/* Mobile: Search + Filter Button */}
               <div className="flex gap-2 lg:hidden">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
                     placeholder="Search..."
-                    className="pl-10"
+                    className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -372,27 +372,27 @@ export function AppointmentsPage() {
                 
                 <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
                   <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="relative">
+                    <Button variant="outline" size="icon" className="relative border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
                       <SlidersHorizontal className="w-4 h-4" />
                       {hasActiveFilters && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-indigo-600 rounded-full" />
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-full" />
                       )}
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-[300px]">
+                  <SheetContent side="right" className="w-[300px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                     <div className="space-y-4 pt-6">
-                      <h3 className="font-medium">Filters</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100">Filters</h3>
                       
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Service</label>
+                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Service</label>
                         <Select value={selectedService} onValueChange={setSelectedService}>
-                          <SelectTrigger>
+                          <SelectTrigger className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue placeholder="All Services" />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Services</SelectItem>
+                          <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                            <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Services</SelectItem>
                             {services.map((service) => (
-                              <SelectItem key={service.id} value={service.name}>
+                              <SelectItem key={service.id} value={service.name} className="text-gray-900 dark:text-gray-100">
                                 {service.name}
                               </SelectItem>
                             ))}
@@ -401,20 +401,20 @@ export function AppointmentsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Date</label>
+                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Date</label>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button
                               variant="outline"
-                              className={`w-full justify-start text-left font-normal ${
-                                !date && "text-muted-foreground"
+                              className={`w-full justify-start text-left font-normal border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 ${
+                                !date && "text-gray-500 dark:text-gray-400"
                               }`}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
                               {date ? format(date, "PP") : "Pick a date"}
                             </Button>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
+                          <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800" align="start">
                             <Calendar
                               mode="single"
                               selected={date}
@@ -429,7 +429,7 @@ export function AppointmentsPage() {
                         <Button
                           variant="outline"
                           onClick={clearFilters}
-                          className="w-full text-indigo-600 hover:text-indigo-700"
+                          className="w-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                         >
                           Clear Filters
                         </Button>
@@ -442,10 +442,10 @@ export function AppointmentsPage() {
               {/* Desktop: Full Filters Row */}
               <div className="hidden lg:flex flex-col lg:flex-row gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
                     placeholder="Search by Chat ID or service..."
-                    className="pl-10"
+                    className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -453,13 +453,13 @@ export function AppointmentsPage() {
 
                 <div className="flex gap-2">
                   <Select value={selectedService} onValueChange={setSelectedService}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[180px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                       <SelectValue placeholder="Service" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Services</SelectItem>
+                    <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                      <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Services</SelectItem>
                       {services.map((service) => (
-                        <SelectItem key={service.id} value={service.name}>
+                        <SelectItem key={service.id} value={service.name} className="text-gray-900 dark:text-gray-100">
                           {service.name}
                         </SelectItem>
                       ))}
@@ -470,15 +470,15 @@ export function AppointmentsPage() {
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
-                        className={`w-[180px] justify-start text-left ${
-                          !date && "text-muted-foreground"
+                        className={`w-[180px] justify-start text-left border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 ${
+                          !date && "text-gray-500 dark:text-gray-400"
                         }`}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {date ? format(date, "PP") : "Date"}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800" align="start">
                       <Calendar
                         mode="single"
                         selected={date}
@@ -492,7 +492,7 @@ export function AppointmentsPage() {
                     <Button
                       variant="ghost"
                       onClick={clearFilters}
-                      className="text-indigo-600 hover:text-indigo-700"
+                      className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
                       Clear
                     </Button>
@@ -502,17 +502,17 @@ export function AppointmentsPage() {
             </div>
 
             {/* Desktop: Table View */}
-            <div className="hidden lg:block border rounded-lg overflow-hidden">
+            <div className="hidden lg:block border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-gray-50">
-                    <TableHead>Service</TableHead>
-                    <TableHead>Date & Time</TableHead>
-                    <TableHead>Client / Chat ID</TableHead>
-                    <TableHead>Duration</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                  <TableRow className="bg-gray-50 dark:bg-gray-800">
+                    <TableHead className="text-gray-900 dark:text-gray-100">Service</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">Date & Time</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">Client / Chat ID</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">Duration</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">Status</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">Created</TableHead>
+                    <TableHead className="text-right text-gray-900 dark:text-gray-100">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -520,12 +520,12 @@ export function AppointmentsPage() {
                     <TableRow>
                       <TableCell colSpan={7} className="text-center py-12">
                         <div className="flex flex-col items-center gap-2">
-                          <CalendarDays className="w-12 h-12 text-gray-300" />
-                          <p className="text-gray-500">No appointments found</p>
+                          <CalendarDays className="w-12 h-12 text-gray-300 dark:text-gray-600" />
+                          <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
                           <Button
                             variant="link"
                             onClick={() => setDialogOpen(true)}
-                            className="text-indigo-600"
+                            className="text-indigo-600 dark:text-indigo-400"
                           >
                             Create your first appointment
                           </Button>
@@ -534,19 +534,19 @@ export function AppointmentsPage() {
                     </TableRow>
                   ) : (
                     filteredAppointments.map((apt) => (
-                      <TableRow key={apt.id} className="hover:bg-gray-50">
-                        <TableCell>
+                      <TableRow key={apt.id} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                        <TableCell className="text-gray-900 dark:text-gray-100">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
-                              <CalendarDays className="w-4 h-4 text-indigo-600" />
+                            <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
+                              <CalendarDays className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                             </div>
                             <span className="font-medium">{apt.service?.name || 'Unknown Service'}</span>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="text-gray-900 dark:text-gray-100">
                           <div>
                             <p className="font-medium">{apt.slot?.startAt ? formatDateToLocal(apt.slot.startAt) : 'No date'}</p>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
                               {apt.slot?.startAt && apt.slot?.endAt ? 
                                 `${formatTimeToLocal(apt.slot.startAt)} - ${formatTimeToLocal(apt.slot.endAt)}` : 
                                 'No time info'
@@ -554,41 +554,41 @@ export function AppointmentsPage() {
                             </p>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="text-gray-900 dark:text-gray-100">
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                              <User className="w-4 h-4 text-gray-600" />
+                            <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
+                              <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             </div>
                             <div>
                               <span className="text-sm font-medium">{apt.customerName || 'Unknown'}</span>
-                              <p className="text-xs text-gray-500">ID: {apt.chatId || 'N/A'}</p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">ID: {apt.chatId || 'N/A'}</p>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="text-gray-900 dark:text-gray-100">
                           <div className="text-sm">
                             <span className="font-medium">{apt.service?.durationMin || 'N/A'} min</span>
                           </div>
                         </TableCell>
                         <TableCell>{getStatusBadge(apt.status)}</TableCell>
-                        <TableCell>
+                        <TableCell className="text-gray-900 dark:text-gray-100">
                           <div className="text-sm">
-                            <p className="text-gray-900">{apt.createdAt ? formatDateToLocal(apt.createdAt) : 'N/A'}</p>
-                            <p className="text-xs text-gray-500">{apt.createdAt ? formatTimeToLocal(apt.createdAt) : ''}</p>
+                            <p>{apt.createdAt ? formatDateToLocal(apt.createdAt) : 'N/A'}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{apt.createdAt ? formatTimeToLocal(apt.createdAt) : ''}</p>
                           </div>
                         </TableCell>
                         <TableCell className="text-right">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
+                              <Button variant="ghost" size="icon" className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
                                 <MoreVertical className="w-4 h-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>View Details</DropdownMenuItem>
-                              <DropdownMenuItem>Edit</DropdownMenuItem>
-                              <DropdownMenuItem>Confirm</DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">
+                            <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">View Details</DropdownMenuItem>
+                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Edit</DropdownMenuItem>
+                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Confirm</DropdownMenuItem>
+                              <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30">
                                 Cancel
                               </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -606,12 +606,12 @@ export function AppointmentsPage() {
               {filteredAppointments.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="flex flex-col items-center gap-2">
-                    <CalendarDays className="w-12 h-12 text-gray-300" />
-                    <p className="text-gray-500">No appointments found</p>
+                    <CalendarDays className="w-12 h-12 text-gray-300 dark:text-gray-600" />
+                    <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
                     <Button
                       variant="link"
                       onClick={() => setSheetOpen(true)}
-                      className="text-indigo-600"
+                      className="text-indigo-600 dark:text-indigo-400"
                     >
                       Create your first appointment
                     </Button>
@@ -638,14 +638,14 @@ export function AppointmentsPage() {
             {/* Pagination */}
             {filteredAppointments.length > 0 && (
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 lg:mt-6">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {filteredAppointments.length} of {appointments?.length || 0} appointments
                 </p>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="sm" disabled>
+                  <Button variant="outline" size="sm" disabled className="border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
                     Previous
                   </Button>
-                  <Button variant="outline" size="sm" disabled>
+                  <Button variant="outline" size="sm" disabled className="border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
                     Next
                   </Button>
                 </div>

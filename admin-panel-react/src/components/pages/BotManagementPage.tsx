@@ -661,50 +661,50 @@ export function BotManagementPage() {
           <div className="max-w-5xl mx-auto">
             <Card className="p-8 sm:p-12">
               <div className="text-center max-w-2xl mx-auto">
-                <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Bot className="w-10 h-10 text-indigo-600" />
+                <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Bot className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 
-                <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+                <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
                   {t('botManagement.emptyState.title')}
                 </h2>
-                <p className="text-gray-600 mb-8">
+                <p className="text-gray-600 dark:text-gray-400 mb-8">
                   {t('botManagement.emptyState.description')}
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                  <div className="p-4 bg-indigo-50 rounded-lg border-2 border-transparent hover:border-indigo-200 transition-colors text-center">
-                    <div className="w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                  <div className="p-4 bg-indigo-50 dark:bg-indigo-950/50 rounded-lg border-2 border-transparent hover:border-indigo-200 dark:hover:border-indigo-800 transition-colors text-center">
+                    <div className="w-8 h-8 bg-indigo-600 dark:bg-indigo-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
                       1
                     </div>
-                    <p className="text-sm font-medium text-gray-900 mb-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                       {t('botManagement.emptyState.step1.title')}
                     </p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                       {t('botManagement.emptyState.step1.description')}
                     </p>
                   </div>
 
-                  <div className="p-4 bg-purple-50 rounded-lg border-2 border-transparent hover:border-purple-200 transition-colors text-center">
-                    <div className="w-8 h-8 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                  <div className="p-4 bg-purple-50 dark:bg-purple-950/50 rounded-lg border-2 border-transparent hover:border-purple-200 dark:hover:border-purple-800 transition-colors text-center">
+                    <div className="w-8 h-8 bg-purple-600 dark:bg-purple-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
                       2
                     </div>
-                    <p className="text-sm font-medium text-gray-900 mb-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                       {t('botManagement.emptyState.step2.title')}
                     </p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                       {t('botManagement.emptyState.step2.description')}
                     </p>
                   </div>
 
-                  <div className="p-4 bg-pink-50 rounded-lg border-2 border-transparent hover:border-pink-200 transition-colors text-center">
-                    <div className="w-8 h-8 bg-pink-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                  <div className="p-4 bg-pink-50 dark:bg-pink-950/50 rounded-lg border-2 border-transparent hover:border-pink-200 dark:hover:border-pink-800 transition-colors text-center">
+                    <div className="w-8 h-8 bg-pink-600 dark:bg-pink-500 text-white rounded-full flex items-center justify-center mx-auto mb-2">
                       3
                     </div>
-                    <p className="text-sm font-medium text-gray-900 mb-1">
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                       {t('botManagement.emptyState.step3.title')}
                     </p>
-                    <p className="text-xs text-gray-600">
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                       {t('botManagement.emptyState.step3.description')}
                     </p>
                   </div>
@@ -719,7 +719,7 @@ export function BotManagementPage() {
                   {t('botManagement.emptyState.startButton')}
                 </Button>
 
-                <p className="text-sm text-gray-500 mt-4">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-4">
                   {t('botManagement.emptyState.footer')}
                 </p>
               </div>
@@ -765,30 +765,30 @@ export function BotManagementPage() {
             <Card className="p-5">
               <div className="flex items-start gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                  botActive ? 'bg-emerald-100' : 'bg-gray-100'
+                  botActive ? 'bg-emerald-100 dark:bg-emerald-900/50' : 'bg-gray-100 dark:bg-gray-800'
                 }`}>
                   <Power className={`w-5 h-5 ${botActive ? 'text-emerald-600' : 'text-gray-400'}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-600">Status</p>
-                  <p className="font-medium text-gray-900">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Status</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-100">
                     {botActive ? "Active" : "Inactive"}
                   </p>
                 </div>
                 {botActive && (
-                  <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse mt-2" />
+                  <div className="w-2 h-2 bg-emerald-500 dark:bg-emerald-400 rounded-full animate-pulse mt-2" />
                 )}
               </div>
             </Card>
 
             <Card className="p-5">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-indigo-600" />
+                <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-600">Bot</p>
-                  <p className="font-medium text-gray-900 truncate">{botUsername || t('common.loading')}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Bot</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-100 truncate">{botUsername || t('common.loading')}</p>
                 </div>
               </div>
             </Card>
@@ -796,13 +796,13 @@ export function BotManagementPage() {
             <Card className="p-5">
               <div className="flex items-start gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                  adminLinked ? 'bg-purple-100' : 'bg-amber-100'
+                  adminLinked ? 'bg-purple-100 dark:bg-purple-900/50' : 'bg-amber-100 dark:bg-amber-900/50'
                 }`}>
                   <Shield className={`w-5 h-5 ${adminLinked ? 'text-purple-600' : 'text-amber-600'}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-600">Admin</p>
-                  <p className="font-medium text-gray-900">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Admin</p>
+                  <p className="font-medium text-gray-900 dark:text-gray-100">
                     {adminLinked ? 'Linked' : 'Not Linked'}
                   </p>
                 </div>
@@ -812,9 +812,9 @@ export function BotManagementPage() {
 
           {/* Admin Not Linked Alert */}
           {!adminLinked && botActive && (
-            <Alert className="border-amber-200 bg-amber-50">
-              <AlertCircle className="h-4 w-4 text-amber-600" />
-              <AlertDescription className="text-amber-900">
+            <Alert className="border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/50">
+              <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+              <AlertDescription className="text-amber-900 dark:text-amber-100">
                 <div className="flex items-center justify-between">
                   <span>
                     <strong>Action Required:</strong> Admin account not linked. Complete Step 3 to authorize admin access.
@@ -823,7 +823,7 @@ export function BotManagementPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => setActiveTab("admin-link")}
-                    className="ml-4 border-amber-300 hover:bg-amber-100"
+                    className="ml-4 border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/50"
                   >
                     Link Admin
                     <ArrowRight className="w-4 h-4 ml-1" />
@@ -835,7 +835,7 @@ export function BotManagementPage() {
 
           {/* Main Tabs - Step-by-Step Setup */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 h-auto p-1 bg-gray-100">
+            <TabsList className="grid w-full grid-cols-4 h-auto p-1 bg-gray-100 dark:bg-gray-800">
               <TabsTrigger value="instructions" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                 {botName ? (
                   <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
@@ -881,39 +881,39 @@ export function BotManagementPage() {
 
             {/* Instructions Tab */}
             <TabsContent value="instructions" className="mt-6">
-              <Card className="p-8 bg-white">
+              <Card className="p-8 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="max-w-4xl mx-auto">
                   <div className="text-center mb-8">
-                    <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <BookOpen className="w-10 h-10 text-indigo-600" />
+                    <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <BookOpen className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-3">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">
                       {t('botManagement.howToCreateBot')}
                     </h2>
-                    <p className="text-gray-600 text-lg">
+                    <p className="text-gray-600 dark:text-gray-400 text-lg">
                       {t('botManagement.stepByStepGuide')}
                     </p>
                   </div>
 
                   <div className="space-y-6">
                     {/* Step 1 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100 hover:shadow-md transition-shadow">
-                      <div className="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
+                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-xl border border-indigo-100 dark:border-indigo-900 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
                         1
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900">
+                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">
                             {t('botManagement.step1Title')}
                           </h4>
-                          <CheckCircle2Icon className="w-5 h-5 text-indigo-600" />
+                          <CheckCircle2Icon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                         </div>
-                        <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                           {t('botManagement.step1Description')}
                         </p>
-                        <div className="mt-3 p-3 bg-white rounded-lg border border-indigo-200">
-                          <p className="text-xs text-gray-600 font-medium mb-1">{t('botManagement.step1HowTo')}</p>
-                          <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                        <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-indigo-200 dark:border-indigo-900">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{t('botManagement.step1HowTo')}</p>
+                          <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1 list-disc list-inside">
                             <li>{t('botManagement.step1List1')}</li>
                             <li>{t('botManagement.step1List2')}</li>
                             <li>{t('botManagement.step1List3')}</li>
@@ -923,23 +923,23 @@ export function BotManagementPage() {
                     </div>
 
                     {/* Step 2 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
-                      <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
+                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 rounded-xl border border-blue-100 dark:border-blue-900 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 rounded-full bg-blue-600 dark:bg-blue-500 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
                         2
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900">
+                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">
                             {t('botManagement.step2Title')}
                           </h4>
-                          <CheckCircle2Icon className="w-5 h-5 text-blue-600" />
+                          <CheckCircle2Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                           {t('botManagement.step2Description')}
                         </p>
-                        <div className="mt-3 p-3 bg-white rounded-lg border border-blue-200">
-                          <p className="text-xs text-gray-600 font-medium mb-1">{t('botManagement.step2HowTo')}</p>
-                          <ul className="text-xs text-gray-700 space-y-1 list-disc list-inside">
+                        <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-blue-200 dark:border-blue-900">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{t('botManagement.step2HowTo')}</p>
+                          <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1 list-disc list-inside">
                             <li>{t('botManagement.step2List1')}</li>
                             <li>{t('botManagement.step2List2')}</li>
                             <li>{t('botManagement.step2List3')}</li>
@@ -950,39 +950,39 @@ export function BotManagementPage() {
                     </div>
 
                     {/* Step 3 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100 hover:shadow-md transition-shadow">
-                      <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
+                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 rounded-xl border border-purple-100 dark:border-purple-900 hover:shadow-md transition-shadow">
+                      <div className="w-12 h-12 rounded-full bg-purple-600 dark:bg-purple-500 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
                         3
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900">
+                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">
                             {t('botManagement.step3Title')}
                           </h4>
-                          <CheckCircle2Icon className="w-5 h-5 text-purple-600" />
+                          <CheckCircle2Icon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                         </div>
-                        <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
                           {t('botManagement.step3Description')}
                         </p>
-                        <div className="mt-3 p-3 bg-white rounded-lg border border-purple-200">
-                          <p className="text-xs text-gray-600 font-medium mb-1">{t('botManagement.step3Format')}</p>
-                          <code className="block text-xs bg-gray-900 text-green-400 px-3 py-2 rounded font-mono mt-2">
+                        <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-900">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{t('botManagement.step3Format')}</p>
+                          <code className="block text-xs bg-gray-900 dark:bg-gray-950 text-green-400 dark:text-green-500 px-3 py-2 rounded font-mono mt-2">
                             123456789:ABCdefGHijKlMNOpqrsTUVwxyz
                           </code>
                           <div className="flex items-start gap-2 mt-2">
-                            <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0 mt-0.5" />
-                            <p className="text-xs text-gray-600">
-                              <span className="font-semibold text-red-600">{t('common.error')}:</span> {t('botManagement.step3Important')}
+                            <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                              <span className="font-semibold text-red-600 dark:text-red-400">{t('common.error')}:</span> {t('botManagement.step3Important')}
                             </p>
                           </div>
                         </div>
                         <div className="mt-3 flex items-center gap-2">
-                          <ArrowRight className="w-4 h-4 text-purple-600" />
+                          <ArrowRight className="w-4 h-4 text-purple-600 dark:text-purple-400" />
                           <Button
                             onClick={() => setActiveTab("activation")}
                             variant="outline"
                             size="sm"
-                            className="text-xs hover:bg-purple-50 hover:border-purple-300"
+                            className="text-xs hover:bg-purple-50 dark:hover:bg-purple-950/50 hover:border-purple-300 dark:hover:border-purple-700"
                           >
                             {t('botManagement.step3GoToActivation')}
                           </Button>
@@ -992,27 +992,27 @@ export function BotManagementPage() {
                   </div>
 
                   {/* Warning Alert */}
-                  <div className="mt-8 p-5 bg-amber-50 border-2 border-amber-200 rounded-xl">
+                  <div className="mt-8 p-5 bg-amber-50 dark:bg-amber-950/50 border-2 border-amber-200 dark:border-amber-900 rounded-xl">
                     <div className="flex gap-3">
-                      <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <AlertCircle className="w-6 h-6 text-amber-600" />
+                      <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <AlertCircle className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-amber-900 mb-2 flex items-center gap-2">
-                          <AlertCircle className="w-5 h-5 text-amber-600" />
+                        <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2 flex items-center gap-2">
+                          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                           {t('botManagement.securityWarning')}
                         </h4>
-                        <ul className="text-sm text-amber-800 space-y-1.5">
+                        <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-1.5">
                           <li className="flex items-start gap-2">
-                            <span className="text-amber-600 mt-0.5">•</span>
+                            <span className="text-amber-600 dark:text-amber-400 mt-0.5">•</span>
                             <span>{t('botManagement.securityWarning1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
-                            <span className="text-amber-600 mt-0.5">•</span>
+                            <span className="text-amber-600 dark:text-amber-400 mt-0.5">•</span>
                             <span>{t('botManagement.securityWarning2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
-                            <span className="text-amber-600 mt-0.5">•</span>
+                            <span className="text-amber-600 dark:text-amber-400 mt-0.5">•</span>
                             <span>{t('botManagement.securityWarning3')}</span>
                           </li>
                         </ul>
@@ -1025,20 +1025,20 @@ export function BotManagementPage() {
 
             {/* Activation Tab */}
             <TabsContent value="activation" className="mt-6">
-              <Card className="p-8 bg-white border-2 border-indigo-100 shadow-lg">
+              <Card className="p-8 bg-white dark:bg-gray-900 border-2 border-indigo-100 dark:border-indigo-900 shadow-lg">
                 <div className="max-w-2xl mx-auto">
                   <div className="text-center mb-8">
-                    <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Key className="w-10 h-10 text-indigo-600" />
+                    <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Key className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-3">{t('botManagement.activationTitle')}</h2>
-                    <p className="text-gray-600 text-lg">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">{t('botManagement.activationTitle')}</h2>
+                    <p className="text-gray-600 dark:text-gray-400 text-lg">
                       {t('botManagement.activationDescription')}
                     </p>
                     {!botActive && (
-                      <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg">
-                        <AlertCircle className="w-4 h-4 text-amber-600" />
-                        <span className="text-sm text-amber-800">
+                      <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-900 rounded-lg">
+                        <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                        <span className="text-sm text-amber-800 dark:text-amber-200">
                           {t('botManagement.botNotActiveAlert')}
                         </span>
                       </div>
@@ -1089,22 +1089,22 @@ export function BotManagementPage() {
                     </div>
 
                     {/* Info Card */}
-                    <div className="p-5 bg-blue-50 border border-blue-200 rounded-xl">
+                    <div className="p-5 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900 rounded-xl">
                       <div className="flex gap-3">
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <HelpCircle className="w-5 h-5 text-blue-600" />
+                        <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-blue-900 mb-2">
+                          <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
                             {t('botManagement.tokenFormat')}
                           </h4>
-                          <p className="text-sm text-blue-800 mb-2">
+                          <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
                             {t('botManagement.tokenFormatDescription')}
                           </p>
-                          <code className="block text-xs bg-white px-3 py-2 rounded border border-blue-200 text-blue-700 font-mono">
+                          <code className="block text-xs bg-white dark:bg-gray-800 px-3 py-2 rounded border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 font-mono">
                             123456789:ABCdefGHijKlMNOpqrsTUVwxyz
                           </code>
-                          <p className="text-sm text-blue-800 mt-3">
+                          <p className="text-sm text-blue-800 dark:text-blue-200 mt-3">
                             {t('botManagement.tokenFormatGetFrom')}
                           </p>
                         </div>
@@ -1191,27 +1191,27 @@ export function BotManagementPage() {
                 </Card>
               )}
               {/* Bot Status Section */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <AlertCircle className="w-5 h-5 text-indigo-600" />
+                  <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
+                    <AlertCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Статус бота</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Статус бота</h3>
                 </div>
 
                 {isLoading ? (
-                  <p className="text-gray-500">Загрузка статуса бота...</p>
+                  <p className="text-gray-500 dark:text-gray-400">Загрузка статуса бота...</p>
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
                       <Badge
                         variant={botActive ? "default" : "destructive"}
-                        className={`text-sm px-3 py-1 ${botActive ? "bg-green-500" : "bg-red-500"} text-white`}
+                        className={`text-sm px-3 py-1 ${botActive ? "bg-green-500 dark:bg-green-600" : "bg-red-500 dark:bg-red-600"} text-white`}
                       >
                         {botActive ? "Активен" : "Неактивен"}
                       </Badge>
                       {botStatus?.error && (
-                        <span className="text-sm text-red-600 flex items-center gap-1">
+                        <span className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
                           <AlertCircle className="w-4 h-4" /> {botStatus.error}
                         </span>
                       )}
@@ -1219,30 +1219,30 @@ export function BotManagementPage() {
                     {botActive && (
                       <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                            <Users className="w-5 h-5 text-gray-600" />
+                          <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                             <div className="flex-1">
-                              <p className="text-sm text-gray-600">Имя бота</p>
-                              <p className="text-sm font-medium text-gray-900">{botName || "Не указано"}</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">Имя бота</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botName || "Не указано"}</p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                            <AtSign className="w-5 h-5 text-gray-600" />
+                          <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <AtSign className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                             <div className="flex-1">
-                              <p className="text-sm text-gray-600">Username</p>
-                              <p className="text-sm font-medium text-gray-900">{botUsername || "Не указано"}</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">Username</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botUsername || "Не указано"}</p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                          <LinkIcon className="w-5 h-5 text-gray-600" />
+                        <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <LinkIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                           <div className="flex-1">
-                            <p className="text-sm text-gray-600">Ссылка на бота</p>
-                            <p className="text-sm font-medium text-gray-900">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">Ссылка на бота</p>
+                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                               {botLink ? (
-                                <a href={botLink} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">
+                                <a href={botLink} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 hover:underline">
                                   {botLink}
                                 </a>
                               ) : (
@@ -1254,21 +1254,21 @@ export function BotManagementPage() {
 
                         {botStatus && (
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                              <CheckCircle className="w-5 h-5 text-green-600" />
+                            <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                               <div className="flex-1">
-                                <p className="text-sm text-gray-600">Может присоединяться к группам</p>
-                                <p className="text-sm font-medium text-gray-900">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Может присоединяться к группам</p>
+                                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                   {botStatus.canJoinGroups ? "Да" : "Нет"}
                                 </p>
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                              <Eye className="w-5 h-5 text-blue-600" />
+                            <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                              <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                               <div className="flex-1">
-                                <p className="text-sm text-gray-600">Может читать сообщения групп</p>
-                                <p className="text-sm font-medium text-gray-900">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">Может читать сообщения групп</p>
+                                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                   {botStatus.canReadAllGroupMessages ? "Да" : "Нет"}
                                 </p>
                               </div>
@@ -1278,7 +1278,7 @@ export function BotManagementPage() {
                       </>
                     )}
                     {!botActive && (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Бот неактивен. Пожалуйста, введите и активируйте токен бота.
                       </p>
                     )}
@@ -1287,15 +1287,15 @@ export function BotManagementPage() {
               </Card>
 
               {/* Basic Settings Section */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <SettingsIcon className="w-5 h-5 text-indigo-600" />
+                  <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
+                    <SettingsIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Основные настройки</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Основные настройки</h3>
                 </div>
 
-                <p className="text-sm text-gray-600 mb-6">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                   Настройте имя и описание вашего бота
                 </p>
 
@@ -1312,13 +1312,13 @@ export function BotManagementPage() {
                       className="h-11"
                       maxLength={64}
                     />
-                    <p className="text-xs text-gray-500 mt-1.5">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
                       {botName.length}/64
                     </p>
                   </div>
 
                   <div>
-                    <Label htmlFor="bot-description" className="mb-2 block">
+                    <Label htmlFor="bot-description" className="mb-2 block text-gray-900 dark:text-gray-100">
                       Описание бота
                     </Label>
                     <Textarea
@@ -1328,9 +1328,9 @@ export function BotManagementPage() {
                       placeholder="Краткое описание функций бота..."
                       rows={4}
                       maxLength={512}
-                      className="resize-none"
+                      className="resize-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700"
                     />
-                    <p className="text-xs text-gray-500 mt-1.5">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5">
                       {botDescription.length}/512
                     </p>
                   </div>
@@ -1369,27 +1369,27 @@ export function BotManagementPage() {
               </Card>
 
               {/* Share Bot Section */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <Share2 className="w-5 h-5 text-indigo-600" />
+                  <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
+                    <Share2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Поделиться ботом</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Поделиться ботом</h3>
                 </div>
 
-                <p className="text-sm text-gray-600 mb-6">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
                   Поделитесь ссылкой на вашего бота с клиентами
                 </p>
 
                 <div className="space-y-5">
                   {/* Link Field */}
                   <div>
-                    <Label className="mb-2 block">Ссылка на бота</Label>
+                    <Label className="mb-2 block text-gray-900 dark:text-gray-100">Ссылка на бота</Label>
                     <div className="flex gap-2">
                       <Input
                         value={botLink}
                         readOnly
-                        className="flex-1 bg-gray-50 h-11"
+                        className="flex-1 bg-gray-50 dark:bg-gray-800 h-11 text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700"
                       />
                       <Button
                         variant="outline"
@@ -1402,10 +1402,10 @@ export function BotManagementPage() {
                   </div>
 
                   {/* QR Code */}
-                  <div className="flex flex-col items-center py-8 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+                  <div className="flex flex-col items-center py-8 bg-gray-50 dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700">
                     {qrCodeDataUrl ? (
                       <>
-                        <div className="relative w-48 h-48 bg-white rounded-lg shadow-md p-3 mb-4 group">
+                        <div className="relative w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3 mb-4 group">
                           <img 
                             src={qrCodeDataUrl} 
                             alt="QR Code" 
@@ -1416,35 +1416,35 @@ export function BotManagementPage() {
                             <Button
                               onClick={handleCopyQRCode}
                               size="sm"
-                              className="bg-white text-gray-900 hover:bg-gray-100"
+                              className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700"
                             >
                               <Copy className="w-4 h-4 mr-2" />
                               Копировать
                             </Button>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-600 mb-4 text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
                           Отсканируйте QR код для быстрого доступа к боту
                         </p>
-                        <p className="text-xs text-gray-500 mb-4 text-center">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 text-center">
                           Наведите курсор на QR-код для копирования
                         </p>
                       </>
                     ) : botLink && botLink !== "https://t.me/" ? (
                       <div className="flex flex-col items-center">
-                        <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3 mb-4 flex items-center justify-center">
-                          <RefreshCw className="w-8 h-8 text-gray-400 animate-spin" />
+                        <div className="w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3 mb-4 flex items-center justify-center">
+                          <RefreshCw className="w-8 h-8 text-gray-400 dark:text-gray-500 animate-spin" />
                         </div>
-                        <p className="text-sm text-gray-600 mb-4">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                           Генерация QR-кода...
                         </p>
                       </div>
                     ) : (
                       <>
-                        <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3 mb-4 flex items-center justify-center">
-                          <QrCode className="w-24 h-24 text-gray-300" />
+                        <div className="w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3 mb-4 flex items-center justify-center">
+                          <QrCode className="w-24 h-24 text-gray-300 dark:text-gray-600" />
                         </div>
-                        <p className="text-sm text-gray-600 mb-4 text-center">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
                           QR-код будет доступен после активации бота
                         </p>
                       </>
@@ -1495,7 +1495,7 @@ export function BotManagementPage() {
 
                   {/* Share Options */}
                   <div>
-                    <Label className="mb-3 block text-sm font-medium text-gray-700">
+                    <Label className="mb-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       Поделиться ботом
                     </Label>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -1535,22 +1535,22 @@ export function BotManagementPage() {
 
             {/* Step 3: Link Admin Account Tab */}
             <TabsContent value="admin-link" className="mt-6">
-              <Card className="p-8 bg-white">
+              <Card className="p-8 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-indigo-600 text-white flex items-center justify-center font-semibold text-lg">
+                  <div className="w-12 h-12 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center font-semibold text-lg">
                     3
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-gray-900">Link Admin Account</h2>
-                    <p className="text-gray-600">Authorize your Telegram account as administrator</p>
+                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Link Admin Account</h2>
+                    <p className="text-gray-600 dark:text-gray-400">Authorize your Telegram account as administrator</p>
                   </div>
                 </div>
 
                 {!botActive ? (
                   <div className="space-y-4">
-                    <Alert className="border-amber-200 bg-amber-50">
-                      <AlertCircle className="h-4 w-4 text-amber-600" />
-                      <AlertDescription className="text-amber-900 text-sm">
+                    <Alert className="border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/50">
+                      <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                      <AlertDescription className="text-amber-900 dark:text-amber-100 text-sm">
                         <strong>Bot must be activated first:</strong> Please complete Step 2 (Activation) before linking your admin account.
                       </AlertDescription>
                     </Alert>
@@ -1565,19 +1565,19 @@ export function BotManagementPage() {
                   </div>
                 ) : adminLinked ? (
                   <div className="space-y-6">
-                    <Alert className="border-emerald-200 bg-emerald-50">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                      <AlertDescription className="text-emerald-900">
+                    <Alert className="border-emerald-200 dark:border-emerald-900 bg-emerald-50 dark:bg-emerald-950/50">
+                      <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                      <AlertDescription className="text-emerald-900 dark:text-emerald-100">
                         <strong>Success!</strong> Your admin account has been linked. You now have full access to the bot management panel.
                       </AlertDescription>
                     </Alert>
 
-                    <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-lg border border-emerald-200 text-center">
-                      <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 rounded-lg border border-emerald-200 dark:border-emerald-900 text-center">
+                      <div className="w-16 h-16 bg-emerald-600 dark:bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
                         <CheckCircle2 className="w-8 h-8 text-white" />
                       </div>
-                      <h3 className="font-semibold text-gray-900 mb-2">Setup Complete!</h3>
-                      <p className="text-gray-600 mb-4">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Setup Complete!</h3>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
                         Your Telegram bot is fully configured and ready to use.
                       </p>
                       
@@ -1598,28 +1598,28 @@ export function BotManagementPage() {
                         </Button>
                       </div>
                       
-                      <div className="mt-4 pt-4 border-t border-emerald-200">
+                      <div className="mt-4 pt-4 border-t border-emerald-200 dark:border-emerald-900">
                         <Button
                           variant="outline"
                           onClick={() => setShowUnlinkDialog(true)}
-                          className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                          className="w-full text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50 border-red-200 dark:border-red-900"
                         >
                           <Unlink className="w-4 h-4 mr-2" />
                           Unlink Telegram Account
                         </Button>
-                        <p className="text-xs text-gray-500 mt-2 text-center">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
                           Unlink your Telegram account to remove admin access from the bot
                         </p>
                       </div>
                     </div>
 
                     {/* Admin Commands Reference */}
-                    <Card className="p-6 bg-gray-50">
+                    <Card className="p-6 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
                       <div className="flex items-center gap-3 mb-4">
-                        <Terminal className="w-5 h-5 text-indigo-600" />
-                        <h3 className="font-medium text-gray-900">Available Admin Commands</h3>
+                        <Terminal className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                        <h3 className="font-medium text-gray-900 dark:text-gray-100">Available Admin Commands</h3>
                       </div>
-                      <p className="text-sm text-gray-600 mb-4">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                         These commands are only available when your Telegram account is linked and the bot is active:
                       </p>
                       
@@ -1633,11 +1633,11 @@ export function BotManagementPage() {
                         ].map(({ cmd, desc }) => (
                           <div
                             key={cmd}
-                            className="flex items-center justify-between p-3 bg-white rounded-lg group hover:bg-gray-50 transition-colors"
+                            className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                           >
                             <div>
-                              <code className="text-sm font-medium text-indigo-600">{cmd}</code>
-                              <p className="text-xs text-gray-600 mt-0.5">{desc}</p>
+                              <code className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{cmd}</code>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{desc}</p>
                             </div>
                             <Button
                               variant="ghost"
@@ -1657,36 +1657,36 @@ export function BotManagementPage() {
                   </div>
                 ) : (
                   <div className="space-y-6">
-                    <Alert className="border-amber-200 bg-amber-50">
-                      <AlertCircle className="h-4 w-4 text-amber-600" />
-                      <AlertDescription className="text-amber-900 text-sm">
+                    <Alert className="border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/50">
+                      <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                      <AlertDescription className="text-amber-900 dark:text-amber-100 text-sm">
                         <strong>Important:</strong> Only authorized admins can access this management panel. Complete this step to enable admin access.
                       </AlertDescription>
                     </Alert>
 
-                    <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg border-2 border-dashed border-indigo-200">
-                      <h3 className="font-medium text-gray-900 mb-4 text-center">Scan QR Code or Click Button</h3>
+                    <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-lg border-2 border-dashed border-indigo-200 dark:border-indigo-900">
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-4 text-center">Scan QR Code or Click Button</h3>
                       
                       {/* QR Code */}
                       {adminLinkQRCode ? (
                         <div className="flex flex-col items-center mb-4">
-                          <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3">
+                          <div className="w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3">
                             <img 
                               src={adminLinkQRCode} 
                               alt="Admin Link QR Code" 
                               className="w-full h-full object-contain"
                             />
                           </div>
-                          <p className="text-sm text-gray-600 text-center mt-3">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-3">
                             Scan with Telegram mobile app
                           </p>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center mb-4">
-                          <div className="w-48 h-48 bg-white rounded-lg shadow-md p-3 flex items-center justify-center">
-                            <QrCode className="w-24 h-24 text-gray-300" />
+                          <div className="w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3 flex items-center justify-center">
+                            <QrCode className="w-24 h-24 text-gray-300 dark:text-gray-600" />
                           </div>
-                          <p className="text-sm text-gray-600 text-center mt-3">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-3">
                             QR code will appear after generating link
                           </p>
                         </div>
@@ -1694,10 +1694,10 @@ export function BotManagementPage() {
 
                       <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
-                          <div className="w-full border-t border-gray-300"></div>
+                          <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                          <span className="px-4 bg-gradient-to-br from-indigo-50 to-purple-50 text-gray-600">or</span>
+                          <span className="px-4 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 text-gray-600 dark:text-gray-400">or</span>
                         </div>
                       </div>
 
@@ -1707,7 +1707,7 @@ export function BotManagementPage() {
                           <Button
                             onClick={handleGenerateAdminLink}
                             disabled={isGeneratingAdminLink}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 h-12"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 h-12"
                           >
                             {isGeneratingAdminLink ? (
                               <>
@@ -1724,12 +1724,12 @@ export function BotManagementPage() {
                         ) : (
                           <>
                             <div className="space-y-2">
-                              <Label className="mb-2 block">Authorization Link</Label>
+                              <Label className="mb-2 block text-gray-900 dark:text-gray-100">Authorization Link</Label>
                               <div className="flex gap-2">
                                 <Input
                                   value={adminLink}
                                   readOnly
-                                  className="flex-1 bg-gray-50 h-11 font-mono text-xs"
+                                  className="flex-1 bg-gray-50 dark:bg-gray-800 h-11 font-mono text-xs text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700"
                                 />
                                 <Button
                                   variant="outline"
@@ -1739,7 +1739,7 @@ export function BotManagementPage() {
                                   <Copy className="w-4 h-4" />
                                 </Button>
                               </div>
-                              <p className="text-xs text-gray-500 mt-1">
+                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                 Link expires in 1 hour
                               </p>
                             </div>
@@ -1764,9 +1764,9 @@ export function BotManagementPage() {
                       </div>
                     </div>
 
-                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <h4 className="font-medium text-blue-900 mb-2">How it works:</h4>
-                      <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/50 rounded-lg border border-blue-200 dark:border-blue-900">
+                      <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">How it works:</h4>
+                      <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-decimal list-inside">
                         <li>Click "Generate Admin Link" button</li>
                         <li>Click "Open in Telegram" button (this will open the link in Telegram app)</li>
                         <li><strong>Important:</strong> The link must be opened in Telegram app, not in browser</li>
@@ -1776,7 +1776,7 @@ export function BotManagementPage() {
                       </ol>
                     </div>
 
-                    <div className="flex justify-between items-center pt-4 border-t">
+                    <div className="flex justify-between items-center pt-4 border-t border-gray-200 dark:border-gray-700">
                       <Button
                         variant="outline"
                         onClick={() => setActiveTab("activation")}
@@ -1785,7 +1785,7 @@ export function BotManagementPage() {
                         Back
                       </Button>
                       
-                      <p className="text-sm text-gray-500">Complete authorization to continue</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">Complete authorization to continue</p>
                     </div>
                   </div>
                 )}
@@ -1807,25 +1807,25 @@ export function BotManagementPage() {
           </AlertDialogHeader>
           
           <div className="py-4 space-y-3">
-            <div className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-200">
-              <AlertCircle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <div className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-950/50 rounded-lg border border-red-200 dark:border-red-900">
+              <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-red-900 mb-1">
+                <p className="text-sm font-medium text-red-900 dark:text-red-100 mb-1">
                   You will lose access to admin commands in the bot
                 </p>
-                <p className="text-xs text-red-700">
+                <p className="text-xs text-red-700 dark:text-red-300">
                   You won't be able to use commands like /admin, /stats, or manage appointments through Telegram
                 </p>
               </div>
             </div>
             
-            <div className="flex items-start gap-3 p-3 bg-amber-50 rounded-lg border border-amber-200">
-              <LinkIcon className="h-5 w-5 text-amber-600 mt-0.5 flex-shrink-0" />
+            <div className="flex items-start gap-3 p-3 bg-amber-50 dark:bg-amber-950/50 rounded-lg border border-amber-200 dark:border-amber-900">
+              <LinkIcon className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
               <div className="flex-1">
-                <p className="text-sm font-medium text-amber-900 mb-1">
+                <p className="text-sm font-medium text-amber-900 dark:text-amber-100 mb-1">
                   You can always link again later
                 </p>
-                <p className="text-xs text-amber-700">
+                <p className="text-xs text-amber-700 dark:text-amber-300">
                   Just generate a new admin link and open it in Telegram to restore access
                 </p>
               </div>

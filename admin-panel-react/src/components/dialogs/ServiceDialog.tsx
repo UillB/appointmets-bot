@@ -105,18 +105,18 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="bg-white border shadow-lg flex flex-col h-full">
-        <DrawerHeader className="border-b bg-gradient-to-r from-indigo-50 to-purple-50 flex-shrink-0">
+      <DrawerContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 shadow-lg flex flex-col h-full">
+        <DrawerHeader className="border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-indigo-600 dark:bg-indigo-500 rounded-lg flex items-center justify-center">
                 <Wrench className="w-5 h-5 text-white" />
               </div>
               <div>
-                <DrawerTitle className="text-xl text-gray-900">
+                <DrawerTitle className="text-xl text-gray-900 dark:text-gray-100">
                   {isEdit ? "Edit Service" : "Create New Service"}
                 </DrawerTitle>
-                <DrawerDescription className="text-gray-600">
+                <DrawerDescription className="text-gray-600 dark:text-gray-400">
                   {isEdit 
                     ? "Update service information and settings."
                     : "Follow the steps below to add a new service"}
@@ -127,7 +127,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               variant="ghost"
               size="icon"
               onClick={() => onOpenChange(false)}
-              className="h-8 w-8 text-gray-600 hover:bg-gray-100"
+              className="h-8 w-8 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -188,7 +188,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                         Duration (minutes) <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
-                        <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="duration"
                           name="duration"
@@ -206,7 +206,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                         Price (optional)
                       </Label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-medium">₽</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">₽</span>
                         <Input
                           id="price"
                           name="price"
@@ -225,7 +225,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
             /* Edit mode - simple form without steps */
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="serviceName" className="text-sm font-semibold text-gray-700">
+                  <Label htmlFor="serviceName" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Service Name *
                   </Label>
                   <Input
@@ -367,7 +367,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                     <div className="grid grid-cols-7 gap-2">
                       {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
                         <div key={day} className="flex flex-col items-center space-y-1">
-                          <Label htmlFor={`day-${index}`} className="text-xs text-gray-600">
+                          <Label htmlFor={`day-${index}`} className="text-xs text-gray-600 dark:text-gray-400">
                             {day}
                           </Label>
                           <input
@@ -392,7 +392,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
           </ScrollArea>
         </div>
 
-        <DrawerFooter className="border-t bg-white flex-shrink-0 p-6">
+        <DrawerFooter className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex-shrink-0 p-6">
           <div className="flex gap-4">
             <Button
               type="submit" 
@@ -406,7 +406,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1 h-12 text-base font-semibold border-gray-300 hover:bg-gray-50"
+              className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
             >
               Cancel
             </Button>

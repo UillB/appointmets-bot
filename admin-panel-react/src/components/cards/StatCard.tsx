@@ -34,16 +34,16 @@ export function StatCard({
   const TrendIcon = getTrendIcon();
 
   return (
-    <Card className="p-4">
+    <Card className="p-4 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
       <div className="flex items-start justify-between mb-3">
         <div 
-          className={`w-9 h-9 rounded-lg flex items-center justify-center ${iconBg}`}
+          className={`w-9 h-9 rounded-lg flex items-center justify-center ${iconBg} dark:opacity-80`}
         >
           <Icon className={`w-4.5 h-4.5 ${iconColor}`} />
         </div>
         
         {trend !== undefined && (
-          <div className={`flex items-center gap-1 ${getTrendColor()}`}>
+          <div className={`flex items-center gap-1 ${getTrendColor()} dark:text-gray-400`}>
             <TrendIcon className="w-4 h-4" />
             <span className="text-sm font-medium">{Math.abs(trend)}%</span>
           </div>
@@ -51,9 +51,9 @@ export function StatCard({
       </div>
       
       <div>
-        <p className="text-sm text-gray-600 mb-1">{title}</p>
-        <p className="text-2xl font-semibold text-gray-900">{value}</p>
-        <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">{title}</p>
+        <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100">{value}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{subtitle}</p>
       </div>
     </Card>
   );

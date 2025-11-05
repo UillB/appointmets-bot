@@ -165,6 +165,12 @@ class ApiClient {
     this.accessToken = localStorage.getItem('accessToken');
   }
 
+  // Method to set token manually (used when token is saved from landing page)
+  setToken(token: string) {
+    this.accessToken = token;
+    localStorage.setItem('accessToken', token);
+  }
+
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}

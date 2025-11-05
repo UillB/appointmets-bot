@@ -78,12 +78,20 @@ export function useWebSocket() {
         // Stop heartbeat
         stopHeartbeat();
         
-        // Attempt to reconnect after 3 seconds
-        if (event.code !== 1000) { // Not a normal closure
+        // Attempt to reconnect after 3 seconds for non-normal closures
+        // Skip reconnection for code 1008 (Invalid session) - need to refresh token first
+        if (event.code !== 1000 && event.code !== 1008) { // Not a normal closure or invalid session
           reconnectTimeoutRef.current = setTimeout(() => {
             console.log('Attempting to reconnect...');
             connect();
           }, 3000);
+        } else if (event.code === 1008) {
+          console.warn('WebSocket: Invalid session (1008). Token may be expired. Will retry after token refresh.');
+          // Retry connection after a longer delay to allow token refresh
+          reconnectTimeoutRef.current = setTimeout(() => {
+            console.log('Retrying WebSocket connection after invalid session...');
+            connect();
+          }, 5000);
         }
       };
 

@@ -256,15 +256,15 @@ export function ServicesPage() {
           </div>
 
           {/* Filters */}
-          <Card className="p-4 lg:p-6 bg-white">
+          <Card className="p-4 lg:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             <div className="flex flex-col lg:flex-row gap-4 mb-6">
               {/* Mobile: Search + Filter Button */}
               <div className="flex gap-2 lg:hidden">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
                     placeholder="Search services..."
-                    className="pl-10"
+                    className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
@@ -272,31 +272,31 @@ export function ServicesPage() {
                 
                 <Sheet>
                   <SheetTrigger asChild>
-                    <Button variant="outline" size="icon" className="relative">
+                    <Button variant="outline" size="icon" className="relative border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
                       <SlidersHorizontal className="w-4 h-4" />
                       {hasActiveFilters && (
-                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-indigo-600 rounded-full" />
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-indigo-600 dark:bg-indigo-400 rounded-full" />
                       )}
                     </Button>
                   </SheetTrigger>
-                  <SheetContent side="right" className="w-[300px]">
+                  <SheetContent side="right" className="w-[300px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                     <SheetHeader>
-                      <SheetTitle>Filters</SheetTitle>
-                      <SheetDescription>Filter services by category</SheetDescription>
+                      <SheetTitle className="text-gray-900 dark:text-gray-100">Filters</SheetTitle>
+                      <SheetDescription className="text-gray-600 dark:text-gray-400">Filter services by category</SheetDescription>
                     </SheetHeader>
                     <div className="space-y-4 pt-6">
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Category</label>
+                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Category</label>
                         <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                          <SelectTrigger>
+                          <SelectTrigger className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue placeholder="All Categories" />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Categories</SelectItem>
-                            <SelectItem value="general">General</SelectItem>
-                            <SelectItem value="beauty">Beauty</SelectItem>
-                            <SelectItem value="health">Health</SelectItem>
-                            <SelectItem value="consultation">Consultation</SelectItem>
+                          <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                            <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Categories</SelectItem>
+                            <SelectItem value="general" className="text-gray-900 dark:text-gray-100">General</SelectItem>
+                            <SelectItem value="beauty" className="text-gray-900 dark:text-gray-100">Beauty</SelectItem>
+                            <SelectItem value="health" className="text-gray-900 dark:text-gray-100">Health</SelectItem>
+                            <SelectItem value="consultation" className="text-gray-900 dark:text-gray-100">Consultation</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -305,7 +305,7 @@ export function ServicesPage() {
                         <Button
                           variant="outline"
                           onClick={clearFilters}
-                          className="w-full text-indigo-600 hover:text-indigo-700"
+                          className="w-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                         >
                           Clear Filters
                         </Button>
@@ -318,25 +318,25 @@ export function ServicesPage() {
               {/* Desktop: Full Filters Row */}
               <div className="hidden lg:flex flex-1 gap-4">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
                     placeholder="Search services by name..."
-                    className="pl-10"
+                    className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
 
                 <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-[200px]">
+                  <SelectTrigger className="w-[200px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    <SelectItem value="general">General</SelectItem>
-                    <SelectItem value="beauty">Beauty</SelectItem>
-                    <SelectItem value="health">Health</SelectItem>
-                    <SelectItem value="consultation">Consultation</SelectItem>
+                  <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                    <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Categories</SelectItem>
+                    <SelectItem value="general" className="text-gray-900 dark:text-gray-100">General</SelectItem>
+                    <SelectItem value="beauty" className="text-gray-900 dark:text-gray-100">Beauty</SelectItem>
+                    <SelectItem value="health" className="text-gray-900 dark:text-gray-100">Health</SelectItem>
+                    <SelectItem value="consultation" className="text-gray-900 dark:text-gray-100">Consultation</SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -344,7 +344,7 @@ export function ServicesPage() {
                   <Button
                     variant="ghost"
                     onClick={clearFilters}
-                    className="text-indigo-600 hover:text-indigo-700"
+                    className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
                     Clear
                   </Button>
@@ -356,12 +356,12 @@ export function ServicesPage() {
             {filteredServices.length === 0 ? (
               <div className="text-center py-12">
                 <div className="flex flex-col items-center gap-2">
-                  <Wrench className="w-12 h-12 text-gray-300" />
-                  <p className="text-gray-500">No services found</p>
+                  <Wrench className="w-12 h-12 text-gray-300 dark:text-gray-600" />
+                  <p className="text-gray-500 dark:text-gray-400">No services found</p>
                   <Button
                     variant="link"
                     onClick={() => setDialogOpen(true)}
-                    className="text-indigo-600"
+                    className="text-indigo-600 dark:text-indigo-400"
                   >
                     Create your first service
                   </Button>
@@ -370,12 +370,12 @@ export function ServicesPage() {
             ) : (
               <div className="space-y-6">
                 {/* Info Banner about Auto-Slot Generation */}
-                <Card className="border-blue-200 bg-blue-50">
+                <Card className="border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30">
                   <div className="p-4 flex items-start gap-3">
-                    <div className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0">ℹ️</div>
+                    <div className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0">ℹ️</div>
                     <div>
-                      <h3 className="font-medium text-blue-900">Auto-Generated Slots</h3>
-                      <p className="text-blue-700 text-sm mt-1">
+                      <h3 className="font-medium text-blue-900 dark:text-blue-100">Auto-Generated Slots</h3>
+                      <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
                         Time slots are automatically generated for 1 year when you create services. 
                         No manual slot management needed - just create your services and start booking!
                       </p>
@@ -417,8 +417,8 @@ export function ServicesPage() {
 
             {/* Results count */}
             {filteredServices.length > 0 && (
-              <div className="mt-6 pt-4 border-t">
-                <p className="text-sm text-gray-600">
+              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {filteredServices.length} of {services.length} services
                 </p>
               </div>

@@ -49,15 +49,15 @@ export function PageHeader({
   return (
     <>
       {/* Gradient Header with Page Title */}
-      <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 px-6 py-6 rounded-lg">
+      <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 dark:from-indigo-700 dark:via-purple-700 dark:to-indigo-800 px-6 py-6 rounded-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+            <div className="w-12 h-12 bg-white/20 dark:bg-white/10 rounded-xl flex items-center justify-center">
               {icon}
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white mb-1">{title}</h1>
-              <p className="text-indigo-100">{description}</p>
+              <p className="text-indigo-100 dark:text-indigo-200">{description}</p>
             </div>
           </div>
 

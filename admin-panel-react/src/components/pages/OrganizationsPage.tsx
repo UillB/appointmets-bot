@@ -215,16 +215,16 @@ export function OrganizationsPage() {
           />
           
           {/* Filters */}
-          <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-4">
+          <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 sm:px-6 py-4">
         <div className="flex flex-col sm:flex-row gap-3">
           {/* Search */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
             <Input
               placeholder="Search organizations..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-9"
+              className="pl-9 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
             />
           </div>
 
@@ -234,14 +234,14 @@ export function OrganizationsPage() {
               value={sortBy}
               onValueChange={(value: SortOption) => setSortBy(value)}
             >
-              <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                 <SelectValue placeholder="Sort by..." />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="name">By Name</SelectItem>
-                <SelectItem value="users">By Users</SelectItem>
-                <SelectItem value="services">By Services</SelectItem>
-                <SelectItem value="date">By Date</SelectItem>
+              <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                <SelectItem value="name" className="text-gray-900 dark:text-gray-100">By Name</SelectItem>
+                <SelectItem value="users" className="text-gray-900 dark:text-gray-100">By Users</SelectItem>
+                <SelectItem value="services" className="text-gray-900 dark:text-gray-100">By Services</SelectItem>
+                <SelectItem value="date" className="text-gray-900 dark:text-gray-100">By Date</SelectItem>
               </SelectContent>
             </Select>
 
@@ -250,7 +250,7 @@ export function OrganizationsPage() {
                 variant="ghost"
                 size="sm"
                 onClick={handleClearFilters}
-                className="text-gray-600 hover:text-gray-900"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <X className="w-4 h-4 mr-2" />
                 Clear Filters
@@ -261,12 +261,12 @@ export function OrganizationsPage() {
       </div>
 
       {/* Mobile Actions */}
-      <div className="sm:hidden flex items-center gap-2 px-4 py-3 bg-gray-50 border-b border-gray-200">
+      <div className="sm:hidden flex items-center gap-2 px-4 py-3 bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
         <Button
           variant="outline"
           size="sm"
           onClick={handleRefresh}
-          className="flex-1"
+          className="flex-1 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
           Refresh
@@ -274,14 +274,14 @@ export function OrganizationsPage() {
       </div>
 
       {/* Organizations Grid */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 px-4 sm:px-6 py-6">
+      <div className="flex-1 overflow-y-auto bg-white dark:bg-gray-900 px-4 sm:px-6 py-6">
         {filteredOrganizations.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Building2 className="w-8 h-8 text-gray-400" />
+            <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+              <Building2 className="w-8 h-8 text-gray-400 dark:text-gray-600" />
             </div>
-            <h3 className="text-gray-900 mb-2">No organizations found</h3>
-            <p className="text-sm text-gray-500 mb-6">
+            <h3 className="text-gray-900 dark:text-gray-100 mb-2">No organizations found</h3>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
               {searchQuery
                 ? "Try adjusting your search or filters"
                 : "Get started by creating your first organization"}
@@ -292,7 +292,7 @@ export function OrganizationsPage() {
                   setSelectedOrg(null);
                   setDialogOpen(true);
                 }}
-                className="bg-indigo-600 hover:bg-indigo-700 text-white"
+                className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 New Organization
@@ -321,8 +321,8 @@ export function OrganizationsPage() {
 
       {/* Results Count */}
       {filteredOrganizations.length > 0 && (
-        <div className="flex-shrink-0 bg-white border-t border-gray-200 px-4 sm:px-6 py-3">
-          <p className="text-sm text-gray-600 text-center">
+        <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 sm:px-6 py-3">
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
             Showing {filteredOrganizations.length} of {organizations.length}{" "}
             organizations
           </p>

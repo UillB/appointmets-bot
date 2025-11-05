@@ -233,7 +233,7 @@ export function AnalyticsPage() {
 
           {/* Time Period Selector */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <h3 className="text-gray-900">Performance Overview</h3>
+            <h3 className="text-gray-900 dark:text-gray-100">Performance Overview</h3>
             <Tabs value={timePeriod} onValueChange={setTimePeriod}>
               <TabsList className="bg-gray-100">
                 <TabsTrigger
@@ -259,11 +259,11 @@ export function AnalyticsPage() {
           </div>
 
           {/* Appointments Trend */}
-          <Card className="p-6">
+          <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h3 className="text-gray-900 mb-1">Appointments Trend</h3>
-                <p className="text-sm text-gray-600">Daily bookings over time</p>
+                <h3 className="text-gray-900 dark:text-gray-100 mb-1">Appointments Trend</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Daily bookings over time</p>
               </div>
               <Select value={selectedMetric} onValueChange={setSelectedMetric}>
                 <SelectTrigger className="w-[180px]">
@@ -310,10 +310,10 @@ export function AnalyticsPage() {
           {/* Two Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Top Services */}
-            <Card className="p-6">
+            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="mb-6">
-                <h3 className="text-gray-900 mb-1">Top Services</h3>
-                <p className="text-sm text-gray-600">Most popular services</p>
+                <h3 className="text-gray-900 dark:text-gray-100 mb-1">Top Services</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Most popular services</p>
               </div>
 
               <div className="space-y-4">
@@ -321,15 +321,15 @@ export function AnalyticsPage() {
                   <div key={service.name} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-medium text-gray-700">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300">
                           #{index + 1}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{service.name}</p>
-                          <p className="text-sm text-gray-600">{service.bookings} bookings</p>
+                          <p className="font-medium text-gray-900 dark:text-gray-100">{service.name}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{service.bookings} bookings</p>
                         </div>
                       </div>
-                      <Wrench className="w-5 h-5 text-gray-400" style={{ color: service.color }} />
+                      <Wrench className="w-5 h-5 text-gray-400 dark:text-gray-500" style={{ color: service.color }} />
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2">
                       <div
@@ -348,10 +348,10 @@ export function AnalyticsPage() {
             </Card>
 
             {/* Status Distribution */}
-            <Card className="p-6">
+            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="mb-6">
-                <h3 className="text-gray-900 mb-1">Appointment Status</h3>
-                <p className="text-sm text-gray-600">Status distribution</p>
+                <h3 className="text-gray-900 dark:text-gray-100 mb-1">Appointment Status</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Status distribution</p>
               </div>
 
               <div className="flex items-center justify-center h-64">
@@ -383,9 +383,9 @@ export function AnalyticsPage() {
                         className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: status.color }}
                       />
-                      <span className="text-sm text-gray-700">{status.name}</span>
+                      <span className="text-sm text-gray-700 dark:text-gray-300">{status.name}</span>
                     </div>
-                    <span className="text-sm font-medium text-gray-900">{status.value}%</span>
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{status.value}%</span>
                   </div>
                 ))}
               </div>
@@ -393,10 +393,10 @@ export function AnalyticsPage() {
           </div>
 
           {/* Peak Hours */}
-          <Card className="p-6">
+          <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             <div className="mb-6">
-              <h3 className="text-gray-900 mb-1">Peak Hours</h3>
-              <p className="text-sm text-gray-600">Busiest times of the day</p>
+              <h3 className="text-gray-900 dark:text-gray-100 mb-1">Peak Hours</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Busiest times of the day</p>
             </div>
 
             <div className="h-80">
@@ -424,7 +424,7 @@ export function AnalyticsPage() {
           </Card>
 
           {/* Quick Insights */}
-          <Card className="p-6">
+          <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             <h3 className="text-gray-900 mb-4">Quick Insights</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {insights.bestDay ? (

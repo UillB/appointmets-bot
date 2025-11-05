@@ -4,8 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Appointments Bot Admin Panel</title>
-    <script type="module" crossorigin src="/admin-panel/assets/index-HC5oHvB7.js"></script>
-    <link rel="stylesheet" crossorigin href="/admin-panel/assets/index-DMWX_Z4z.css">
+    <script>
+      // CRITICAL: Ensure default theme is always light on page load
+      // Remove any dark class before React loads - execute immediately
+      (function() {
+        try {
+          const html = document.documentElement;
+          if (html) {
+            // Force remove dark class immediately - multiple times to be sure
+            html.classList.remove('dark');
+            html.classList.remove('dark');
+            html.classList.remove('dark');
+            // Ensure light theme is applied
+            html.style.colorScheme = 'light';
+            html.style.setProperty('--background', '0 0% 100%');
+            // Force white background
+            document.body.style.backgroundColor = '#ffffff';
+          }
+        } catch (e) {
+          // Ignore errors
+        }
+      })();
+    </script>
+    <style>
+      /* Prevent dark theme flash on load - force light theme */
+      html {
+        color-scheme: light !important;
+      }
+      html:not(.dark) {
+        --background: 0 0% 100% !important;
+      }
+      body {
+        background-color: #ffffff !important;
+      }
+    </style>
+    <script type="module" crossorigin src="/admin-panel/assets/index-BMVQGuzx.js"></script>
+    <link rel="stylesheet" crossorigin href="/admin-panel/assets/index-D_8LfDDR.css">
   </head>
   <body>
     <div id="root"></div>

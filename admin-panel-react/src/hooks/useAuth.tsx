@@ -26,6 +26,51 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.log('🚀 Auth initialization started');
       
       try {
+        // CRITICAL: Check URL parameters first (token passed from landing page)
+        // This handles cross-origin token transfer from landing (3000) to admin panel (4200)
+        const urlParams = new URLSearchParams(window.location.search);
+        const tokenFromUrl = urlParams.get('token');
+        const userFromUrl = urlParams.get('user');
+        
+        if (tokenFromUrl && userFromUrl) {
+          console.log('✅ Found token in URL parameters (from landing page)');
+          try {
+            // Decode user JSON (was encoded with encodeURIComponent)
+            const userData = JSON.parse(decodeURIComponent(userFromUrl));
+            
+            // Save token and user to localStorage (save decoded user JSON)
+            localStorage.setItem('accessToken', tokenFromUrl);
+            localStorage.setItem('user', JSON.stringify(userData));
+            
+            // Set user and token immediately
+            setUser(userData);
+            setToken(tokenFromUrl);
+            apiClient.setToken(tokenFromUrl);
+            
+            console.log('✅ Token saved from landing page, user authenticated');
+            
+            // Remove token from URL for security
+            const newUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+            
+            // Validate token in background (non-blocking)
+            setTimeout(async () => {
+              try {
+                await apiClient.getDashboardStats();
+                console.log('✅ Token validation successful (background)');
+              } catch (error: any) {
+                console.log('⚠️ Token validation failed (background):', error.message);
+              }
+            }, 100);
+            
+            setIsLoading(false);
+            return; // Exit early - user is authenticated
+          } catch (parseError) {
+            console.error('❌ Failed to parse user data from URL:', parseError);
+            // Continue to normal auth flow below
+          }
+        }
+        
         // CRITICAL: Check if we're in Telegram WebApp FIRST
         // Even if we have stored tokens, we should re-authenticate via Telegram in TWA
         const savedInitData = localStorage.getItem('telegram_initData');
@@ -54,11 +99,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           try {
             const userData = JSON.parse(storedUser);
             
-            // CRITICAL: Set user and token immediately without validation
-            // Wrapper page just authenticated, so tokens are guaranteed fresh
+            // CRITICAL: Set user and token immediately and set API client token
             setUser(userData);
             setToken(storedToken);
-            console.log('✅ User authenticated with tokens from wrapper page');
+            apiClient.setToken(storedToken); // CRITICAL: Set token in API client immediately
+            console.log('✅ User authenticated with tokens from landing/wrapper page');
             
             // Validate token in background (non-blocking)
             // This doesn't block the UI, but helps verify token is still valid

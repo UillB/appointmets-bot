@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* CRITICAL: Configure Tailwind for class-based dark mode */
+@custom-variant dark (&:is(.dark *));
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -51,10 +54,26 @@
   * {
     border-color: hsl(var(--border));
   }
+  
+  /* CRITICAL: Force light theme background when not dark */
+  html:not(.dark) {
+    --background: 0 0% 100% !important; /* White */
+  }
+  
+  /* CRITICAL: Force dark theme background when dark */
+  html.dark {
+    --background: 222.2 84% 4.9% !important; /* Dark gray */
+  }
+  
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    background-color: hsl(var(--background)) !important;
+    color: hsl(var(--foreground)) !important;
     font-family: var(--font-sans);
+  }
+  
+  /* FORCE white background when not dark */
+  html:not(.dark) body {
+    background-color: #ffffff !important;
   }
 }
 
@@ -255,6 +274,61 @@ input:focus, textarea:focus, select:focus {
     padding: 0.75rem 1.5rem;
     font-size: 0.875rem;
   }
+}
+
+/* Safe area insets for Telegram Web App and mobile devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .pl-safe {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .pr-safe {
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  .p-safe {
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+}
+
+/* Dark mode scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Dark mode gradient backgrounds */
+.gradient-bg {
+  @apply bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-950 dark:via-purple-950 dark:to-pink-950;
 }
 
 /* High contrast mode support */

@@ -42,12 +42,14 @@ import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
 import { useLanguage } from "../../i18n";
 import { useSearchParams } from "react-router-dom";
+import { useTheme } from "../../hooks/useTheme";
 
 export function SettingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState(tabParam || "profile");
   const { language, setLanguage } = useLanguage();
+  const { theme, setTheme } = useTheme();
 
   // Update active tab when URL param changes
   useEffect(() => {
@@ -65,9 +67,6 @@ export function SettingsPage() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  // System Settings State (language is now from global context)
-  const [theme, setTheme] = useState("light");
   const [emailNotifications, setEmailNotifications] = useState(true);
   const [pushNotifications, setPushNotifications] = useState(true);
   const [timezone, setTimezone] = useState("UTC");
@@ -179,12 +178,12 @@ export function SettingsPage() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="profile" className="gap-2">
+            <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 dark:bg-gray-800">
+              <TabsTrigger value="profile" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400">
                 <User className="w-4 h-4" />
                 User Profile
               </TabsTrigger>
-              <TabsTrigger value="system" className="gap-2">
+              <TabsTrigger value="system" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400">
                 <SettingsIcon className="w-4 h-4" />
                 System Settings
               </TabsTrigger>
@@ -193,15 +192,15 @@ export function SettingsPage() {
             {/* User Profile Tab */}
             <TabsContent value="profile" className="mt-0 space-y-6">
               {/* Current Profile Info */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center">
                       <User className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg">User Profile</h3>
-                      <p className="text-sm text-gray-500">
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">User Profile</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Manage your personal information
                       </p>
                     </div>
@@ -211,71 +210,71 @@ export function SettingsPage() {
 
                   {/* Profile Info Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 rounded-lg">
                       <div className="flex items-center gap-3 mb-2">
-                        <User className="w-5 h-5 text-blue-600" />
-                        <span className="text-xs text-blue-600 font-medium uppercase">
+                        <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                        <span className="text-xs text-blue-600 dark:text-blue-400 font-medium uppercase">
                           Full Name
                         </span>
                       </div>
-                      <p className="text-gray-900">{fullName}</p>
+                      <p className="text-gray-900 dark:text-gray-100">{fullName}</p>
                     </div>
 
-                    <div className="p-4 bg-purple-50 border border-purple-100 rounded-lg">
+                    <div className="p-4 bg-purple-50 dark:bg-purple-950/30 border border-purple-100 dark:border-purple-900 rounded-lg">
                       <div className="flex items-center gap-3 mb-2">
-                        <Mail className="w-5 h-5 text-purple-600" />
-                        <span className="text-xs text-purple-600 font-medium uppercase">
+                        <Mail className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                        <span className="text-xs text-purple-600 dark:text-purple-400 font-medium uppercase">
                           Email Address
                         </span>
                       </div>
-                      <p className="text-gray-900">{email}</p>
+                      <p className="text-gray-900 dark:text-gray-100">{email}</p>
                     </div>
 
-                    <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-lg">
+                    <div className="p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900 rounded-lg">
                       <div className="flex items-center gap-3 mb-2">
-                        <Shield className="w-5 h-5 text-emerald-600" />
-                        <span className="text-xs text-emerald-600 font-medium uppercase">
+                        <Shield className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                        <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium uppercase">
                           Role
                         </span>
                       </div>
-                      <Badge className="bg-emerald-600 hover:bg-emerald-700">
+                      <Badge className="bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600">
                         Manager
                       </Badge>
                     </div>
 
-                    <div className="p-4 bg-indigo-50 border border-indigo-100 rounded-lg">
+                    <div className="p-4 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 rounded-lg">
                       <div className="flex items-center gap-3 mb-2">
-                        <Building2 className="w-5 h-5 text-indigo-600" />
-                        <span className="text-xs text-indigo-600 font-medium uppercase">
+                        <Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                        <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase">
                           Organization
                         </span>
                       </div>
-                      <p className="text-gray-900">Demo Org</p>
+                      <p className="text-gray-900 dark:text-gray-100">Demo Org</p>
                     </div>
 
-                    <div className="p-4 bg-amber-50 border border-amber-100 rounded-lg sm:col-span-2">
+                    <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900 rounded-lg sm:col-span-2">
                       <div className="flex items-center gap-3 mb-2">
-                        <Calendar className="w-5 h-5 text-amber-600" />
-                        <span className="text-xs text-amber-600 font-medium uppercase">
+                        <Calendar className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                        <span className="text-xs text-amber-600 dark:text-amber-400 font-medium uppercase">
                           Member Since
                         </span>
                       </div>
-                      <p className="text-gray-900">N/A</p>
+                      <p className="text-gray-900 dark:text-gray-100">N/A</p>
                     </div>
                   </div>
                 </div>
               </Card>
 
               {/* Update Profile Form */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                      <User className="w-5 h-5 text-indigo-600" />
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center">
+                      <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg">Update Profile</h3>
-                      <p className="text-sm text-gray-500">
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Update Profile</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Update your profile information
                       </p>
                     </div>
@@ -289,12 +288,12 @@ export function SettingsPage() {
                         Full Name <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="fullName"
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          className="pl-10"
+                          className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                           placeholder="Enter your full name"
                         />
                       </div>
@@ -305,13 +304,13 @@ export function SettingsPage() {
                         Email Address <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="email"
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="pl-10"
+                          className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                           placeholder="Enter your email"
                         />
                       </div>
@@ -331,15 +330,15 @@ export function SettingsPage() {
               </Card>
 
               {/* Change Password */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-                      <Lock className="w-5 h-5 text-red-600" />
+                    <div className="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                      <Lock className="w-5 h-5 text-red-600 dark:text-red-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg">Change Password</h3>
-                      <p className="text-sm text-gray-500">
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Change Password</h3>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Update your password to keep your account secure
                       </p>
                     </div>
@@ -353,13 +352,13 @@ export function SettingsPage() {
                         Current Password <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="currentPassword"
                           type={showCurrentPassword ? "text" : "password"}
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
-                          className="pl-10 pr-10"
+                          className="pl-10 pr-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                           placeholder="Enter current password"
                         />
                         <button
@@ -382,19 +381,19 @@ export function SettingsPage() {
                           New Password <span className="text-red-500">*</span>
                         </Label>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                           <Input
                             id="newPassword"
                             type={showNewPassword ? "text" : "password"}
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
-                            className="pl-10 pr-10"
+                            className="pl-10 pr-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                             placeholder="Enter new password"
                           />
                           <button
                             type="button"
                             onClick={() => setShowNewPassword(!showNewPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                           >
                             {showNewPassword ? (
                               <EyeOff className="w-4 h-4" />
@@ -410,19 +409,19 @@ export function SettingsPage() {
                           Confirm Password <span className="text-red-500">*</span>
                         </Label>
                         <div className="relative">
-                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                           <Input
                             id="confirmPassword"
                             type={showConfirmPassword ? "text" : "password"}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="pl-10 pr-10"
+                            className="pl-10 pr-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                             placeholder="Confirm new password"
                           />
                           <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                           >
                             {showConfirmPassword ? (
                               <EyeOff className="w-4 h-4" />
@@ -463,7 +462,7 @@ export function SettingsPage() {
             {/* System Settings Tab */}
             <TabsContent value="system" className="mt-0 space-y-6">
               {/* Language & Theme */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -471,7 +470,7 @@ export function SettingsPage() {
                     </div>
                     <div>
                       <h3 className="text-lg">Language & Theme</h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Configure system preferences
                       </p>
                     </div>
@@ -483,15 +482,15 @@ export function SettingsPage() {
                     <div className="space-y-2">
                       <Label htmlFor="language">Language</Label>
                       <div className="relative">
-                        <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                        <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                         <Select value={language} onValueChange={(value) => setLanguage(value as 'ru' | 'en' | 'he')}>
-                          <SelectTrigger id="language" className="pl-10">
+                          <SelectTrigger id="language" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="en">🇬🇧 English</SelectItem>
-                            <SelectItem value="ru">🇷🇺 Русский</SelectItem>
-                            <SelectItem value="he">🇮🇱 עברית</SelectItem>
+                          <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                            <SelectItem value="en" className="text-gray-900 dark:text-gray-100">🇬🇧 English</SelectItem>
+                            <SelectItem value="ru" className="text-gray-900 dark:text-gray-100">🇷🇺 Русский</SelectItem>
+                            <SelectItem value="he" className="text-gray-900 dark:text-gray-100">🇮🇱 עברית</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -500,15 +499,15 @@ export function SettingsPage() {
                     <div className="space-y-2">
                       <Label htmlFor="theme">Theme</Label>
                       <div className="relative">
-                        <Palette className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                        <Palette className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                         <Select value={theme} onValueChange={setTheme}>
-                          <SelectTrigger id="theme" className="pl-10">
+                          <SelectTrigger id="theme" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="light">Light Theme</SelectItem>
-                            <SelectItem value="dark">Dark Theme</SelectItem>
-                            <SelectItem value="auto">Auto (System)</SelectItem>
+                          <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                            <SelectItem value="light" className="text-gray-900 dark:text-gray-100">Light Theme</SelectItem>
+                            <SelectItem value="dark" className="text-gray-900 dark:text-gray-100">Dark Theme</SelectItem>
+                            <SelectItem value="auto" className="text-gray-900 dark:text-gray-100">Auto (System)</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -518,7 +517,7 @@ export function SettingsPage() {
               </Card>
 
               {/* Notifications */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -526,7 +525,7 @@ export function SettingsPage() {
                     </div>
                     <div>
                       <h3 className="text-lg">Notifications</h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Manage how you receive notifications
                       </p>
                     </div>
@@ -542,7 +541,7 @@ export function SettingsPage() {
                           <Label className="text-base cursor-pointer">
                             Email Notifications
                           </Label>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Receive notifications via email
                           </p>
                         </div>
@@ -561,7 +560,7 @@ export function SettingsPage() {
                           <Label className="text-base cursor-pointer">
                             Push Notifications
                           </Label>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             Receive push notifications in browser
                           </p>
                         </div>
@@ -577,7 +576,7 @@ export function SettingsPage() {
               </Card>
 
               {/* System Preferences */}
-              <Card className="p-6 bg-white">
+              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
@@ -585,7 +584,7 @@ export function SettingsPage() {
                     </div>
                     <div>
                       <h3 className="text-lg">System Preferences</h3>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
                         Configure date, time, and refresh settings
                       </p>
                     </div>
@@ -597,7 +596,7 @@ export function SettingsPage() {
                     <div className="space-y-2">
                       <Label htmlFor="timezone">Timezone</Label>
                       <div className="relative">
-                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                         <Select value={timezone} onValueChange={setTimezone}>
                           <SelectTrigger id="timezone" className="pl-10">
                             <SelectValue />
@@ -645,7 +644,7 @@ export function SettingsPage() {
                       <div className="space-y-2">
                         <Label htmlFor="timeFormat">Time Format</Label>
                         <div className="relative">
-                          <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                          <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                           <Select value={timeFormat} onValueChange={setTimeFormat}>
                             <SelectTrigger id="timeFormat" className="pl-10">
                               <SelectValue />

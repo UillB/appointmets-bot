@@ -156,7 +156,7 @@ export function SlotsPage() {
       />
 
       {/* Info Banner */}
-      <Card className="border-blue-200 bg-blue-50">
+      <Card className="border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30">
         <div className="p-4 flex items-start gap-3">
           <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
           <div>
@@ -182,7 +182,7 @@ export function SlotsPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 h-4 w-4" />
                       <Input
                         placeholder="Search slots..."
                         value={searchQuery}
@@ -243,7 +243,7 @@ export function SlotsPage() {
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">Time Slots</h3>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-gray-500 dark:text-gray-400">
               {filteredSlots.length} of {slots.length} slots
             </div>
                     </div>
@@ -254,9 +254,9 @@ export function SlotsPage() {
             </div>
           ) : filteredSlots.length === 0 ? (
             <div className="text-center py-8">
-              <CalendarDays className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No slots found</h3>
-              <p className="text-gray-500">
+              <CalendarDays className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No slots found</h3>
+              <p className="text-gray-500 dark:text-gray-400">
                 {slots.length === 0 
                   ? "Create a service to auto-generate slots" 
                   : "Try adjusting your filters"}
@@ -283,13 +283,13 @@ export function SlotsPage() {
                       </TableCell>
                               <TableCell>
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-gray-400" />
+                          <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                           {getDateDisplay(slot.startAt)}
                         </div>
                               </TableCell>
                               <TableCell>
                         <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-gray-400" />
+                          <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                           {getTimeDisplay(slot.startAt)} - {getTimeDisplay(slot.endAt)}
                                 </div>
                               </TableCell>

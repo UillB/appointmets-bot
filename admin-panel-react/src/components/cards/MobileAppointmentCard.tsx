@@ -37,9 +37,9 @@ export function MobileAppointmentCard({
 }: MobileAppointmentCardProps) {
   const getStatusBadge = (status: "confirmed" | "cancelled" | "pending") => {
     const styles = {
-      confirmed: "bg-emerald-100 text-emerald-700 border-0",
-      cancelled: "bg-red-100 text-red-700 border-0",
-      pending: "bg-amber-100 text-amber-700 border-0",
+      confirmed: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border-0",
+      cancelled: "bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400 border-0",
+      pending: "bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-400 border-0",
     };
 
     const icons = {
@@ -59,29 +59,29 @@ export function MobileAppointmentCard({
   };
 
   return (
-    <Card className="p-3 hover:shadow-md transition-shadow">
+    <Card className="p-3 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md dark:hover:shadow-lg transition-shadow">
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <CalendarDays className="w-4 h-4 text-indigo-600" />
+          <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+            <CalendarDays className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
           </div>
           <div>
-            <h3 className="font-medium text-gray-900 text-sm">{service}</h3>
+            <h3 className="font-medium text-gray-900 dark:text-gray-100 text-sm">{service}</h3>
             {getStatusBadge(status)}
           </div>
         </div>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-7 w-7">
+            <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
               <MoreVertical className="w-3.5 h-3.5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Confirm</DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600">
+          <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">View Details</DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Edit</DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Confirm</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30">
               Cancel
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -89,17 +89,17 @@ export function MobileAppointmentCard({
       </div>
 
       <div className="space-y-1.5">
-        <div className="flex items-center gap-2 text-xs text-gray-600">
+        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
           <CalendarDays className="w-3.5 h-3.5" />
           <span>{date}</span>
         </div>
         
-        <div className="flex items-center gap-2 text-xs text-gray-600">
+        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
           <Clock className="w-3.5 h-3.5" />
           <span>{timeStart} - {timeEnd}</span>
         </div>
         
-        <div className="flex items-center gap-2 text-xs text-gray-600">
+        <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
           <User className="w-3.5 h-3.5" />
           <span>Client ID: {client}</span>
         </div>
