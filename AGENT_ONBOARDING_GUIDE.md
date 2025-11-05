@@ -1,14 +1,73 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 3.8  
-**Last Updated:** January 18, 2025 (Latest Session - Telegram Web App API & WebSocket URL Fixes)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes
+**Version:** 3.9  
+**Last Updated:** January 18, 2025 (Latest Session - Figma Prototype Integration Plan)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + **Figma Prototype Integration Plan Ready**
 
 > **This is the ONLY document you need to read to start working on this project.**
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Telegram Web App API & WebSocket URL Fixes ✅
+### Latest Session (January 18, 2025) - Figma Prototype Integration Plan ✅
+
+#### Figma Coded Prototype v0.1.1 Analysis & Integration Plan
+- ✅ **Проанализирован Figma Prototype v0.1.1** - Полный анализ структуры, компонентов и паттернов
+- ✅ **Сравнение с текущим проектом** - Выявлены различия и необходимые интеграции
+- ✅ **Детальный план интеграции** - Создан полный план с 8 фазами и приоритетами
+- ✅ **Dark Theme Integration Plan** - Полная интеграция темной темы на всех страницах и компонентах
+- ✅ **Mobile & Telegram Web App Optimization Plan** - План оптимизации для мобильных устройств и TWA
+- ✅ **Documentation Structure** - Определен порядок чтения документов для Cursor AI
+
+#### Key Integration Areas:
+1. **Dark Theme Support** - Полная интеграция темной темы на всех страницах (Dashboard, Appointments, Services, Organizations, Bot Management, Analytics, Settings, AI Assistant)
+2. **Mobile Optimization** - Mobile-first responsive design, MobileBottomNav, MobileStatCard, MobileAppointmentCard
+3. **Telegram Web App Integration** - useTelegramWebApp hook, theme sync, TWA-specific optimizations
+4. **Documentation Updates** - QUICK_START.md, DARK_THEME_GUIDE.md, MOBILE_OPTIMIZATION.md
+
+#### Integration Plan Overview:
+- **Phase 1:** Documentation (4 files) - QUICK_START.md, DARK_THEME_GUIDE.md, MOBILE_OPTIMIZATION.md, README.md updates
+- **Phase 2:** Core Components & Hooks (4 files) - useTelegramWebApp hook, MobileBottomNav, MobileStatCard, MobileAppointmentCard
+- **Phase 3:** Dark Theme on All Pages (8 pages) - Dashboard, AppointmentsPage, ServicesPage, OrganizationsPage, BotManagementPage, AnalyticsPage, SettingsPage, AIAssistantPage
+- **Phase 4:** Layout Components (3 files) - Header, Sidebar, App.tsx
+- **Phase 5:** Forms & Dialogs (3 files) - AppointmentDialog, ServiceDialog, OrganizationDialog
+- **Phase 6:** UI Components (3 files) - NotificationCenter, StatCard, AppointmentsSummaryCard
+- **Phase 7:** Mobile Optimization (all pages) - Conditional rendering, touch optimization
+- **Phase 8:** Telegram Web App Integration (2 files) - useTelegramWebApp integration, theme sync
+
+#### Total Changes:
+- **New Files:** ~8 files
+- **Modified Files:** ~30+ files
+- **Large Changes:** ~10 files
+- **Medium Changes:** ~20 files
+- **Small Changes:** ~5 files
+
+#### Critical Rules for Integration:
+1. ✅ **Always add `dark:` variants** for all visual elements
+2. ✅ **Mobile-first approach** - Base styles for mobile, then `lg:` for desktop
+3. ✅ **Touch targets** - Minimum 44x44px on mobile
+4. ✅ **Telegram Web App** - Check `isTelegramWebApp` and adapt UI
+5. ✅ **Semantic colors** - Use color system from DARK_THEME_GUIDE.md
+
+#### Documentation Reading Order:
+1. **QUICK_START.md** - Quick overview + critical rules
+2. **DARK_THEME_GUIDE.md** - Dark theme details
+3. **MOBILE_OPTIMIZATION.md** - Responsive design & Telegram Web App details
+
+#### Current Status:
+- ✅ **Plan Created** - Complete integration plan ready for execution
+- ✅ **Priorities Defined** - Phase 1-4 are Priority 1 (Critical)
+- ✅ **Documentation Structure** - Ready for implementation
+- 🔄 **Implementation** - Ready to start Phase 1 (Documentation)
+
+#### Files to Reference:
+- `figma coded prototype v0.1.1/src/QUICK_START.md` - Quick start guide from prototype
+- `figma coded prototype v0.1.1/src/DARK_THEME_GUIDE.md` - Dark theme implementation guide
+- `figma coded prototype v0.1.1/src/MOBILE_OPTIMIZATION.md` - Mobile & TWA optimization guide
+- `figma coded prototype v0.1.1/src/CURSOR_INDEX.md` - Complete project overview
+
+**Note:** Projects are isolated - Figma prototype is used only as reference, no direct dependencies.
+
+### Previous Session (January 18, 2025) - Telegram Web App API & WebSocket URL Fixes ✅
 
 #### Critical TWA Connectivity Fixes
 - ✅ **API Client Dynamic URL** - Исправлен API клиент для использования относительных путей `/api` при работе через HTTPS (ngrok), что позволяет TWA корректно подключаться к backend
@@ -1068,13 +1127,27 @@ echo "PUBLIC_BASE_URL=https://[ngrok-url].ngrok-free.dev" >> backend/.env
 
 ### 🔄 High Priority (Next Steps)
 
-#### 1. 🔴 Appointment Management & Admin System (CRITICAL - New Feature)
+#### 1. 🔴 Figma Prototype Integration (CRITICAL - UI/UX Enhancement)
+- **Priority:** 🔴 CRITICAL
+- **Status:** Plan ready, ready to start implementation
+- **Description:** Complete integration of Figma Coded Prototype v0.1.1 features: Dark Theme, Mobile Optimization, Telegram Web App enhancements
+- **Integration Plan:**
+  - **Phase 1:** Documentation (QUICK_START.md, DARK_THEME_GUIDE.md, MOBILE_OPTIMIZATION.md)
+  - **Phase 2:** Core Components & Hooks (useTelegramWebApp, MobileBottomNav, MobileStatCard, MobileAppointmentCard)
+  - **Phase 3:** Dark Theme on All Pages (8 pages)
+  - **Phase 4:** Layout Components (Header, Sidebar, App.tsx)
+  - **Phase 5-8:** Forms, UI Components, Mobile Optimization, TWA Integration
+- **Total Impact:** ~8 new files, ~30+ modified files
+- **Reference:** See "Latest Session (January 18, 2025) - Figma Prototype Integration Plan" above
+- **Files to Reference:** `figma coded prototype v0.1.1/src/` directory
+
+#### 2. 🔴 Appointment Management & Admin System (CRITICAL - New Feature)
 - **Priority:** 🔴 CRITICAL
 - **Status:** Not started
 - **Description:** Complete appointment approval system with admin role management, Telegram linking, and real-time notifications
 - **See detailed plan below in "🎯 Appointment Management & Admin System - Detailed Implementation Plan"**
 
-#### 2. Telegram Web App Integration (85% → 100%)
+#### 3. Telegram Web App Integration (85% → 100%)
 - **Priority:** 🟡 HIGH
 - **Status:** 85% complete
 - **What's Left:**
@@ -1087,7 +1160,7 @@ echo "PUBLIC_BASE_URL=https://[ngrok-url].ngrok-free.dev" >> backend/.env
   - `backend/src/api/routes/auth.ts` - Improve telegram-login endpoint
   - `admin-panel-react/src/components/` - Adapt UI for Telegram
 
-#### 3. AI Assistant Enhancement
+#### 4. AI Assistant Enhancement
 - **Priority:** 🟡 HIGH
 - **Status:** Functional, needs enhancement
 - **What's Needed:**
@@ -1099,7 +1172,7 @@ echo "PUBLIC_BASE_URL=https://[ngrok-url].ngrok-free.dev" >> backend/.env
   - `backend/src/lib/ai/ai-service.ts` - Improve error handling
   - `backend/src/bot/handlers/ai-chat.ts` - Improve context
 
-#### 4. Production Deployment Optimization
+#### 5. Production Deployment Optimization
 - **Priority:** 🟢 MEDIUM
 - **What's Needed:**
   - Comprehensive testing (E2E, load testing)
@@ -2313,9 +2386,37 @@ For detailed information, see:
 
 ### 🔄 Next Steps for Next Agent
 
-**IMPORTANT: Project is 100% functionally complete. All 12 integration tasks completed. Focus on testing and quality assurance.**
+**IMPORTANT: Project is 100% functionally complete. All 12 integration tasks completed. New priority: Figma Prototype Integration for enhanced UI/UX.**
 
-#### Priority 1: Testing & Quality Assurance 🔴
+#### Priority 1: Figma Prototype Integration 🔴 (NEW - CRITICAL)
+
+1. **Figma Coded Prototype v0.1.1 Integration**
+   - ✅ **Plan Created** - Complete integration plan ready (see "Latest Session" above)
+   - 🔄 **Ready to Start** - Phase 1 (Documentation) is first priority
+   - **Reference:** `figma coded prototype v0.1.1/src/` directory
+   - **Key Areas:**
+     - Dark Theme support on all pages
+     - Mobile optimization (MobileBottomNav, MobileStatCard, MobileAppointmentCard)
+     - Telegram Web App enhancements (useTelegramWebApp hook, theme sync)
+     - Documentation structure (QUICK_START.md, DARK_THEME_GUIDE.md, MOBILE_OPTIMIZATION.md)
+   - **Total Impact:** ~8 new files, ~30+ modified files
+   - **Start with:** Phase 1 - Documentation (4 files)
+
+2. **Integration Phases:**
+   - **Phase 1:** Documentation (QUICK_START.md, DARK_THEME_GUIDE.md, MOBILE_OPTIMIZATION.md, README.md)
+   - **Phase 2:** Core Components & Hooks (useTelegramWebApp, MobileBottomNav, MobileStatCard, MobileAppointmentCard)
+   - **Phase 3:** Dark Theme on All Pages (8 pages: Dashboard, Appointments, Services, Organizations, Bot Management, Analytics, Settings, AI Assistant)
+   - **Phase 4:** Layout Components (Header, Sidebar, App.tsx)
+   - **Phase 5-8:** Forms, UI Components, Mobile Optimization, TWA Integration
+
+3. **Critical Rules:**
+   - ✅ Always add `dark:` variants for all visual elements
+   - ✅ Mobile-first approach (base styles for mobile, then `lg:` for desktop)
+   - ✅ Touch targets minimum 44x44px on mobile
+   - ✅ Check `isTelegramWebApp` and adapt UI
+   - ✅ Use semantic colors from DARK_THEME_GUIDE.md
+
+#### Priority 2: Testing & Quality Assurance 🟡
 
 1. **Manual Testing of New Features**
    - ✅ Использовать `TESTING_PLAN.md` для полного тестирования
@@ -2331,7 +2432,7 @@ For detailed information, see:
      - Toast notifications показываются при событиях
      - Backend API endpoints возвращают корректные данные
 
-#### Priority 1: Testing & Quality Assurance 🔴 (Previous)
+#### Priority 3: Testing & Quality Assurance 🟢 (Previous)
 1. **Complete Telegram Bot Flow Testing**
    - ✅ Ngrok настроен и работает
    - ✅ Backend использует HTTPS URL
@@ -2350,7 +2451,7 @@ For detailed information, see:
    - Check database query performance
    - Monitor analytics dashboard performance
 
-#### Priority 2: Enhancements 🟡
+#### Priority 4: Enhancements 🟢
 
 1. **Telegram Web App Integration (85% → 100%)**
    - Create `TelegramWebAppService` in React
@@ -2366,7 +2467,7 @@ For detailed information, see:
    - Rate limiting for AI requests
    - Files: `backend/src/lib/ai/ai-service.ts`, `backend/src/bot/handlers/ai-chat.ts`
 
-#### Priority 3: Production Readiness 🟢
+#### Priority 5: Production Readiness 🟢
 
 1. **Production Testing & Security**
    - Comprehensive endpoint testing
@@ -2586,7 +2687,7 @@ echo "PUBLIC_BASE_URL=https://[new-ngrok-url]" >> .env
    - Enhanced monitoring and logging
    - Rate limiting for AI requests
 
-#### Priority 3: Production Readiness 🟢
+#### Priority 5: Production Readiness 🟢
 1. **Production Testing & Security**
    - Comprehensive endpoint testing
    - Security audit
