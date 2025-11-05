@@ -277,9 +277,14 @@ router.post('/telegram-login', async (req: any, res: any) => {
             allowInDev
           });
           if (!allowInDev) {
+            console.log('❌ Returning 401 - invalid signature');
             return res.status(401).json({ error: 'Invalid Telegram initData signature' });
           }
+        } else {
+          console.log('✅ InitData signature verified');
         }
+      } else {
+        console.log('⚠️ No bot token for verification (skipping signature check)');
       }
     }
 
@@ -287,9 +292,12 @@ router.post('/telegram-login', async (req: any, res: any) => {
     if (!user) {
       // Новый пользователь через TWA без онбординга организации запрещен
       console.warn('🔐 Telegram login: user not found for telegramId', telegramId);
+      console.log('❌ Returning 403 - user not found');
       return res.status(403).json({ error: 'User not found. Complete organization onboarding in web admin first.' });
     }
 
+    console.log('✅ User found, generating tokens...');
+    
     // Генерируем токены
     const { accessToken, refreshToken } = generateTokens(
       user.id,
@@ -299,6 +307,15 @@ router.post('/telegram-login', async (req: any, res: any) => {
       user.organizationId,
       user.organization.name
     );
+
+    console.log('✅ Tokens generated, sending response...');
+    console.log('✅ Sending response with user:', {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken
+    });
 
     res.json({
       message: 'Login successful',
@@ -313,6 +330,8 @@ router.post('/telegram-login', async (req: any, res: any) => {
       accessToken,
       refreshToken
     });
+    
+    console.log('✅ Response sent successfully');
   } catch (error) {
     console.error('Telegram login error:', error);
     res.status(500).json({ error: 'Internal server error' });

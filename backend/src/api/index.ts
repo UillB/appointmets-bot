@@ -59,7 +59,11 @@ try {
     app.use("/admin-panel", express.static(reactAdminDist, { index: ["index.html"] }));
     console.log("✅ React Admin panel static served from:", reactAdminDist);
     // SPA fallback for deep links and refresh inside Telegram WebView
+    // Handle both with and without trailing slash
     app.get('/admin-panel', (req, res) => {
+      res.sendFile(path.join(reactAdminDist, 'index.html'));
+    });
+    app.get('/admin-panel/', (req, res) => {
       res.sendFile(path.join(reactAdminDist, 'index.html'));
     });
   } else {

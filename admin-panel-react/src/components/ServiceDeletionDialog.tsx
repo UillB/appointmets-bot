@@ -61,7 +61,11 @@ export function ServiceDeletionDialog({
       const result = await apiClient.deleteServiceWithCheck(service.id);
       setDeletionInfo(result);
       
-      if (result.error) {
+      // If service has no slots, show simple confirm dialog instead of deletion impact
+      if (result.details?.totalSlots === 0) {
+        // Skip showing deletion impact, go straight to simple confirm
+        setShowForceDelete(false);
+      } else if (result.error) {
         setShowForceDelete(true);
       }
     } catch (error) {
@@ -141,6 +145,66 @@ export function ServiceDeletionDialog({
                 )}
               </Button>
             </div>
+          )}
+
+          {/* Simple confirmation for services with no slots */}
+          {deletionInfo && deletionInfo.details?.totalSlots === 0 && !deletionInfo.error && (
+            <Card className="border-blue-200 bg-blue-50">
+              <div className="p-6">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-blue-900 mb-2">
+                      Confirm Service Deletion
+                    </h3>
+                    <p className="text-blue-700 text-sm mb-4">
+                      Are you sure you want to delete this service? This action cannot be undone.
+                    </p>
+                    <div className="flex gap-3">
+                      <Button
+                        variant="outline"
+                        onClick={handleClose}
+                        className="flex-1"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          try {
+                            setIsDeleting(true);
+                            await apiClient.deleteService(service.id);
+                            toast.success('Service deleted successfully');
+                            onServiceDeleted?.();
+                            onOpenChange(false);
+                            setDeletionInfo(null);
+                          } catch (error) {
+                            console.error('Failed to delete service:', error);
+                            toast.error('Failed to delete service');
+                          } finally {
+                            setIsDeleting(false);
+                          }
+                        }}
+                        disabled={isDeleting}
+                        variant="destructive"
+                        className="flex-1"
+                      >
+                        {isDeleting ? (
+                          <>
+                            <Clock className="h-4 w-4 mr-2 animate-spin" />
+                            Deleting...
+                          </>
+                        ) : (
+                          <>
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete Service
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
           )}
 
           {deletionInfo?.error && (
@@ -289,44 +353,47 @@ export function ServiceDeletionDialog({
           )}
         </div>
 
-        <div className="flex justify-end gap-3 pt-6 mt-6 border-t">
-          <Button variant="outline" onClick={handleClose}>
-            Cancel
-          </Button>
-          {deletionInfo && !deletionInfo.error && deletionInfo.safeToDelete && (
-            <Button
-              onClick={async () => {
-                try {
-                  setIsDeleting(true);
-                  await apiClient.deleteService(service.id);
-                  toast.success('Service deleted successfully');
-                  onServiceDeleted?.();
-                  onOpenChange(false);
-                  setDeletionInfo(null);
-                } catch (error) {
-                  console.error('Failed to delete service:', error);
-                  toast.error('Failed to delete service');
-                } finally {
-                  setIsDeleting(false);
-                }
-              }}
-              disabled={isDeleting}
-              variant="destructive"
-            >
-              {isDeleting ? (
-                <>
-                  <Clock className="h-4 w-4 mr-2 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                <>
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete Service
-                </>
-              )}
+        {/* Only show footer buttons if not showing simple confirm (which has its own buttons) */}
+        {!(deletionInfo && deletionInfo.details?.totalSlots === 0 && !deletionInfo.error) && (
+          <div className="flex justify-end gap-3 pt-6 mt-6 border-t">
+            <Button variant="outline" onClick={handleClose}>
+              Cancel
             </Button>
-          )}
-        </div>
+            {deletionInfo && !deletionInfo.error && deletionInfo.safeToDelete && deletionInfo.details?.totalSlots !== 0 && (
+              <Button
+                onClick={async () => {
+                  try {
+                    setIsDeleting(true);
+                    await apiClient.deleteService(service.id);
+                    toast.success('Service deleted successfully');
+                    onServiceDeleted?.();
+                    onOpenChange(false);
+                    setDeletionInfo(null);
+                  } catch (error) {
+                    console.error('Failed to delete service:', error);
+                    toast.error('Failed to delete service');
+                  } finally {
+                    setIsDeleting(false);
+                  }
+                }}
+                disabled={isDeleting}
+                variant="destructive"
+              >
+                {isDeleting ? (
+                  <>
+                    <Clock className="h-4 w-4 mr-2 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete Service
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );

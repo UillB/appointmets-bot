@@ -1,7 +1,22 @@
 // API Service for Appointments Bot Admin Panel
 // Integrates with existing backend on port 4000
 
-const API_BASE_URL = 'http://localhost:4000/api';
+// Determine API base URL dynamically based on current origin
+// This allows the app to work both locally (localhost) and via ngrok (HTTPS)
+const getApiBaseUrl = () => {
+  // In production or when accessed via ngrok, use relative path
+  if (window.location.protocol === 'https:' || window.location.hostname !== 'localhost') {
+    const apiUrl = '/api';
+    console.log('🌐 API Base URL (relative):', apiUrl, 'from origin:', window.location.origin);
+    return apiUrl;
+  }
+  // For local development, use localhost
+  const apiUrl = 'http://localhost:4000/api';
+  console.log('🌐 API Base URL (localhost):', apiUrl);
+  return apiUrl;
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Types
 export interface User {
@@ -154,6 +169,12 @@ class ApiClient {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
+    // Always get fresh token from localStorage (in case it was updated)
+    const currentToken = localStorage.getItem('accessToken');
+    if (currentToken) {
+      this.accessToken = currentToken;
+    }
+    
     const url = `${this.baseURL}${endpoint}`;
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
@@ -224,6 +245,40 @@ class ApiClient {
         name,
         organizationName,
       }),
+    });
+
+    this.accessToken = response.accessToken;
+    localStorage.setItem('accessToken', response.accessToken);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    localStorage.setItem('user', JSON.stringify(response.user));
+
+    return response;
+  }
+
+  async telegramLogin(initData: string, telegramUser: any): Promise<AuthResponse> {
+    console.log('📤 Sending telegram-login request:', {
+      telegramId: telegramUser.id,
+      username: telegramUser.username,
+      hasInitData: !!initData,
+      initDataLength: initData?.length
+    });
+    
+    const response = await this.request<AuthResponse>('/auth/telegram-login', {
+      method: 'POST',
+      body: JSON.stringify({
+        telegramId: telegramUser.id.toString(),
+        firstName: telegramUser.first_name,
+        lastName: telegramUser.last_name,
+        username: telegramUser.username,
+        languageCode: telegramUser.language_code,
+        initData: initData,
+      }),
+    });
+
+    console.log('📥 Telegram login response received:', {
+      userId: response.user.id,
+      email: response.user.email,
+      role: response.user.role
     });
 
     this.accessToken = response.accessToken;
@@ -334,11 +389,6 @@ class ApiClient {
     });
   }
 
-  async deleteService(id: number): Promise<void> {
-    return this.request(`/services/${id}`, {
-      method: 'DELETE',
-    });
-  }
 
   async getServicesStats(): Promise<{
     totalServices: number;
@@ -718,6 +768,75 @@ class ApiClient {
     rejectedAppointments: number;
   }> {
     return this.request('/appointments/summary-stats');
+  }
+
+  // Analytics data
+  async getAnalytics(params?: {
+    timePeriod?: 'week' | 'month' | 'year';
+    startDate?: string;
+    endDate?: string;
+  }): Promise<{
+    totalAppointments: number;
+    totalRevenue: number;
+    averageBookingTime: number;
+    averageDuration: number;
+    growthRate: number;
+    activeClients: number;
+    statusDistribution: Array<{
+      name: string;
+      value: number;
+      count: number;
+    }>;
+    peakHours: Array<{
+      hour: number;
+      hourLabel: string;
+      bookings: number;
+    }>;
+    topServices: Array<{
+      serviceId: number;
+      serviceName: string;
+      bookings: number;
+      revenue: number;
+    }>;
+    dailyBookings: Array<{
+      date: string;
+      day: string;
+      dayShort: string;
+      appointments: number;
+      bookings: number;
+      revenue: number;
+    }>;
+    monthlyTrends: Array<{
+      month: string;
+      bookings: number;
+      revenue: number;
+    }>;
+    customerInsights: {
+      newCustomers: number;
+      returningCustomers: number;
+      averageBookingFrequency: number;
+      totalClients: number;
+    };
+    insights: {
+      bestDay: { day: string; bookings: number } | null;
+      peakTime: { hour: string; bookings: number } | null;
+      topService: {
+        serviceId: number;
+        serviceName: string;
+        bookings: number;
+        revenue: number;
+      } | null;
+    };
+  }> {
+    const searchParams = new URLSearchParams();
+    if (params?.timePeriod) searchParams.set('timePeriod', params.timePeriod);
+    if (params?.startDate) searchParams.set('startDate', params.startDate);
+    if (params?.endDate) searchParams.set('endDate', params.endDate);
+
+    const queryString = searchParams.toString();
+    const endpoint = `/analytics${queryString ? `?${queryString}` : ''}`;
+    
+    return this.request(endpoint);
   }
 }
 

@@ -41,7 +41,15 @@ export function useWebSocket() {
     setConnectionStatus('connecting');
 
     try {
-      const wsUrl = `ws://localhost:4000/ws?token=${token}`;
+      // Determine WebSocket URL based on current protocol and host
+      // Use wss:// for HTTPS (ngrok) and ws:// for HTTP (localhost)
+      const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsHost = window.location.hostname === 'localhost' 
+        ? 'localhost:4000' 
+        : window.location.host;
+      const wsUrl = `${wsProtocol}//${wsHost}/ws?token=${token}`;
+      
+      console.log('🔌 Connecting to WebSocket:', wsUrl);
       wsRef.current = new WebSocket(wsUrl);
 
       wsRef.current.onopen = () => {

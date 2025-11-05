@@ -186,11 +186,12 @@ r.get("/calendar", (req: any, res: any) => {
   `);
 });
 
-// Admin WebApp wrapper: initializes Telegram WebApp and redirects to React app
+// Admin WebApp wrapper: initializes Telegram WebApp, authenticates, and redirects to React app
 r.get("/admin", (req: any, res: any) => {
   const lang = detectLang(req.query.lang as string);
   // IMPORTANT: Use same-origin path for Telegram iOS webview to avoid cross-origin redirects
-  const frontendUrl = "/admin-panel";
+  // Use trailing slash to ensure proper routing
+  const frontendUrl = "/admin-panel/";
 
   res.type("html").send(`
 <!doctype html>
@@ -205,21 +206,147 @@ r.get("/admin", (req: any, res: any) => {
     #loading { display:flex; align-items:center; justify-content:center; height:100vh; flex-direction:column; gap:16px; }
     .spinner { width:40px; height:40px; border:4px solid rgba(0,0,0,0.1); border-top:4px solid #3b82f6; border-radius:50%; animation:spin 1s linear infinite; }
     @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
+    #status { margin-top: 16px; font-size: 14px; color: #666; }
   </style>
 </head>
 <body>
   <div id="loading">
     <div class="spinner"></div>
     <p>Loading Admin Panel…</p>
+    <div id="status"></div>
   </div>
   <script>
     (function(){
-      try {
-        var tg = window.Telegram && window.Telegram.WebApp;
-        if (tg) { tg.ready(); tg.expand(); }
-      } catch (e) { /* no-op */ }
-      // Redirect to same-origin React build served by backend (MAIN panel)
-      window.location.replace('${frontendUrl}');
+      console.log('🔍 Wrapper script started');
+      var statusEl = document.getElementById('status');
+      
+      function setStatus(msg) {
+        if (statusEl) statusEl.textContent = msg;
+        console.log('📝 Status:', msg);
+      }
+      
+      // Wait for Telegram WebApp script to load
+      function authenticateAndRedirect() {
+        try {
+          var tg = window.Telegram && window.Telegram.WebApp;
+          
+          if (!tg) {
+            setStatus('⚠️ Telegram WebApp not available');
+            setTimeout(function() {
+              window.location.replace('${frontendUrl}');
+            }, 1000);
+            return;
+          }
+          
+          tg.ready();
+          tg.expand();
+          
+          var initData = tg.initData;
+          var telegramUser = tg.initDataUnsafe?.user;
+          
+          console.log('🔍 Telegram WebApp data:', {
+            hasInitData: !!initData,
+            hasUser: !!telegramUser,
+            userId: telegramUser?.id
+          });
+          
+          if (!initData || !telegramUser) {
+            setStatus('⚠️ Telegram data incomplete');
+            setTimeout(function() {
+              window.location.replace('${frontendUrl}');
+            }, 1000);
+            return;
+          }
+          
+          setStatus('🔐 Authenticating...');
+          console.log('🔐 Attempting authentication with Telegram ID:', telegramUser.id);
+          
+          // CRITICAL: Authenticate directly in wrapper page
+          fetch('/api/auth/telegram-login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              telegramId: telegramUser.id.toString(),
+              firstName: telegramUser.first_name,
+              lastName: telegramUser.last_name,
+              username: telegramUser.username,
+              languageCode: telegramUser.language_code,
+              initData: initData
+            })
+          })
+          .then(function(response) {
+            console.log('📥 Auth response status:', response.status);
+            if (!response.ok) {
+              return response.json().then(function(data) {
+                console.error('❌ Auth failed:', data);
+                throw new Error(data.error || 'Authentication failed');
+              });
+            }
+            return response.json();
+          })
+          .then(function(data) {
+            console.log('✅ Authentication successful:', {
+              userId: data.user.id,
+              email: data.user.email
+            });
+            
+            // Save tokens to localStorage
+            try {
+              localStorage.setItem('accessToken', data.accessToken);
+              localStorage.setItem('refreshToken', data.refreshToken);
+              localStorage.setItem('user', JSON.stringify(data.user));
+              console.log('✅ Tokens saved to localStorage');
+            } catch (e) {
+              console.error('❌ Failed to save tokens:', e);
+            }
+            
+            setStatus('✅ Authenticated! Loading...');
+            
+            // Redirect to React app
+            setTimeout(function() {
+              window.location.replace('${frontendUrl}');
+            }, 500);
+          })
+          .catch(function(error) {
+            console.error('❌ Authentication error:', error);
+            setStatus('❌ Auth failed: ' + error.message);
+            // Still redirect - user will see login page
+            setTimeout(function() {
+              window.location.replace('${frontendUrl}');
+            }, 2000);
+          });
+        } catch (e) {
+          console.error('❌ Error:', e);
+          setStatus('❌ Error: ' + e.message);
+          setTimeout(function() {
+            window.location.replace('${frontendUrl}');
+          }, 2000);
+        }
+      }
+      
+      // Wait for Telegram script to load
+      if (typeof window.Telegram === 'undefined') {
+        setStatus('⏳ Waiting for Telegram...');
+        var checkInterval = setInterval(function() {
+          if (typeof window.Telegram !== 'undefined') {
+            clearInterval(checkInterval);
+            setStatus('✅ Telegram loaded');
+            setTimeout(authenticateAndRedirect, 200);
+          }
+        }, 100);
+        
+        setTimeout(function() {
+          clearInterval(checkInterval);
+          if (typeof window.Telegram === 'undefined') {
+            setStatus('⚠️ Telegram timeout - redirecting...');
+            window.location.replace('${frontendUrl}');
+          }
+        }, 3000);
+      } else {
+        authenticateAndRedirect();
+      }
     })();
   </script>
 </body>

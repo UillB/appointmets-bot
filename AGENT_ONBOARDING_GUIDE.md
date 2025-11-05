@@ -1,14 +1,38 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 3.6  
-**Last Updated:** January 18, 2025 (Latest Session - Notification Center & UI Improvements)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes
+**Version:** 3.8  
+**Last Updated:** January 18, 2025 (Latest Session - Telegram Web App API & WebSocket URL Fixes)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes
 
 > **This is the ONLY document you need to read to start working on this project.**
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - UI/UX Fixes & Animation Improvements ✅
+### Latest Session (January 18, 2025) - Telegram Web App API & WebSocket URL Fixes ✅
+
+#### Critical TWA Connectivity Fixes
+- ✅ **API Client Dynamic URL** - Исправлен API клиент для использования относительных путей `/api` при работе через HTTPS (ngrok), что позволяет TWA корректно подключаться к backend
+- ✅ **WebSocket Dynamic URL** - Исправлен WebSocket клиент для автоматического определения URL на основе текущего протокола (wss:// для HTTPS, ws:// для HTTP)
+- ✅ **Token Synchronization** - Улучшена синхронизация токена в API клиенте - всегда берется свежий токен из localStorage перед каждым запросом
+- ✅ **Offline Status Fix** - Исправлена проблема "Offline" статуса и "Failed to load data" в TWA - теперь все запросы идут на правильный URL
+
+#### Key Technical Changes:
+- API клиент определяет базовый URL динамически: `/api` для HTTPS (ngrok) или `http://localhost:4000/api` для localhost
+- WebSocket клиент определяет протокол (wss/ws) и хост автоматически на основе `window.location`
+- Добавлено логирование для отладки API и WebSocket подключений
+- Токен всегда синхронизируется из localStorage перед каждым API запросом
+
+#### Files Modified:
+- `admin-panel-react/src/services/api.ts` - Динамическое определение API URL, синхронизация токена
+- `admin-panel-react/src/hooks/useWebSocket.ts` - Динамическое определение WebSocket URL
+
+#### Current Status:
+- ✅ **TWA API Connection** - API запросы работают корректно через ngrok
+- ✅ **TWA WebSocket Connection** - WebSocket подключается и показывает статус "Online"
+- ✅ **Data Loading** - Данные загружаются корректно, ошибки "Failed to load" исправлены
+- ✅ **Local Development** - Локальная разработка (localhost) продолжает работать как раньше
+
+### Previous Session (January 18, 2025) - UI/UX Fixes & Animation Improvements ✅
 
 #### Critical UI/UX Fixes
 - ✅ **NotificationCenter Default Tab** - Исправлена проблема с дефолтной табой: теперь всегда устанавливается активная таба при открытии (Unread если есть непрочитанные, иначе All)

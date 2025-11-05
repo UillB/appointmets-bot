@@ -75,8 +75,12 @@ function AppContent() {
 }
 
 function App() {
+  // Determine basename based on current path
+  // If app is served from /admin-panel, use that as basename
+  const basename = window.location.pathname.startsWith('/admin-panel') ? '/admin-panel' : '/';
+  
   return (
-    <Router>
+    <Router basename={basename}>
       <LanguageProvider>
         <AuthProvider>
           <div>

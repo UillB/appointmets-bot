@@ -20,81 +20,297 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
 
-  // Initialize auth state from localStorage
+  // Initialize auth state from localStorage and Telegram WebApp
   useEffect(() => {
     const initializeAuth = async () => {
+      console.log('🚀 Auth initialization started');
+      
       try {
+        // CRITICAL: Check if we're in Telegram WebApp FIRST
+        // Even if we have stored tokens, we should re-authenticate via Telegram in TWA
+        const savedInitData = localStorage.getItem('telegram_initData');
+        const savedUser = localStorage.getItem('telegram_user');
+        const isInTelegramWebApp = !!(savedInitData && savedUser) || !!(window as any).Telegram?.WebApp;
+        
+        console.log('🔍 Initial check:', {
+          isInTelegramWebApp: isInTelegramWebApp,
+          hasSavedInitData: !!savedInitData,
+          hasSavedUser: !!savedUser,
+          hasTelegramAPI: !!(window as any).Telegram?.WebApp
+        });
+        
         const storedUser = localStorage.getItem('user');
         const storedToken = localStorage.getItem('accessToken');
         
+        console.log('🔍 Stored auth check:', {
+          hasStoredUser: !!storedUser,
+          hasStoredToken: !!storedToken
+        });
+        
+        // CRITICAL: If tokens were just saved by wrapper page, use them immediately
+        // Wrapper page already authenticated and saved tokens, so we don't need to auth again
         if (storedUser && storedToken) {
+          console.log('✅ Found stored tokens - using them immediately');
           try {
             const userData = JSON.parse(storedUser);
+            
+            // CRITICAL: Set user and token immediately without validation
+            // Wrapper page just authenticated, so tokens are guaranteed fresh
             setUser(userData);
             setToken(storedToken);
+            console.log('✅ User authenticated with tokens from wrapper page');
             
-            // Verify token is still valid by making a test request with timeout
-            const timeoutPromise = new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Request timeout')), 3000)
-            );
-            
-            try {
-              await Promise.race([
-                apiClient.getDashboardStats(),
-                timeoutPromise
-              ]);
-              // Token is valid
-            } catch (error: any) {
-              console.log('Token validation failed:', error.message);
-              
-              // If it's a network error or timeout, don't try to refresh - just keep user logged in
-              const isNetworkError = error.message === 'Request timeout' || 
-                                    error.message?.includes('Failed to fetch') || 
-                                    error.message?.includes('NetworkError');
-              
-              if (!isNetworkError) {
-                // Token is invalid (not network error), try to refresh
-                try {
-                  const refreshTimeoutPromise = new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('Refresh timeout')), 3000)
-                  );
-                  
-                  await Promise.race([
-                    apiClient.refreshToken(),
-                    refreshTimeoutPromise
-                  ]);
-                  // Token refreshed successfully, keep user logged in
-                } catch (refreshError: any) {
-                  console.log('Token refresh failed:', refreshError.message);
-                  
-                  // If refresh also timed out, keep user logged in
-                  const isRefreshNetworkError = refreshError.message === 'Refresh timeout' || 
-                                                refreshError.message?.includes('Failed to fetch');
-                  
-                  if (!isRefreshNetworkError) {
-                    // Refresh failed for other reasons (invalid token), clear auth state
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
-                    localStorage.removeItem('user');
-                    setUser(null);
-                    setToken(null);
-                  }
-                  // If network error, keep user logged in
-                }
+            // Validate token in background (non-blocking)
+            // This doesn't block the UI, but helps verify token is still valid
+            setTimeout(async () => {
+              try {
+                await apiClient.getDashboardStats();
+                console.log('✅ Token validation successful (background)');
+              } catch (error: any) {
+                console.log('⚠️ Token validation failed (background):', error.message);
+                // Don't clear tokens on background validation failure
+                // User is already logged in, validation can fail due to network issues
               }
-              // If network error during validation, keep user logged in
-            }
+            }, 100);
+            
+            // Don't proceed to Telegram auth - we already have valid tokens
+            setIsLoading(false);
+            return; // Exit early - user is authenticated
           } catch (parseError) {
             console.error('Failed to parse user data:', parseError);
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('user');
             setUser(null);
+            // Continue to Telegram auth below
           }
-        } else {
-          // No stored auth data, user is not authenticated
-          setUser(null);
-          setToken(null);
+        }
+        
+        // Telegram WebApp auto-login (only if no stored tokens)
+        // If tokens exist, they were saved by wrapper page and we should use them
+        if (!storedUser || !storedToken) {
+          console.log('⚠️ No stored auth data - attempting Telegram WebApp auto-login');
+          
+          // CRITICAL: Check localStorage FIRST (saved by wrapper page)
+          const savedInitData = localStorage.getItem('telegram_initData');
+          const savedUser = localStorage.getItem('telegram_user');
+          
+          console.log('🔍 Checking localStorage for Telegram data:', {
+            hasSavedInitData: !!savedInitData,
+            hasSavedUser: !!savedUser,
+            savedInitDataLength: savedInitData?.length || 0
+          });
+          
+          // CRITICAL: Wait for Telegram WebApp API to fully load
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Try multiple times to get Telegram WebApp API
+          let tg = (window as any).Telegram?.WebApp;
+          let attempts = 0;
+          const maxAttempts = 10; // Increased attempts
+          
+          while (!tg && attempts < maxAttempts) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+            tg = (window as any).Telegram?.WebApp;
+            attempts++;
+            console.log(`🔍 Attempt ${attempts}/${maxAttempts} to get Telegram WebApp API...`);
+          }
+          
+          let telegramLoginSuccess = false;
+          
+          console.log('🔍 Checking Telegram WebApp:', {
+            hasTelegram: !!(window as any).Telegram,
+            hasWebApp: !!tg,
+            hasInitData: !!tg?.initData,
+            hasUser: !!tg?.initDataUnsafe?.user,
+            platform: tg?.platform,
+            version: tg?.version,
+            attempts: attempts,
+            savedInitDataInLocalStorage: !!savedInitData
+          });
+          
+          if (tg) {
+            try {
+              // Initialize WebApp if not already done
+              if (tg.ready) {
+                tg.ready();
+                console.log('✅ Telegram WebApp ready() called');
+              }
+              if (tg.expand) {
+                tg.expand();
+                console.log('✅ Telegram WebApp expand() called');
+              }
+              
+              // Wait a bit more for initData to be available
+              await new Promise(resolve => setTimeout(resolve, 300));
+              
+              // Try to get initData from Telegram WebApp API first
+              let initData = tg.initData;
+              let telegramUser = tg.initDataUnsafe?.user;
+              
+              // FALLBACK: If initData not available from API, try localStorage (saved by wrapper)
+              if (!initData) {
+                console.log('⚠️ initData not in Telegram API, checking localStorage...');
+                const savedInitData = localStorage.getItem('telegram_initData');
+                const savedUser = localStorage.getItem('telegram_user');
+                
+                if (savedInitData) {
+                  initData = savedInitData;
+                  console.log('✅ Found initData in localStorage');
+                }
+                
+                if (savedUser) {
+                  try {
+                    telegramUser = JSON.parse(savedUser);
+                    console.log('✅ Found telegram user in localStorage');
+                  } catch (e) {
+                    console.error('❌ Failed to parse saved telegram user:', e);
+                  }
+                }
+              }
+              
+              console.log('🔐 Telegram WebApp data:', {
+                hasInitData: !!initData,
+                initDataLength: initData?.length || 0,
+                initDataPreview: initData ? initData.substring(0, 50) + '...' : null,
+                hasUser: !!telegramUser,
+                userId: telegramUser?.id,
+                username: telegramUser?.username,
+                firstName: telegramUser?.first_name
+              });
+              
+              // If we have initData OR saved data, try to login
+              if (initData && telegramUser) {
+                console.log('🔐 Attempting Telegram WebApp auto-login...');
+                console.log('🔐 Sending request to /auth/telegram-login with:', {
+                  telegramId: telegramUser.id,
+                  username: telegramUser.username,
+                  firstName: telegramUser.first_name,
+                  hasInitData: !!initData,
+                  initDataSource: tg.initData ? 'Telegram API' : 'localStorage'
+                });
+                
+                try {
+                  const response = await apiClient.telegramLogin(initData, telegramUser);
+                  console.log('✅ Telegram login response received:', {
+                    userId: response.user.id,
+                    email: response.user.email,
+                    role: response.user.role
+                  });
+                  setUser(response.user);
+                  setToken(response.accessToken);
+                  toast.success('Авторизация через Telegram успешна');
+                  console.log('✅ Telegram WebApp auto-login successful');
+                  telegramLoginSuccess = true;
+                  
+                  // Clean up saved data after successful login
+                  localStorage.removeItem('telegram_initData');
+                  localStorage.removeItem('telegram_user');
+                } catch (telegramLoginError: any) {
+                  console.error('❌ Telegram auto-login failed:', {
+                    message: telegramLoginError.message,
+                    status: telegramLoginError.response?.status,
+                    data: telegramLoginError.response?.data,
+                    error: telegramLoginError
+                  });
+                  // If Telegram login fails, user will see login page
+                  // This is expected if user is not linked to an admin account
+                }
+              } else if (savedInitData && savedUser) {
+                // We have saved data but Telegram API not available - use saved data
+                console.log('🔐 Using saved Telegram data from localStorage for auto-login...');
+                try {
+                  const parsedUser = JSON.parse(savedUser);
+                  console.log('🔐 Sending request to /auth/telegram-login with saved data:', {
+                    telegramId: parsedUser.id,
+                    username: parsedUser.username,
+                    hasInitData: !!savedInitData
+                  });
+                  
+                  const response = await apiClient.telegramLogin(savedInitData, parsedUser);
+                  console.log('✅ Telegram login response received:', {
+                    userId: response.user.id,
+                    email: response.user.email,
+                    role: response.user.role
+                  });
+                  setUser(response.user);
+                  setToken(response.accessToken);
+                  toast.success('Авторизация через Telegram успешна');
+                  console.log('✅ Telegram WebApp auto-login successful (using saved data)');
+                  telegramLoginSuccess = true;
+                  
+                  // Clean up saved data after successful login
+                  localStorage.removeItem('telegram_initData');
+                  localStorage.removeItem('telegram_user');
+                } catch (telegramLoginError: any) {
+                  console.error('❌ Telegram auto-login failed (saved data):', {
+                    message: telegramLoginError.message,
+                    status: telegramLoginError.response?.status,
+                    data: telegramLoginError.response?.data,
+                    error: telegramLoginError
+                  });
+                }
+              } else {
+                console.warn('⚠️ Telegram WebApp data incomplete:', {
+                  hasInitData: !!initData,
+                  hasUser: !!telegramUser,
+                  hasSavedInitData: !!savedInitData,
+                  hasSavedUser: !!savedUser,
+                  initDataValue: initData,
+                  userValue: telegramUser
+                });
+              }
+            } catch (error) {
+              console.error('❌ Telegram WebApp initialization error:', error);
+            }
+          } else {
+            console.warn('⚠️ Telegram WebApp not available after', maxAttempts, 'attempts');
+            
+            // CRITICAL: If we have saved data but Telegram API not available, try using saved data
+            if (savedInitData && savedUser && !telegramLoginSuccess) {
+              console.log('🔐 Telegram API not available, but we have saved data - trying auto-login with saved data...');
+              try {
+                const parsedUser = JSON.parse(savedUser);
+                console.log('🔐 Sending request to /auth/telegram-login with saved data:', {
+                  telegramId: parsedUser.id,
+                  username: parsedUser.username,
+                  hasInitData: !!savedInitData
+                });
+                
+                const response = await apiClient.telegramLogin(savedInitData, parsedUser);
+                console.log('✅ Telegram login response received:', {
+                  userId: response.user.id,
+                  email: response.user.email,
+                  role: response.user.role
+                });
+                setUser(response.user);
+                setToken(response.accessToken);
+                toast.success('Авторизация через Telegram успешна');
+                console.log('✅ Telegram WebApp auto-login successful (using saved data, no API)');
+                telegramLoginSuccess = true;
+                
+                // Clean up saved data after successful login
+                localStorage.removeItem('telegram_initData');
+                localStorage.removeItem('telegram_user');
+              } catch (telegramLoginError: any) {
+                console.error('❌ Telegram auto-login failed (saved data, no API):', {
+                  message: telegramLoginError.message,
+                  status: telegramLoginError.response?.status,
+                  data: telegramLoginError.response?.data,
+                  error: telegramLoginError
+                });
+              }
+            } else {
+              console.warn('⚠️ Window.Telegram:', (window as any).Telegram);
+            }
+          }
+          
+          // If no Telegram auth or it failed, user is not authenticated
+          if (!telegramLoginSuccess) {
+            console.log('⚠️ No Telegram auto-login, user will see login page');
+            setUser(null);
+            setToken(null);
+          }
         }
       } catch (error) {
         console.error('Auth initialization error:', error);

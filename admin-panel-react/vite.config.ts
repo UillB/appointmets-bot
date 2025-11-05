@@ -15,6 +15,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // CRITICAL: Set base path for production build to match /admin-panel route
+  base: process.env.NODE_ENV === 'production' ? '/admin-panel/' : '/',
   build: {
     target: 'esnext',
     outDir: 'build',
