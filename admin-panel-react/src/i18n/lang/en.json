@@ -134,7 +134,25 @@
     "botSettingsUpdateError": "Error updating settings",
     "failedToLoadStatus": "Failed to load bot status",
     "failedToGenerateQR": "Failed to generate QR code",
-    "loadingUser": "Loading user..."
+    "loadingUser": "Loading user...",
+    "emptyState": {
+      "title": "Start Bot Setup",
+      "description": "Create a Telegram bot in 3 simple steps and start accepting bookings from clients",
+      "step1": {
+        "title": "Create Bot",
+        "description": "Find @BotFather in Telegram"
+      },
+      "step2": {
+        "title": "Get Token",
+        "description": "Copy token from BotFather"
+      },
+      "step3": {
+        "title": "Activate",
+        "description": "Paste token into system"
+      },
+      "startButton": "Start Setup",
+      "footer": "Follow the instructions below for step-by-step guide"
+    }
   },
   "language": {
     "switch": "Language Switch",

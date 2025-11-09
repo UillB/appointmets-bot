@@ -134,7 +134,25 @@
     "botSettingsUpdateError": "Ошибка при обновлении настроек",
     "failedToLoadStatus": "Failed to load bot status",
     "failedToGenerateQR": "Не удалось сгенерировать QR-код",
-    "loadingUser": "Загрузка пользователя..."
+    "loadingUser": "Загрузка пользователя...",
+    "emptyState": {
+      "title": "Начните настройку бота",
+      "description": "Создайте Telegram бота за 3 простых шага и начните принимать записи от клиентов",
+      "step1": {
+        "title": "Создайте бота",
+        "description": "Найдите @BotFather в Telegram"
+      },
+      "step2": {
+        "title": "Получите токен",
+        "description": "Скопируйте токен от BotFather"
+      },
+      "step3": {
+        "title": "Активируйте",
+        "description": "Вставьте токен в систему"
+      },
+      "startButton": "Начать настройку",
+      "footer": "Следуйте инструкциям ниже для пошагового руководства"
+    }
   },
   "language": {
     "switch": "Переключение языка",

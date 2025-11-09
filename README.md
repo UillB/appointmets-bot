@@ -21,25 +21,41 @@ appointments-bot/
 - Node.js 20+
 - npm
 - Git
+- ngrok (для Telegram WebApp в dev режиме)
 
 ### Installation & Setup
 
 1. **Clone repository:**
    ```bash
    git clone <repository-url>
-   cd appointments-bot
+   cd appointments-bot-latest
    ```
 
-2. **Automated setup:**
+2. **Quick start (рекомендуется):**
    ```bash
-   chmod +x scripts/setup.sh
-   ./scripts/setup.sh
+   # Инициализация базы данных
+   cd backend
+   npx prisma generate
+   npx prisma db push
+   cd ..
+   
+   # Запуск всех сервисов
+   ./start-all.sh
    ```
 
-3. **Start development:**
+3. **Или ручной запуск:**
    ```bash
-   chmod +x scripts/dev.sh
-   ./scripts/dev.sh
+   # Backend (терминал 1)
+   cd backend && npm run dev
+   
+   # React Admin (терминал 2)
+   cd admin-panel-react && npm run dev
+   
+   # Landing (терминал 3)
+   cd landing && npm run dev
+   
+   # Ngrok для Telegram WebApp (терминал 4)
+   ngrok http 4000
    ```
 
 ### Manual Setup
@@ -205,8 +221,13 @@ cd backend && npm run check-slots
 
 ## 📚 Documentation
 
-Additional documentation is available in the `docs/` folder:
-- [🚨 **Critical Features Roadmap**](docs/CRITICAL_FEATURES_ROADMAP.md) - **CRITICAL** - MVP features
+### Для нового агента (начни отсюда):
+1. **[🚀 GETTING_STARTED.md](GETTING_STARTED.md)** - Быстрый старт для нового агента ⭐
+2. **[🤖 SYSTEM_PROMPT_FOR_GPT.md](SYSTEM_PROMPT_FOR_GPT.md)** - Полная архитектура системы (864 строки)
+3. **[📖 AGENT_ONBOARDING_GUIDE.md](AGENT_ONBOARDING_GUIDE.md)** - Детальный гайд для агента
+
+### Дополнительная документация:
+- [🚨 **Critical Features Roadmap**](docs/CRITICAL_FEATURES_ROADMAP.md) - MVP features
 - [📊 Project Status](docs/PROJECT_CHECKPOINT_2025.md) - Current project status
 - [💼 Business Documentation](docs/business/) - Business plans and strategy
 - [🔧 Development Guides](docs/development/) - Development guides
@@ -215,7 +236,6 @@ Additional documentation is available in the `docs/` folder:
 - [🔌 API Documentation](docs/api/) - API documentation
 - [🤖 Agent Prompts](docs/agent-prompts/) - Prompts for AI agents
 - [📋 **Detailed Specification**](docs/PROJECT_DETAILED_SPECIFICATION.md) - Complete project specification
-- [🤖 **Agent Onboarding**](AGENT_ONBOARDING_GUIDE.md) - Agent onboarding guide
 
 ## 🤝 Contributing
 

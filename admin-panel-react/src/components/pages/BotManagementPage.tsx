@@ -87,7 +87,7 @@ export function BotManagementPage() {
   const [organizationName, setOrganizationName] = useState("");
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
   const qrCodeCanvasRef = useRef<HTMLCanvasElement>(null);
-  const [activeTab, setActiveTab] = useState<string>("instructions");
+  const [activeTab, setActiveTab] = useState<string>("");
   const [adminLinked, setAdminLinked] = useState(false);
   const [adminLink, setAdminLink] = useState<string | null>(null);
   const [adminDeepLink, setAdminDeepLink] = useState<string | null>(null);
@@ -648,8 +648,8 @@ export function BotManagementPage() {
     );
   }
 
-  // Empty State - No bot configured yet
-  if (!botActive && !botName && !botUsername && !isLoading) {
+  // Empty State - No bot configured yet (but show tabs if user clicked "Start Setup")
+  if (!botActive && !botName && !botUsername && !isLoading && activeTab !== "instructions" && activeTab !== "activation") {
     return (
       <div className="space-y-6">
         <PageHeader
@@ -711,9 +711,14 @@ export function BotManagementPage() {
                 </div>
 
                 <Button
-                  onClick={() => setActiveTab("instructions")}
+                  onClick={() => {
+                    setActiveTab("instructions");
+                    // Scroll to top to show the tabs
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
                   size="lg"
-                  className="bg-indigo-600 hover:bg-indigo-700 h-12 px-8"
+                  className="bg-indigo-600 hover:bg-indigo-700 h-12 px-8 cursor-pointer"
+                  type="button"
                 >
                   <PlayCircle className="w-5 h-5 mr-2" />
                   {t('botManagement.emptyState.startButton')}
@@ -834,7 +839,7 @@ export function BotManagementPage() {
           )}
 
           {/* Main Tabs - Step-by-Step Setup */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Tabs value={activeTab || "instructions"} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-4 h-auto p-1 bg-gray-100 dark:bg-gray-800">
               <TabsTrigger value="instructions" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
                 {botName ? (

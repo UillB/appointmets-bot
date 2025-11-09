@@ -1,14 +1,47 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 4.3  
-**Last Updated:** January 18, 2025 (Latest Session - Bug Fixes: AI Assistant & WebSocket Improvements)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + **AI Assistant Bug Fixes + WebSocket Error Handling Improvements**
+**Version:** 4.4  
+**Last Updated:** January 18, 2025 (Latest Session - Bot Management Fixes & Documentation Update)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + **Bot Management Translations & Button Fix + Documentation Update**
 
-> **This is the ONLY document you need to read to start working on this project.**
+> **Для нового агента:** Начни с `GETTING_STARTED.md` для быстрого старта, затем прочитай этот документ для детального понимания.
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Bug Fixes: AI Assistant & WebSocket Improvements ✅
+### Latest Session (January 18, 2025) - Bot Management Fixes & Documentation Update ✅
+
+#### Bot Management Page Critical Fixes
+- ✅ **Добавлены переводы для emptyState** - Все тексты в empty state теперь переведены на русский, английский и иврит (ru.json, en.json, he.json)
+- ✅ **Исправлена кнопка "Начать настройку"** - Кнопка теперь работает корректно, переключает на вкладку "Инструкции" и прокручивает страницу вверх
+- ✅ **Улучшена логика рендеринга** - Empty state показывается только когда бот не настроен и пользователь не нажал "Начать настройку"
+
+#### Documentation Updates
+- ✅ **Создан GETTING_STARTED.md** - Быстрый старт для нового агента с ключевой информацией
+- ✅ **Обновлен README.md** - Добавлены ссылки на ключевые документы, актуализированы команды запуска
+- ✅ **Обновлен QUICK_START.md** - Актуализированы команды запуска сервисов
+- ✅ **Создан CHANGELOG.md** - История изменений проекта
+
+#### Key Technical Changes:
+- **Bot Management:**
+  - Добавлены переводы для `emptyState.title`, `emptyState.description`, `emptyState.step1/2/3.title/description`, `emptyState.startButton`, `emptyState.footer`
+  - Исправлена логика рендеринга: empty state показывается только если `activeTab !== "instructions" && activeTab !== "activation"`
+  - Кнопка "Начать настройку" теперь правильно устанавливает `activeTab` в "instructions" и прокручивает страницу
+
+#### Files Modified:
+- `admin-panel-react/src/i18n/lang/ru.json` - Добавлены переводы для emptyState
+- `admin-panel-react/src/i18n/lang/en.json` - Добавлены переводы для emptyState
+- `admin-panel-react/src/i18n/lang/he.json` - Добавлены переводы для emptyState
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Исправлена логика кнопки и рендеринга
+- `README.md` - Обновлена документация
+- `QUICK_START.md` - Актуализированы команды
+- `GETTING_STARTED.md` - Создан новый файл для быстрого старта
+- `CHANGELOG.md` - Создан файл истории изменений
+
+#### Current Status:
+- ✅ **Bot Management** - Все переводы добавлены, кнопка работает корректно
+- ✅ **Documentation** - Обновлена для нового агента, добавлен быстрый старт
+
+### Previous Session (January 18, 2025) - Bug Fixes: AI Assistant & WebSocket Improvements ✅
 
 #### AI Assistant Page Bug Fixes
 - ✅ **Исправлена ошибка "Cannot read properties of undefined (reading 'length')"** - Добавлена проверка на `undefined` для `instructions`, добавлены дефолтные значения для всех полей конфигурации

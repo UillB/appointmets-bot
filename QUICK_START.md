@@ -1,13 +1,19 @@
 # 🚀 Quick Start Guide
 
+> **Для нового агента:** Начни с `GETTING_STARTED.md` для полного понимания проекта.
+
 ## 📋 Available Commands
 
 ### 🏗️ Infrastructure Commands
 ```bash
-# Start all services
-./scripts/start-dev.sh
+# Start all services (рекомендуется)
+./start-all.sh
 
 # Stop all services  
+./stop-all.sh
+
+# Или через скрипты
+./scripts/start-dev.sh
 ./scripts/stop-dev.sh
 
 # Individual services

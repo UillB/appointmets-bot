@@ -134,7 +134,25 @@
     "botSettingsUpdateError": "שגיאה בעדכון הגדרות",
     "failedToLoadStatus": "נכשל בטעינת סטטוס בוט",
     "failedToGenerateQR": "נכשל ביצירת QR קוד",
-    "loadingUser": "טוען משתמש..."
+    "loadingUser": "טוען משתמש...",
+    "emptyState": {
+      "title": "התחל הגדרת בוט",
+      "description": "צור בוט Telegram ב-3 שלבים פשוטים והתחל לקבל הזמנות מלקוחות",
+      "step1": {
+        "title": "צור בוט",
+        "description": "מצא @BotFather ב-Telegram"
+      },
+      "step2": {
+        "title": "קבל טוקן",
+        "description": "העתק טוקן מ-BotFather"
+      },
+      "step3": {
+        "title": "הפעל",
+        "description": "הדבק טוקן במערכת"
+      },
+      "startButton": "התחל הגדרה",
+      "footer": "עקוב אחר ההוראות למטה למדריך שלב אחר שלב"
+    }
   },
   "language": {
     "switch": "החלפת שפה",
