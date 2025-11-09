@@ -5,6 +5,11 @@
 
 set -e
 
+# Load nvm and use Node 20
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+nvm use 20 > /dev/null 2>&1 || true
+
 echo "🚀 Запуск всех сервисов Appointments Bot..."
 echo ""
 
@@ -40,13 +45,78 @@ else
 fi
 cd ..
 
-# Шаг 2: Backend
+# Шаг 2: Ngrok для HTTPS (должен быть запущен ПЕРЕД backend)
 echo ""
-echo "🔧 Шаг 2: Запуск Backend (порт 4000)..."
+echo "🌐 Шаг 2: Настройка Ngrok для HTTPS (Telegram WebApp требует HTTPS)..."
+NGROK_URL=""
+if check_port 4040; then
+    if ! command -v ngrok &> /dev/null; then
+        echo -e "${YELLOW}⚠️  Ngrok не установлен. Установите: brew install ngrok/ngrok/ngrok${NC}"
+    else
+        # Проверяем аутентификацию ngrok
+        if ! ngrok config check &> /dev/null; then
+            echo -e "${YELLOW}⚠️  Ngrok не аутентифицирован${NC}"
+            echo "   Для Telegram WebApp требуется HTTPS. Настройте ngrok:"
+            echo "   1. Зарегистрируйтесь: https://dashboard.ngrok.com/signup"
+            echo "   2. Получите authtoken: https://dashboard.ngrok.com/get-started/your-authtoken"
+            echo "   3. Выполните: ngrok config add-authtoken YOUR_AUTHTOKEN"
+        else
+            mkdir -p logs
+            echo "   Запускаю ngrok туннель для backend (порт 4000)..."
+            ngrok http 4000 --log=stdout > logs/ngrok.log 2>&1 &
+            NGROK_PID=$!
+            echo $NGROK_PID > .ngrok.pid
+            sleep 5
+            # Получаем ngrok URL
+            for i in {1..10}; do
+                NGROK_URL=$(curl -s http://localhost:4040/api/tunnels 2>/dev/null | grep -o '"public_url":"https://[^"]*"' | head -1 | cut -d'"' -f4 || echo "")
+                if [ -n "$NGROK_URL" ]; then
+                    break
+                fi
+                sleep 2
+            done
+            if [ -n "$NGROK_URL" ]; then
+                echo -e "${GREEN}✅ Ngrok запущен (PID: $NGROK_PID)${NC}"
+                echo "   HTTPS URL: $NGROK_URL"
+                # Автоматически обновляем backend/.env
+                cd backend
+                if grep -q "^PUBLIC_BASE_URL=" .env 2>/dev/null; then
+                    sed -i '' '/^PUBLIC_BASE_URL=/d' .env
+                fi
+                echo "PUBLIC_BASE_URL=$NGROK_URL" >> .env
+                cd ..
+                echo -e "${GREEN}✅ Обновлен backend/.env с HTTPS URL${NC}"
+            else
+                echo -e "${YELLOW}⚠️  Ngrok запущен, но URL еще не доступен${NC}"
+            fi
+        fi
+    fi
+else
+    echo -e "${YELLOW}⚠️  Ngrok уже запущен или порт 4040 занят${NC}"
+    # Пытаемся получить существующий URL
+    NGROK_URL=$(curl -s http://localhost:4040/api/tunnels 2>/dev/null | grep -o '"public_url":"https://[^"]*"' | head -1 | cut -d'"' -f4 || echo "")
+    if [ -n "$NGROK_URL" ]; then
+        echo "   Используется существующий туннель: $NGROK_URL"
+        # Обновляем .env если нужно
+        cd backend
+        if ! grep -q "^PUBLIC_BASE_URL=$NGROK_URL" .env 2>/dev/null; then
+            if grep -q "^PUBLIC_BASE_URL=" .env 2>/dev/null; then
+                sed -i '' '/^PUBLIC_BASE_URL=/d' .env
+            fi
+            echo "PUBLIC_BASE_URL=$NGROK_URL" >> .env
+            echo -e "${GREEN}✅ Обновлен backend/.env с HTTPS URL${NC}"
+        fi
+        cd ..
+    fi
+fi
+
+# Шаг 3: Backend
+echo ""
+echo "🔧 Шаг 3: Запуск Backend (порт 4000)..."
 if check_port 4000; then
     cd backend
     echo "   Запускаю backend в фоне..."
-    npm run dev > ../logs/backend.log 2>&1 &
+    bash -c 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use 20 && npm run dev' > ../logs/backend.log 2>&1 &
     BACKEND_PID=$!
     echo $BACKEND_PID > ../.backend.pid
     echo -e "${GREEN}✅ Backend запущен (PID: $BACKEND_PID)${NC}"
@@ -57,13 +127,13 @@ else
     echo -e "${YELLOW}⚠️  Backend уже запущен или порт 4000 занят${NC}"
 fi
 
-# Шаг 3: React Admin Panel
+# Шаг 4: React Admin Panel
 echo ""
-echo "⚛️  Шаг 3: Запуск React Admin Panel (порт 4200)..."
+echo "⚛️  Шаг 4: Запуск React Admin Panel (порт 4200)..."
 if check_port 4200; then
     cd admin-panel-react
     echo "   Запускаю React панель в фоне..."
-    npm run dev > ../logs/react-admin.log 2>&1 &
+    bash -c 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use 20 && npm run dev' > ../logs/react-admin.log 2>&1 &
     REACT_PID=$!
     echo $REACT_PID > ../.react.pid
     echo -e "${GREEN}✅ React панель запущена (PID: $REACT_PID)${NC}"
@@ -74,13 +144,13 @@ else
     echo -e "${YELLOW}⚠️  React панель уже запущена или порт 4200 занят${NC}"
 fi
 
-# Шаг 4: Landing Page
+# Шаг 5: Landing Page
 echo ""
-echo "🌐 Шаг 4: Запуск Landing Page (порт 3000)..."
+echo "🌐 Шаг 5: Запуск Landing Page (порт 3000)..."
 if check_port 3000; then
     cd landing
     echo "   Запускаю Landing в фоне..."
-    npm run dev > ../logs/landing.log 2>&1 &
+    bash -c 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use 20 && npm run dev' > ../logs/landing.log 2>&1 &
     LANDING_PID=$!
     echo $LANDING_PID > ../.landing.pid
     echo -e "${GREEN}✅ Landing запущен (PID: $LANDING_PID)${NC}"
@@ -91,13 +161,13 @@ else
     echo -e "${YELLOW}⚠️  Landing уже запущен или порт 3000 занят${NC}"
 fi
 
-# Шаг 5: Сборка React для WebApp
+# Шаг 6: Сборка React для WebApp
 echo ""
-echo "📦 Шаг 5: Сборка React панели для Telegram WebApp..."
+echo "📦 Шаг 6: Сборка React панели для Telegram WebApp..."
 cd admin-panel-react
 if [ ! -d "build" ]; then
     echo "   Собираю React панель..."
-    npm run build > ../logs/react-build.log 2>&1
+    bash -c 'export NVM_DIR="$HOME/.nvm" && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use 20 && npm run build' > ../logs/react-build.log 2>&1
     if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ React панель собрана${NC}"
     else
@@ -107,40 +177,6 @@ else
     echo -e "${YELLOW}⚠️  Build уже существует, пропускаю сборку${NC}"
 fi
 cd ..
-
-# Шаг 6: Ngrok для HTTPS (Telegram WebApp требует HTTPS)
-echo ""
-echo "🌐 Шаг 6: Запуск Ngrok туннеля для HTTPS (порт 4000)..."
-if check_port 4040; then
-    # Проверяем наличие ngrok
-    if ! command -v ngrok &> /dev/null; then
-        echo -e "${YELLOW}⚠️  Ngrok не установлен. Установите: brew install ngrok/ngrok/ngrok${NC}"
-        echo -e "${YELLOW}⚠️  Или пропустите этот шаг и запустите вручную: ngrok http 4000${NC}"
-    else
-        mkdir -p logs
-        echo "   Запускаю ngrok туннель для backend (порт 4000)..."
-        ngrok http 4000 --log=stdout > logs/ngrok.log 2>&1 &
-        NGROK_PID=$!
-        echo $NGROK_PID > .ngrok.pid
-        sleep 3
-        # Получаем ngrok URL
-        NGROK_URL=$(curl -s http://localhost:4040/api/tunnels 2>/dev/null | grep -o '"public_url":"https://[^"]*"' | head -1 | cut -d'"' -f4)
-        if [ -n "$NGROK_URL" ]; then
-            echo -e "${GREEN}✅ Ngrok запущен (PID: $NGROK_PID)${NC}"
-            echo "   HTTPS URL: $NGROK_URL"
-            echo "   Логи: logs/ngrok.log"
-            echo ""
-            echo "   ⚠️  ВАЖНО: Обновите backend/.env с PUBLIC_BASE_URL=$NGROK_URL"
-            echo "   Команда: echo 'PUBLIC_BASE_URL=$NGROK_URL' >> backend/.env"
-            echo "   Затем перезапустите backend!"
-        else
-            echo -e "${YELLOW}⚠️  Ngrok запущен, но URL еще не доступен. Проверьте через несколько секунд:${NC}"
-            echo "   curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[] | select(.proto==\"https\") | .public_url'"
-        fi
-    fi
-else
-    echo -e "${YELLOW}⚠️  Ngrok уже запущен или порт 4040 занят${NC}"
-fi
 
 # Финальная проверка
 echo ""
@@ -183,13 +219,15 @@ echo "🌐 URL:"
 echo "   Backend API: http://localhost:4000"
 echo "   React Admin: http://localhost:4200"
 echo "   Landing: http://localhost:3000"
-echo "   Telegram WebApp: http://localhost:4000/webapp/admin"
 if [ -n "$NGROK_URL" ]; then
     echo "   Ngrok HTTPS: $NGROK_URL"
+    echo "   Telegram WebApp: $NGROK_URL/webapp/calendar"
     echo ""
-    echo "⚠️  ВАЖНО для Telegram WebApp:"
-    echo "   1. Обновите backend/.env: echo 'PUBLIC_BASE_URL=$NGROK_URL' >> backend/.env"
-    echo "   2. Перезапустите backend: lsof -ti:4000 | xargs kill -9 && cd backend && npm run dev"
+    echo -e "${GREEN}✅ Backend настроен для работы с Telegram WebApp (HTTPS)${NC}"
+else
+    echo ""
+    echo -e "${YELLOW}⚠️  Ngrok не настроен - Telegram WebApp может не работать${NC}"
+    echo "   Telegram требует HTTPS для Web App кнопок"
 fi
 echo ""
 
