@@ -1,14 +1,94 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 4.4  
-**Last Updated:** January 18, 2025 (Latest Session - Bot Management Fixes & Documentation Update)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + **Bot Management Translations & Button Fix + Documentation Update**
+**Version:** 4.5  
+**Last Updated:** January 18, 2025 (Latest Session - Team Workflow Setup & Documentation Update)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + **Bot Management Translations & Button Fix + Team Workflow Setup**
 
 > **Для нового агента:** Начни с `GETTING_STARTED.md` для быстрого старта, затем прочитай этот документ для детального понимания.
 
+## 👥 Командная работа
+
+**Важно:** Проект разрабатывается командой из 2 разработчиков, работающих в Cursor.
+
+### Документация для команды:
+- **[👥 TEAM_WORKFLOW.md](docs/TEAM_WORKFLOW.md)** - Полное руководство по совместной работе (Git workflow, code review, процессы)
+- **[⚡ TEAM_QUICK_REFERENCE.md](docs/TEAM_QUICK_REFERENCE.md)** - Быстрая справка для ежедневной работы
+- **[🚀 TEAM_SETUP.md](docs/TEAM_SETUP.md)** - Первоначальная настройка проекта для команды
+- **[📋 TEAM_START_HERE.md](TEAM_START_HERE.md)** - Точка входа для команды (в корне проекта)
+
+### Git Workflow:
+- **`main`** - production-ready код (только через PR)
+- **`develop`** - integration branch (основная рабочая ветка)
+- **Feature branches** - `feature/название` для новой функциональности
+- **Bugfix branches** - `bugfix/название` для исправления багов
+
+### Конвенции коммитов:
+```
+type(scope): subject
+
+Примеры:
+feat(backend): add user authentication endpoint
+fix(frontend): resolve calendar date picker bug
+docs(readme): update installation instructions
+```
+
+**Типы:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`
+
+### Процессы:
+1. Всегда начинай день с `git checkout develop && git pull origin develop`
+2. Создавай feature ветку: `git checkout -b feature/my-task`
+3. Делай коммиты с правильным форматом
+4. Создавай PR для code review перед мержем в `develop`
+5. Используй `.cursorrules` для консистентности кода
+
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Bot Management Fixes & Documentation Update ✅
+### Latest Session (January 18, 2025) - Team Workflow Setup & Documentation Update ✅
+
+#### Team Collaboration Setup
+- ✅ **Создана система для совместной работы команды** - Полная документация для команды из 2 разработчиков
+- ✅ **Git Workflow настроен** - Feature Branch Workflow с `main` и `develop` ветками
+- ✅ **Шаблоны для PR и Issues** - Созданы шаблоны в `.github/` для стандартизации
+- ✅ **Конвенции коммитов** - Настроен `.gitmessage` template для единообразия
+- ✅ **Cursor Rules** - Создан `.cursorrules` для консистентности кода между разработчиками
+- ✅ **Быстрая справка** - Создан `TEAM_QUICK_REFERENCE.md` для ежедневной работы
+
+#### Documentation Created:
+- ✅ **docs/TEAM_WORKFLOW.md** - Полное руководство по совместной работе (512 строк)
+- ✅ **docs/TEAM_QUICK_REFERENCE.md** - Быстрая справка для команды
+- ✅ **docs/TEAM_SETUP.md** - Настройка проекта для команды
+- ✅ **TEAM_START_HERE.md** - Точка входа для команды (в корне)
+- ✅ **.github/pull_request_template.md** - Шаблон для Pull Requests
+- ✅ **.github/issue_template.md** - Шаблон для Issues
+- ✅ **.gitmessage** - Шаблон для коммитов
+- ✅ **.cursorrules** - Правила для AI-ассистента в Cursor
+
+#### Key Technical Changes:
+- **Git Configuration:**
+  - Настроен commit template через `git config --local commit.template .gitmessage`
+  - Создана ветка `develop` для integration
+  - Настроены шаблоны для PR и Issues
+- **Documentation:**
+  - Обновлен README.md с ссылками на команду документацию
+  - Создана структура для командной работы
+  - Добавлены best practices для работы в Cursor
+
+#### Files Created:
+- `docs/TEAM_WORKFLOW.md` - Полное руководство по совместной работе
+- `docs/TEAM_QUICK_REFERENCE.md` - Быстрая справка
+- `docs/TEAM_SETUP.md` - Настройка проекта
+- `TEAM_START_HERE.md` - Точка входа для команды
+- `.github/pull_request_template.md` - Шаблон для PR
+- `.github/issue_template.md` - Шаблон для Issues
+- `.gitmessage` - Шаблон для коммитов
+- `.cursorrules` - Правила для Cursor AI
+
+#### Current Status:
+- ✅ **Team Workflow** - Полностью настроен и документирован
+- ✅ **Git Configuration** - Шаблоны и конвенции установлены
+- ✅ **Documentation** - Комплексная документация для команды готова
+
+### Previous Session (January 18, 2025) - Bot Management Fixes & Documentation Update ✅
 
 #### Bot Management Page Critical Fixes
 - ✅ **Добавлены переводы для emptyState** - Все тексты в empty state теперь переведены на русский, английский и иврит (ru.json, en.json, he.json)
@@ -2935,6 +3015,7 @@ echo "PUBLIC_BASE_URL=https://[new-ngrok-url]" >> .env
 - ✅ **All Critical Features:** 100% complete
 - ✅ **Figma Prototype Integration:** 12 задач выполнено (AppointmentsSummaryCard, Bot Status Alerts, Charts, Empty State, Toast Notifications, NotificationCenter Tabs, PageTitle, Backend API)
 - ✅ **WebSocket Performance Fixes:** Polling убран, используется только WebSocket для обновлений
+- ✅ **Team Workflow:** Полностью настроен и документирован (Git workflow, PR templates, commit conventions)
 
 ### What Needs to Be Done:
 
@@ -2974,6 +3055,10 @@ echo "PUBLIC_BASE_URL=https://[new-ngrok-url]" >> .env
    - Backup automation verification
 
 ### Important Context:
+- **Командная работа:** Проект разрабатывается командой из 2 разработчиков - см. `docs/TEAM_WORKFLOW.md`
+- **Git Workflow:** Используется Feature Branch Workflow с `main` и `develop` ветками
+- **Конвенции коммитов:** Используй формат `type(scope): subject` - см. `.gitmessage`
+- **Code Review:** Все изменения мержатся в `develop` только через Pull Request
 - **Ngrok URL может измениться** - проверять через `curl http://localhost:4040/api/tunnels`
 - **Backend нужно перезапускать** после изменения PUBLIC_BASE_URL
 - **Telegram WebApp требует HTTPS** - всегда использовать ngrok в development

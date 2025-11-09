@@ -222,9 +222,15 @@ cd backend && npm run check-slots
 ## 📚 Documentation
 
 ### Для нового агента (начни отсюда):
-1. **[🚀 GETTING_STARTED.md](GETTING_STARTED.md)** - Быстрый старт для нового агента ⭐
-2. **[🤖 SYSTEM_PROMPT_FOR_GPT.md](SYSTEM_PROMPT_FOR_GPT.md)** - Полная архитектура системы (864 строки)
-3. **[📖 AGENT_ONBOARDING_GUIDE.md](AGENT_ONBOARDING_GUIDE.md)** - Детальный гайд для агента
+1. **[📊 CURRENT_STATUS.md](CURRENT_STATUS.md)** - Текущий статус проекта и быстрый обзор ⭐
+2. **[🚀 GETTING_STARTED.md](GETTING_STARTED.md)** - Быстрый старт для нового агента
+3. **[🤖 SYSTEM_PROMPT_FOR_GPT.md](SYSTEM_PROMPT_FOR_GPT.md)** - Полная архитектура системы (900+ строк)
+4. **[📖 AGENT_ONBOARDING_GUIDE.md](AGENT_ONBOARDING_GUIDE.md)** - Детальный гайд для агента
+
+### Для команды:
+- [👥 **Team Workflow**](docs/TEAM_WORKFLOW.md) - Руководство по совместной работе в команде ⭐
+- [⚡ **Team Quick Reference**](docs/TEAM_QUICK_REFERENCE.md) - Быстрая справка для команды
+- [📋 **TEAM_START_HERE.md**](TEAM_START_HERE.md) - Точка входа для команды
 
 ### Дополнительная документация:
 - [🚨 **Critical Features Roadmap**](docs/CRITICAL_FEATURES_ROADMAP.md) - MVP features

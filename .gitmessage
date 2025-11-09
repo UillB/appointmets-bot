@@ -1,0 +1,26 @@
+# <type>(<scope>): <subject>
+
+# <body>
+
+# <footer>
+
+# Типы:
+#   feat:     Новая функциональность
+#   fix:      Исправление бага
+#   docs:     Изменения в документации
+#   style:    Форматирование, отсутствующие точки с запятой и т.д.
+#   refactor: Рефакторинг кода
+#   test:     Добавление тестов
+#   chore:    Обновление зависимостей, конфигурации и т.д.
+#   perf:     Улучшение производительности
+#   ci:       Изменения CI/CD
+
+# Scope (область изменений):
+#   backend, frontend, landing, bot, websocket, database, docs, deps
+
+# Примеры:
+#   feat(backend): add user authentication endpoint
+#   fix(frontend): resolve calendar date picker bug
+#   docs(readme): update installation instructions
+#   refactor(websocket): improve connection handling
+
