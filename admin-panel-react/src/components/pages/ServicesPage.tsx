@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
@@ -39,9 +40,13 @@ import { toast } from "sonner";
 import { apiClient } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
 import { toastNotifications } from "../toast-notifications";
+import { SetupSuccessModal } from "../SetupSuccessModal";
+import { listenToSetupWizardModal, SetupWizardModalData } from "../../utils/setupWizardEvents";
 
 export function ServicesPage() {
   const { events } = useWebSocket();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -63,12 +68,57 @@ export function ServicesPage() {
   });
   const [statsLoading, setStatsLoading] = useState(true);
   const processedEventsRef = useRef<Set<string>>(new Set());
+  const [successModal, setSuccessModal] = useState<{
+    open: boolean;
+    step: 'service' | 'bot' | 'admin' | 'complete';
+    message: string;
+    primaryAction?: { label: string; onClick: () => void };
+    secondaryAction?: { label: string; onClick: () => void };
+  }>({
+    open: false,
+    step: 'service',
+    message: '',
+  });
 
   // Load services and stats on mount
   useEffect(() => {
     loadData();
     loadStats();
   }, []);
+
+  // Handle navigation state for auto-opening dialog
+  useEffect(() => {
+    if (location.state?.openDialog) {
+      setDialogOpen(true);
+      // Clear state to prevent re-triggering
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
+  // Listen for setup wizard modal events
+  useEffect(() => {
+    console.log('🎯 ServicesPage: Setting up setup wizard modal listener');
+    const unsubscribe = listenToSetupWizardModal((data: SetupWizardModalData) => {
+      console.log('🎯 ServicesPage: Received setup wizard modal event:', data);
+      setSuccessModal(prev => {
+        const newState = {
+          open: true,
+          step: data.step,
+          message: data.message,
+          primaryAction: data.primaryAction,
+          secondaryAction: data.secondaryAction,
+        };
+        console.log('✅ ServicesPage: Success modal state updated:', newState);
+        return newState;
+      });
+    });
+    return unsubscribe;
+  }, []);
+
+  // Debug: log modal state changes
+  useEffect(() => {
+    console.log('🔍 ServicesPage: Success modal state changed:', successModal);
+  }, [successModal]);
 
   // Handle real-time WebSocket events for services
   useEffect(() => {
@@ -437,6 +487,16 @@ export function ServicesPage() {
             onOpenChange={setDeletionDialogOpen}
             service={serviceToDelete || { id: 0, name: '' }}
             onServiceDeleted={handleRefresh}
+          />
+
+          {/* Setup Success Modal */}
+          <SetupSuccessModal
+            open={successModal.open}
+            onOpenChange={(open) => setSuccessModal(prev => ({ ...prev, open }))}
+            step={successModal.step}
+            message={successModal.message}
+            primaryAction={successModal.primaryAction}
+            secondaryAction={successModal.secondaryAction}
           />
         </div>
       </div>

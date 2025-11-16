@@ -1,8 +1,8 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 4.5  
-**Last Updated:** January 18, 2025 (Latest Session - Team Workflow Setup & Documentation Update)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + **Bot Management Translations & Button Fix + Team Workflow Setup**
+**Version:** 4.6  
+**Last Updated:** January 18, 2025 (Latest Session - Setup Wizard Feature Implementation)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + Bot Management Translations & Button Fix + Team Workflow Setup + **Setup Wizard Onboarding Flow**
 
 > **Для нового агента:** Начни с `GETTING_STARTED.md` для быстрого старта, затем прочитай этот документ для детального понимания.
 
@@ -43,7 +43,56 @@ docs(readme): update installation instructions
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Team Workflow Setup & Documentation Update ✅
+### Latest Session (January 18, 2025) - Setup Wizard Feature Implementation ✅
+
+#### Setup Wizard Onboarding Flow
+- ✅ **Setup Banners on Dashboard** - Визуальные индикаторы для незавершенных шагов настройки (Services, Bot, Admin)
+- ✅ **Success Modals** - Поздравительные модальные окна после каждого шага с подсказками для следующих действий
+- ✅ **Smart Navigation** - Автоматический переход на нужные страницы и табы при клике на действия
+- ✅ **Color-Coded Banners** - Разные цвета для разных типов баннеров (синий для Services, красный для Bot, янтарный для Admin)
+- ✅ **Dark Theme Support** - Полная поддержка темной темы для всех компонентов
+- ✅ **Event-Based System** - Система событий для показа модалов из разных компонентов
+
+#### Key Features:
+1. **Dashboard Banners:**
+   - Показываются когда setup не завершен
+   - Пульсирующая анимация для привлечения внимания
+   - Прямые действия для каждого шага
+   - Адаптивный дизайн для мобильных устройств
+
+2. **Success Modals:**
+   - После создания первого сервиса → "Connect Bot"
+   - После активации бота → "Link Admin"
+   - После линкинга админа → "Setup Complete"
+
+3. **Technical Implementation:**
+   - `useSetupWizard` hook для проверки состояния setup
+   - `SetupBanner` компонент с цветовой кодировкой
+   - `SetupSuccessModal` компонент для поздравлений
+   - Event system через CustomEvents для межкомпонентной коммуникации
+
+#### Files Created:
+- `docs/FEATURE_SETUP_WIZARD.md` - Полная документация фичи
+- `admin-panel-react/src/hooks/useSetupWizard.ts` - Hook для проверки состояния setup
+- `admin-panel-react/src/components/SetupBanner.tsx` - Компонент баннера
+- `admin-panel-react/src/components/SetupSuccessModal.tsx` - Компонент модала
+- `admin-panel-react/src/utils/setupWizardEvents.ts` - Система событий
+
+#### Files Modified:
+- `admin-panel-react/src/components/pages/Dashboard.tsx` - Интеграция баннеров
+- `admin-panel-react/src/components/pages/ServicesPage.tsx` - Модал после создания сервиса
+- `admin-panel-react/src/components/pages/BotManagementPage.tsx` - Модалы после активации бота и линкинга админа
+- `admin-panel-react/src/components/dialogs/ServiceDialog.tsx` - Триггер модала после создания первого сервиса
+- `admin-panel-react/src/index.css` - Анимация пульсации
+
+#### Current Status:
+- ✅ **Setup Wizard** - Полностью реализован и протестирован
+- ✅ **Banners** - Отображаются корректно на Dashboard
+- ✅ **Modals** - Показываются после каждого шага
+- ✅ **Navigation** - Автоматический переход работает
+- ✅ **Dark Theme** - Полная поддержка темной темы
+
+### Previous Session (January 18, 2025) - Team Workflow Setup & Documentation Update ✅
 
 #### Team Collaboration Setup
 - ✅ **Создана система для совместной работы команды** - Полная документация для команды из 2 разработчиков
@@ -2350,6 +2399,7 @@ For detailed information, see:
 - ✅ Лендинг правильно редиректит на приложение
 - ✅ Bot creation flow с QR кодами и sharing
 - ✅ WebSocket real-time система работает
+- ✅ **Setup Wizard Onboarding Flow** - Полная система онбординга с баннерами и модалами
 
 **🔄 Needs Enhancement:**
 - 🔄 Telegram Web App integration (85% → 100%)
@@ -2370,6 +2420,11 @@ For detailed information, see:
 - Role: OWNER (organizationId: 3)
 
 **📋 Новые компоненты и функции:**
+- ✅ **Setup Wizard System** - Полная система онбординга для новых пользователей
+  - SetupBanner - Визуальные баннеры с цветовой кодировкой (синий/красный/янтарный)
+  - SetupSuccessModal - Поздравительные модалы после каждого шага
+  - useSetupWizard hook - Проверка состояния setup (services, bot, admin)
+  - setupWizardEvents - Система событий для межкомпонентной коммуникации
 - ✅ AppointmentsSummaryCard - Карточка статистики appointments на Dashboard
 - ✅ Bot Status Alerts - Алерты на Dashboard для статуса бота и admin linking
 - ✅ Toast Notifications System - Централизованная система уведомлений
@@ -3086,5 +3141,5 @@ cd backend && npm run dev
 ---
 
 *Agent Onboarding Guide - Complete guide for AI agents working on Appointments Bot*  
-*Version: 4.3 | Last Updated: January 18, 2025 (Latest Session - Bug Fixes: AI Assistant & WebSocket Improvements)*  
-*Status: Production Ready - All Critical Features Complete (100%) + WebSocket Real-time System Fully Functional + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements*
+*Version: 4.6 | Last Updated: January 18, 2025 (Latest Session - Setup Wizard Feature Implementation)*  
+*Status: Production Ready - All Critical Features Complete (100%) + WebSocket Real-time System Fully Functional + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + Setup Wizard Onboarding Flow*

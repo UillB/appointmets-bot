@@ -38,6 +38,9 @@ import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { useLanguage } from "../../i18n";
 import { useWebSocket } from "../../hooks/useWebSocket";
+import { triggerSetupWizardModal, listenToSetupWizardModal, SetupWizardModalData } from "../../utils/setupWizardEvents";
+import { useNavigate, useLocation } from "react-router-dom";
+import { SetupSuccessModal } from "../SetupSuccessModal";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
@@ -66,6 +69,8 @@ export function BotManagementPage() {
   const { user } = useAuth();
   const { t, language } = useLanguage();
   const { events } = useWebSocket();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [currentTime, setCurrentTime] = useState(new Date());
   
   // Debug: log when language changes
@@ -95,6 +100,17 @@ export function BotManagementPage() {
   const [isGeneratingAdminLink, setIsGeneratingAdminLink] = useState(false);
   const [showUnlinkDialog, setShowUnlinkDialog] = useState(false);
   const [isUnlinking, setIsUnlinking] = useState(false);
+  const [successModal, setSuccessModal] = useState<{
+    open: boolean;
+    step: 'service' | 'bot' | 'admin' | 'complete';
+    message: string;
+    primaryAction?: { label: string; onClick: () => void };
+    secondaryAction?: { label: string; onClick: () => void };
+  }>({
+    open: false,
+    step: 'service',
+    message: '',
+  });
 
   // Update time every second
   useEffect(() => {
@@ -133,8 +149,19 @@ export function BotManagementPage() {
     if (latestEvent.type === 'admin.linked' || latestEvent.type === 'admin_linked') {
       processedEventIds.current.add(latestEvent.id);
       
+      // Check if admin was not linked before
+      const wasNotLinked = !adminLinked;
+      
       // Update admin linked status immediately from event data
       setAdminLinked(true);
+      
+      // Show success modal if admin was not linked before
+      if (wasNotLinked) {
+        triggerSetupWizardModal({
+          step: 'complete',
+          message: "Perfect! Your setup is complete. Your Telegram admin account is now linked and you have full access to all admin features. You're all set to start receiving appointments and managing your business through Telegram!",
+        });
+      }
       
       // Also reload bot status to ensure everything is in sync
       setTimeout(() => {
@@ -189,6 +216,29 @@ export function BotManagementPage() {
       setSetupProgress(0);
     }
   }, [botActive, botName, botUsername]);
+
+  // Handle navigation state for auto-tab selection
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+      // Clear state to prevent re-triggering
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
+
+  // Listen for setup wizard modal events
+  useEffect(() => {
+    const unsubscribe = listenToSetupWizardModal((data: SetupWizardModalData) => {
+      setSuccessModal({
+        open: true,
+        step: data.step,
+        message: data.message,
+        primaryAction: data.primaryAction,
+        secondaryAction: data.secondaryAction,
+      });
+    });
+    return unsubscribe;
+  }, []);
 
   // Generate QR code when bot link is available
   useEffect(() => {
@@ -351,9 +401,30 @@ export function BotManagementPage() {
       console.log('📥 Activation result:', result);
 
       if (result && result.success) {
+        const wasInactive = !botActive;
         setBotActive(true);
         setToken(""); // Очищаем токен после успешной активации
         toast.success(t('botManagement.botActivated'));
+        
+        // Show success modal if bot was inactive before activation
+        if (wasInactive) {
+          triggerSetupWizardModal({
+            step: 'bot',
+            message: "Excellent! Your Telegram bot is now connected and ready to receive appointments. You're almost done! Now link your admin account to enable admin features such as accessing the management system from Telegram. This step is optional but recommended.",
+            primaryAction: {
+              label: 'Link Admin',
+              onClick: () => {
+                // Switch to link-admin tab
+                setActiveTab('link-admin');
+              },
+            },
+            secondaryAction: {
+              label: 'Maybe Later',
+              onClick: () => {},
+            },
+          });
+        }
+        
         // Обновляем статус через небольшую задержку
         setTimeout(() => {
           loadBotStatus();
@@ -1864,6 +1935,16 @@ export function BotManagementPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Setup Success Modal */}
+      <SetupSuccessModal
+        open={successModal.open}
+        onOpenChange={(open) => setSuccessModal(prev => ({ ...prev, open }))}
+        step={successModal.step}
+        message={successModal.message}
+        primaryAction={successModal.primaryAction}
+        secondaryAction={successModal.secondaryAction}
+      />
     </div>
   );
 }

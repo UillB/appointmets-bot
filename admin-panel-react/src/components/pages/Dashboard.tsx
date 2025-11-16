@@ -11,14 +11,11 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  Bot,
-  Shield,
   ArrowRight,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Alert, AlertDescription } from "../ui/alert";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { QuickActionCard } from "../cards/QuickActionCard";
 import { StatCard } from "../cards/StatCard";
@@ -29,8 +26,12 @@ import { toast } from "sonner";
 import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { useWebSocket } from "../../hooks/useWebSocket";
+import { useSetupWizard } from "../../hooks/useSetupWizard";
 import { toastNotifications } from "../toast-notifications";
 import { formatTimeToLocal, isSameDay } from "../../utils/dateUtils";
+import { SetupBanner } from "../SetupBanner";
+import { SetupSuccessModal } from "../SetupSuccessModal";
+import { listenToSetupWizardModal, SetupWizardModalData } from "../../utils/setupWizardEvents";
 
 interface DashboardStats {
   totalAppointments: number;
@@ -60,6 +61,18 @@ export function Dashboard() {
   });
   const [botActive, setBotActive] = useState(false);
   const [adminLinked, setAdminLinked] = useState(false);
+  const setupWizard = useSetupWizard();
+  const [successModal, setSuccessModal] = useState<{
+    open: boolean;
+    step: 'service' | 'bot' | 'admin' | 'complete';
+    message: string;
+    primaryAction?: { label: string; onClick: () => void };
+    secondaryAction?: { label: string; onClick: () => void };
+  }>({
+    open: false,
+    step: 'service',
+    message: '',
+  });
 
   const loadDashboardData = async () => {
     try {
@@ -134,6 +147,38 @@ export function Dashboard() {
       }, 500);
     }
   }, [events]);
+
+  // Refresh setup wizard state when data changes
+  useEffect(() => {
+    setupWizard.refresh();
+  }, [stats?.totalServices, botActive, adminLinked]);
+
+  // Listen for setup wizard modal events
+  useEffect(() => {
+    const unsubscribe = listenToSetupWizardModal((data: SetupWizardModalData) => {
+      setSuccessModal({
+        open: true,
+        step: data.step,
+        message: data.message,
+        primaryAction: data.primaryAction,
+        secondaryAction: data.secondaryAction,
+      });
+    });
+    return unsubscribe;
+  }, []);
+
+  // Setup wizard action handlers
+  const handleCreateService = () => {
+    navigate('/services', { state: { openDialog: true } });
+  };
+
+  const handleConnectBot = () => {
+    navigate('/bot-management', { state: { activeTab: 'instructions' } });
+  };
+
+  const handleLinkAdmin = () => {
+    navigate('/bot-management', { state: { activeTab: 'link-admin' } });
+  };
 
   // Initialize filtered appointments when recentAppointments change
   useEffect(() => {
@@ -297,52 +342,39 @@ export function Dashboard() {
     );
   }
 
+  // Check if setup is incomplete
+  const setupIncomplete = !setupWizard.hasServices || !setupWizard.botActive || !setupWizard.adminLinked;
+
   return (
     <div className="space-y-6">
-      {/* Bot Status Alerts */}
-      {!botActive && (
-        <Alert className="border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950">
-          <Bot className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0" />
-          <AlertDescription className="text-red-900 dark:text-red-100">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div className="flex-1">
-                <strong className="font-semibold dark:text-red-50">Telegram Bot Not Active</strong>
-                <p className="text-sm mt-1 dark:text-red-100">Your bot is not configured yet. Set it up to start receiving appointments through Telegram.</p>
-              </div>
-              <Button
-                size="sm"
-                className="bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 flex-shrink-0 w-full sm:w-auto"
-                onClick={() => navigate("/bot-management")}
-              >
-                Setup Bot
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </div>
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {botActive && !adminLinked && (
-        <Alert className="border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950">
-          <Shield className="h-5 w-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
-          <AlertDescription className="text-amber-900 dark:text-amber-100">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <div className="flex-1">
-                <strong className="font-semibold dark:text-amber-50">Admin Account Not Linked</strong>
-                <p className="text-sm mt-1 dark:text-amber-100">Complete the setup by linking your Telegram account as administrator.</p>
-              </div>
-              <Button
-                size="sm"
-                variant="outline"
-                className="border-amber-300 dark:border-amber-700 hover:bg-amber-100 dark:hover:bg-amber-900/50 flex-shrink-0 w-full sm:w-auto"
-                onClick={() => navigate("/bot-management")}
-              >
-                Link Admin
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Button>
-            </div>
-          </AlertDescription>
-        </Alert>
+      {/* Setup Wizard Banners */}
+      {setupIncomplete && (
+        <div className="space-y-4">
+          {!setupWizard.hasServices && (
+            <SetupBanner
+              type="services"
+              message="You currently have no services (what you sell). Create your first service now - this is necessary to start working and takes just one minute."
+              actionLabel="Create Service"
+              onAction={handleCreateService}
+            />
+          )}
+          {!setupWizard.botActive && (
+            <SetupBanner
+              type="bot"
+              message="Your Telegram bot is not connected. Please connect your bot to share it with people and start receiving appointments today."
+              actionLabel="Connect Bot"
+              onAction={handleConnectBot}
+            />
+          )}
+          {!setupWizard.adminLinked && (
+            <SetupBanner
+              type="admin"
+              message="Your Telegram admin account is not linked. Link it now to enable admin features such as accessing the management system (admin panel) from Telegram."
+              actionLabel="Link Admin"
+              onAction={handleLinkAdmin}
+            />
+          )}
+        </div>
       )}
 
       {/* Welcome Section */}
@@ -554,6 +586,16 @@ export function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Setup Success Modal */}
+      <SetupSuccessModal
+        open={successModal.open}
+        onOpenChange={(open) => setSuccessModal(prev => ({ ...prev, open }))}
+        step={successModal.step}
+        message={successModal.message}
+        primaryAction={successModal.primaryAction}
+        secondaryAction={successModal.secondaryAction}
+      />
     </div>
   );
 }

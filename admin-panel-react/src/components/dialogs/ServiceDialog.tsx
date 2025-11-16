@@ -16,6 +16,8 @@ import { X, Wrench, Clock } from "lucide-react";
 import { apiClient } from "../../services/api";
 import { toast } from "sonner";
 import { StepIndicator } from "../StepIndicator";
+import { triggerSetupWizardModal } from "../../utils/setupWizardEvents";
+import { useNavigate } from "react-router-dom";
 
 interface ServiceDialogProps {
   open: boolean;
@@ -39,6 +41,7 @@ interface ServiceDialogProps {
 
 export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: ServiceDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Debug logging
   console.log('ServiceDialog render - open:', open);
@@ -85,9 +88,41 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
         toast.success("Service updated successfully");
       } else {
         console.log('Creating new service');
+        
+        // Check services count BEFORE creating
+        const servicesBeforeResponse = await apiClient.getServices();
+        const servicesCountBefore = servicesBeforeResponse.services?.length || 0;
+        console.log('Services count before creation:', servicesCountBefore);
+        
+        // If there are no services before creation, this is the first service
+        // (regardless of history - if user deleted previous services, current state is what matters)
+        const isFirstService = servicesCountBefore === 0;
+        console.log('Is first service?', isFirstService, '(services count before:', servicesCountBefore, ')');
+        
         const result = await apiClient.createService(serviceData);
         console.log('Service created:', result);
         toast.success("Service created successfully");
+
+        // Show success modal if this was the first service (no services existed before)
+        if (isFirstService) {
+          console.log('🎉 Triggering setup wizard modal for first service');
+          // Small delay to ensure dialog closes first, then show modal
+          setTimeout(() => {
+            triggerSetupWizardModal({
+              step: 'service',
+              message: "Congratulations! Your service has been created successfully. You can create additional services at any time. Now let's complete the setup and connect your Telegram bot so you can start receiving appointments right away.",
+              primaryAction: {
+                label: 'Connect Bot',
+                onClick: () => {
+                  navigate('/bot-management', { state: { activeTab: 'instructions' } });
+                },
+              },
+            });
+            console.log('✅ Setup wizard modal triggered');
+          }, 300); // Small delay to let dialog close first
+        } else {
+          console.log('⚠️ Not first service (services existed before), skipping modal');
+        }
       }
 
       console.log('Calling onServiceSaved and closing dialog');
