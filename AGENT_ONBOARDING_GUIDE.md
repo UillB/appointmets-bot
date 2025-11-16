@@ -1,8 +1,8 @@
 # 🤖 Agent Onboarding Guide - Appointments Bot
 
-**Version:** 4.6  
-**Last Updated:** January 18, 2025 (Latest Session - Setup Wizard Feature Implementation)  
-**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + Bot Management Translations & Button Fix + Team Workflow Setup + **Setup Wizard Onboarding Flow**
+**Version:** 4.7  
+**Last Updated:** January 18, 2025 (Latest Session - Analytics Date Fix & Main Branch Integration)  
+**Status:** Production Ready System - All Critical Features Complete + WebSocket Real-time System Fully Functional + UI Consistency Improvements + Forms Redesign + Notification Center Fixes + TWA Connectivity Fixes + Authentication Architecture Fixed + Theme System Fixed + Production Deployment Ready + Login Page Dark Theme Complete + Mobile Header Complete + Dashboard & AI Assistant Aligned with Figma + AI Assistant Bug Fixes + WebSocket Error Handling Improvements + Bot Management Translations & Button Fix + Team Workflow Setup + Setup Wizard Onboarding Flow + **Analytics Date Bug Fixed & Main Branch Integrated**
 
 > **Для нового агента:** Начни с `GETTING_STARTED.md` для быстрого старта, затем прочитай этот документ для детального понимания.
 
@@ -43,7 +43,63 @@ docs(readme): update installation instructions
 
 ## 🆕 Recent Updates
 
-### Latest Session (January 18, 2025) - Setup Wizard Feature Implementation ✅
+### Latest Session (January 18, 2025) - Analytics Date Fix & Main Branch Integration ✅
+
+#### Critical Bug Fix: Analytics Date Offset
+- ✅ **Fixed date offset bug in analytics** - Исправлено смещение дат на один день в аналитике
+- ✅ **Root cause identified** - Проблема была в использовании `toISOString()` который конвертирует дату в UTC, вызывая смещение на день
+- ✅ **Solution implemented** - Все даты теперь используют локальные компоненты (`getFullYear()`, `getMonth()`, `getDate()`) вместо UTC конвертации
+- ✅ **Date grouping fixed** - Группировка аппоинтментов по дням теперь использует локальное время
+- ✅ **Monthly grouping fixed** - Месячная группировка парсит строки дат напрямую без timezone проблем
+- ✅ **Data accuracy verified** - Данные теперь точно соответствуют реальным датам аппоинтментов в базе
+
+#### Main Branch Integration & Conflict Resolution
+- ✅ **Pulled latest changes from main** - Получены последние изменения из main ветки
+- ✅ **Resolved 7 merge conflicts** - Разрешены конфликты в:
+  - `ServicesPage.tsx` - Объединены изменения по occupancy и темной теме
+  - `StatCard.tsx` - Объединены стили и темная тема
+  - `ServiceDeletionDialog.tsx` - Сохранена логика с hasBookings и двумя типами модалок
+  - `ServiceDialog.tsx` - Сохранен CurrencySelector с темной темой
+  - `OrganizationDialog.tsx` - Объединены режимы просмотра/редактирования
+  - `AppointmentDialog.tsx` - Сохранена интеграция слотов и темная тема
+  - `AnalyticsPage.tsx` - Объединены WebSocket обновления, темная тема и условный рендеринг
+- ✅ **Preserved all local improvements** - Все локальные улучшения сохранены и интегрированы
+- ✅ **Dark theme support** - Добавлена поддержка темной темы во всех графиках и компонентах
+- ✅ **WebSocket integration** - Сохранена интеграция WebSocket для real-time обновлений
+
+#### Key Technical Changes:
+- **Backend Analytics (`backend/src/api/routes/analytics.ts`):**
+  - Заменен `appointmentDate.toISOString().split('T')[0]` на локальные компоненты даты
+  - Исправлена генерация списка всех дней в периоде (использует локальное время)
+  - Исправлена месячная группировка (парсинг строк дат напрямую)
+  - Все даты теперь используют локальное время без конвертации в UTC
+- **Frontend Analytics (`admin-panel-react/src/components/pages/AnalyticsPage.tsx`):**
+  - Объединены изменения из main (темная тема) с локальными улучшениями (WebSocket, условный рендеринг)
+  - Добавлена поддержка `useTheme` hook для темной темы
+  - Сохранена интеграция WebSocket для real-time обновлений
+  - Улучшены tooltips с полной информацией о датах
+- **Other Components:**
+  - Все компоненты обновлены с поддержкой темной темы из main
+  - Сохранены все локальные улучшения (CurrencySelector, улучшенные модалки, и т.д.)
+
+#### Files Modified:
+- `backend/src/api/routes/analytics.ts` - Исправлено смещение дат, использование локальных компонентов
+- `admin-panel-react/src/components/pages/AnalyticsPage.tsx` - Объединены изменения, добавлена темная тема
+- `admin-panel-react/src/components/pages/ServicesPage.tsx` - Разрешены конфликты, сохранены улучшения
+- `admin-panel-react/src/components/cards/StatCard.tsx` - Объединены стили и темная тема
+- `admin-panel-react/src/components/ServiceDeletionDialog.tsx` - Сохранена логика с hasBookings
+- `admin-panel-react/src/components/dialogs/ServiceDialog.tsx` - Сохранен CurrencySelector
+- `admin-panel-react/src/components/dialogs/OrganizationDialog.tsx` - Объединены режимы просмотра/редактирования
+- `admin-panel-react/src/components/dialogs/AppointmentDialog.tsx` - Сохранена интеграция слотов
+
+#### Current Status:
+- ✅ **Analytics Date Bug** - Полностью исправлен, даты отображаются корректно без смещения
+- ✅ **Main Branch Integration** - Все конфликты разрешены, код готов к работе
+- ✅ **Dark Theme** - Полная поддержка темной темы во всех компонентах
+- ✅ **WebSocket Updates** - Real-time обновления работают корректно
+- ✅ **Data Accuracy** - Данные точно соответствуют реальным датам в базе
+
+### Previous Session (January 18, 2025) - Setup Wizard Feature Implementation ✅
 
 #### Setup Wizard Onboarding Flow
 - ✅ **Setup Banners on Dashboard** - Визуальные индикаторы для незавершенных шагов настройки (Services, Bot, Admin)
