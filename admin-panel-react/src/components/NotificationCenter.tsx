@@ -15,6 +15,16 @@ import {
   SheetHeader,
   SheetTitle,
 } from './ui/sheet';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from './ui/alert-dialog';
 
 interface Notification {
   id: string;
@@ -44,6 +54,7 @@ export function NotificationCenter() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
   const [defaultTabSet, setDefaultTabSet] = useState(false);
+  const [clearAllDialogOpen, setClearAllDialogOpen] = useState(false);
 
   useEffect(() => {
     loadNotifications();
@@ -102,7 +113,9 @@ export function NotificationCenter() {
   const loadNotifications = async () => {
     try {
       setIsLoading(true);
-      const response = await apiClient.get('/notifications?limit=20') as any;
+      // Load all notifications with a high limit to get all unread notifications
+      // Backend default limit is 50, so we request a much higher limit to get all notifications
+      const response = await apiClient.get('/notifications?limit=1000') as any;
       setNotifications(response.notifications || []);
     } catch (error) {
       console.error('Failed to load notifications:', error);
@@ -133,7 +146,7 @@ export function NotificationCenter() {
       createdAt: event.timestamp
     };
 
-    setNotifications(prev => [notification, ...prev].slice(0, 50));
+    setNotifications(prev => [notification, ...prev]);
     
     // Update stats
     setStats(prev => prev ? {
@@ -174,13 +187,19 @@ export function NotificationCenter() {
 
   const clearAll = async () => {
     try {
-      await apiClient.delete('/notifications/clear-all');
+      // Use the clearAllNotifications method from apiClient
+      await apiClient.clearAllNotifications();
       setNotifications([]);
       setStats(prev => prev ? { ...prev, total: 0, unread: 0 } : null);
+      setClearAllDialogOpen(false);
+      // Reload stats to ensure consistency
+      await loadStats();
       toast.success('All notifications cleared');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to clear all notifications:', error);
-      toast.error('Failed to clear all notifications');
+      const errorMessage = error?.message || 'Failed to clear all notifications';
+      toast.error(errorMessage);
+      setClearAllDialogOpen(false);
     }
   };
 
@@ -486,8 +505,8 @@ export function NotificationCenter() {
         <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
         {unreadCount > 0 && (
           <>
-            <Badge className="absolute -top-0.5 -right-0.5 w-5 h-5 flex items-center justify-center p-0 bg-red-500 text-white text-[10px] border-2 border-white animate-pulse">
-              {unreadCount > 9 ? '9+' : unreadCount}
+            <Badge className="absolute -top-0.5 -right-0.5 min-w-[20px] h-5 flex items-center justify-center px-1 bg-red-500 text-white text-[10px] border-2 border-white animate-pulse">
+              {unreadCount > 99 ? '99+' : unreadCount}
             </Badge>
             <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-red-500 rounded-full animate-ping" />
           </>
@@ -542,20 +561,34 @@ export function NotificationCenter() {
                 className="flex-1 flex flex-col min-h-0"
               >
                 <div className="border-b bg-gray-50 dark:bg-gray-800 px-4 pt-3 flex-shrink-0">
-                  <TabsList className="w-full grid grid-cols-2 bg-white dark:bg-gray-900">
-                    <TabsTrigger value="all" className="relative text-gray-700 dark:text-gray-300 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">
+                  <TabsList className="w-full grid grid-cols-2 bg-gray-100 dark:bg-gray-800 p-1">
+                    <TabsTrigger 
+                      value="all" 
+                      className="relative text-gray-700 dark:text-gray-300 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white transition-all"
+                    >
                       All
                       <Badge
                         variant="outline"
-                        className="ml-2 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700"
+                        className={`ml-2 ${
+                          activeTab === 'all' 
+                            ? 'bg-white/20 dark:bg-white/20 text-white border-white/30 dark:border-white/30' 
+                            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-700'
+                        }`}
                       >
                         {notifications.length}
                       </Badge>
                     </TabsTrigger>
-                    <TabsTrigger value="unread" className="relative text-gray-700 dark:text-gray-300 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-800">
+                    <TabsTrigger 
+                      value="unread" 
+                      className="relative text-gray-700 dark:text-gray-300 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white transition-all"
+                    >
                       Unread
                       {unreadCount > 0 && (
-                        <Badge className="ml-2 bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600">
+                        <Badge className={`ml-2 ${
+                          activeTab === 'unread'
+                            ? 'bg-white/20 dark:bg-white/20 text-white border-white/30 dark:border-white/30'
+                            : 'bg-indigo-600 dark:bg-indigo-500 text-white hover:bg-indigo-700 dark:hover:bg-indigo-600'
+                        }`}>
                           {unreadCount}
                         </Badge>
                       )}
@@ -580,7 +613,7 @@ export function NotificationCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={clearAll}
+                    onClick={() => setClearAllDialogOpen(true)}
                     className="flex-1 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 border-red-200 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-300 dark:hover:border-red-700"
                   >
                     <Trash2 className="w-4 h-4 mr-2" />
@@ -642,6 +675,31 @@ export function NotificationCenter() {
           )}
         </SheetContent>
       </Sheet>
+
+      {/* Clear All Confirmation Dialog */}
+      <AlertDialog open={clearAllDialogOpen} onOpenChange={setClearAllDialogOpen}>
+        <AlertDialogContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-gray-900 dark:text-gray-100">
+              Clear All Notifications?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-600 dark:text-gray-400">
+              Are you sure you want to delete all notifications? This action cannot be undone. All notifications, including unread ones, will be permanently removed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={clearAll}
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 text-white"
+            >
+              Clear All
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 }

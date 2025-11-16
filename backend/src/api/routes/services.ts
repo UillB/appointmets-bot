@@ -273,6 +273,11 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
     const result = await DatabaseCache.getCachedQuery(
       cacheKey,
       async () => {
+        // Calculate current month boundaries for occupancy calculation
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
         const services = await prisma.service.findMany({
           where: whereClause,
           include: {
@@ -294,11 +299,56 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
           }
         });
 
+        // Calculate occupancy for current month for each service
+        const servicesWithOccupancy = await Promise.all(
+          services.map(async (service) => {
+            // Count slots in current month
+            const slotsInMonth = await prisma.slot.count({
+              where: {
+                serviceId: service.id,
+                startAt: {
+                  gte: startOfMonth,
+                  lte: endOfMonth
+                }
+              }
+            });
+
+            // Count appointments in current month (only for slots in current month)
+            const appointmentsInMonth = await prisma.appointment.count({
+              where: {
+                serviceId: service.id,
+                status: { not: 'cancelled' },
+                slot: {
+                  startAt: {
+                    gte: startOfMonth,
+                    lte: endOfMonth
+                  }
+                }
+              }
+            });
+
+            // Calculate occupancy for current month
+            const occupancy = slotsInMonth > 0 
+              ? Math.min(100, Math.round((appointmentsInMonth / slotsInMonth) * 100))
+              : 0;
+
+            return {
+              ...service,
+              _count: {
+                ...service._count,
+                slotsInCurrentMonth: slotsInMonth,
+                appointmentsInCurrentMonth: appointmentsInMonth
+              },
+              occupancy
+            };
+          })
+        );
+
         return {
-          services,
-          total: services.length,
+          services: servicesWithOccupancy,
+          total: servicesWithOccupancy.length,
           page: 1,
-          limit: services.length,
+          limit: servicesWithOccupancy.length,
           isSuperAdmin: role === 'SUPER_ADMIN'
         };
       },
@@ -394,7 +444,40 @@ router.get('/stats', verifyToken, async (req: any, res: Response) => {
       where: { serviceId: { in: serviceIds } } 
     });
 
-    const averageOccupancy = totalSlots > 0 ? Math.round((totalAppointments / totalSlots) * 100) : 0;
+    // Calculate current month boundaries for occupancy calculation
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    // Count slots in current month
+    const slotsInCurrentMonth = await prisma.slot.count({
+      where: {
+        serviceId: { in: serviceIds },
+        startAt: {
+          gte: startOfMonth,
+          lte: endOfMonth
+        }
+      }
+    });
+
+    // Count appointments in current month (only for slots in current month)
+    const appointmentsInCurrentMonth = await prisma.appointment.count({
+      where: {
+        serviceId: { in: serviceIds },
+        status: { not: 'cancelled' },
+        slot: {
+          startAt: {
+            gte: startOfMonth,
+            lte: endOfMonth
+          }
+        }
+      }
+    });
+
+    // Calculate average occupancy for current month, cap at 100% to handle edge cases
+    const averageOccupancy = slotsInCurrentMonth > 0 
+      ? Math.min(100, Math.round((appointmentsInCurrentMonth / slotsInCurrentMonth) * 100)) 
+      : 0;
 
     // Calculate revenue by getting appointments with their service prices
     const appointmentsWithRevenue = await prisma.appointment.findMany({
@@ -773,6 +856,22 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
         }
       }
     });
+
+    // Invalidate cache for services list
+    try {
+      const cacheKey = `services_${role}_${organizationId}_all`;
+      DatabaseCache.invalidateQuery(cacheKey);
+      // Also invalidate any organization-specific caches
+      if (role !== 'SUPER_ADMIN') {
+        CacheUtils.invalidatePattern(`services_.*_${organizationId}_.*`);
+      } else {
+        CacheUtils.invalidatePattern(`services_.*`);
+      }
+      console.log('✅ Cache invalidated for services list');
+    } catch (error) {
+      console.error('⚠️ Failed to invalidate cache:', error);
+      // Don't fail the request if cache invalidation fails
+    }
 
     // Emit real-time notification for service update
     try {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,19 +8,15 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { Badge } from "./ui/badge";
 import {
   AlertTriangle,
   Calendar,
   Clock,
   Users,
   Trash2,
-  X,
-  CheckCircle,
 } from "lucide-react";
 import { apiClient } from "../services/api";
 import { toast } from "sonner";
-import { format, parseISO } from "date-fns";
 
 interface ServiceDeletionDialogProps {
   open: boolean;
@@ -53,30 +49,40 @@ export function ServiceDeletionDialog({
     };
   } | null>(null);
   const [confirmText, setConfirmText] = useState("");
-  const [showForceDelete, setShowForceDelete] = useState(false);
+  const [hasBookings, setHasBookings] = useState(false);
 
-  const handleCheckDeletion = async () => {
+  const handleCheckDeletion = useCallback(async () => {
     try {
       setIsChecking(true);
       const result = await apiClient.deleteServiceWithCheck(service.id);
       setDeletionInfo(result);
       
-      // If service has no slots, show simple confirm dialog instead of deletion impact
-      if (result.details?.totalSlots === 0) {
-        // Skip showing deletion impact, go straight to simple confirm
-        setShowForceDelete(false);
-      } else if (result.error) {
-        setShowForceDelete(true);
-      }
+      // Check if service has bookings (appointments)
+      const totalAppointments = result.details?.totalAppointments || 0;
+      setHasBookings(totalAppointments > 0);
     } catch (error) {
       console.error('Failed to check deletion:', error);
       toast.error('Failed to check deletion status');
+      setDeletionInfo(null);
+      setHasBookings(false);
     } finally {
       setIsChecking(false);
     }
-  };
+  }, [service.id]);
 
-  const handleForceDelete = async () => {
+  // Automatically check for bookings when dialog opens
+  useEffect(() => {
+    if (open && service.id) {
+      handleCheckDeletion();
+    } else {
+      // Reset state when dialog closes
+      setDeletionInfo(null);
+      setConfirmText("");
+      setHasBookings(false);
+    }
+  }, [open, service.id, handleCheckDeletion]);
+
+  const handleDeleteWithBookings = async () => {
     if (confirmText !== "DELETE") {
       toast.error('Please type "DELETE" to confirm');
       return;
@@ -94,7 +100,24 @@ export function ServiceDeletionDialog({
       onOpenChange(false);
       setDeletionInfo(null);
       setConfirmText("");
-      setShowForceDelete(false);
+      setHasBookings(false);
+    } catch (error) {
+      console.error('Failed to delete service:', error);
+      toast.error('Failed to delete service');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleDeleteWithoutBookings = async () => {
+    try {
+      setIsDeleting(true);
+      await apiClient.deleteService(service.id);
+      toast.success('Service deleted successfully');
+      onServiceDeleted?.();
+      onOpenChange(false);
+      setDeletionInfo(null);
+      setHasBookings(false);
     } catch (error) {
       console.error('Failed to delete service:', error);
       toast.error('Failed to delete service');
@@ -107,7 +130,7 @@ export function ServiceDeletionDialog({
     onOpenChange(false);
     setDeletionInfo(null);
     setConfirmText("");
-    setShowForceDelete(false);
+    setHasBookings(false);
   };
 
   return (
@@ -124,37 +147,133 @@ export function ServiceDeletionDialog({
         </DialogHeader>
 
         <div className="space-y-6">
-          {!deletionInfo && (
+          {/* Loading state */}
+          {isChecking && (
             <div className="text-center py-10">
-              <Button 
-                onClick={handleCheckDeletion} 
-                disabled={isChecking}
-                variant="outline"
-                className="border-2 border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 font-medium px-8 py-3 h-auto"
-              >
-                {isChecking ? (
-                  <>
-                    <Clock className="h-4 w-4 mr-2 animate-spin" />
-                    Checking...
-                  </>
-                ) : (
-                  <>
-                    <AlertTriangle className="h-4 w-4 mr-2" />
-                    Check Deletion Impact
-                  </>
-                )}
-              </Button>
+              <Clock className="h-8 w-8 mx-auto mb-4 text-gray-400 animate-spin" />
+              <p className="text-gray-600 dark:text-gray-400">Checking service status...</p>
             </div>
           )}
 
-          {/* Simple confirmation for services with no slots */}
-          {deletionInfo && deletionInfo.details?.totalSlots === 0 && !deletionInfo.error && (
-            <Card className="border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/50">
+          {/* Error state */}
+          {deletionInfo?.error && (
+            <Card className="border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/30">
+              <div className="p-6">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-red-900 dark:text-red-100 mb-2">
+                      Cannot Delete Service
+                    </h3>
+                    <p className="text-red-700 dark:text-red-300 text-sm mb-3">
+                      {deletionInfo.details?.message || deletionInfo.error}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Warning modal for services WITH bookings */}
+          {!isChecking && deletionInfo && !deletionInfo.error && hasBookings && (
+            <Card className="border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/30">
+              <div className="p-6">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="h-5 w-5 text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-amber-900 dark:text-amber-100 mb-2">
+                      Warning: Service Has Bookings
+                    </h3>
+                    <p className="text-amber-700 dark:text-amber-300 text-sm mb-4">
+                      This service has {deletionInfo.details?.totalAppointments || 0} appointment(s). 
+                      Deleting this service will permanently cancel all appointments and remove all associated data.
+                    </p>
+
+                    {deletionInfo.details && (
+                      <div className="space-y-2 mb-4">
+                        {deletionInfo.details.totalAppointments > 0 && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Calendar className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                            <span className="text-amber-700 dark:text-amber-300">
+                              Total appointments: {deletionInfo.details.totalAppointments}
+                            </span>
+                          </div>
+                        )}
+                        {deletionInfo.details.futureAppointments > 0 && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Users className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                            <span className="text-amber-700 dark:text-amber-300">
+                              Future appointments: {deletionInfo.details.futureAppointments}
+                            </span>
+                          </div>
+                        )}
+                        {deletionInfo.details.nextAppointmentTime && (
+                          <div className="flex items-center gap-2 text-sm">
+                            <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+                            <span className="text-amber-700 dark:text-amber-300">
+                              Next appointment: {deletionInfo.details.nextAppointmentTime}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <div className="space-y-3">
+                      <div>
+                        <label className="block text-sm font-medium text-amber-900 dark:text-amber-100 mb-1">
+                          Type "DELETE" to confirm:
+                        </label>
+                        <input
+                          type="text"
+                          value={confirmText}
+                          onChange={(e) => setConfirmText(e.target.value)}
+                          placeholder="Type DELETE here"
+                          className="w-full px-3 py-2 border border-amber-300 dark:border-amber-700 rounded-md bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:focus:ring-amber-400"
+                        />
+                      </div>
+
+                      <div className="flex gap-3">
+                        <Button
+                          variant="outline"
+                          onClick={handleClose}
+                          className="flex-1 border-gray-300 dark:border-gray-700"
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={handleDeleteWithBookings}
+                          disabled={confirmText !== "DELETE" || isDeleting}
+                          variant="destructive"
+                          className="flex-1 border-2 border-red-500 dark:border-red-500 bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-500/20 dark:hover:bg-red-500/30 hover:border-red-600 dark:hover:border-red-400 font-medium"
+                        >
+                          {isDeleting ? (
+                            <>
+                              <Clock className="h-4 w-4 mr-2 animate-spin" />
+                              Deleting...
+                            </>
+                          ) : (
+                            <>
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete Service
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* Simple confirmation modal for services WITHOUT bookings */}
+          {!isChecking && deletionInfo && !hasBookings && (
+            <Card className="border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30">
               <div className="p-6">
                 <div className="flex items-start gap-3">
                   <AlertTriangle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
                       Confirm Service Deletion
                     </h3>
                     <p className="text-blue-700 dark:text-blue-300 text-sm mb-4">
@@ -164,29 +283,15 @@ export function ServiceDeletionDialog({
                       <Button
                         variant="outline"
                         onClick={handleClose}
-                        className="flex-1"
+                        className="flex-1 border-gray-300 dark:border-gray-700"
                       >
                         Cancel
                       </Button>
                       <Button
-                        onClick={async () => {
-                          try {
-                            setIsDeleting(true);
-                            await apiClient.deleteService(service.id);
-                            toast.success('Service deleted successfully');
-                            onServiceDeleted?.();
-                            onOpenChange(false);
-                            setDeletionInfo(null);
-                          } catch (error) {
-                            console.error('Failed to delete service:', error);
-                            toast.error('Failed to delete service');
-                          } finally {
-                            setIsDeleting(false);
-                          }
-                        }}
+                        onClick={handleDeleteWithoutBookings}
                         disabled={isDeleting}
                         variant="destructive"
-                        className="flex-1"
+                        className="flex-1 border-2 border-red-500 dark:border-red-500 bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-400 hover:bg-red-500/20 dark:hover:bg-red-500/30 hover:border-red-600 dark:hover:border-red-400 font-medium"
                       >
                         {isDeleting ? (
                           <>
@@ -206,194 +311,8 @@ export function ServiceDeletionDialog({
               </div>
             </Card>
           )}
-
-          {deletionInfo?.error && (
-            <Card className="border-red-200 bg-red-50">
-              <div className="p-6">
-                <div className="flex items-start gap-3">
-                  <X className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-red-900 mb-2">
-                      Cannot Delete Service
-                    </h3>
-                    <p className="text-red-700 text-sm mb-3">
-                      {deletionInfo.details?.message}
-                    </p>
-
-                    {deletionInfo.details && (
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="h-4 w-4 text-red-600" />
-                          <span className="text-red-700">
-                            Total appointments: {deletionInfo.details.totalAppointments}
-                          </span>
-                        </div>
-                        
-                        <div className="flex items-center gap-2 text-sm">
-                          <Users className="h-4 w-4 text-red-600" />
-                          <span className="text-red-700">
-                            Future appointments: {deletionInfo.details.futureAppointments}
-                          </span>
-                        </div>
-
-                        {deletionInfo.details.nextAppointmentTime && (
-                          <div className="flex items-center gap-2 text-sm">
-                            <Clock className="h-4 w-4 text-red-600" />
-                            <span className="text-red-700">
-                              Next appointment: {deletionInfo.details.nextAppointmentTime}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Card>
-          )}
-
-          {showForceDelete && (
-            <Card className="border-yellow-200 bg-yellow-50">
-              <div className="p-6">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-yellow-900 mb-2">
-                      Force Delete Service
-                    </h3>
-                    <p className="text-yellow-700 text-sm mb-4">
-                      This will permanently delete the service and ALL associated data:
-                    </p>
-
-                    <div className="space-y-3 mb-6">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Trash2 className="h-4 w-4 text-yellow-600 flex-shrink-0" />
-                        <span className="text-yellow-700">
-                          • All time slots will be deleted
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4 text-yellow-600 flex-shrink-0" />
-                        <span className="text-yellow-700">
-                          • All appointments will be cancelled
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Users className="h-4 w-4 text-yellow-600 flex-shrink-0" />
-                        <span className="text-yellow-700">
-                          • Customers will lose their bookings
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-yellow-900 mb-1">
-                          Type "DELETE" to confirm:
-                        </label>
-                        <input
-                          type="text"
-                          value={confirmText}
-                          onChange={(e) => setConfirmText(e.target.value)}
-                          placeholder="Type DELETE here"
-                          className="w-full px-3 py-2 border border-yellow-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        />
-                      </div>
-
-                      <div className="flex gap-3">
-                        <Button
-                          variant="outline"
-                          onClick={handleClose}
-                          className="flex-1"
-                        >
-                          Cancel
-                        </Button>
-                        <Button
-                          onClick={handleForceDelete}
-                          disabled={confirmText !== "DELETE" || isDeleting}
-                          variant="destructive"
-                          className="flex-1"
-                        >
-                          {isDeleting ? (
-                            <>
-                              <Clock className="h-4 w-4 mr-2 animate-spin" />
-                              Deleting...
-                            </>
-                          ) : (
-                            <>
-                              <Trash2 className="h-4 w-4 mr-2" />
-                              Force Delete Service
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          )}
-
-          {deletionInfo && !deletionInfo.error && deletionInfo.safeToDelete && (
-            <Card className="border-green-200 bg-green-50">
-              <div className="p-6">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-green-900 mb-2">
-                      Safe to Delete
-                    </h3>
-                    <p className="text-green-700 text-sm">
-                      {deletionInfo.details?.message || 'This service can be safely deleted without affecting any appointments.'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          )}
         </div>
 
-        {/* Only show footer buttons if not showing simple confirm (which has its own buttons) */}
-        {!(deletionInfo && deletionInfo.details?.totalSlots === 0 && !deletionInfo.error) && (
-          <div className="flex justify-end gap-3 pt-6 mt-6 border-t">
-            <Button variant="outline" onClick={handleClose}>
-              Cancel
-            </Button>
-            {deletionInfo && !deletionInfo.error && deletionInfo.safeToDelete && deletionInfo.details?.totalSlots !== 0 && (
-              <Button
-                onClick={async () => {
-                  try {
-                    setIsDeleting(true);
-                    await apiClient.deleteService(service.id);
-                    toast.success('Service deleted successfully');
-                    onServiceDeleted?.();
-                    onOpenChange(false);
-                    setDeletionInfo(null);
-                  } catch (error) {
-                    console.error('Failed to delete service:', error);
-                    toast.error('Failed to delete service');
-                  } finally {
-                    setIsDeleting(false);
-                  }
-                }}
-                disabled={isDeleting}
-                variant="destructive"
-              >
-                {isDeleting ? (
-                  <>
-                    <Clock className="h-4 w-4 mr-2 animate-spin" />
-                    Deleting...
-                  </>
-                ) : (
-                  <>
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    Delete Service
-                  </>
-                )}
-              </Button>
-            )}
-          </div>
-        )}
       </DialogContent>
     </Dialog>
   );

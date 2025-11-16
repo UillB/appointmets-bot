@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X, Building2, Mail, Phone, MapPin } from "lucide-react";
 import {
   Drawer,
@@ -11,22 +11,16 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
-import { apiClient } from "../../services/api";
+import { apiClient, Organization } from "../../services/api";
 import { toast } from "sonner";
 import { StepIndicator } from "../StepIndicator";
 
 interface OrganizationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  organization?: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-    description: string;
-  } | null;
+  organization?: Organization | null;
   onSave: (data: any) => void;
+  readOnly?: boolean; // If true, show in view-only mode
 }
 
 export function OrganizationDialog({
@@ -34,6 +28,7 @@ export function OrganizationDialog({
   onOpenChange,
   organization,
   onSave,
+  readOnly = false,
 }: OrganizationDialogProps) {
   const [formData, setFormData] = useState({
     name: organization?.name || "",
@@ -43,8 +38,35 @@ export function OrganizationDialog({
     description: organization?.description || "",
   });
 
+  // Update form data when organization changes
+  useEffect(() => {
+    if (organization) {
+      setFormData({
+        name: organization.name || "",
+        email: organization.email || "",
+        phone: organization.phone || "",
+        address: organization.address || "",
+        description: organization.description || "",
+      });
+    } else {
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        description: "",
+      });
+    }
+  }, [organization]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Don't submit in view mode
+    if (isViewMode) {
+      return;
+    }
+    
     console.log('Organization form submitted!');
     
     try {
@@ -62,7 +84,7 @@ export function OrganizationDialog({
       };
 
       if (organization) {
-        await apiClient.updateOrganization(parseInt(organization.id), organizationData);
+        await apiClient.updateOrganization(organization.id, organizationData);
         toast.success("Organization updated successfully");
       } else {
         const result = await apiClient.createOrganization(organizationData);
@@ -95,6 +117,7 @@ export function OrganizationDialog({
   };
 
   const isEdit = !!organization;
+  const isViewMode = readOnly && organization;
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
@@ -107,10 +130,12 @@ export function OrganizationDialog({
               </div>
               <div>
                 <DrawerTitle className="text-xl text-gray-900 dark:text-gray-100">
-                  {isEdit ? "Edit Organization" : "Create New Organization"}
+                  {isViewMode ? "View Organization" : isEdit ? "Edit Organization" : "Create New Organization"}
                 </DrawerTitle>
                 <DrawerDescription className="text-gray-600 dark:text-gray-400">
-                  {isEdit 
+                  {isViewMode 
+                    ? "View organization details"
+                    : isEdit 
                     ? "Update organization information"
                     : "Follow the steps below to add a new organization"}
                 </DrawerDescription>
@@ -129,7 +154,74 @@ export function OrganizationDialog({
 
         <div className="flex-1 overflow-y-auto">
           <div className="p-6">
-            <form onSubmit={handleSubmit} id="organization-form" className="space-y-2">
+            {isViewMode ? (
+              // View mode - no form, just display
+              <div className="space-y-4">
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Organization Name
+                    </Label>
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                      <p className="text-gray-900 dark:text-gray-100">{formData.name || "N/A"}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Description
+                    </Label>
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[80px]">
+                      <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{formData.description || "N/A"}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Email Address
+                    </Label>
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                      <p className="text-gray-900 dark:text-gray-100">{formData.email || "N/A"}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Phone Number
+                    </Label>
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                      <p className="text-gray-900 dark:text-gray-100">{formData.phone || "N/A"}</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Address
+                    </Label>
+                    <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                      <p className="text-gray-900 dark:text-gray-100">{formData.address || "N/A"}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Close button */}
+                <div className="flex gap-4 pt-6">
+                  <Button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onOpenChange(false);
+                    }}
+                    className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
+                  >
+                    Close
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              // Edit/Create mode - with form
+              <form onSubmit={handleSubmit} id="organization-form" className="space-y-2" noValidate>
               {!isEdit ? (
                 <>
                   {/* Step 1: Basic Information */}
@@ -153,6 +245,8 @@ export function OrganizationDialog({
                           placeholder="e.g., Acme Corporation"
                           className="h-11 pl-10"
                           required
+                          disabled={isViewMode}
+                          readOnly={isViewMode}
                         />
                       </div>
                     </div>
@@ -169,6 +263,8 @@ export function OrganizationDialog({
                         placeholder="Brief description of the organization..."
                         rows={3}
                         className="resize-none"
+                        disabled={isViewMode}
+                        readOnly={isViewMode}
                       />
                     </div>
                   </div>
@@ -195,6 +291,8 @@ export function OrganizationDialog({
                           onChange={handleChange}
                           placeholder="contact@example.com"
                           className="h-11 pl-10"
+                          disabled={isViewMode}
+                          readOnly={isViewMode}
                         />
                       </div>
                     </div>
@@ -213,6 +311,8 @@ export function OrganizationDialog({
                           onChange={handleChange}
                           placeholder="+1 (555) 123-4567"
                           className="h-11 pl-10"
+                          disabled={isViewMode}
+                          readOnly={isViewMode}
                         />
                       </div>
                     </div>
@@ -230,6 +330,8 @@ export function OrganizationDialog({
                           onChange={handleChange}
                           placeholder="123 Main Street, City, State, ZIP"
                           className="h-11 pl-10"
+                          disabled={isViewMode}
+                          readOnly={isViewMode}
                         />
                       </div>
                     </div>
@@ -251,6 +353,8 @@ export function OrganizationDialog({
                         placeholder="e.g., Acme Corporation"
                         required
                         className="h-12 pl-10 text-base"
+                        disabled={isViewMode}
+                        readOnly={isViewMode}
                       />
                     </div>
                   </div>
@@ -267,6 +371,8 @@ export function OrganizationDialog({
                       placeholder="Brief description of the organization..."
                       rows={3}
                       className="text-base"
+                      disabled={isViewMode}
+                      readOnly={isViewMode}
                     />
                   </div>
 
@@ -284,6 +390,8 @@ export function OrganizationDialog({
                         onChange={handleChange}
                         placeholder="contact@example.com"
                         className="h-12 pl-10 text-base"
+                        disabled={isViewMode}
+                        readOnly={isViewMode}
                       />
                     </div>
                   </div>
@@ -302,6 +410,8 @@ export function OrganizationDialog({
                         onChange={handleChange}
                         placeholder="+1 (555) 123-4567"
                         className="h-12 pl-10 text-base"
+                        disabled={isViewMode}
+                        readOnly={isViewMode}
                       />
                     </div>
                   </div>
@@ -319,6 +429,8 @@ export function OrganizationDialog({
                         onChange={handleChange}
                         placeholder="123 Main Street, City, State, ZIP"
                         className="h-12 pl-10 text-base"
+                        disabled={isViewMode}
+                        readOnly={isViewMode}
                       />
                     </div>
                   </div>
@@ -326,23 +438,26 @@ export function OrganizationDialog({
               )}
 
               {/* Submit and Cancel buttons */}
-              <div className="flex gap-4 pt-6">
-                <Button
-                  type="submit" 
-                  className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
-                >
-                  {isEdit ? "Save Changes" : "Create Organization"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => onOpenChange(false)}
-                  className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
-                >
-                  Cancel
-                </Button>
-              </div>
+              {!isViewMode && (
+                <div className="flex gap-4 pt-6">
+                  <Button
+                    type="submit" 
+                    className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
+                  >
+                    {isEdit ? "Save Changes" : "Create Organization"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => onOpenChange(false)}
+                    className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
             </form>
+          )}
           </div>
         </div>
       </DrawerContent>

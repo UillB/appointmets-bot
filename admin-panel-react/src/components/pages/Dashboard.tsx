@@ -61,6 +61,7 @@ export function Dashboard() {
   });
   const [botActive, setBotActive] = useState(false);
   const [adminLinked, setAdminLinked] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const setupWizard = useSetupWizard();
   const [successModal, setSuccessModal] = useState<{
     open: boolean;
@@ -424,7 +425,11 @@ export function Dashboard() {
           {/* Statistics & Overview */}
           <div className="flex items-center justify-between">
             <h2 className="text-gray-900 dark:text-gray-100">Statistics & Overview</h2>
-            <Button variant="link" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 p-0 h-auto">
+            <Button 
+              variant="link" 
+              className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 p-0 h-auto"
+              onClick={() => navigate('/analytics')}
+            >
               View All →
             </Button>
           </div>
@@ -555,7 +560,10 @@ export function Dashboard() {
                     {selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select a date'}
                   </h3>
                 </div>
-                <Button className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white h-8 px-3 text-sm whitespace-nowrap">
+                <Button 
+                  className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white h-8 px-3 text-sm whitespace-nowrap"
+                  onClick={() => navigate('/appointments', { state: { openDialog: true } })}
+                >
                   New Appointment
                 </Button>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Drawer,
   DrawerContent,
@@ -18,6 +18,8 @@ import { toast } from "sonner";
 import { StepIndicator } from "../StepIndicator";
 import { triggerSetupWizardModal } from "../../utils/setupWizardEvents";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { CurrencySelector, getCurrencySymbol } from "../CurrencySelector";
 
 interface ServiceDialogProps {
   open: boolean;
@@ -35,13 +37,25 @@ interface ServiceDialogProps {
     descriptionRu?: string;
     descriptionEn?: string;
     descriptionHe?: string;
+    organizationId?: number;
   };
   onServiceSaved?: () => void;
 }
 
 export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: ServiceDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState<string>(service?.currency || 'USD');
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  // Update currency when service changes
+  useEffect(() => {
+    if (service?.currency) {
+      setSelectedCurrency(service.currency);
+    } else {
+      setSelectedCurrency('USD');
+    }
+  }, [service]);
 
   // Debug logging
   console.log('ServiceDialog render - open:', open);
@@ -71,13 +85,25 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
         return;
       }
 
+      // Get organizationId from current user or from service being edited
+      const organizationId = user?.organizationId || service?.organizationId;
+      
+      if (!organizationId) {
+        toast.error("Organization ID is required");
+        setIsLoading(false);
+        return;
+      }
+
+      const priceValue = formData.get('price');
+      const parsedPrice = priceValue && priceValue !== '' ? parseFloat(priceValue as string) : undefined;
+
       const serviceData = {
         name: serviceName.trim(),
         description: (formData.get('description') as string) || undefined,
         durationMin: parseInt(duration as string),
-        price: formData.get('price') ? parseFloat(formData.get('price') as string) : undefined,
-        currency: (formData.get('currency') as string) || 'RUB',
-        organizationId: 3, // Demo organization
+        price: parsedPrice,
+        currency: selectedCurrency || 'USD', // Use selectedCurrency state directly
+        ...(service ? {} : { organizationId }), // Only include organizationId when creating, not when updating
       };
 
       console.log('Sending service data:', serviceData);
@@ -241,7 +267,9 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                         Price (optional)
                       </Label>
                       <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">₽</span>
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">
+                          {getCurrencySymbol(selectedCurrency)}
+                        </span>
                         <Input
                           id="price"
                           name="price"
@@ -252,6 +280,28 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                           className="h-11 pl-8"
                         />
                       </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="currency" className="text-sm">
+                        Currency
+                      </Label>
+                      <CurrencySelector
+                        value={selectedCurrency}
+                        onChange={(currency) => {
+                          setSelectedCurrency(currency);
+                          // Set hidden input for form submission
+                          const currencyInput = document.getElementById('currency') as HTMLInputElement;
+                          if (currencyInput) {
+                            currencyInput.value = currency;
+                          }
+                        }}
+                      />
+                      <input
+                        type="hidden"
+                        id="currency"
+                        name="currency"
+                        value={selectedCurrency}
+                      />
                     </div>
                   </div>
                 </div>
@@ -312,7 +362,9 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                       Price (optional)
                     </Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">₽</span>
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">
+                        {getCurrencySymbol(selectedCurrency)}
+                      </span>
                       <Input
                         id="price"
                         name="price"
@@ -324,6 +376,28 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                         className="h-12 pl-8 text-base"
                       />
                     </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="currency" className="text-sm font-semibold text-gray-700">
+                      Currency
+                    </Label>
+                    <CurrencySelector
+                      value={selectedCurrency}
+                      onChange={(currency) => {
+                        setSelectedCurrency(currency);
+                        // Set hidden input for form submission
+                        const currencyInput = document.getElementById('currency') as HTMLInputElement;
+                        if (currencyInput) {
+                          currencyInput.value = currency;
+                        }
+                      }}
+                    />
+                    <input
+                      type="hidden"
+                      id="currency"
+                      name="currency"
+                      value={selectedCurrency}
+                    />
                   </div>
                 </div>
               </div>

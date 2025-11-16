@@ -23,7 +23,6 @@ import {
 import { StatCard } from "../cards/StatCard";
 import { ServiceCard } from "../cards/ServiceCard";
 import { ServiceDialog } from "../dialogs/ServiceDialog";
-import { SlotsManagementPage } from "./SlotsManagementPage";
 import { ServiceDeletionDialog } from "../ServiceDeletionDialog";
 import {
   Sheet,
@@ -37,7 +36,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { PageHeader } from "../PageHeader";
 import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
-import { apiClient } from "../../services/api";
+import { apiClient, Service } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
 import { toastNotifications } from "../toast-notifications";
 import { SetupSuccessModal } from "../SetupSuccessModal";
@@ -48,12 +47,10 @@ export function ServicesPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [serviceToEdit, setServiceToEdit] = useState<Service | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [services, setServices] = useState<any[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showSlotsManagement, setShowSlotsManagement] = useState(false);
-  const [selectedServiceForSlots, setSelectedServiceForSlots] = useState<number | null>(null);
   const [deletionDialogOpen, setDeletionDialogOpen] = useState(false);
   const [serviceToDelete, setServiceToDelete] = useState<{ id: number; name: string } | null>(null);
   const [stats, setStats] = useState({
@@ -80,10 +77,21 @@ export function ServicesPage() {
     message: '',
   });
 
-  // Load services and stats on mount
+  // Load services and stats on mount - load both in parallel but wait for both
   useEffect(() => {
-    loadData();
-    loadStats();
+    const loadAll = async () => {
+      setIsLoading(true);
+      setStatsLoading(true);
+      try {
+        await Promise.all([loadData(), loadStats()]);
+      } catch (error) {
+        console.error('Failed to load initial data:', error);
+      } finally {
+        setIsLoading(false);
+        setStatsLoading(false);
+      }
+    };
+    loadAll();
   }, []);
 
   // Handle navigation state for auto-opening dialog
@@ -146,36 +154,40 @@ export function ServicesPage() {
 
     // Reload services if we processed any new service events
     if (hasNewEvents) {
-      setTimeout(() => {
-        loadData();
-        loadStats();
+      setTimeout(async () => {
+        setIsLoading(true);
+        setStatsLoading(true);
+        try {
+          await Promise.all([loadData(), loadStats()]);
+        } catch (error) {
+          console.error('Failed to reload after event:', error);
+        } finally {
+          setIsLoading(false);
+          setStatsLoading(false);
+        }
       }, 300);
     }
   }, [events]);
 
   const loadData = async () => {
     try {
-      setIsLoading(true);
       const servicesData = await apiClient.getServices();
       setServices(servicesData.services || []);
     } catch (error) {
       console.error('Failed to load services:', error);
       toast.error("Failed to load services");
-    } finally {
-      setIsLoading(false);
+      throw error;
     }
   };
 
   const loadStats = async () => {
     try {
-      setStatsLoading(true);
       const statsData = await apiClient.getServicesStats();
       setStats(statsData);
     } catch (error) {
       console.error('Failed to load statistics:', error);
       toast.error("Failed to load statistics");
-    } finally {
-      setStatsLoading(false);
+      throw error;
     }
   };
 
@@ -200,7 +212,7 @@ export function ServicesPage() {
       icon: TrendingUp,
       iconBg: "bg-purple-50 dark:bg-purple-900/50",
       iconColor: "text-purple-600 dark:text-purple-400",
-      title: "Average Occupancy",
+      title: "Average Occupancy (Current Month)",
       value: statsLoading ? "..." : `${stats.averageOccupancy}%`,
       subtitle: "Capacity utilization",
     },
@@ -208,24 +220,37 @@ export function ServicesPage() {
 
   const filteredServices = services?.filter((service) => {
     const matchesSearch = service.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = categoryFilter === "all" || (service.category || "General").toLowerCase() === categoryFilter.toLowerCase();
-    return matchesSearch && matchesCategory;
+    return matchesSearch;
   }) || [];
 
   const clearFilters = () => {
     setSearchQuery("");
-    setCategoryFilter("all");
   };
 
-  const hasActiveFilters = searchQuery || categoryFilter !== "all";
+  const hasActiveFilters = searchQuery;
 
   const handleRefresh = async () => {
     try {
+      // Small delay to ensure backend has processed the update
+      await new Promise(resolve => setTimeout(resolve, 300));
       await Promise.all([loadData(), loadStats()]);
-      toast.success("Services refreshed");
+      // Don't show toast on auto-refresh after edit/create
     } catch (error) {
       console.error('Failed to refresh services:', error);
       toast.error("Failed to refresh services");
+    }
+  };
+
+  const handleEditService = (service: Service) => {
+    setServiceToEdit(service);
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = (open: boolean) => {
+    setDialogOpen(open);
+    if (!open) {
+      // Clear serviceToEdit when dialog closes
+      setServiceToEdit(null);
     }
   };
 
@@ -237,29 +262,30 @@ export function ServicesPage() {
     setDeletionDialogOpen(true);
   };
 
-  const handleManageSlots = (serviceId: number) => {
-    setSelectedServiceForSlots(serviceId);
-    setShowSlotsManagement(true);
+  const handleManageAppointments = (serviceId: number) => {
+    // Navigate to appointments page with service filter and today's date
+    navigate('/appointments', { 
+      state: { 
+        serviceId,
+        date: new Date() // Today's date
+      } 
+    });
   };
 
-  const handleBackToServices = () => {
-    setShowSlotsManagement(false);
-    setSelectedServiceForSlots(null);
-  };
 
-  // Show slots management page if selected
-  if (showSlotsManagement && selectedServiceForSlots) {
+  // Show loading state before rendering content - wait for both services and stats
+  // Only show content when ALL data is loaded (both services and stats)
+  if (isLoading || statsLoading) {
     return (
-      <SlotsManagementPage 
-        serviceId={selectedServiceForSlots}
-        onBack={handleBackToServices}
-      />
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
+      </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6" style={{ animation: 'none', transition: 'none' }}>
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Page Title */}
           <PageTitle
@@ -278,7 +304,10 @@ export function ServicesPage() {
                   Refresh
                 </Button>
                 <Button
-                  onClick={() => setDialogOpen(true)}
+                  onClick={() => {
+                    setServiceToEdit(null);
+                    setDialogOpen(true);
+                  }}
                   size="sm"
                   className="bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
@@ -332,25 +361,9 @@ export function ServicesPage() {
                   <SheetContent side="right" className="w-[300px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                     <SheetHeader>
                       <SheetTitle className="text-gray-900 dark:text-gray-100">Filters</SheetTitle>
-                      <SheetDescription className="text-gray-600 dark:text-gray-400">Filter services by category</SheetDescription>
+                      <SheetDescription className="text-gray-600 dark:text-gray-400">Filter services by name</SheetDescription>
                     </SheetHeader>
                     <div className="space-y-4 pt-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Category</label>
-                        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                          <SelectTrigger className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
-                            <SelectValue placeholder="All Categories" />
-                          </SelectTrigger>
-                          <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                            <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Categories</SelectItem>
-                            <SelectItem value="general" className="text-gray-900 dark:text-gray-100">General</SelectItem>
-                            <SelectItem value="beauty" className="text-gray-900 dark:text-gray-100">Beauty</SelectItem>
-                            <SelectItem value="health" className="text-gray-900 dark:text-gray-100">Health</SelectItem>
-                            <SelectItem value="consultation" className="text-gray-900 dark:text-gray-100">Consultation</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
                       {hasActiveFilters && (
                         <Button
                           variant="outline"
@@ -377,19 +390,6 @@ export function ServicesPage() {
                   />
                 </div>
 
-                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                  <SelectTrigger className="w-[200px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                    <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Categories</SelectItem>
-                    <SelectItem value="general" className="text-gray-900 dark:text-gray-100">General</SelectItem>
-                    <SelectItem value="beauty" className="text-gray-900 dark:text-gray-100">Beauty</SelectItem>
-                    <SelectItem value="health" className="text-gray-900 dark:text-gray-100">Health</SelectItem>
-                    <SelectItem value="consultation" className="text-gray-900 dark:text-gray-100">Consultation</SelectItem>
-                  </SelectContent>
-                </Select>
-
                 {hasActiveFilters && (
                   <Button
                     variant="ghost"
@@ -410,7 +410,10 @@ export function ServicesPage() {
                   <p className="text-gray-500 dark:text-gray-400">No services found</p>
                   <Button
                     variant="link"
-                    onClick={() => setDialogOpen(true)}
+                    onClick={() => {
+                    setServiceToEdit(null);
+                    setDialogOpen(true);
+                  }}
                     className="text-indigo-600 dark:text-indigo-400"
                   >
                     Create your first service
@@ -454,9 +457,10 @@ export function ServicesPage() {
                         createdAt={service.createdAt}
                         updatedAt={service.updatedAt}
                         _count={service._count}
-                        onEdit={() => setDialogOpen(true)}
+                        occupancy={service.occupancy}
+                        onEdit={() => handleEditService(service)}
                         onDelete={() => handleDeleteService(service.id)}
-                        onManageSlots={() => handleManageSlots(service.id)}
+                        onManageAppointments={() => handleManageAppointments(service.id)}
                       />
                     );
                     return <ServiceCardComponent key={service.id} />;
@@ -478,7 +482,22 @@ export function ServicesPage() {
           {/* Dialogs */}
           <ServiceDialog 
             open={dialogOpen} 
-            onOpenChange={setDialogOpen}
+            onOpenChange={handleDialogClose}
+            service={serviceToEdit ? {
+              id: serviceToEdit.id,
+              name: serviceToEdit.name,
+              nameRu: serviceToEdit.nameRu,
+              nameEn: serviceToEdit.nameEn,
+              nameHe: serviceToEdit.nameHe,
+              description: serviceToEdit.description,
+              descriptionRu: serviceToEdit.descriptionRu,
+              descriptionEn: serviceToEdit.descriptionEn,
+              descriptionHe: serviceToEdit.descriptionHe,
+              durationMin: serviceToEdit.durationMin,
+              price: serviceToEdit.price,
+              currency: serviceToEdit.currency,
+              organizationId: serviceToEdit.organizationId,
+            } : undefined}
             onServiceSaved={handleRefresh}
           />
 

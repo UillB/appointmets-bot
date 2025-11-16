@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Moon, Sun, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User, Wifi, WifiOff } from "lucide-react";
+import { Moon, Sun, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User, Wifi, WifiOff, Mail } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback } from "./ui/avatar";
@@ -11,6 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "./ui/popover";
 import { useAuth } from "../hooks/useAuth";
 import { useLanguage, Language } from "../i18n";
 import { useTheme } from "../hooks/useTheme";
@@ -201,9 +206,40 @@ export function Header({ onMenuClick }: HeaderProps) {
             <NotificationCenter />
           </div>
           
-          <Button variant="ghost" size="icon" className="hidden sm:flex w-9 h-9 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
-            <HelpCircle className="w-4 h-4" />
-          </Button>
+          {/* Help Popover */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="ghost" size="icon" className="hidden sm:flex w-9 h-9 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">
+                <HelpCircle className="w-4 h-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent 
+              align="end" 
+              className="w-80 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 p-4"
+            >
+              <div className="space-y-3">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center flex-shrink-0">
+                    <HelpCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1">
+                      Need Help?
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                      Have any questions, need any help or support? Feel free to contact our support team. We will reply as soon as possible to help you with any request.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-800">
+                  <Mail className="w-4 h-4 text-gray-500 dark:text-gray-400 flex-shrink-0" />
+                  <span className="text-sm text-indigo-600 dark:text-indigo-400">
+                    support@yourbrand.com
+                  </span>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

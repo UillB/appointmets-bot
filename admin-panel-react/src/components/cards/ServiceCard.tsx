@@ -8,6 +8,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 import { Clock, DollarSign, Calendar, MoreVertical, TrendingUp } from "lucide-react";
 import { Progress } from "../ui/progress";
 
@@ -30,10 +36,13 @@ interface ServiceCardProps {
   _count?: {
     slots: number;
     appointments: number;
+    slotsInCurrentMonth?: number;
+    appointmentsInCurrentMonth?: number;
   };
+  occupancy?: number; // Occupancy for current month (0-100)
   onEdit?: () => void;
   onDelete?: () => void;
-  onManageSlots?: () => void;
+  onManageAppointments?: () => void;
 }
 
 export function ServiceCard({
@@ -53,14 +62,23 @@ export function ServiceCard({
   createdAt,
   updatedAt,
   _count,
+  occupancy: occupancyFromApi,
   onEdit,
   onDelete,
-  onManageSlots,
+  onManageAppointments,
 }: ServiceCardProps) {
-  // Calculate occupancy based on slots and appointments
+  // Use occupancy from API if available, otherwise calculate from current month data
+  const slotsInCurrentMonth = _count?.slotsInCurrentMonth ?? 0;
+  const appointmentsInCurrentMonth = _count?.appointmentsInCurrentMonth ?? 0;
+  const occupancy = occupancyFromApi !== undefined 
+    ? occupancyFromApi 
+    : (slotsInCurrentMonth > 0 
+        ? Math.min(100, Math.round((appointmentsInCurrentMonth / slotsInCurrentMonth) * 100)) 
+        : 0);
+  
+  // Total slots and appointments for display
   const totalSlots = _count?.slots || 0;
   const totalAppointments = _count?.appointments || 0;
-  const occupancy = totalSlots > 0 ? Math.round((totalAppointments / totalSlots) * 100) : 0;
 
   const getOccupancyColor = (occupancy: number) => {
     if (occupancy === 0) return "text-gray-500 dark:text-gray-400";
@@ -83,9 +101,46 @@ export function ServiceCard({
     return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
   };
 
+  // Currency symbols mapping
+  const getCurrencySymbol = (code?: string): string => {
+    const symbols: Record<string, string> = {
+      USD: "$",
+      EUR: "€",
+      GBP: "£",
+      JPY: "¥",
+      CNY: "¥",
+      RUB: "₽",
+      INR: "₹",
+      BRL: "R$",
+      CAD: "C$",
+      AUD: "A$",
+      CHF: "CHF",
+      SEK: "kr",
+      NOK: "kr",
+      DKK: "kr",
+      PLN: "zł",
+      MXN: "$",
+      ZAR: "R",
+      SGD: "S$",
+      HKD: "HK$",
+      NZD: "NZ$",
+      KRW: "₩",
+      TRY: "₺",
+      ILS: "₪",
+      AED: "د.إ",
+      SAR: "﷼",
+      THB: "฿",
+      IDR: "Rp",
+      PHP: "₱",
+      MYR: "RM",
+    };
+    return symbols[code || 'USD'] || "$";
+  };
+
   const formatPrice = (price?: number, currency?: string) => {
     if (!price) return "Free";
-    return `${price} ${currency || 'USD'}`;
+    const symbol = getCurrencySymbol(currency);
+    return `${symbol}${price}`;
   };
 
   return (
@@ -126,15 +181,14 @@ export function ServiceCard({
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="h-8 w-8 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <MoreVertical className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             <DropdownMenuItem onClick={onEdit} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Edit Service</DropdownMenuItem>
-            <DropdownMenuItem onClick={onManageSlots} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Manage Slots</DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">View Analytics</DropdownMenuItem>
+            <DropdownMenuItem onClick={onManageAppointments} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Manage Appointments</DropdownMenuItem>
             <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={onDelete}>
               Delete Service
             </DropdownMenuItem>
@@ -145,33 +199,68 @@ export function ServiceCard({
       <div className="space-y-3">
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1.5">
-              <TrendingUp className="w-4 h-4" />
-              Occupancy
-            </span>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1.5 cursor-help">
+                    <TrendingUp className="w-4 h-4" />
+                    Occupancy (Current Month)
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs">
+                    {slotsInCurrentMonth > 0 
+                      ? `${appointmentsInCurrentMonth} of ${slotsInCurrentMonth} slots booked this month`
+                      : 'No slots available this month'}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <span className={`text-sm font-medium ${getOccupancyColor(occupancy)}`}>
               {occupancy}%
             </span>
           </div>
-          <Progress 
-            value={occupancy} 
-            className="h-2 bg-gray-200 dark:bg-gray-800"
-            indicatorClassName={getOccupancyBgColor(occupancy)}
-          />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="cursor-help">
+                  <Progress 
+                    value={occupancy} 
+                    className="h-2 bg-gray-200 dark:bg-gray-800"
+                    indicatorClassName={getOccupancyBgColor(occupancy)}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="text-xs">
+                  {occupancy}% occupancy for current month
+                  {slotsInCurrentMonth > 0 && (
+                    <span className="block mt-1 text-gray-400">
+                      {appointmentsInCurrentMonth} / {slotsInCurrentMonth} slots
+                    </span>
+                  )}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
-        <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-800">
-          <span className="text-sm text-gray-600 dark:text-gray-400">
-            {totalAppointments} of {totalSlots} slots booked
-          </span>
+        <div className="pt-2 border-t border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-gray-600 dark:text-gray-400">
+              {slotsInCurrentMonth > 0 
+                ? `${appointmentsInCurrentMonth} of ${slotsInCurrentMonth} slots booked this month`
+                : `${totalAppointments} of ${totalSlots} total slots booked`}
+            </span>
+          </div>
           <Button 
             variant="outline" 
             size="sm"
-            onClick={onManageSlots}
-            className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 border-gray-200 dark:border-gray-700"
+            onClick={onManageAppointments}
+            className="w-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 border-gray-200 dark:border-gray-700"
           >
             <Calendar className="w-3.5 h-3.5 mr-1.5" />
-            Manage Slots
+            Manage Appointments
           </Button>
         </div>
       </div>

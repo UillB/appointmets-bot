@@ -95,6 +95,13 @@ export interface Service {
   };
   createdAt: string;
   updatedAt: string;
+  _count?: {
+    slots: number;
+    appointments: number;
+    slotsInCurrentMonth?: number;
+    appointmentsInCurrentMonth?: number;
+  };
+  occupancy?: number; // Occupancy for current month (0-100)
 }
 
 export interface Organization {
@@ -778,7 +785,7 @@ class ApiClient {
 
   // Analytics data
   async getAnalytics(params?: {
-    timePeriod?: 'week' | 'month' | 'year';
+    timePeriod?: 'week' | 'month' | 'year' | 'all';
     startDate?: string;
     endDate?: string;
   }): Promise<{

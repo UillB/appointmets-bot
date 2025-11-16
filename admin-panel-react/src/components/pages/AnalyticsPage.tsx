@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useWebSocket } from "../../hooks/useWebSocket";
 import {
   BarChart3,
   TrendingUp,
@@ -44,7 +45,8 @@ import { useTheme } from "../../hooks/useTheme";
 export function AnalyticsPage() {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
-  const [timePeriod, setTimePeriod] = useState<"week" | "month" | "year">("week");
+  const { events } = useWebSocket();
+  const [timePeriod, setTimePeriod] = useState<"week" | "month" | "year" | "all">("week");
   const [selectedMetric, setSelectedMetric] = useState("appointments");
   const [loading, setLoading] = useState(true);
   const [analyticsData, setAnalyticsData] = useState<any>(null);
@@ -59,7 +61,7 @@ export function AnalyticsPage() {
     } catch (err: any) {
       console.error("Error loading analytics:", err);
       setError(err.message || "Failed to load analytics");
-      toastNotifications.errors.loadFailed("Analytics data");
+      toastNotifications.errors.general("Failed to load analytics data");
     } finally {
       setLoading(false);
     }
@@ -68,6 +70,30 @@ export function AnalyticsPage() {
   useEffect(() => {
     loadAnalytics();
   }, [timePeriod]);
+
+  // Handle WebSocket events for real-time updates
+  useEffect(() => {
+    if (events.length === 0) return;
+
+    const latestEvent = events[0];
+    
+    // Reload analytics when appointment events occur
+    if (
+      latestEvent.type === 'appointment.created' || 
+      latestEvent.type === 'appointment_created' ||
+      latestEvent.type === 'appointment.updated' ||
+      latestEvent.type === 'appointment_updated' ||
+      latestEvent.type === 'appointment.cancelled' ||
+      latestEvent.type === 'appointment_cancelled' ||
+      latestEvent.type === 'appointment.confirmed' ||
+      latestEvent.type === 'appointment_confirmed'
+    ) {
+      // Small delay to ensure backend has processed the change
+      setTimeout(() => {
+        loadAnalytics();
+      }, 500);
+    }
+  }, [events]);
 
   const handleRefresh = () => {
     loadAnalytics();
@@ -94,7 +120,7 @@ export function AnalyticsPage() {
       iconColor: "text-blue-600 dark:text-blue-400",
       title: "Total Bookings",
       value: (analyticsData.totalAppointments || 0) as string | number,
-      subtitle: `This ${timePeriod}`,
+      subtitle: timePeriod === 'all' ? 'All time' : `This ${timePeriod}`,
       trend: analyticsData.growthRate || 0,
     },
     {
@@ -103,7 +129,7 @@ export function AnalyticsPage() {
       iconColor: "text-emerald-600 dark:text-emerald-400",
       title: "Growth Rate",
       value: `${analyticsData.growthRate >= 0 ? '+' : ''}${analyticsData.growthRate || 0}%`,
-      subtitle: `vs last ${timePeriod}`,
+      subtitle: timePeriod === 'all' ? 'vs previous period' : `vs last ${timePeriod}`,
       trend: analyticsData.growthRate || 0,
     },
     {
@@ -126,9 +152,11 @@ export function AnalyticsPage() {
     },
   ] : [];
 
-  // Appointments over time data
+  // Appointments over time data - use full date for display
   const appointmentsData = analyticsData?.dailyBookings?.map((item: any) => ({
-    day: item.dayShort || item.day || "",
+    day: item.fullDate || item.dayLabel || item.dayShort || item.day || "",
+    date: item.date || "",
+    fullDate: item.fullDate || item.dayLabel || "",
     appointments: item.appointments || item.bookings || 0,
     revenue: item.revenue || 0,
   })) || [];
@@ -163,17 +191,17 @@ export function AnalyticsPage() {
   // Quick insights
   const insights = analyticsData?.insights || {};
 
-  if (loading) {
+  if (loading || !analyticsData) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <Button onClick={loadAnalytics}>Retry</Button>
@@ -219,26 +247,35 @@ export function AnalyticsPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map((stat) => (
-              // @ts-expect-error - key is a React prop, not part of StatCardProps
-              <StatCard
-                key={stat.title}
-                icon={stat.icon}
-                iconBg={stat.iconBg}
-                iconColor={stat.iconColor}
-                title={stat.title}
-                value={stat.value}
-                subtitle={stat.subtitle}
-                trend={stat.trend}
-              />
-            ))}
+            {stats.map((stat) => {
+              const { icon, iconBg, iconColor, title, value, subtitle, trend } = stat;
+              return (
+                // @ts-ignore - key is a standard React prop, not part of component props
+                <StatCard
+                  key={title}
+                  icon={icon}
+                  iconBg={iconBg}
+                  iconColor={iconColor}
+                  title={title}
+                  value={value}
+                  subtitle={subtitle}
+                  trend={trend}
+                />
+              );
+            })}
           </div>
 
           {/* Time Period Selector */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <h3 className="text-gray-900 dark:text-gray-100">Performance Overview</h3>
-            <Tabs value={timePeriod} onValueChange={setTimePeriod}>
+            <Tabs value={timePeriod} onValueChange={(value) => setTimePeriod(value as "week" | "month" | "year" | "all")}>
               <TabsList className="bg-gray-100 dark:bg-gray-800">
+                <TabsTrigger
+                  value="all"
+                  className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
+                >
+                  All Time
+                </TabsTrigger>
                 <TabsTrigger
                   value="week"
                   className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
@@ -279,36 +316,61 @@ export function AnalyticsPage() {
               </Select>
             </div>
 
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={appointmentsData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#E5E7EB"} />
-                  <XAxis
-                    dataKey="day"
-                    stroke={isDark ? "#9CA3AF" : "#6B7280"}
-                    style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }}
-                  />
-                  <YAxis stroke={isDark ? "#9CA3AF" : "#6B7280"} style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: isDark ? "#1F2937" : "#fff",
-                      border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
-                      borderRadius: "8px",
-                      boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                      color: isDark ? "#F9FAFB" : "#111827",
-                    }}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey={selectedMetric === "appointments" ? "appointments" : "revenue"}
-                    stroke="#4F46E5"
-                    strokeWidth={2}
-                    dot={{ fill: "#4F46E5", r: 4 }}
-                    activeDot={{ r: 6 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            {appointmentsData.length > 0 ? (
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={appointmentsData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#E5E7EB"} />
+                    <XAxis
+                      dataKey="day"
+                      stroke={isDark ? "#9CA3AF" : "#6B7280"}
+                      style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }}
+                      angle={appointmentsData.length > 7 ? -45 : 0}
+                      textAnchor={appointmentsData.length > 7 ? "end" : "middle"}
+                      height={appointmentsData.length > 7 ? 60 : 30}
+                    />
+                    <YAxis 
+                      stroke={isDark ? "#9CA3AF" : "#6B7280"} 
+                      style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }}
+                      allowDecimals={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: isDark ? "#1F2937" : "#fff",
+                        border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
+                        borderRadius: "8px",
+                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                        color: isDark ? "#F9FAFB" : "#111827",
+                      }}
+                      formatter={(value: any) => [
+                        selectedMetric === "appointments" 
+                          ? `${value} ${value === 1 ? 'appointment' : 'appointments'}`
+                          : `$${value.toFixed(2)}`,
+                        selectedMetric === "appointments" ? "Appointments" : "Revenue"
+                      ]}
+                      labelFormatter={(label, payload) => {
+                        // Use full date from payload if available
+                        const fullDate = payload?.[0]?.payload?.fullDate || label;
+                        return `Date: ${fullDate}`;
+                      }}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey={selectedMetric === "appointments" ? "appointments" : "revenue"}
+                      stroke="#4F46E5"
+                      strokeWidth={2}
+                      dot={{ fill: "#4F46E5", r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-80 text-center">
+                <BarChart3 className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+                <p className="text-gray-500 dark:text-gray-400">No appointment data available for this period</p>
+              </div>
+            )}
           </Card>
 
           {/* Two Column Layout */}
@@ -320,35 +382,42 @@ export function AnalyticsPage() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Most popular services</p>
               </div>
 
-              <div className="space-y-4">
-                {servicesData.map((service, index) => (
-                  <div key={service.name} className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300">
-                          #{index + 1}
+              {servicesData.length > 0 ? (
+                <div className="space-y-4">
+                  {servicesData.map((service, index) => (
+                    <div key={service.name} className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300">
+                            #{index + 1}
+                          </div>
+                          <div>
+                            <p className="font-medium text-gray-900 dark:text-gray-100">{service.name}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{service.bookings} bookings</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-medium text-gray-900 dark:text-gray-100">{service.name}</p>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{service.bookings} bookings</p>
-                        </div>
+                        <Wrench className="w-5 h-5 text-gray-400 dark:text-gray-500" style={{ color: service.color }} />
                       </div>
-                      <Wrench className="w-5 h-5 text-gray-400 dark:text-gray-500" style={{ color: service.color }} />
+                      <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2">
+                        <div
+                          className="h-2 rounded-full transition-all"
+                          style={{
+                            width: `${servicesData.length > 0 && servicesData[0].bookings > 0 
+                              ? (service.bookings / servicesData[0].bookings) * 100 
+                              : 0}%`,
+                            backgroundColor: service.color,
+                          }}
+                        />
+                      </div>
                     </div>
-                    <div className="w-full bg-gray-100 dark:bg-gray-800 rounded-full h-2">
-                      <div
-                        className="h-2 rounded-full transition-all"
-                        style={{
-                          width: `${servicesData.length > 0 && servicesData[0].bookings > 0 
-                            ? (service.bookings / servicesData[0].bookings) * 100 
-                            : 0}%`,
-                          backgroundColor: service.color,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <Wrench className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+                  <p className="text-gray-500 dark:text-gray-400">No services with bookings in this period</p>
+                </div>
+              )}
             </Card>
 
             {/* Status Distribution */}
@@ -358,49 +427,61 @@ export function AnalyticsPage() {
                 <p className="text-sm text-gray-600 dark:text-gray-400">Status distribution</p>
               </div>
 
-              <div className="flex items-center justify-center h-64">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={statusData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {statusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: isDark ? "#1F2937" : "#fff",
-                        border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
-                        borderRadius: "8px",
-                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                        color: isDark ? "#F9FAFB" : "#111827",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-
-              <div className="mt-4 space-y-2">
-                {statusData.map((status) => (
-                  <div key={status.name} className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: status.color }}
-                      />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">{status.name}</span>
-                    </div>
-                    <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{status.value}%</span>
+              {statusData.length > 0 ? (
+                <>
+                  <div className="flex items-center justify-center h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={statusData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={80}
+                          paddingAngle={5}
+                          dataKey="value"
+                        >
+                          {statusData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip
+                          contentStyle={{
+                            backgroundColor: isDark ? "#1F2937" : "#fff",
+                            border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
+                            borderRadius: "8px",
+                            boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                            color: isDark ? "#F9FAFB" : "#111827",
+                          }}
+                          formatter={(value: any) => [`${value}%`, 'Percentage']}
+                          labelFormatter={(label) => `Status: ${label}`}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
                   </div>
-                ))}
-              </div>
+                  <div className="mt-4 space-y-2">
+                    {statusData.map((status) => (
+                      <div key={status.name} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="w-3 h-3 rounded-full"
+                            style={{ backgroundColor: status.color }}
+                          />
+                          <span className="text-sm text-gray-700 dark:text-gray-300">{status.name}</span>
+                        </div>
+                        <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          {status.value}% ({status.count})
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-64 text-center">
+                  <Calendar className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+                  <p className="text-gray-500 dark:text-gray-400">No appointment status data available</p>
+                </div>
+              )}
             </Card>
           </div>
 
@@ -411,28 +492,45 @@ export function AnalyticsPage() {
               <p className="text-sm text-gray-600 dark:text-gray-400">Busiest times of the day</p>
             </div>
 
-            <div className="h-80">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={peakHoursData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#E5E7EB"} />
-                  <XAxis
-                    dataKey="hour"
-                    stroke={isDark ? "#9CA3AF" : "#6B7280"}
-                    style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }}
-                  />
-                  <YAxis stroke={isDark ? "#9CA3AF" : "#6B7280"} style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: isDark ? "#1F2937" : "#fff",
-                      border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
-                      borderRadius: "8px",
-                      boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                    }}
-                  />
-                  <Bar dataKey="bookings" fill="#4F46E5" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </div>
+            {peakHoursData.length > 0 ? (
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={peakHoursData}>
+                    <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#E5E7EB"} />
+                    <XAxis
+                      dataKey="hour"
+                      stroke={isDark ? "#9CA3AF" : "#6B7280"}
+                      style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }}
+                      angle={-45}
+                      textAnchor="end"
+                      height={60}
+                    />
+                    <YAxis 
+                      stroke={isDark ? "#9CA3AF" : "#6B7280"} 
+                      style={{ fontSize: "12px", fill: isDark ? "#D1D5DB" : "#6B7280" }}
+                      allowDecimals={false}
+                    />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: isDark ? "#1F2937" : "#fff",
+                        border: isDark ? "1px solid #374151" : "1px solid #E5E7EB",
+                        borderRadius: "8px",
+                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                        color: isDark ? "#F9FAFB" : "#111827",
+                      }}
+                      formatter={(value: any) => [`${value} ${value === 1 ? 'booking' : 'bookings'}`, 'Bookings']}
+                      labelFormatter={(label) => `Time: ${label}`}
+                    />
+                    <Bar dataKey="bookings" fill="#4F46E5" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-80 text-center">
+                <Clock className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
+                <p className="text-gray-500 dark:text-gray-400">No peak hours data available</p>
+              </div>
+            )}
           </Card>
 
           {/* Quick Insights */}
@@ -447,7 +545,7 @@ export function AnalyticsPage() {
                   <div>
                     <p className="text-sm font-medium text-emerald-900 dark:text-emerald-300">Best Day</p>
                     <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-1">
-                      {insights.bestDay.day} with {insights.bestDay.bookings} bookings
+                      {insights.bestDay.formatted || `${insights.bestDay.day} ${insights.bestDay.date}`} with {insights.bestDay.bookings} bookings
                     </p>
                   </div>
                 </div>

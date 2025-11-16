@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
@@ -63,6 +64,8 @@ import { formatDateToLocal, formatTimeToLocal } from "../../utils/dateUtils";
 
 export function AppointmentsPage() {
   const { events } = useWebSocket();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -73,6 +76,39 @@ export function AppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [services, setServices] = useState<any[]>([]);
+
+  // Handle navigation state for filters (from ServicesPage)
+  // Use ref to track if we've already processed the state to prevent re-triggering
+  const stateProcessedRef = React.useRef(false);
+  
+  useEffect(() => {
+    // Only process state if it exists and hasn't been processed yet
+    if (location.state && !stateProcessedRef.current && services.length > 0) {
+      const { serviceId, date: dateFromState } = location.state as { serviceId?: number; date?: Date };
+      
+      if (serviceId) {
+        // Find service name by ID
+        const service = services.find(s => s.id === serviceId);
+        if (service) {
+          setSelectedService(service.name);
+        }
+      }
+      
+      // Only set date if explicitly provided, don't set today's date automatically
+      if (dateFromState) {
+        setDate(new Date(dateFromState));
+      }
+      
+      // Mark as processed and clear state to prevent re-triggering
+      stateProcessedRef.current = true;
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname, services]);
+
+  // Reset the ref when location changes (new navigation)
+  useEffect(() => {
+    stateProcessedRef.current = false;
+  }, [location.pathname]);
 
   // Load data function - wrapped in useCallback to avoid dependency issues
   const loadData = useCallback(async () => {
@@ -97,6 +133,15 @@ export function AppointmentsPage() {
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  // Handle navigation state for opening dialog
+  useEffect(() => {
+    if (location.state?.openDialog) {
+      setDialogOpen(true);
+      // Clear state to prevent re-triggering
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, navigate, location.pathname]);
 
   // Handle real-time WebSocket events for appointments
   const processedEventsRef = useRef<Set<string>>(new Set());
@@ -254,9 +299,19 @@ export function AppointmentsPage() {
     toast.success("Appointments refreshed");
   };
 
+  // Show loading state before rendering content - ensure all data is loaded
+  // Wait until both appointments and services arrays are initialized (even if empty)
+  if (isLoading || appointments === undefined || services === undefined) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6" style={{ animation: 'none', transition: 'none' }}>
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Page Title */}
           <PageTitle
@@ -308,13 +363,6 @@ export function AppointmentsPage() {
               return <StatCardComponent key={`stat-${index}`} />;
             })}
           </div>
-
-          {/* Loading State */}
-          {isLoading && (
-            <div className="flex items-center justify-center min-h-[calc(100vh-300px)] bg-white dark:bg-gray-900">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
-            </div>
-          )}
 
           {/* Main Content Card */}
           <Card className="p-4 lg:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
@@ -502,7 +550,7 @@ export function AppointmentsPage() {
             </div>
 
             {/* Desktop: Table View */}
-            <div className="hidden lg:block border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
+            <div className="hidden lg:block border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden" style={{ animation: 'none', transition: 'none' }}>
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50 dark:bg-gray-800">
@@ -521,14 +569,34 @@ export function AppointmentsPage() {
                       <TableCell colSpan={7} className="text-center py-12">
                         <div className="flex flex-col items-center gap-2">
                           <CalendarDays className="w-12 h-12 text-gray-300 dark:text-gray-600" />
-                          <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
-                          <Button
-                            variant="link"
-                            onClick={() => setDialogOpen(true)}
-                            className="text-indigo-600 dark:text-indigo-400"
-                          >
-                            Create your first appointment
-                          </Button>
+                          {date ? (
+                            <>
+                              <p className="text-gray-500 dark:text-gray-400 font-medium">
+                                No appointments found for {format(date, "PP")}
+                              </p>
+                              <p className="text-sm text-gray-400 dark:text-gray-500">
+                                Try selecting a different date or clear the date filter to see all appointments
+                              </p>
+                              <Button
+                                variant="outline"
+                                onClick={() => setDate(undefined)}
+                                className="mt-2 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
+                              >
+                                Clear Date Filter
+                              </Button>
+                            </>
+                          ) : (
+                            <>
+                              <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
+                              <Button
+                                variant="link"
+                                onClick={() => setDialogOpen(true)}
+                                className="text-indigo-600 dark:text-indigo-400"
+                              >
+                                Create your first appointment
+                              </Button>
+                            </>
+                          )}
                         </div>
                       </TableCell>
                     </TableRow>
@@ -607,14 +675,34 @@ export function AppointmentsPage() {
                 <div className="text-center py-12">
                   <div className="flex flex-col items-center gap-2">
                     <CalendarDays className="w-12 h-12 text-gray-300 dark:text-gray-600" />
-                    <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
-                    <Button
-                      variant="link"
-                      onClick={() => setSheetOpen(true)}
-                      className="text-indigo-600 dark:text-indigo-400"
-                    >
-                      Create your first appointment
-                    </Button>
+                    {date ? (
+                      <>
+                        <p className="text-gray-500 dark:text-gray-400 font-medium">
+                          No appointments found for {format(date, "PP")}
+                        </p>
+                        <p className="text-sm text-gray-400 dark:text-gray-500 px-4">
+                          Try selecting a different date or clear the date filter to see all appointments
+                        </p>
+                        <Button
+                          variant="outline"
+                          onClick={() => setDate(undefined)}
+                          className="mt-2 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
+                        >
+                          Clear Date Filter
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
+                        <Button
+                          variant="link"
+                          onClick={() => setSheetOpen(true)}
+                          className="text-indigo-600 dark:text-indigo-400"
+                        >
+                          Create your first appointment
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -656,8 +744,26 @@ export function AppointmentsPage() {
       </div>
 
       {/* Dialogs */}
-      <AppointmentDialog open={dialogOpen} onOpenChange={setDialogOpen} />
-      <AppointmentFormSheet open={sheetOpen} onOpenChange={setSheetOpen} />
+      <AppointmentDialog 
+        open={dialogOpen} 
+        onOpenChange={setDialogOpen}
+        onAppointmentSaved={() => {
+          // Small delay to ensure backend has processed the creation
+          setTimeout(() => {
+            loadData();
+          }, 300);
+        }}
+      />
+      <AppointmentFormSheet 
+        open={sheetOpen} 
+        onOpenChange={setSheetOpen}
+        onAppointmentSaved={() => {
+          // Small delay to ensure backend has processed the creation
+          setTimeout(() => {
+            loadData();
+          }, 300);
+        }}
+      />
     </div>
   );
 }

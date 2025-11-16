@@ -80,6 +80,7 @@ export function OrganizationsPage() {
   const [sortBy, setSortBy] = useState<SortOption>("name");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
+  const [isViewMode, setIsViewMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Load data on component mount
@@ -141,47 +142,50 @@ export function OrganizationsPage() {
   };
 
   const handleView = (id: string) => {
-    const org = organizations.find((o) => o.id === id);
+    const org = organizations.find((o) => o.id.toString() === id);
     if (org) {
-      toast.info(`Viewing ${org.name}`);
+      setSelectedOrg(org);
+      setIsViewMode(true);
+      setDialogOpen(true);
     }
   };
 
   const handleEdit = (id: string) => {
-    const org = organizations.find((o) => o.id === id);
-    setSelectedOrg(org || null);
-    setDialogOpen(true);
+    const org = organizations.find((o) => o.id.toString() === id);
+    if (org) {
+      setSelectedOrg(org);
+      setIsViewMode(false);
+      setDialogOpen(true);
+    }
   };
 
-  const handleSave = (data: any) => {
-    if (selectedOrg) {
-      // Update existing
-      setOrganizations((prev) =>
-        prev.map((org) =>
-          org.id === selectedOrg.id ? { ...org, ...data } : org
-        )
-      );
-      toast.success("Organization updated successfully");
-    } else {
-      // Create new
-      const newOrg = {
-        id: String(organizations.length + 1),
-        ...data,
-        usersCount: 0,
-        servicesCount: 0,
-        createdAt: new Date().toLocaleDateString("en-GB"),
-      };
-      setOrganizations((prev) => [...prev, newOrg]);
-      toast.success("Organization created successfully");
+  const handleSave = async (data: any) => {
+    try {
+      // Reload data to get fresh data from backend
+      await loadData();
+      setSelectedOrg(null);
+      setIsViewMode(false);
+    } catch (error) {
+      console.error('Failed to save organization:', error);
+      toast.error("Failed to save organization");
     }
-    setSelectedOrg(null);
   };
 
   const hasFilters = searchQuery || sortBy !== "name";
 
+  // Show loading state before rendering content
+  // Wait until organizations array is initialized (even if empty)
+  if (isLoading || organizations === undefined) {
+    return (
+      <div className="flex-1 flex items-center justify-center min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 dark:border-indigo-400"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6" style={{ animation: 'none', transition: 'none' }}>
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Page Title */}
           <PageTitle
@@ -202,6 +206,7 @@ export function OrganizationsPage() {
                 <Button
                   onClick={() => {
                     setSelectedOrg(null);
+                    setIsViewMode(false);
                     setDialogOpen(true);
                   }}
                   size="sm"
@@ -290,6 +295,7 @@ export function OrganizationsPage() {
               <Button
                 onClick={() => {
                   setSelectedOrg(null);
+                  setIsViewMode(false);
                   setDialogOpen(true);
                 }}
                 className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white"
@@ -332,9 +338,16 @@ export function OrganizationsPage() {
           {/* Dialog */}
           <OrganizationDialog
             open={dialogOpen}
-            onOpenChange={setDialogOpen}
+            onOpenChange={(open) => {
+              setDialogOpen(open);
+              if (!open) {
+                setSelectedOrg(null);
+                setIsViewMode(false);
+              }
+            }}
             organization={selectedOrg}
             onSave={handleSave}
+            readOnly={isViewMode}
           />
         </div>
       </div>
