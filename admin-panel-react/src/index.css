@@ -154,15 +154,7 @@
 }
 
 /* Smooth transitions */
-* {
-  transition: all 0.2s ease-in-out;
-}
-
-/* Focus styles */
-*:focus {
-  outline: 2px solid #4f46e5;
-  outline-offset: 2px;
-}
+/* Removed global * { transition: all } - apply transitions to specific elements instead */
 
 /* Button hover effects */
 button:not(:disabled):hover {
@@ -350,9 +342,7 @@ input:focus, textarea:focus, select:focus {
     animation: none;
   }
   
-  * {
-    transition: none;
-  }
+  /* Removed global * { transition: none } - transitions should be applied to specific elements */
 }
 
 /* Setup Wizard Animation */
