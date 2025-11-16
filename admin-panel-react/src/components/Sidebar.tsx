@@ -219,7 +219,7 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
                   onClose();
                 }}
                 className={`
-                  w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg transition-all
+                  w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg transition-all cursor-pointer
                   ${location.pathname === `/${item.page}`
                     ? 'bg-white/20 dark:bg-white/10 backdrop-blur-sm shadow-sm' 
                     : 'hover:bg-white/10 dark:hover:bg-white/5'
@@ -291,7 +291,7 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
             {/* Logout */}
             <button 
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm hover:bg-white/10 dark:hover:bg-white/5 rounded-lg transition-all"
+              className="w-full flex items-center gap-2 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm hover:bg-white/10 dark:hover:bg-white/5 rounded-lg transition-all cursor-pointer"
             >
               <LogOut className="w-3.5 h-3.5 sm:w-4 sm:h-4 flex-shrink-0" />
               <span>Logout</span>

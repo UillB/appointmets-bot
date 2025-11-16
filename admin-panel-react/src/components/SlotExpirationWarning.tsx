@@ -76,10 +76,10 @@ export function SlotExpirationWarning({
 
   if (isLoading) {
     return (
-      <Card className="border-blue-200 bg-blue-50">
+      <Card className="border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/50">
         <div className="p-4 flex items-center gap-3">
-          <RefreshCw className="h-5 w-5 text-blue-600 animate-spin" />
-          <span className="text-blue-700">Checking slot status...</span>
+          <RefreshCw className="h-5 w-5 text-blue-600 dark:text-blue-400 animate-spin" />
+          <span className="text-blue-700 dark:text-blue-300">Checking slot status...</span>
         </div>
       </Card>
     );
@@ -92,23 +92,23 @@ export function SlotExpirationWarning({
   const getStatusIcon = () => {
     if (slotStatus.needsRenewal) {
       if (slotStatus.daysUntilExpiry <= 7) {
-        return <XCircle className="h-5 w-5 text-red-600" />;
+        return <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" />;
       } else if (slotStatus.daysUntilExpiry <= 30) {
-        return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
+        return <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />;
       }
     }
-    return <CheckCircle className="h-5 w-5 text-green-600" />;
+    return <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />;
   };
 
   const getStatusColor = () => {
     if (slotStatus.needsRenewal) {
       if (slotStatus.daysUntilExpiry <= 7) {
-        return "border-red-200 bg-red-50";
+        return "border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/50";
       } else if (slotStatus.daysUntilExpiry <= 30) {
-        return "border-yellow-200 bg-yellow-50";
+        return "border-yellow-200 dark:border-yellow-900 bg-yellow-50 dark:bg-yellow-950/50";
       }
     }
-    return "border-green-200 bg-green-50";
+    return "border-green-200 dark:border-green-900 bg-green-50 dark:bg-green-950/50";
   };
 
   const getStatusBadge = () => {
@@ -130,18 +130,18 @@ export function SlotExpirationWarning({
             {getStatusIcon()}
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-gray-900 dark:text-gray-100">
                   Slot Status for {serviceName}
                 </h3>
                 {getStatusBadge()}
               </div>
               
-              <p className="text-sm text-gray-700 mb-3">
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
                 {slotStatus.message}
               </p>
 
               {slotStatus.latestSlotDate && (
-                <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
                   <Calendar className="h-4 w-4" />
                   <span>
                     Latest slot: {format(parseISO(slotStatus.latestSlotDate), "MMM dd, yyyy")}

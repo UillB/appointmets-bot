@@ -27,14 +27,14 @@ export function QuickActionCard({
 }: QuickActionCardProps) {
   return (
     <Card 
-      className="p-5 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md dark:hover:shadow-lg transition-shadow cursor-pointer group"
+      className="p-5 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 hover:shadow-md dark:hover:shadow-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all cursor-pointer group"
       onClick={onClick}
     >
       <div className="flex items-start gap-4">
         <div 
-          className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg} dark:opacity-80`}
+          className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}
         >
-          <Icon className={`w-6 h-6 ${iconColor}`} />
+          <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>
         
         <div className="flex-1 min-w-0">

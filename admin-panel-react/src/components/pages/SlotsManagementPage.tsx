@@ -120,7 +120,7 @@ export function SlotsManagementPage({
       case 'conflict':
         return <AlertCircle className="h-4 w-4 text-yellow-500" />;
       default:
-        return <Clock className="h-4 w-4 text-gray-500" />;
+        return <Clock className="h-4 w-4 text-gray-500 dark:text-gray-400" />;
     }
   };
 
@@ -153,12 +153,12 @@ export function SlotsManagementPage({
       </div>
 
       {/* Info Banner */}
-      <Card className="border-blue-200 bg-blue-50">
+      <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
         <div className="p-4 flex items-start gap-3">
-          <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+          <Info className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="font-medium text-blue-900">Auto-Generated Slots</h3>
-            <p className="text-blue-700 text-sm mt-1">
+            <h3 className="font-medium text-blue-900 dark:text-blue-100">Auto-Generated Slots</h3>
+            <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
               Slots are automatically created when you add services. They cover 1 year ahead 
               with standard working hours (9 AM - 6 PM, Monday-Friday). No manual setup required!
             </p>
@@ -218,17 +218,17 @@ export function SlotsManagementPage({
       <Card>
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Time Slots</h3>
-            <div className="text-sm text-gray-500">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Time Slots</h3>
+            <div className="text-sm text-gray-500 dark:text-gray-400">
               {slots.length} slots found
             </div>
           </div>
 
           {!selectedService ? (
             <div className="text-center py-8">
-              <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Select a Service</h3>
-              <p className="text-gray-500">Choose a service to view its auto-generated slots</p>
+              <Calendar className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Select a Service</h3>
+              <p className="text-gray-500 dark:text-gray-400">Choose a service to view its auto-generated slots</p>
             </div>
           ) : isLoading ? (
             <div className="flex items-center justify-center min-h-[calc(100vh-300px)]">
@@ -236,9 +236,9 @@ export function SlotsManagementPage({
             </div>
           ) : slots.length === 0 ? (
             <div className="text-center py-8">
-              <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No slots found</h3>
-              <p className="text-gray-500">
+              <Calendar className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No slots found</h3>
+              <p className="text-gray-500 dark:text-gray-400">
                 {selectedDate 
                   ? "No slots found for the selected date" 
                   : "This service doesn't have any slots yet"}
@@ -261,13 +261,13 @@ export function SlotsManagementPage({
                     <TableRow key={slot.id}>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Calendar className="h-4 w-4 text-gray-400" />
+                          <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                           {getDateDisplay(slot.startAt)}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-gray-400" />
+                          <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                           {getTimeDisplay(slot.startAt)} - {getTimeDisplay(slot.endAt)}
                         </div>
                       </TableCell>

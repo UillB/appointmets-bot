@@ -71,8 +71,8 @@ export function SlotsPage() {
   const stats = [
     {
       icon: CalendarClock,
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-600",
+      iconBg: "bg-blue-50 dark:bg-blue-900/50",
+      iconColor: "text-blue-600 dark:text-blue-400",
       title: "Total Slots",
       value: slots.length.toString(),
       change: "+12%",
@@ -80,8 +80,8 @@ export function SlotsPage() {
     },
     {
       icon: CheckCircle,
-      iconBg: "bg-green-50",
-      iconColor: "text-green-600",
+      iconBg: "bg-green-50 dark:bg-green-900/50",
+      iconColor: "text-green-600 dark:text-green-400",
       title: "Available",
       value: slots.filter(slot => !slot.isBooked).length.toString(),
       change: "+8%",
@@ -89,8 +89,8 @@ export function SlotsPage() {
     },
     {
       icon: XCircle,
-      iconBg: "bg-red-50",
-      iconColor: "text-red-600",
+      iconBg: "bg-red-50 dark:bg-red-900/50",
+      iconColor: "text-red-600 dark:text-red-400",
       title: "Booked",
       value: slots.filter(slot => slot.isBooked).length.toString(),
       change: "+15%",
@@ -98,8 +98,8 @@ export function SlotsPage() {
     },
     {
       icon: TrendingUp,
-      iconBg: "bg-purple-50",
-      iconColor: "text-purple-600",
+      iconBg: "bg-purple-50 dark:bg-purple-900/50",
+      iconColor: "text-purple-600 dark:text-purple-400",
       title: "Utilization",
       value: slots.length > 0 ? `${Math.round((slots.filter(slot => slot.isBooked).length / slots.length) * 100)}%` : "0%",
       change: "+5%",

@@ -77,24 +77,24 @@ export function SettingsPage() {
   const stats = [
     {
       icon: User,
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-600",
+      iconBg: "bg-blue-50 dark:bg-blue-900/50",
+      iconColor: "text-blue-600 dark:text-blue-400",
       title: "Account Status",
       value: "Active",
       subtitle: "Since Oct 2023",
     },
     {
       icon: Shield,
-      iconBg: "bg-emerald-50",
-      iconColor: "text-emerald-600",
+      iconBg: "bg-emerald-50 dark:bg-emerald-900/50",
+      iconColor: "text-emerald-600 dark:text-emerald-400",
       title: "Security Level",
       value: "High",
       subtitle: "2FA Enabled",
     },
     {
       icon: Calendar,
-      iconBg: "bg-purple-50",
-      iconColor: "text-purple-600",
+      iconBg: "bg-purple-50 dark:bg-purple-900/50",
+      iconColor: "text-purple-600 dark:text-purple-400",
       title: "Member Since",
       value: "N/A",
       subtitle: "Active user",
@@ -364,7 +364,7 @@ export function SettingsPage() {
                         <button
                           type="button"
                           onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
                         >
                           {showCurrentPassword ? (
                             <EyeOff className="w-4 h-4" />
@@ -393,7 +393,7 @@ export function SettingsPage() {
                           <button
                             type="button"
                             onClick={() => setShowNewPassword(!showNewPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
                           >
                             {showNewPassword ? (
                               <EyeOff className="w-4 h-4" />
@@ -421,7 +421,7 @@ export function SettingsPage() {
                           <button
                             type="button"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer"
                           >
                             {showConfirmPassword ? (
                               <EyeOff className="w-4 h-4" />
@@ -433,11 +433,11 @@ export function SettingsPage() {
                       </div>
                     </div>
 
-                    <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                      <p className="text-sm text-blue-700">
+                    <div className="bg-blue-50 dark:bg-blue-950/50 border border-blue-100 dark:border-blue-900 rounded-lg p-4">
+                      <p className="text-sm text-blue-700 dark:text-blue-300">
                         <strong>Password Requirements:</strong>
                       </p>
-                      <ul className="list-disc list-inside text-sm text-blue-600 mt-2 space-y-1">
+                      <ul className="list-disc list-inside text-sm text-blue-600 dark:text-blue-400 mt-2 space-y-1">
                         <li>At least 8 characters long</li>
                         <li>Include uppercase and lowercase letters</li>
                         <li>Include at least one number</li>
@@ -448,7 +448,7 @@ export function SettingsPage() {
                     <div className="flex justify-end pt-4">
                       <Button
                         onClick={handleChangePassword}
-                        className="bg-red-600 hover:bg-red-700"
+                        className="bg-red-500 hover:bg-red-600 text-white"
                       >
                         <Lock className="w-4 h-4 mr-2" />
                         Change Password
@@ -465,11 +465,11 @@ export function SettingsPage() {
               <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <Globe className="w-5 h-5 text-purple-600" />
+                    <div className="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                      <Globe className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg">Language & Theme</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Language & Theme</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Configure system preferences
                       </p>
@@ -520,11 +520,11 @@ export function SettingsPage() {
               <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Bell className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                      <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg">Notifications</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Notifications</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Manage how you receive notifications
                       </p>
@@ -534,11 +534,11 @@ export function SettingsPage() {
                   <Separator />
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                       <div className="flex items-center gap-3 flex-1">
-                        <Mail className="w-5 h-5 text-blue-600" />
+                        <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         <div>
-                          <Label className="text-base cursor-pointer">
+                          <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">
                             Email Notifications
                           </Label>
                           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -553,11 +553,11 @@ export function SettingsPage() {
                       />
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                       <div className="flex items-center gap-3 flex-1">
-                        <Bell className="w-5 h-5 text-purple-600" />
+                        <Bell className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                         <div>
-                          <Label className="text-base cursor-pointer">
+                          <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">
                             Push Notifications
                           </Label>
                           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
@@ -579,11 +579,11 @@ export function SettingsPage() {
               <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
-                      <SettingsIcon className="w-5 h-5 text-emerald-600" />
+                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center">
+                      <SettingsIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg">System Preferences</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">System Preferences</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Configure date, time, and refresh settings
                       </p>
@@ -594,28 +594,28 @@ export function SettingsPage() {
 
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="timezone">Timezone</Label>
+                      <Label htmlFor="timezone" className="text-gray-900 dark:text-gray-100">Timezone</Label>
                       <div className="relative">
                         <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                         <Select value={timezone} onValueChange={setTimezone}>
-                          <SelectTrigger id="timezone" className="pl-10">
+                          <SelectTrigger id="timezone" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="UTC">UTC</SelectItem>
-                            <SelectItem value="America/New_York">
+                          <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                            <SelectItem value="UTC" className="text-gray-900 dark:text-gray-100">UTC</SelectItem>
+                            <SelectItem value="America/New_York" className="text-gray-900 dark:text-gray-100">
                               Eastern Time (ET)
                             </SelectItem>
-                            <SelectItem value="America/Los_Angeles">
+                            <SelectItem value="America/Los_Angeles" className="text-gray-900 dark:text-gray-100">
                               Pacific Time (PT)
                             </SelectItem>
-                            <SelectItem value="Europe/London">
+                            <SelectItem value="Europe/London" className="text-gray-900 dark:text-gray-100">
                               London (GMT)
                             </SelectItem>
-                            <SelectItem value="Europe/Moscow">
+                            <SelectItem value="Europe/Moscow" className="text-gray-900 dark:text-gray-100">
                               Moscow (MSK)
                             </SelectItem>
-                            <SelectItem value="Asia/Jerusalem">
+                            <SelectItem value="Asia/Jerusalem" className="text-gray-900 dark:text-gray-100">
                               Israel (IST)
                             </SelectItem>
                           </SelectContent>
@@ -625,33 +625,33 @@ export function SettingsPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="dateFormat">Date Format</Label>
+                        <Label htmlFor="dateFormat" className="text-gray-900 dark:text-gray-100">Date Format</Label>
                         <div className="relative">
-                          <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                          <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                           <Select value={dateFormat} onValueChange={setDateFormat}>
-                            <SelectTrigger id="dateFormat" className="pl-10">
+                            <SelectTrigger id="dateFormat" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="MM/DD/YYYY">MM/DD/YYYY</SelectItem>
-                              <SelectItem value="DD/MM/YYYY">DD/MM/YYYY</SelectItem>
-                              <SelectItem value="YYYY-MM-DD">YYYY-MM-DD</SelectItem>
+                            <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                              <SelectItem value="MM/DD/YYYY" className="text-gray-900 dark:text-gray-100">MM/DD/YYYY</SelectItem>
+                              <SelectItem value="DD/MM/YYYY" className="text-gray-900 dark:text-gray-100">DD/MM/YYYY</SelectItem>
+                              <SelectItem value="YYYY-MM-DD" className="text-gray-900 dark:text-gray-100">YYYY-MM-DD</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="timeFormat">Time Format</Label>
+                        <Label htmlFor="timeFormat" className="text-gray-900 dark:text-gray-100">Time Format</Label>
                         <div className="relative">
                           <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                           <Select value={timeFormat} onValueChange={setTimeFormat}>
-                            <SelectTrigger id="timeFormat" className="pl-10">
+                            <SelectTrigger id="timeFormat" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="12">12 Hour (AM/PM)</SelectItem>
-                              <SelectItem value="24">24 Hour</SelectItem>
+                            <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                              <SelectItem value="12" className="text-gray-900 dark:text-gray-100">12 Hour (AM/PM)</SelectItem>
+                              <SelectItem value="24" className="text-gray-900 dark:text-gray-100">24 Hour</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -659,24 +659,24 @@ export function SettingsPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="refreshInterval">
+                      <Label htmlFor="refreshInterval" className="text-gray-900 dark:text-gray-100">
                         Refresh Interval (seconds)
                       </Label>
                       <div className="relative">
-                        <Timer className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                        <Timer className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                         <Select
                           value={refreshInterval}
                           onValueChange={setRefreshInterval}
                         >
-                          <SelectTrigger id="refreshInterval" className="pl-10">
+                          <SelectTrigger id="refreshInterval" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="15">15 seconds</SelectItem>
-                            <SelectItem value="30">30 seconds</SelectItem>
-                            <SelectItem value="60">1 minute</SelectItem>
-                            <SelectItem value="300">5 minutes</SelectItem>
-                            <SelectItem value="0">Manual only</SelectItem>
+                          <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                            <SelectItem value="15" className="text-gray-900 dark:text-gray-100">15 seconds</SelectItem>
+                            <SelectItem value="30" className="text-gray-900 dark:text-gray-100">30 seconds</SelectItem>
+                            <SelectItem value="60" className="text-gray-900 dark:text-gray-100">1 minute</SelectItem>
+                            <SelectItem value="300" className="text-gray-900 dark:text-gray-100">5 minutes</SelectItem>
+                            <SelectItem value="0" className="text-gray-900 dark:text-gray-100">Manual only</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>

@@ -37,9 +37,9 @@ export function StatCard({
     <Card className="p-4 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
       <div className="flex items-start justify-between mb-3">
         <div 
-          className={`w-9 h-9 rounded-lg flex items-center justify-center ${iconBg} dark:opacity-80`}
+          className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconBg}`}
         >
-          <Icon className={`w-4.5 h-4.5 ${iconColor}`} />
+          <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>
         
         {trend !== undefined && (

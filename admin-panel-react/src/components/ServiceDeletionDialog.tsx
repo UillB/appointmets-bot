@@ -149,15 +149,15 @@ export function ServiceDeletionDialog({
 
           {/* Simple confirmation for services with no slots */}
           {deletionInfo && deletionInfo.details?.totalSlots === 0 && !deletionInfo.error && (
-            <Card className="border-blue-200 bg-blue-50">
+            <Card className="border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/50">
               <div className="p-6">
                 <div className="flex items-start gap-3">
-                  <AlertTriangle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <AlertTriangle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-blue-900 mb-2">
+                    <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
                       Confirm Service Deletion
                     </h3>
-                    <p className="text-blue-700 text-sm mb-4">
+                    <p className="text-blue-700 dark:text-blue-300 text-sm mb-4">
                       Are you sure you want to delete this service? This action cannot be undone.
                     </p>
                     <div className="flex gap-3">

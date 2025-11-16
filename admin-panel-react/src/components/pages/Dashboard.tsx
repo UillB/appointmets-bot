@@ -259,8 +259,8 @@ export function Dashboard() {
   const quickActions = [
     {
       icon: CalendarIcon,
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-600",
+      iconBg: "bg-blue-50 dark:bg-blue-900/50",
+      iconColor: "text-blue-600 dark:text-blue-400",
       title: "Appointments",
       description: "Manage bookings",
       badge: { text: `${stats?.todayAppointments || 0} today`, variant: "indigo" },
@@ -268,8 +268,8 @@ export function Dashboard() {
     },
     {
       icon: Wrench,
-      iconBg: "bg-purple-50",
-      iconColor: "text-purple-600",
+      iconBg: "bg-purple-50 dark:bg-purple-900/50",
+      iconColor: "text-purple-600 dark:text-purple-400",
       title: "Services",
       description: "Configure offerings",
       badge: { text: `${stats?.totalServices || 0} available`, variant: "" },
@@ -277,8 +277,8 @@ export function Dashboard() {
     },
     {
       icon: Building2,
-      iconBg: "bg-indigo-50",
-      iconColor: "text-indigo-600",
+      iconBg: "bg-indigo-50 dark:bg-indigo-900/50",
+      iconColor: "text-indigo-600 dark:text-indigo-400",
       title: "Organizations",
       description: "Manage locations",
       badge: { text: `${organizationsCount} active`, variant: "blue" },
@@ -286,8 +286,8 @@ export function Dashboard() {
     },
     {
       icon: Settings,
-      iconBg: "bg-gray-50",
-      iconColor: "text-gray-600",
+      iconBg: "bg-gray-50 dark:bg-gray-800",
+      iconColor: "text-gray-600 dark:text-gray-400",
       title: "Settings",
       description: "System configuration",
       badge: { text: "Account" },
@@ -298,8 +298,8 @@ export function Dashboard() {
   const statsData = stats ? [
     {
       icon: CalendarDays,
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-600",
+      iconBg: "bg-blue-50 dark:bg-blue-900/50",
+      iconColor: "text-blue-600 dark:text-blue-400",
       title: "Total Appointments",
       value: stats.totalAppointments,
       subtitle: "all time",
@@ -307,8 +307,8 @@ export function Dashboard() {
     },
     {
       icon: Clock,
-      iconBg: "bg-indigo-50",
-      iconColor: "text-indigo-600",
+      iconBg: "bg-indigo-50 dark:bg-indigo-900/50",
+      iconColor: "text-indigo-600 dark:text-indigo-400",
       title: "Today's Bookings",
       value: stats.todayAppointments,
       subtitle: "Scheduled for today",
@@ -316,8 +316,8 @@ export function Dashboard() {
     },
     {
       icon: CheckCircle2,
-      iconBg: "bg-amber-50",
-      iconColor: "text-amber-600",
+      iconBg: "bg-amber-50 dark:bg-amber-900/50",
+      iconColor: "text-amber-600 dark:text-amber-400",
       title: "Pending Approvals",
       value: stats.pendingAppointments,
       subtitle: "Awaiting confirmation",
@@ -325,8 +325,8 @@ export function Dashboard() {
     },
     {
       icon: Sparkles,
-      iconBg: "bg-purple-50",
-      iconColor: "text-purple-600",
+      iconBg: "bg-purple-50 dark:bg-purple-900/50",
+      iconColor: "text-purple-600 dark:text-purple-400",
       title: "Active Services",
       value: stats.totalServices,
       subtitle: "Available for booking",
@@ -494,7 +494,7 @@ export function Dashboard() {
 
                   {/* Empty cells for days before month starts */}
                   {Array.from({ length: getFirstDayOfMonth(currentMonth) }, (_, i) => (
-                    <div key={`empty-${i}`} className="aspect-square"></div>
+                    <div key={`empty-${i}`} className="w-10 h-10"></div>
                   ))}
 
                   {/* Days of the month */}
@@ -506,8 +506,8 @@ export function Dashboard() {
                         key={day}
                         onClick={() => handleDateClick(day)}
                         className={`
-                          w-8 h-8 flex flex-col items-center justify-center text-sm rounded-md relative
-                          transition-all duration-200 hover:scale-105
+                          w-10 h-10 flex flex-col items-center justify-center text-sm rounded-md relative
+                          transition-all duration-200 hover:scale-105 cursor-pointer
                           ${isToday(day)
                             ? "bg-indigo-600 dark:bg-indigo-500 text-white font-semibold shadow-md"
                             : isSelected(day)

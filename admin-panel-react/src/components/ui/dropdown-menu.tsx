@@ -154,6 +154,7 @@ const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, DropdownMenuTrig
         aria-expanded={open}
         aria-haspopup="menu"
         data-slot="dropdown-menu-trigger"
+        className={cn("cursor-pointer", props.className)}
         {...props}
       >
         {children}
@@ -358,7 +359,7 @@ const DropdownMenuContent = React.forwardRef<HTMLDivElement, DropdownMenuContent
           top: position?.top ?? 0,
           left: position?.left ?? 0,
           transformOrigin: position?.transformOrigin ?? "top left",
-          transition: "opacity 0.15s ease-out, transform 0.15s ease-out",
+          transition: "opacity 0.2s ease-out, transform 0.2s ease-out",
           opacity: open ? 1 : 0,
           transform: open ? "scale(1)" : "scale(0.95)",
           pointerEvents: open ? "auto" : "none",
@@ -426,7 +427,7 @@ const DropdownMenuItem = React.forwardRef<HTMLDivElement, DropdownMenuItemProps>
           // Text colors with dark mode support
           "text-gray-900 dark:text-gray-100",
           // Hover and focus states with dark mode support
-          "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800",
+          "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800 transition-colors",
           // Destructive variant styles with dark mode support
           variant === "destructive" && "text-red-600 dark:text-red-400",
           variant === "destructive" && "hover:bg-red-50 dark:hover:bg-red-950/30",
@@ -469,8 +470,8 @@ const DropdownMenuCheckboxItem = React.forwardRef<HTMLDivElement, DropdownMenuCh
         aria-checked={checked}
         tabIndex={0}
         className={cn(
-          "relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none",
-          "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800",
+          "relative flex cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none",
+          "hover:bg-gray-100 dark:hover:bg-gray-800 focus:bg-gray-100 dark:focus:bg-gray-800 transition-colors",
           "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
           className
         )}

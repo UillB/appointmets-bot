@@ -98,18 +98,18 @@ export function OrganizationDialog({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="w-full sm:max-w-lg flex flex-col h-screen bg-white border shadow-lg">
-        <DrawerHeader className="border-b bg-gradient-to-r from-indigo-50 to-purple-50 flex-shrink-0">
+      <DrawerContent className="w-full sm:max-w-lg flex flex-col h-screen bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg">
+        <DrawerHeader className="border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-indigo-600 dark:bg-indigo-500 rounded-lg flex items-center justify-center">
                 <Building2 className="w-5 h-5 text-white" />
               </div>
               <div>
-                <DrawerTitle className="text-xl text-gray-900">
+                <DrawerTitle className="text-xl text-gray-900 dark:text-gray-100">
                   {isEdit ? "Edit Organization" : "Create New Organization"}
                 </DrawerTitle>
-                <DrawerDescription className="text-gray-600">
+                <DrawerDescription className="text-gray-600 dark:text-gray-400">
                   {isEdit 
                     ? "Update organization information"
                     : "Follow the steps below to add a new organization"}
@@ -120,7 +120,7 @@ export function OrganizationDialog({
               variant="ghost"
               size="icon"
               onClick={() => onOpenChange(false)}
-              className="h-8 w-8 text-gray-600 hover:bg-gray-100"
+              className="h-8 w-8 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -144,7 +144,7 @@ export function OrganizationDialog({
                         Organization Name <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
-                        <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="name"
                           name="name"
@@ -186,7 +186,7 @@ export function OrganizationDialog({
                         Email Address
                       </Label>
                       <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="email"
                           name="email"
@@ -204,7 +204,7 @@ export function OrganizationDialog({
                         Phone Number
                       </Label>
                       <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="phone"
                           name="phone"
@@ -222,7 +222,7 @@ export function OrganizationDialog({
                         Address
                       </Label>
                       <div className="relative">
-                        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                         <Input
                           id="address"
                           name="address"
@@ -238,11 +238,11 @@ export function OrganizationDialog({
               ) : (
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+                    <Label htmlFor="name" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Organization Name *
                     </Label>
                     <div className="relative">
-                      <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                       <Input
                         id="name"
                         name="name"
@@ -256,7 +256,7 @@ export function OrganizationDialog({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description" className="text-sm font-semibold text-gray-700">
+                    <Label htmlFor="description" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Description
                     </Label>
                     <Textarea
@@ -271,11 +271,11 @@ export function OrganizationDialog({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+                    <Label htmlFor="email" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Email Address
                     </Label>
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                       <Input
                         id="email"
                         name="email"
@@ -289,11 +289,11 @@ export function OrganizationDialog({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">
+                    <Label htmlFor="phone" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Phone Number
                     </Label>
                     <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                       <Input
                         id="phone"
                         name="phone"
@@ -307,11 +307,11 @@ export function OrganizationDialog({
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="address" className="text-sm font-semibold text-gray-700">
+                    <Label htmlFor="address" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Address
                     </Label>
                     <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                       <Input
                         id="address"
                         name="address"
@@ -337,7 +337,7 @@ export function OrganizationDialog({
                   type="button"
                   variant="outline"
                   onClick={() => onOpenChange(false)}
-                  className="flex-1 h-12 text-base font-semibold border-gray-300 hover:bg-gray-50"
+                  className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   Cancel
                 </Button>

@@ -89,7 +89,7 @@ export function ServiceCard({
   };
 
   return (
-    <Card className="p-5 hover:shadow-md transition-all group bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+    <Card className="p-5 hover:shadow-md hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all group bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">

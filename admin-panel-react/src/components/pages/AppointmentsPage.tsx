@@ -138,32 +138,32 @@ export function AppointmentsPage() {
   const stats = [
     {
       icon: CalendarDays,
-      iconBg: "bg-blue-50",
-      iconColor: "text-blue-600",
+      iconBg: "bg-blue-50 dark:bg-blue-900/50",
+      iconColor: "text-blue-600 dark:text-blue-400",
       title: "Total Appointments",
       value: appointments?.length || 0,
       subtitle: "All time bookings",
     },
     {
       icon: CheckCircle2,
-      iconBg: "bg-emerald-50",
-      iconColor: "text-emerald-600",
+      iconBg: "bg-emerald-50 dark:bg-emerald-900/50",
+      iconColor: "text-emerald-600 dark:text-emerald-400",
       title: "Confirmed",
       value: appointments?.filter(apt => apt.status === 'confirmed').length || 0,
       subtitle: "Successfully confirmed",
     },
     {
       icon: Clock,
-      iconBg: "bg-amber-50",
-      iconColor: "text-amber-600",
+      iconBg: "bg-amber-50 dark:bg-amber-900/50",
+      iconColor: "text-amber-600 dark:text-amber-400",
       title: "Pending",
       value: appointments?.filter(apt => apt.status === 'pending').length || 0,
       subtitle: "Awaiting confirmation",
     },
     {
       icon: XCircle,
-      iconBg: "bg-red-50",
-      iconColor: "text-red-600",
+      iconBg: "bg-red-50 dark:bg-red-900/50",
+      iconColor: "text-red-600 dark:text-red-400",
       title: "Cancelled & Rejected",
       value: appointments?.filter(apt => apt.status === 'cancelled').length || 0,
       subtitle: "Cancelled and rejected bookings",
@@ -173,9 +173,9 @@ export function AppointmentsPage() {
 
   const getStatusBadge = (status: "confirmed" | "cancelled" | "pending") => {
     const styles = {
-      confirmed: "bg-emerald-100 text-emerald-700 border-0",
-      cancelled: "bg-red-100 text-red-700 border-0",
-      pending: "bg-amber-100 text-amber-700 border-0",
+      confirmed: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border-0",
+      cancelled: "bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 border-0",
+      pending: "bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border-0",
     };
 
     const icons = {

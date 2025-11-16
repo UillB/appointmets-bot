@@ -274,7 +274,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-sm font-semibold text-gray-700">
+                  <Label htmlFor="description" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     Description *
                   </Label>
                   <Textarea
@@ -289,11 +289,11 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="duration" className="text-sm font-semibold text-gray-700">
+                    <Label htmlFor="duration" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Duration (minutes) *
                     </Label>
                     <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                       <Input
                         id="duration"
                         name="duration"
@@ -308,11 +308,11 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="price" className="text-sm font-semibold text-gray-700">
+                    <Label htmlFor="price" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                       Price (optional)
                     </Label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-medium">₽</span>
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">₽</span>
                       <Input
                         id="price"
                         name="price"

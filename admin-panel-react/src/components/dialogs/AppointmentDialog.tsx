@@ -88,18 +88,18 @@ export function AppointmentDialog({
 
   return (
     <Drawer open={open} onOpenChange={onOpenChange} direction="right">
-      <DrawerContent className="w-full sm:max-w-lg flex flex-col h-screen bg-white border shadow-lg">
-        <DrawerHeader className="border-b bg-gradient-to-r from-indigo-50 to-purple-50 flex-shrink-0">
+      <DrawerContent className="w-full sm:max-w-lg flex flex-col h-screen bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-lg">
+        <DrawerHeader className="border-b border-gray-200 dark:border-gray-800 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/30 dark:to-purple-950/30 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-indigo-600 dark:bg-indigo-500 rounded-lg flex items-center justify-center">
                 <CalendarIcon className="w-5 h-5 text-white" />
               </div>
               <div>
-                <DrawerTitle className="text-xl text-gray-900">
+                <DrawerTitle className="text-xl text-gray-900 dark:text-gray-100">
                   Create New Appointment
                 </DrawerTitle>
-                <DrawerDescription className="text-gray-600">
+                <DrawerDescription className="text-gray-600 dark:text-gray-400">
                   Follow the steps below to create a new appointment
                 </DrawerDescription>
               </div>
@@ -108,7 +108,7 @@ export function AppointmentDialog({
               variant="ghost"
               size="icon"
               onClick={() => onOpenChange(false)}
-              className="h-8 w-8 text-gray-600 hover:bg-gray-100"
+              className="h-8 w-8 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -202,19 +202,19 @@ export function AppointmentDialog({
                     </Popover>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="time" className="text-sm">Time</Label>
-                    <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                      <Input
-                        id="time"
-                        name="time"
-                        type="time"
-                        className="pl-10 h-11"
-                        required
-                      />
+                    <div className="space-y-2">
+                      <Label htmlFor="time" className="text-sm">Time</Label>
+                      <div className="relative">
+                        <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
+                        <Input
+                          id="time"
+                          name="time"
+                          type="time"
+                          className="pl-10 h-11"
+                          required
+                        />
+                      </div>
                     </div>
-                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -258,7 +258,7 @@ export function AppointmentDialog({
                   type="button"
                   variant="outline"
                   onClick={() => onOpenChange(false)}
-                  className="flex-1 h-12 text-base font-semibold border-gray-300 hover:bg-gray-50"
+                  className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                 >
                   Cancel
                 </Button>

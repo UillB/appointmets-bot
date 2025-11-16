@@ -46,7 +46,7 @@ export function OrganizationCard({
     .slice(0, 2);
 
   return (
-    <Card className="p-6 hover:shadow-md transition-shadow bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+    <Card className="p-6 hover:shadow-md hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
       <div className="flex flex-col gap-4">
         {/* Header */}
         <div className="flex items-start gap-3">
