@@ -489,10 +489,10 @@ export function Dashboard() {
                 </div>
 
                 {/* Calendar grid */}
-                <div className="grid grid-cols-7 gap-1">
+                <div className="grid grid-cols-7 gap-1 place-items-center">
                   {/* Day headers */}
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, idx) => (
-                    <div key={idx} className="text-center text-sm text-gray-500 dark:text-gray-400 py-2 font-medium">
+                    <div key={idx} className="w-10 h-10 flex items-center justify-center text-sm text-gray-500 dark:text-gray-400 font-medium">
                       {day}
                     </div>
                   ))}
@@ -511,7 +511,7 @@ export function Dashboard() {
                         key={day}
                         onClick={() => handleDateClick(day)}
                         className={`
-                          w-10 h-10 flex flex-col items-center justify-center text-sm rounded-md relative
+                          w-10 h-10 flex flex-col items-center justify-center text-sm rounded-md relative my-1
                           transition-all duration-200 hover:scale-105 cursor-pointer
                           ${isToday(day)
                             ? "bg-indigo-600 dark:bg-indigo-500 text-white font-semibold shadow-md"

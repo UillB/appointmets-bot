@@ -88,47 +88,53 @@ export function AppointmentsSummaryCard({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Bot Status Card */}
             <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-3 border border-white/50 dark:border-gray-700/50">
-              <div className="flex items-center gap-2 mb-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${botActive ? 'bg-emerald-100 dark:bg-emerald-900/50' : 'bg-gray-100 dark:bg-gray-700/50'}`}>
-                  <Bot className={`w-4 h-4 ${botActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400'}`} />
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${botActive ? 'bg-emerald-100 dark:bg-emerald-900/50' : 'bg-gray-100 dark:bg-gray-700/50'}`}>
+                    <Bot className={`w-4 h-4 ${botActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-600 dark:text-gray-400'}`} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400 truncate">Bot Status</span>
                 </div>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Bot Status</span>
+                <Badge 
+                  variant={botActive ? "default" : "secondary"}
+                  className={`px-3 py-1 flex-shrink-0 ${botActive ? "bg-emerald-600 dark:bg-emerald-500 text-white" : "bg-gray-400 dark:bg-gray-600 text-white"}`}
+                >
+                  {botActive ? "Active" : "Inactive"}
+                </Badge>
               </div>
-              <Badge 
-                variant={botActive ? "default" : "secondary"}
-                className={`w-full justify-center ${botActive ? "bg-emerald-600 dark:bg-emerald-500 text-white" : "bg-gray-400 dark:bg-gray-600 text-white"}`}
-              >
-                {botActive ? "Active" : "Inactive"}
-              </Badge>
             </div>
 
             {/* Admin Status Card */}
             <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-3 border border-white/50 dark:border-gray-700/50">
-              <div className="flex items-center gap-2 mb-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${adminLinked ? 'bg-indigo-100 dark:bg-indigo-900/50' : 'bg-amber-100 dark:bg-amber-900/50'}`}>
-                  <Shield className={`w-4 h-4 ${adminLinked ? 'text-indigo-600 dark:text-indigo-400' : 'text-amber-600 dark:text-amber-400'}`} />
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${adminLinked ? 'bg-indigo-100 dark:bg-indigo-900/50' : 'bg-amber-100 dark:bg-amber-900/50'}`}>
+                    <Shield className={`w-4 h-4 ${adminLinked ? 'text-indigo-600 dark:text-indigo-400' : 'text-amber-600 dark:text-amber-400'}`} />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400 truncate">Admin</span>
                 </div>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Admin</span>
+                <Badge 
+                  variant={adminLinked ? "default" : "secondary"}
+                  className={`px-3 py-1 flex-shrink-0 ${adminLinked ? "bg-indigo-600 dark:bg-indigo-500 text-white" : "bg-amber-500 dark:bg-amber-600 text-white"}`}
+                >
+                  {adminLinked ? "Linked" : "Not Linked"}
+                </Badge>
               </div>
-              <Badge 
-                variant={adminLinked ? "default" : "secondary"}
-                className={`w-full justify-center ${adminLinked ? "bg-indigo-600 dark:bg-indigo-500 text-white" : "bg-amber-500 dark:bg-amber-600 text-white"}`}
-              >
-                {adminLinked ? "Linked" : "Not Linked"}
-              </Badge>
             </div>
 
             {/* Confirmation Rate Card */}
             <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-3 border border-white/50 dark:border-gray-700/50">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
-                  <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400 truncate">Confirmation</span>
                 </div>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Confirmation</span>
-              </div>
-              <div className="flex items-baseline gap-1">
-                <span className="text-xl font-bold text-gray-900 dark:text-gray-100">{confirmationRate}%</span>
-                <span className="text-xs text-gray-500 dark:text-gray-400">/ {rejectionRate}%</span>
+                <div className="flex items-baseline gap-1 flex-shrink-0">
+                  <span className="text-xl font-bold text-gray-900 dark:text-gray-100">{confirmationRate}%</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">/ {rejectionRate}%</span>
+                </div>
               </div>
             </div>
           </div>

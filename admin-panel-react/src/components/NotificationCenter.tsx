@@ -560,11 +560,11 @@ export function NotificationCenter() {
                 onValueChange={(v) => setActiveTab(v as 'all' | 'unread')}
                 className="flex-1 flex flex-col min-h-0"
               >
-                <div className="border-b bg-gray-50 dark:bg-gray-800 px-4 pt-3 flex-shrink-0">
-                  <TabsList className="w-full grid grid-cols-2 bg-gray-100 dark:bg-gray-800 p-1">
+                <div className="border-b bg-gray-50 dark:bg-gray-800 px-4 py-4 flex-shrink-0">
+                  <TabsList className="w-full grid grid-cols-2 bg-gray-200 dark:bg-gray-800 p-0 gap-2">
                     <TabsTrigger 
                       value="all" 
-                      className="relative text-gray-700 dark:text-gray-300 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white transition-all"
+                      className="relative text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-500 transition-all"
                     >
                       All
                       <Badge
@@ -580,7 +580,7 @@ export function NotificationCenter() {
                     </TabsTrigger>
                     <TabsTrigger 
                       value="unread" 
-                      className="relative text-gray-700 dark:text-gray-300 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white transition-all"
+                      className="relative text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-500 transition-all"
                     >
                       Unread
                       {unreadCount > 0 && (
@@ -665,7 +665,7 @@ export function NotificationCenter() {
                 <div className="p-3 border-t bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 rounded-b-lg">
                   <button
                     onClick={loadNotifications}
-                    className="w-full text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
+                    className="w-full text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-200 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-md py-1.5 px-2 transition-colors cursor-pointer"
                   >
                     Refresh notifications
                   </button>

@@ -79,7 +79,7 @@
 
 @layer components {
   .card-hover {
-    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+    @apply transition-all duration-200 hover:shadow-lg;
   }
   
   .btn-primary {
@@ -157,17 +157,12 @@
 /* Removed global * { transition: all } - apply transitions to specific elements instead */
 
 /* Button hover effects */
-button:not(:disabled):hover {
-  transform: translateY(-1px);
-}
-
 button:not(:disabled):active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 /* Card hover effects */
 .card-hover:hover {
-  transform: translateY(-2px);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 

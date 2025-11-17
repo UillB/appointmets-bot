@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
-import { Card } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -365,10 +365,11 @@ export function AppointmentsPage() {
           </div>
 
           {/* Main Content Card */}
-          <Card className="p-4 lg:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-            {/* Tabs - Scrollable on mobile */}
-            <ScrollArea className="w-full">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4 lg:mb-6">
+          <Card className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+            <CardContent className="pt-4">
+              {/* Tabs - Scrollable on mobile */}
+              <ScrollArea className="w-full">
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4">
                 <TabsList className="bg-gray-100 dark:bg-gray-800 inline-flex">
                   <TabsTrigger 
                     value="all" 
@@ -405,7 +406,7 @@ export function AppointmentsPage() {
             </ScrollArea>
 
             {/* Filters */}
-            <div className="space-y-4 mb-4 lg:mb-6">
+            <div className="space-y-4 mb-4">
               {/* Mobile: Search + Filter Button */}
               <div className="flex gap-2 lg:hidden">
                 <div className="relative flex-1">
@@ -739,6 +740,7 @@ export function AppointmentsPage() {
                 </div>
               </div>
             )}
+            </CardContent>
           </Card>
         </div>
       </div>
