@@ -9,12 +9,12 @@ import { ScrollArea } from './ui/scroll-area';
 import { Button } from './ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent } from './ui/tooltip';
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from './ui/sheet';
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from './ui/drawer';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -513,25 +513,33 @@ export function NotificationCenter() {
         )}
       </Button>
 
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetContent className="w-full sm:max-w-md p-0 flex flex-col h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800" side="right">
-          <SheetHeader className="px-6 py-4 border-b bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 border-gray-200 dark:border-gray-800">
+      <Drawer open={isOpen} onOpenChange={setIsOpen} direction="right">
+        <DrawerContent className="max-w-md sm:!max-w-md p-0 flex flex-col h-full bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+          <DrawerHeader className="px-6 py-4 border-b bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 border-gray-200 dark:border-gray-800">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                   <Bell className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <SheetTitle className="text-left text-gray-900 dark:text-gray-100">Notifications</SheetTitle>
+                  <DrawerTitle className="text-left text-gray-900 dark:text-gray-100">Notifications</DrawerTitle>
                   {unreadCount > 0 && (
-                    <SheetDescription className="text-left text-gray-600 dark:text-gray-400">
+                    <DrawerDescription className="text-left text-gray-600 dark:text-gray-400">
                       {unreadCount} unread notification{unreadCount > 1 ? "s" : ""}
-                    </SheetDescription>
+                    </DrawerDescription>
                   )}
                 </div>
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsOpen(false)}
+                className="h-9 w-9 rounded-md bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-all duration-200 hover:scale-110 shadow-md hover:shadow-lg border border-gray-300 dark:border-gray-600"
+              >
+                <X className="w-5 h-5" />
+              </Button>
             </div>
-          </SheetHeader>
+          </DrawerHeader>
 
           {isLoading ? (
             <div className="flex-1 flex items-center justify-center p-8">
@@ -561,10 +569,10 @@ export function NotificationCenter() {
                 className="flex-1 flex flex-col min-h-0"
               >
                 <div className="border-b bg-gray-50 dark:bg-gray-800 px-4 py-4 flex-shrink-0">
-                  <TabsList className="w-full grid grid-cols-2 bg-gray-200 dark:bg-gray-800 p-0 gap-2">
+                  <TabsList className="w-full grid grid-cols-2 dark:bg-gray-800 p-0 gap-2">
                     <TabsTrigger 
                       value="all" 
-                      className="relative text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-500 transition-all"
+                      className="relative text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-transparent hover:bg-gray-100 hover:border-gray-400 dark:hover:bg-gray-600 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:border-indigo-600 dark:data-[state=active]:border-transparent data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-500 transition-all"
                     >
                       All
                       <Badge
@@ -580,7 +588,7 @@ export function NotificationCenter() {
                     </TabsTrigger>
                     <TabsTrigger 
                       value="unread" 
-                      className="relative text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-500 transition-all"
+                      className="relative text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-transparent hover:bg-gray-100 hover:border-gray-400 dark:hover:bg-gray-600 data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white data-[state=active]:border-indigo-600 dark:data-[state=active]:border-transparent data-[state=active]:hover:bg-indigo-600 dark:data-[state=active]:hover:bg-indigo-500 transition-all"
                     >
                       Unread
                       {unreadCount > 0 && (
@@ -673,8 +681,8 @@ export function NotificationCenter() {
               )}
             </>
           )}
-        </SheetContent>
-      </Sheet>
+        </DrawerContent>
+      </Drawer>
 
       {/* Clear All Confirmation Dialog */}
       <AlertDialog open={clearAllDialogOpen} onOpenChange={setClearAllDialogOpen}>

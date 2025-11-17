@@ -35,19 +35,24 @@ export function StatCard({
 
   return (
     <Card className="p-3 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-      {/* Top row: Icon, Title, and Count */}
-      <div className="flex items-center justify-between mb-2">
+      {/* Top row: Icon, Title/Subtitle, and Count */}
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
           <div 
             className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${iconBg} dark:opacity-80`}
           >
             <Icon className={`w-5 h-5 ${iconColor}`} />
           </div>
-          <p className="text-[0.91875rem] font-medium text-[#525B6A] dark:text-[#B5BCC5] truncate">{title}</p>
+          <div className="flex flex-col min-w-0 flex-1">
+            <p className="text-[0.91875rem] font-medium text-[#525B6A] dark:text-[#B5BCC5] truncate">{title}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{subtitle}</p>
+          </div>
         </div>
         
         <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-          <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100 leading-none">{value}</p>
+          <div className="min-w-8 h-8 rounded-[4px] bg-gray-100/80 dark:bg-gray-800/80 flex items-center justify-center px-2">
+            <p className="text-2xl font-semibold text-gray-900 dark:text-gray-100 leading-none whitespace-nowrap">{value}</p>
+          </div>
           {trend !== undefined && (
             <div className={`flex items-center gap-1 ${getTrendColor()} dark:text-gray-400`}>
               <TrendIcon className="w-4 h-4" />
@@ -56,9 +61,6 @@ export function StatCard({
           )}
         </div>
       </div>
-      
-      {/* Subtitle */}
-      <p className="text-xs text-gray-500 dark:text-gray-400">{subtitle}</p>
     </Card>
   );
 }

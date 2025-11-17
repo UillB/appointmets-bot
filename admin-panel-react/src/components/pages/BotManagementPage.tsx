@@ -1661,31 +1661,39 @@ export function BotManagementPage() {
                         <Button
                           variant="outline"
                           onClick={handleOpenBot}
+                          className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-white dark:hover:bg-indigo-900/50 hover:border-indigo-400 dark:hover:border-indigo-600 hover:text-indigo-800 dark:hover:text-indigo-200 hover:shadow-md dark:hover:shadow-md text-gray-900 dark:text-gray-100 font-medium h-11 transition-all"
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
                           Open Bot
                         </Button>
                         <Button
                           onClick={handleCopyLink}
-                          className="bg-indigo-600 hover:bg-indigo-700"
+                          className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium h-11 shadow-md hover:shadow-lg transition-all"
                         >
                           <Copy className="w-4 h-4 mr-2" />
                           Share Bot
                         </Button>
                       </div>
                       
-                      <div className="mt-4 pt-4 border-t border-emerald-200 dark:border-emerald-900">
-                        <Button
-                          variant="outline"
-                          onClick={() => setShowUnlinkDialog(true)}
-                          className="w-full text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-950/50 border-red-200 dark:border-red-900"
-                        >
-                          <Unlink className="w-4 h-4 mr-2" />
-                          Unlink Telegram Account
-                        </Button>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-                          Unlink your Telegram account to remove admin access from the bot
-                        </p>
+                      <div className="mt-6 pt-6 border-t-2 border-emerald-200 dark:border-emerald-800">
+                        <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-lg border border-red-200 dark:border-red-900/50 mb-3">
+                          <p className="text-sm text-red-800 dark:text-red-200 text-center font-medium mb-1">
+                            Need to unlink your account?
+                          </p>
+                          <p className="text-xs text-red-700 dark:text-red-300 text-center">
+                            Unlink your Telegram account to remove admin access from the bot
+                          </p>
+                        </div>
+                        <div className="flex justify-center">
+                          <Button
+                            variant="outline"
+                            onClick={() => setShowUnlinkDialog(true)}
+                            className="!px-11 text-red-700 dark:text-red-500 hover:text-white dark:hover:text-white hover:bg-red-700 dark:hover:bg-red-800 border-2 border-red-400 dark:border-red-800 hover:border-red-700 dark:hover:border-red-800 font-medium h-11 transition-all shadow-sm hover:shadow-md"
+                          >
+                            <Unlink className="w-4 h-4 mr-2" />
+                            Unlink Telegram Account
+                          </Button>
+                        </div>
                       </div>
                     </div>
 
@@ -1709,7 +1717,11 @@ export function BotManagementPage() {
                         ].map(({ cmd, desc }) => (
                           <div
                             key={cmd}
-                            className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg group hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                            onClick={() => {
+                              navigator.clipboard.writeText(cmd);
+                              toast.success(`Copied: ${cmd}`);
+                            }}
+                            className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-transparent group hover:bg-indigo-50 dark:hover:bg-indigo-950/50 hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-sm transition-all cursor-pointer"
                           >
                             <div>
                               <code className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{cmd}</code>
@@ -1718,7 +1730,8 @@ export function BotManagementPage() {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 navigator.clipboard.writeText(cmd);
                                 toast.success(`Copied: ${cmd}`);
                               }}
@@ -1783,7 +1796,7 @@ export function BotManagementPage() {
                           <Button
                             onClick={handleGenerateAdminLink}
                             disabled={isGeneratingAdminLink}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 h-12"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium h-12 shadow-md hover:shadow-lg transition-all"
                           >
                             {isGeneratingAdminLink ? (
                               <>
@@ -1800,28 +1813,28 @@ export function BotManagementPage() {
                         ) : (
                           <>
                             <div className="space-y-2">
-                              <Label className="mb-2 block text-gray-900 dark:text-gray-100">Authorization Link</Label>
+                              <Label className="mb-2 block text-gray-900 dark:text-gray-100 font-medium">Authorization Link</Label>
                               <div className="flex gap-2">
                                 <Input
                                   value={adminLink}
                                   readOnly
-                                  className="flex-1 bg-gray-50 dark:bg-gray-800 h-11 font-mono text-xs text-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700"
+                                  className="flex-1 bg-white dark:bg-gray-800 h-11 font-mono text-xs text-gray-900 dark:text-gray-100 border-2 border-gray-300 dark:border-gray-600 focus:border-indigo-500 dark:focus:border-indigo-500"
                                 />
                                 <Button
                                   variant="outline"
                                   onClick={handleCopyAdminLink}
-                                  className="h-11 px-4"
+                                  className="h-11 px-4 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100"
                                 >
                                   <Copy className="w-4 h-4" />
                                 </Button>
                               </div>
-                              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 font-medium">
                                 Link expires in 1 hour
                               </p>
                             </div>
                             <Button
                               onClick={handleOpenAdminLink}
-                              className="w-full bg-indigo-600 hover:bg-indigo-700 h-12"
+                              className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium h-12 shadow-md hover:shadow-lg transition-all"
                             >
                               <ExternalLink className="w-5 h-5 mr-2" />
                               Open in Telegram
@@ -1830,7 +1843,7 @@ export function BotManagementPage() {
                               variant="outline"
                               onClick={handleGenerateAdminLink}
                               disabled={isGeneratingAdminLink}
-                              className="w-full h-12"
+                              className="w-full h-12 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium"
                             >
                               <RefreshCw className={`w-4 h-4 mr-2 ${isGeneratingAdminLink ? 'animate-spin' : ''}`} />
                               Generate New Link
@@ -1840,12 +1853,17 @@ export function BotManagementPage() {
                       </div>
                     </div>
 
-                    <div className="p-4 bg-blue-50 dark:bg-blue-950/50 rounded-lg border border-blue-200 dark:border-blue-900">
-                      <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-2">How it works:</h4>
-                      <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-decimal list-inside">
-                        <li>Click "Generate Admin Link" button</li>
-                        <li>Click "Open in Telegram" button (this will open the link in Telegram app)</li>
-                        <li><strong>Important:</strong> The link must be opened in Telegram app, not in browser</li>
+                    <div className="p-5 bg-blue-50 dark:bg-blue-950/50 rounded-lg border-2 border-blue-200 dark:border-blue-800">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-500 flex items-center justify-center flex-shrink-0">
+                          <span className="text-white font-semibold text-sm">?</span>
+                        </div>
+                        <h4 className="font-semibold text-blue-900 dark:text-blue-100 text-base">How it works:</h4>
+                      </div>
+                      <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-2 list-decimal list-inside ml-2">
+                        <li className="font-medium">Click "Generate Admin Link" button</li>
+                        <li className="font-medium">Click "Open in Telegram" button (this will open the link in Telegram app)</li>
+                        <li><strong className="text-blue-900 dark:text-blue-100">Important:</strong> The link must be opened in Telegram app, not in browser</li>
                         <li>When you open the link, Telegram should automatically send the /start command</li>
                         <li>If you don't see a confirmation message, try typing /start manually in the bot chat</li>
                         <li>You will receive a confirmation message when the link is successful</li>

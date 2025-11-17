@@ -92,7 +92,7 @@ export function OrganizationCard({
           <Button
             variant="ghost"
             size="sm"
-            className="flex-1 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
+            className="flex-1 bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/60 hover:bg-indigo-100 dark:hover:bg-indigo-950/70 hover:text-indigo-700 dark:hover:text-indigo-200 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-md transition-all duration-200 font-medium"
             onClick={() => onView(id)}
           >
             <Building2 className="w-4 h-4 mr-2" />
@@ -101,7 +101,7 @@ export function OrganizationCard({
           <Button
             variant="ghost"
             size="sm"
-            className="flex-1 text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="flex-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-gray-100 hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-md transition-all duration-200 font-medium"
             onClick={() => onEdit(id)}
           >
             <Wrench className="w-4 h-4 mr-2" />

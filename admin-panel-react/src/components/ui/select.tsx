@@ -66,6 +66,7 @@ function SelectContent({
         data-slot="select-content"
         className={cn(
           "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 z-[9999] max-h-[300px] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-md border border-gray-200 dark:border-gray-800 shadow-lg",
+          "opacity-0 data-[side]:opacity-100 transition-opacity duration-200 ease-out",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
