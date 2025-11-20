@@ -1,6 +1,7 @@
 import React from "react";
 import { Clock, ChevronRight, User, Calendar, Sparkles, Users } from "lucide-react";
 import { Badge } from "../ui/badge";
+import { useLanguage } from "../../i18n";
 
 interface AppointmentCardProps {
   clientName?: string;
@@ -11,6 +12,13 @@ interface AppointmentCardProps {
 }
 
 export function AppointmentCard({ clientName, clientId, time, status, appointment }: AppointmentCardProps) {
+  const { t, language } = useLanguage();
+  const localeMap: Record<string, string> = {
+    en: "en-US",
+    ru: "ru-RU",
+    he: "he-IL",
+  };
+  const locale = localeMap[language] || "en-US";
   const getStatusColor = () => {
     switch (status) {
       case "confirmed":
@@ -25,7 +33,16 @@ export function AppointmentCard({ clientName, clientId, time, status, appointmen
   };
 
   const getStatusText = () => {
-    return status ? status.charAt(0).toUpperCase() + status.slice(1) : 'Unknown';
+    switch (status) {
+      case "confirmed":
+        return t('cards.appointment.status.confirmed');
+      case "cancelled":
+        return t('cards.appointment.status.cancelled');
+      case "pending":
+        return t('cards.appointment.status.pending');
+      default:
+        return t('cards.appointment.status.unknown');
+    }
   };
 
   // Extract data from appointment object if available
@@ -33,13 +50,14 @@ export function AppointmentCard({ clientName, clientId, time, status, appointmen
   const serviceName = appointment?.service?.name || appointment?.serviceName;
   const slotStart = appointment?.slot?.startAt;
   const slotEnd = appointment?.slot?.endAt;
+  const chatIdValue = customerInfo.chatId || clientId || t('cards.appointment.unknown');
   const displayName = customerInfo.firstName 
     ? `${customerInfo.firstName} ${customerInfo.lastName || ''}`.trim()
-    : clientName || `Chat ID: ${customerInfo.chatId || clientId || 'Unknown'}`;
-  const displayTime = time || (slotStart ? new Date(slotStart).toLocaleTimeString('en-US', { 
+    : clientName || t('cards.appointment.chatIdDisplay', { chatId: chatIdValue });
+  const displayTime = time || (slotStart ? new Date(slotStart).toLocaleTimeString(locale, { 
     hour: '2-digit', 
     minute: '2-digit' 
-  }) : 'N/A');
+  }) : t('cards.appointment.notAvailable'));
 
   return (
     <div className="p-4 border rounded-lg hover:shadow-md dark:hover:shadow-lg transition-all cursor-pointer group bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
@@ -62,19 +80,19 @@ export function AppointmentCard({ clientName, clientId, time, status, appointmen
                     {customerInfo.firstName && (
                       <div className="flex items-center gap-1.5">
                         <Users className="w-3 h-3 text-gray-400 dark:text-gray-500" />
-                        <span className="text-gray-600 dark:text-gray-400 font-medium">Name:</span>
+                        <span className="text-gray-600 dark:text-gray-400 font-medium">{t('cards.appointment.labels.name')}</span>
                         <span className="text-gray-900 dark:text-gray-100">{customerInfo.firstName} {customerInfo.lastName || ''}</span>
                       </div>
                     )}
                     {customerInfo.username && (
                       <div className="flex items-center gap-1.5">
-                        <span className="text-gray-600 dark:text-gray-400 font-medium">Username:</span>
+                        <span className="text-gray-600 dark:text-gray-400 font-medium">{t('cards.appointment.labels.username')}</span>
                         <span className="text-gray-900 dark:text-gray-100">@{customerInfo.username}</span>
                       </div>
                     )}
                     {(customerInfo.chatId || clientId) && (
                       <div className="flex items-center gap-1.5">
-                        <span className="text-gray-600 dark:text-gray-400 font-medium">Chat ID:</span>
+                        <span className="text-gray-600 dark:text-gray-400 font-medium">{t('cards.appointment.labels.chatId')}</span>
                         <span className="text-gray-900 dark:text-gray-100">{customerInfo.chatId || clientId}</span>
                       </div>
                     )}
@@ -87,16 +105,16 @@ export function AppointmentCard({ clientName, clientId, time, status, appointmen
                 {serviceName && (
                   <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                     <Sparkles className="w-3.5 h-3.5" />
-                    <span className="font-medium">Service:</span>
+                    <span className="font-medium">{t('cards.appointment.labels.service')}</span>
                     <span className="text-gray-900 dark:text-gray-100">{serviceName}</span>
                   </div>
                 )}
                 {slotStart && (
                   <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                     <Calendar className="w-3.5 h-3.5" />
-                    <span className="font-medium">Date:</span>
+                    <span className="font-medium">{t('cards.appointment.labels.date')}</span>
                     <span className="text-gray-900 dark:text-gray-100">
-                      {new Date(slotStart).toLocaleDateString('en-US', { 
+                      {new Date(slotStart).toLocaleDateString(locale, { 
                         month: 'short', 
                         day: 'numeric',
                         year: 'numeric'
@@ -107,12 +125,12 @@ export function AppointmentCard({ clientName, clientId, time, status, appointmen
                 {(slotStart && slotEnd) && (
                   <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                     <Clock className="w-3.5 h-3.5" />
-                    <span className="font-medium">Time:</span>
+                    <span className="font-medium">{t('cards.appointment.labels.time')}</span>
                     <span className="text-gray-900 dark:text-gray-100">
-                      {new Date(slotStart).toLocaleTimeString('en-US', { 
+                      {new Date(slotStart).toLocaleTimeString(locale, { 
                         hour: '2-digit', 
                         minute: '2-digit'
-                      })} - {new Date(slotEnd).toLocaleTimeString('en-US', { 
+                      })} - {new Date(slotEnd).toLocaleTimeString(locale, { 
                         hour: '2-digit', 
                         minute: '2-digit'
                       })}
@@ -122,7 +140,7 @@ export function AppointmentCard({ clientName, clientId, time, status, appointmen
                 {!slotStart && time && (
                   <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
                     <Clock className="w-3.5 h-3.5" />
-                    <span className="font-medium">Time:</span>
+                    <span className="font-medium">{t('cards.appointment.labels.time')}</span>
                     <span className="text-gray-900 dark:text-gray-100">{displayTime}</span>
                   </div>
                 )}

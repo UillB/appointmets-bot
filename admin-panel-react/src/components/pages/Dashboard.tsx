@@ -32,6 +32,7 @@ import { formatTimeToLocal, isSameDay } from "../../utils/dateUtils";
 import { SetupBanner } from "../SetupBanner";
 import { SetupSuccessModal } from "../SetupSuccessModal";
 import { listenToSetupWizardModal, SetupWizardModalData } from "../../utils/setupWizardEvents";
+import { useLanguage } from "../../i18n";
 
 interface DashboardStats {
   totalAppointments: number;
@@ -45,6 +46,7 @@ interface DashboardStats {
 }
 
 export function Dashboard() {
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { events } = useWebSocket();
@@ -107,7 +109,7 @@ export function Dashboard() {
       }
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
-      toast.error('Failed to load dashboard data');
+      toast.error(t('toasts.failedToLoadDashboard'));
     } finally {
       setIsLoading(false);
     }
@@ -262,36 +264,36 @@ export function Dashboard() {
       icon: CalendarIcon,
       iconBg: "bg-blue-50 dark:bg-blue-900/50",
       iconColor: "text-blue-600 dark:text-blue-400",
-      title: "Appointments",
-      description: "Manage bookings",
-      badge: { text: `${stats?.todayAppointments || 0} today`, variant: "indigo" },
+      title: t('dashboard.quickActions.appointments.title'),
+      description: t('dashboard.quickActions.appointments.description'),
+      badge: { text: `${stats?.todayAppointments || 0} ${t('dashboard.quickActions.today')}`, variant: "indigo" },
       onClick: () => navigate("/appointments")
     },
     {
       icon: Wrench,
       iconBg: "bg-purple-50 dark:bg-purple-900/50",
       iconColor: "text-purple-600 dark:text-purple-400",
-      title: "Services",
-      description: "Configure offerings",
-      badge: { text: `${stats?.totalServices || 0} available`, variant: "" },
+      title: t('dashboard.quickActions.services.title'),
+      description: t('dashboard.quickActions.services.description'),
+      badge: { text: `${stats?.totalServices || 0} ${t('dashboard.quickActions.available')}`, variant: "" },
       onClick: () => navigate("/services")
     },
     {
       icon: Building2,
       iconBg: "bg-indigo-50 dark:bg-indigo-900/50",
       iconColor: "text-indigo-600 dark:text-indigo-400",
-      title: "Organizations",
-      description: "Manage locations",
-      badge: { text: `${organizationsCount} active`, variant: "blue" },
+      title: t('dashboard.quickActions.organizations.title'),
+      description: t('dashboard.quickActions.organizations.description'),
+      badge: { text: `${organizationsCount} ${t('dashboard.quickActions.active')}`, variant: "blue" },
       onClick: () => navigate("/organizations")
     },
     {
       icon: Settings,
       iconBg: "bg-gray-50 dark:bg-gray-800",
       iconColor: "text-gray-600 dark:text-gray-400",
-      title: "Settings",
-      description: "System configuration",
-      badge: { text: "Account" },
+      title: t('dashboard.quickActions.settings.title'),
+      description: t('dashboard.quickActions.settings.description'),
+      badge: { text: t('dashboard.quickActions.account') },
       onClick: () => navigate("/settings")
     }
   ];
@@ -301,36 +303,36 @@ export function Dashboard() {
       icon: CalendarDays,
       iconBg: "bg-blue-50 dark:bg-blue-900/50",
       iconColor: "text-blue-600 dark:text-blue-400",
-      title: "Total Appointments",
+      title: t('dashboard.stats.totalAppointments'),
       value: stats.totalAppointments,
-      subtitle: "all time",
+      subtitle: t('dashboard.stats.allTime'),
       trend: stats.weekAppointments > 0 ? Math.round((stats.weekAppointments / Math.max(stats.totalAppointments, 1)) * 100) : 0
     },
     {
       icon: Clock,
       iconBg: "bg-indigo-50 dark:bg-indigo-900/50",
       iconColor: "text-indigo-600 dark:text-indigo-400",
-      title: "Today's Bookings",
+      title: t('dashboard.stats.todaysBookings'),
       value: stats.todayAppointments,
-      subtitle: "Scheduled for today",
+      subtitle: t('dashboard.stats.scheduledForToday'),
       trend: stats.todayAppointments > 0 ? Math.min(Math.round((stats.todayAppointments / Math.max(stats.weekAppointments, 1)) * 100), 100) : 0
     },
     {
       icon: CheckCircle2,
       iconBg: "bg-amber-50 dark:bg-amber-900/50",
       iconColor: "text-amber-600 dark:text-amber-400",
-      title: "Pending Approvals",
+      title: t('dashboard.stats.pendingApprovals'),
       value: stats.pendingAppointments,
-      subtitle: "Awaiting confirmation",
+      subtitle: t('dashboard.stats.awaitingConfirmation'),
       trend: stats.pendingAppointments > 0 ? Math.min(Math.round((stats.pendingAppointments / Math.max(stats.totalAppointments, 1)) * 100), 100) : 0
     },
     {
       icon: Sparkles,
       iconBg: "bg-purple-50 dark:bg-purple-900/50",
       iconColor: "text-purple-600 dark:text-purple-400",
-      title: "Active Services",
+      title: t('dashboard.stats.activeServices'),
       value: stats.totalServices,
-      subtitle: "Available for booking",
+      subtitle: t('dashboard.stats.availableForBooking'),
       trend: stats.totalServices > 0 ? Math.min(Math.round((stats.totalServices / 10) * 100), 100) : 0
     }
   ] : [];
@@ -354,24 +356,24 @@ export function Dashboard() {
           {!setupWizard.hasServices && (
             <SetupBanner
               type="services"
-              message="You currently have no services (what you sell). Create your first service now - this is necessary to start working and takes just one minute."
-              actionLabel="Create Service"
+              message={t('dashboard.setupBanners.services.message')}
+              actionLabel={t('dashboard.setupBanners.services.actionLabel')}
               onAction={handleCreateService}
             />
           )}
           {!setupWizard.botActive && (
             <SetupBanner
               type="bot"
-              message="Your Telegram bot is not connected. Please connect your bot to share it with people and start receiving appointments today."
-              actionLabel="Connect Bot"
+              message={t('dashboard.setupBanners.bot.message')}
+              actionLabel={t('dashboard.setupBanners.bot.actionLabel')}
               onAction={handleConnectBot}
             />
           )}
           {!setupWizard.adminLinked && (
             <SetupBanner
               type="admin"
-              message="Your Telegram admin account is not linked. Link it now to enable admin features such as accessing the management system (admin panel) from Telegram."
-              actionLabel="Link Admin"
+              message={t('dashboard.setupBanners.admin.message')}
+              actionLabel={t('dashboard.setupBanners.admin.actionLabel')}
               onAction={handleLinkAdmin}
             />
           )}
@@ -381,7 +383,7 @@ export function Dashboard() {
       {/* Welcome Section */}
       <div>
         <h1 className="text-gray-900 dark:text-gray-100 flex items-center gap-2">
-          Welcome back, {user?.name || 'User'}! <span className="text-2xl">👋</span>
+          {t('dashboard.welcome', { name: user?.name || t('common.user') })} <span className="text-2xl">👋</span>
         </h1>
         <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
           {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
@@ -424,13 +426,13 @@ export function Dashboard() {
 
           {/* Statistics & Overview */}
           <div className="flex items-center justify-between">
-            <h2 className="text-gray-900 dark:text-gray-100">Statistics & Overview</h2>
+            <h2 className="text-gray-900 dark:text-gray-100">{t('dashboard.statisticsOverview')}</h2>
             <Button 
               variant="link" 
               className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 p-0 h-auto"
               onClick={() => navigate('/analytics')}
             >
-              View All →
+              {t('dashboard.viewAll')} →
             </Button>
           </div>
 
@@ -457,7 +459,7 @@ export function Dashboard() {
             <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="flex items-center gap-2 mb-6">
                 <CalendarDays className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                <h3 className="text-gray-900 dark:text-gray-100">Calendar</h3>
+                <h3 className="text-gray-900 dark:text-gray-100">{t('dashboard.calendar.title')}</h3>
               </div>
 
               <div className="space-y-4">
@@ -491,7 +493,15 @@ export function Dashboard() {
                 {/* Calendar grid */}
                 <div className="grid grid-cols-7 gap-1 place-items-center">
                   {/* Day headers */}
-                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, idx) => (
+                  {[
+                    t('dashboard.calendar.days.sun'),
+                    t('dashboard.calendar.days.mon'),
+                    t('dashboard.calendar.days.tue'),
+                    t('dashboard.calendar.days.wed'),
+                    t('dashboard.calendar.days.thu'),
+                    t('dashboard.calendar.days.fri'),
+                    t('dashboard.calendar.days.sat')
+                  ].map((day, idx) => (
                     <div key={idx} className="w-10 h-10 flex items-center justify-center text-sm text-gray-500 dark:text-gray-400 font-medium">
                       {day}
                     </div>
@@ -538,7 +548,7 @@ export function Dashboard() {
                     <div className="flex items-center gap-2">
                       <CalendarDays className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                       <span className="text-sm font-medium text-indigo-900 dark:text-indigo-100">
-                        Selected: {selectedDate.toLocaleDateString('en-US', { 
+                        {t('dashboard.calendar.selected')}: {selectedDate.toLocaleDateString('en-US', { 
                           weekday: 'long', 
                           month: 'long', 
                           day: 'numeric',
@@ -557,14 +567,14 @@ export function Dashboard() {
                 <div className="flex items-center gap-2">
                   <Clock className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   <h3 className="text-gray-900 dark:text-gray-100">
-                    {selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : 'Select a date'}
+                    {selectedDate ? selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' }) : t('dashboard.calendar.selectDate')}
                   </h3>
                 </div>
                 <Button 
                   className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white h-8 px-3 text-sm whitespace-nowrap"
                   onClick={() => navigate('/appointments', { state: { openDialog: true } })}
                 >
-                  New Appointment
+                  {t('appointments.newAppointment')}
                 </Button>
               </div>
 
@@ -574,7 +584,7 @@ export function Dashboard() {
                     const AppointmentComponent = () => (
                       <AppointmentCard 
                         appointment={appointment}
-                        clientName={`Chat ID: ${appointment.chatId || 'Unknown'}`}
+                        clientName={`${t('appointments.chatId')}: ${appointment.chatId || t('appointments.unknown')}`}
                         clientId={appointment.chatId || 'N/A'}
                         time={appointment.slot?.startAt ? formatTimeToLocal(appointment.slot.startAt) : 'N/A'}
                         status={appointment.status}
@@ -585,8 +595,8 @@ export function Dashboard() {
                 ) : (
                   <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                     <Clock className="w-12 h-12 mx-auto mb-4 text-gray-300 dark:text-gray-600" />
-                    <p>No appointments for selected date</p>
-                    <p className="text-sm">Click on a date in the calendar to view appointments</p>
+                    <p>{t('dashboard.emptyStates.noAppointmentsForDate')}</p>
+                    <p className="text-sm">{t('dashboard.emptyStates.clickDateToView')}</p>
                   </div>
                 )}
               </div>

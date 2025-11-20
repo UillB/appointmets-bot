@@ -1,6 +1,7 @@
 import { Building2, Users, Wrench, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
+import { useLanguage } from "../../i18n";
 
 interface OrganizationCardProps {
   id: string;
@@ -23,6 +24,7 @@ export function OrganizationCard({
   onView,
   onEdit,
 }: OrganizationCardProps) {
+  const { t } = useLanguage();
   // Generate avatar color based on name
   const getAvatarColor = (name: string) => {
     const colors = [
@@ -65,8 +67,8 @@ export function OrganizationCard({
           <div className="flex-1 min-w-0">
             <h3 className="font-semibold text-gray-900 dark:text-gray-100 truncate">{name}</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {usersCount} {usersCount === 1 ? "User" : "Users"} • {servicesCount}{" "}
-              {servicesCount === 1 ? "Service" : "Services"}
+              {usersCount} {usersCount === 1 ? t('cards.organization.user') : t('cards.organization.users')} • {servicesCount}{" "}
+              {servicesCount === 1 ? t('cards.organization.service') : t('cards.organization.services')}
             </p>
           </div>
         </div>
@@ -96,7 +98,7 @@ export function OrganizationCard({
             onClick={() => onView(id)}
           >
             <Building2 className="w-4 h-4 mr-2" />
-            View
+            {t('cards.organization.view')}
           </Button>
           <Button
             variant="ghost"
@@ -105,7 +107,7 @@ export function OrganizationCard({
             onClick={() => onEdit(id)}
           >
             <Wrench className="w-4 h-4 mr-2" />
-            Edit
+            {t('cards.organization.edit')}
           </Button>
         </div>
       </div>

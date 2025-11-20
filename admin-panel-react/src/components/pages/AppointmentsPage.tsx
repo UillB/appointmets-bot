@@ -61,8 +61,10 @@ import { apiClient, Appointment } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
 import { toastNotifications } from "../toast-notifications";
 import { formatDateToLocal, formatTimeToLocal } from "../../utils/dateUtils";
+import { useLanguage } from "../../i18n";
 
 export function AppointmentsPage() {
+  const { t } = useLanguage();
   const { events } = useWebSocket();
   const location = useLocation();
   const navigate = useNavigate();
@@ -123,7 +125,7 @@ export function AppointmentsPage() {
       setServices(servicesData.services);
     } catch (error) {
       console.error('Failed to load appointments data:', error);
-      toast.error('Failed to load appointments data');
+      toast.error(t('toasts.failedToLoadAppointments'));
     } finally {
       setIsLoading(false);
     }
@@ -185,33 +187,33 @@ export function AppointmentsPage() {
       icon: CalendarDays,
       iconBg: "bg-blue-50 dark:bg-blue-900/50",
       iconColor: "text-blue-600 dark:text-blue-400",
-      title: "Total Appointments",
+      title: t('appointments.stats.totalAppointments'),
       value: appointments?.length || 0,
-      subtitle: "All time bookings",
+      subtitle: t('appointments.stats.allTimeBookings'),
     },
     {
       icon: CheckCircle2,
       iconBg: "bg-emerald-50 dark:bg-emerald-900/50",
       iconColor: "text-emerald-600 dark:text-emerald-400",
-      title: "Confirmed",
+      title: t('appointments.confirmed'),
       value: appointments?.filter(apt => apt.status === 'confirmed').length || 0,
-      subtitle: "Successfully confirmed",
+      subtitle: t('appointments.stats.successfullyConfirmed'),
     },
     {
       icon: Clock,
       iconBg: "bg-amber-50 dark:bg-amber-900/50",
       iconColor: "text-amber-600 dark:text-amber-400",
-      title: "Pending",
+      title: t('appointments.pending'),
       value: appointments?.filter(apt => apt.status === 'pending').length || 0,
-      subtitle: "Awaiting confirmation",
+      subtitle: t('appointments.stats.awaitingConfirmation'),
     },
     {
       icon: XCircle,
       iconBg: "bg-red-50 dark:bg-red-900/50",
       iconColor: "text-red-600 dark:text-red-400",
-      title: "Cancelled & Rejected",
+      title: t('appointments.stats.cancelledRejected'),
       value: appointments?.filter(apt => apt.status === 'cancelled').length || 0,
-      subtitle: "Cancelled and rejected bookings",
+      subtitle: t('appointments.stats.cancelledRejectedBookings'),
     },
   ];
 
@@ -231,10 +233,16 @@ export function AppointmentsPage() {
 
     const Icon = icons[status];
 
+    const statusLabels: Record<"confirmed" | "cancelled" | "pending", string> = {
+      confirmed: t('appointments.confirmed'),
+      cancelled: t('appointments.cancelled'),
+      pending: t('appointments.pending'),
+    };
+
     return (
       <Badge className={`${styles[status]} flex items-center gap-1 w-fit`}>
         <Icon className="w-3 h-3" />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+        {statusLabels[status]}
       </Badge>
     );
   };
@@ -296,7 +304,7 @@ export function AppointmentsPage() {
 
   const handleRefresh = () => {
     loadData();
-    toast.success("Appointments refreshed");
+    toast.success(t('toasts.appointmentsRefreshed'));
   };
 
   // Show loading state before rendering content - ensure all data is loaded
@@ -316,8 +324,8 @@ export function AppointmentsPage() {
           {/* Page Title */}
           <PageTitle
             icon={<CalendarDays className="w-6 h-6 text-white" />}
-            title="Appointments"
-            description="Manage appointments and bookings"
+            title={t('appointments.title')}
+            description={t('appointments.description')}
             actions={
               <>
                 <Button
@@ -327,7 +335,7 @@ export function AppointmentsPage() {
                   className="hidden sm:flex border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
+                  {t('common.refresh')}
                 </Button>
                 <Button
                   onClick={() => setDialogOpen(true)}
@@ -335,7 +343,7 @@ export function AppointmentsPage() {
                   className="hidden sm:flex bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  New Appointment
+                  {t('appointments.newAppointment')}
                 </Button>
                 <Button
                   onClick={() => setSheetOpen(true)}
@@ -375,31 +383,31 @@ export function AppointmentsPage() {
                     value="all" 
                     className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
-                    All ({getTabCount("all")})
+                    {t('appointments.all')} ({getTabCount("all")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="confirmed" 
                     className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
-                    Confirmed ({getTabCount("confirmed")})
+                    {t('appointments.confirmed')} ({getTabCount("confirmed")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="pending" 
                     className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
-                    Pending ({getTabCount("pending")})
+                    {t('appointments.pending')} ({getTabCount("pending")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="cancelled" 
                     className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
-                    Cancelled ({getTabCount("cancelled")})
+                    {t('appointments.cancelled')} ({getTabCount("cancelled")})
                   </TabsTrigger>
                   <TabsTrigger 
                     value="rejected" 
                     className="data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white whitespace-nowrap text-gray-700 dark:text-gray-300"
                   >
-                    Rejected ({getTabCount("rejected")})
+                    {t('appointments.rejected')} ({getTabCount("rejected")})
                   </TabsTrigger>
                 </TabsList>
               </Tabs>
@@ -412,7 +420,7 @@ export function AppointmentsPage() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
-                    placeholder="Search..."
+                    placeholder={t('appointments.searchPlaceholder')}
                     className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -430,16 +438,16 @@ export function AppointmentsPage() {
                   </SheetTrigger>
                   <SheetContent side="right" className="w-[300px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                     <div className="space-y-4 pt-6">
-                      <h3 className="font-medium text-gray-900 dark:text-gray-100">Filters</h3>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100">{t('appointments.filters')}</h3>
                       
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Service</label>
+                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('appointments.service')}</label>
                         <Select value={selectedService} onValueChange={setSelectedService}>
                           <SelectTrigger className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
-                            <SelectValue placeholder="All Services" />
+                            <SelectValue placeholder={t('appointments.allServices')} />
                           </SelectTrigger>
                           <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                            <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Services</SelectItem>
+                            <SelectItem value="all" className="text-gray-900 dark:text-gray-100">{t('appointments.allServices')}</SelectItem>
                             {services.map((service) => (
                               <SelectItem key={service.id} value={service.name} className="text-gray-900 dark:text-gray-100">
                                 {service.name}
@@ -450,7 +458,7 @@ export function AppointmentsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">Date</label>
+                        <label className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('appointments.date')}</label>
                         <Popover>
                           <PopoverTrigger asChild>
                             <Button
@@ -460,7 +468,7 @@ export function AppointmentsPage() {
                               }`}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4" />
-                              {date ? format(date, "PP") : "Pick a date"}
+                              {date ? format(date, "PP") : t('appointments.pickDate')}
                             </Button>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800" align="start">
@@ -480,7 +488,7 @@ export function AppointmentsPage() {
                           onClick={clearFilters}
                           className="w-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                         >
-                          Clear Filters
+                          {t('appointments.clearFilters')}
                         </Button>
                       )}
                     </div>
@@ -493,7 +501,7 @@ export function AppointmentsPage() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
-                    placeholder="Search by Chat ID or service..."
+                    placeholder={t('appointments.searchPlaceholderDesktop')}
                     className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -503,10 +511,10 @@ export function AppointmentsPage() {
                 <div className="flex gap-2">
                   <Select value={selectedService} onValueChange={setSelectedService}>
                     <SelectTrigger className="w-[180px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
-                      <SelectValue placeholder="Service" />
+                      <SelectValue placeholder={t('appointments.service')} />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                      <SelectItem value="all" className="text-gray-900 dark:text-gray-100">All Services</SelectItem>
+                      <SelectItem value="all" className="text-gray-900 dark:text-gray-100">{t('appointments.allServices')}</SelectItem>
                       {services.map((service) => (
                         <SelectItem key={service.id} value={service.name} className="text-gray-900 dark:text-gray-100">
                           {service.name}
@@ -524,7 +532,7 @@ export function AppointmentsPage() {
                         }`}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PP") : "Date"}
+                        {date ? format(date, "PP") : t('appointments.date')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800" align="start">
@@ -543,7 +551,7 @@ export function AppointmentsPage() {
                       onClick={clearFilters}
                       className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
-                      Clear
+                      {t('appointments.clear')}
                     </Button>
                   )}
                 </div>
@@ -555,13 +563,13 @@ export function AppointmentsPage() {
               <Table>
                 <TableHeader>
                   <TableRow className="bg-gray-50 dark:bg-gray-800">
-                    <TableHead className="text-gray-900 dark:text-gray-100">Service</TableHead>
-                    <TableHead className="text-gray-900 dark:text-gray-100">Date & Time</TableHead>
-                    <TableHead className="text-gray-900 dark:text-gray-100">Client / Chat ID</TableHead>
-                    <TableHead className="text-gray-900 dark:text-gray-100">Duration</TableHead>
-                    <TableHead className="text-gray-900 dark:text-gray-100">Status</TableHead>
-                    <TableHead className="text-gray-900 dark:text-gray-100">Created</TableHead>
-                    <TableHead className="text-right text-gray-900 dark:text-gray-100">Actions</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">{t('appointments.tableHeaders.service')}</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">{t('appointments.tableHeaders.dateTime')}</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">{t('appointments.tableHeaders.clientChatId')}</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">{t('appointments.tableHeaders.duration')}</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">{t('appointments.tableHeaders.status')}</TableHead>
+                    <TableHead className="text-gray-900 dark:text-gray-100">{t('appointments.tableHeaders.created')}</TableHead>
+                    <TableHead className="text-right text-gray-900 dark:text-gray-100">{t('appointments.tableHeaders.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -573,28 +581,28 @@ export function AppointmentsPage() {
                           {date ? (
                             <>
                               <p className="text-gray-500 dark:text-gray-400 font-medium">
-                                No appointments found for {format(date, "PP")}
+                                {t('appointments.emptyStates.noAppointmentsForDate', { date: format(date, "PP") })}
                               </p>
                               <p className="text-sm text-gray-400 dark:text-gray-500">
-                                Try selecting a different date or clear the date filter to see all appointments
+                                {t('appointments.emptyStates.tryDifferentDate')}
                               </p>
                               <Button
                                 variant="outline"
                                 onClick={() => setDate(undefined)}
                                 className="mt-2 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
                               >
-                                Clear Date Filter
+                                {t('appointments.clearDateFilter')}
                               </Button>
                             </>
                           ) : (
                             <>
-                              <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
+                              <p className="text-gray-500 dark:text-gray-400">{t('appointments.emptyStates.noAppointmentsFound')}</p>
                               <Button
                                 variant="link"
                                 onClick={() => setDialogOpen(true)}
                                 className="text-indigo-600 dark:text-indigo-400"
                               >
-                                Create your first appointment
+                                {t('appointments.emptyStates.createFirstAppointment')}
                               </Button>
                             </>
                           )}
@@ -609,16 +617,16 @@ export function AppointmentsPage() {
                             <div className="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
                               <CalendarDays className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                             </div>
-                            <span className="font-medium">{apt.service?.name || 'Unknown Service'}</span>
+                            <span className="font-medium">{apt.service?.name || t('appointments.unknownService')}</span>
                           </div>
                         </TableCell>
                         <TableCell className="text-gray-900 dark:text-gray-100">
                           <div>
-                            <p className="font-medium">{apt.slot?.startAt ? formatDateToLocal(apt.slot.startAt) : 'No date'}</p>
+                            <p className="font-medium">{apt.slot?.startAt ? formatDateToLocal(apt.slot.startAt) : t('appointments.noDate')}</p>
                             <p className="text-sm text-gray-500 dark:text-gray-400">
                               {apt.slot?.startAt && apt.slot?.endAt ? 
                                 `${formatTimeToLocal(apt.slot.startAt)} - ${formatTimeToLocal(apt.slot.endAt)}` : 
-                                'No time info'
+                                t('appointments.noTimeInfo')
                               }
                             </p>
                           </div>
@@ -629,20 +637,20 @@ export function AppointmentsPage() {
                               <User className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                             </div>
                             <div>
-                              <span className="text-sm font-medium">{apt.customerName || 'Unknown'}</span>
-                              <p className="text-xs text-gray-500 dark:text-gray-400">ID: {apt.chatId || 'N/A'}</p>
+                              <span className="text-sm font-medium">{apt.customerName || t('appointments.unknown')}</span>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">{t('appointments.id')}: {apt.chatId || t('appointments.notAvailable')}</p>
                             </div>
                           </div>
                         </TableCell>
                         <TableCell className="text-gray-900 dark:text-gray-100">
                           <div className="text-sm">
-                            <span className="font-medium">{apt.service?.durationMin || 'N/A'} min</span>
+                            <span className="font-medium">{apt.service?.durationMin || t('appointments.notAvailable')} {t('appointments.minutes')}</span>
                           </div>
                         </TableCell>
                         <TableCell>{getStatusBadge(apt.status)}</TableCell>
                         <TableCell className="text-gray-900 dark:text-gray-100">
                           <div className="text-sm">
-                            <p>{apt.createdAt ? formatDateToLocal(apt.createdAt) : 'N/A'}</p>
+                            <p>{apt.createdAt ? formatDateToLocal(apt.createdAt) : t('appointments.notAvailable')}</p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">{apt.createdAt ? formatTimeToLocal(apt.createdAt) : ''}</p>
                           </div>
                         </TableCell>
@@ -654,11 +662,11 @@ export function AppointmentsPage() {
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">View Details</DropdownMenuItem>
-                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Edit</DropdownMenuItem>
-                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Confirm</DropdownMenuItem>
+                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('appointments.actions.viewDetails')}</DropdownMenuItem>
+                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('appointments.actions.edit')}</DropdownMenuItem>
+                              <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('appointments.actions.confirm')}</DropdownMenuItem>
                               <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30">
-                                Cancel
+                                {t('appointments.actions.cancel')}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -679,28 +687,28 @@ export function AppointmentsPage() {
                     {date ? (
                       <>
                         <p className="text-gray-500 dark:text-gray-400 font-medium">
-                          No appointments found for {format(date, "PP")}
+                          {t('appointments.emptyStates.noAppointmentsForDate', { date: format(date, "PP") })}
                         </p>
                         <p className="text-sm text-gray-400 dark:text-gray-500 px-4">
-                          Try selecting a different date or clear the date filter to see all appointments
+                          {t('appointments.emptyStates.tryDifferentDate')}
                         </p>
                         <Button
                           variant="outline"
                           onClick={() => setDate(undefined)}
                           className="mt-2 text-indigo-600 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/20"
                         >
-                          Clear Date Filter
+                          {t('appointments.clearDateFilter')}
                         </Button>
                       </>
                     ) : (
                       <>
-                        <p className="text-gray-500 dark:text-gray-400">No appointments found</p>
+                        <p className="text-gray-500 dark:text-gray-400">{t('appointments.emptyStates.noAppointmentsFound')}</p>
                         <Button
                           variant="link"
                           onClick={() => setSheetOpen(true)}
                           className="text-indigo-600 dark:text-indigo-400"
                         >
-                          Create your first appointment
+                          {t('appointments.emptyStates.createFirstAppointment')}
                         </Button>
                       </>
                     )}
@@ -711,11 +719,11 @@ export function AppointmentsPage() {
                   const MobileCardComponent = () => (
                     <MobileAppointmentCard 
                       id={apt.id}
-                      service={apt.service?.name || 'Unknown Service'}
-                      date={apt.slot?.startAt ? formatDateToLocal(apt.slot.startAt) : 'No date'}
-                      timeStart={apt.slot?.startAt ? formatTimeToLocal(apt.slot.startAt) : 'No time'}
-                      timeEnd={apt.slot?.endAt ? formatTimeToLocal(apt.slot.endAt) : 'No time'}
-                      client={`Chat ID: ${apt.chatId || 'Unknown'}`}
+                      service={apt.service?.name || t('appointments.unknownService')}
+                      date={apt.slot?.startAt ? formatDateToLocal(apt.slot.startAt) : t('appointments.noDate')}
+                      timeStart={apt.slot?.startAt ? formatTimeToLocal(apt.slot.startAt) : t('appointments.noTime')}
+                      timeEnd={apt.slot?.endAt ? formatTimeToLocal(apt.slot.endAt) : t('appointments.noTime')}
+                      client={`${t('appointments.chatId')}: ${apt.chatId || t('appointments.unknown')}`}
                       status={apt.status}
                     />
                   );
@@ -728,14 +736,14 @@ export function AppointmentsPage() {
             {filteredAppointments.length > 0 && (
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 lg:mt-6">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Showing {filteredAppointments.length} of {appointments?.length || 0} appointments
+                  {t('appointments.showing', { count: filteredAppointments.length.toString(), total: (appointments?.length || 0).toString() })}
                 </p>
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" disabled className="border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
-                    Previous
+                    {t('appointments.pagination.previous')}
                   </Button>
                   <Button variant="outline" size="sm" disabled className="border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400">
-                    Next
+                    {t('appointments.pagination.next')}
                   </Button>
                 </div>
               </div>

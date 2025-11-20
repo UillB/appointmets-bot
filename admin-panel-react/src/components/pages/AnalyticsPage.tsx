@@ -41,8 +41,10 @@ import {
 import { toastNotifications } from "../toast-notifications";
 import { apiClient } from "../../services/api";
 import { useTheme } from "../../hooks/useTheme";
+import { useLanguage } from "../../i18n";
 
 export function AnalyticsPage() {
+  const { t } = useLanguage();
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
   const { events } = useWebSocket();
@@ -60,8 +62,8 @@ export function AnalyticsPage() {
       setAnalyticsData(data);
     } catch (err: any) {
       console.error("Error loading analytics:", err);
-      setError(err.message || "Failed to load analytics");
-      toastNotifications.errors.general("Failed to load analytics data");
+      setError(err.message || t('analytics.errors.failedToLoad'));
+      toastNotifications.errors.general(t('analytics.errors.failedToLoadData'));
     } finally {
       setLoading(false);
     }
@@ -118,36 +120,36 @@ export function AnalyticsPage() {
       icon: Calendar,
       iconBg: "bg-blue-50 dark:bg-blue-900/50",
       iconColor: "text-blue-600 dark:text-blue-400",
-      title: "Total Bookings",
+      title: t('analytics.stats.totalBookings'),
       value: (analyticsData.totalAppointments || 0) as string | number,
-      subtitle: timePeriod === 'all' ? 'All time' : `This ${timePeriod}`,
+      subtitle: timePeriod === 'all' ? t('analytics.stats.allTime') : t(`analytics.stats.this${timePeriod.charAt(0).toUpperCase() + timePeriod.slice(1)}`),
       trend: analyticsData.growthRate || 0,
     },
     {
       icon: TrendingUp,
       iconBg: "bg-emerald-50 dark:bg-emerald-900/50",
       iconColor: "text-emerald-600 dark:text-emerald-400",
-      title: "Growth Rate",
+      title: t('analytics.stats.growthRate'),
       value: `${analyticsData.growthRate >= 0 ? '+' : ''}${analyticsData.growthRate || 0}%`,
-      subtitle: timePeriod === 'all' ? 'vs previous period' : `vs last ${timePeriod}`,
+      subtitle: timePeriod === 'all' ? t('analytics.stats.vsPreviousPeriod') : t(`analytics.stats.vsLast${timePeriod.charAt(0).toUpperCase() + timePeriod.slice(1)}`),
       trend: analyticsData.growthRate || 0,
     },
     {
       icon: Users,
       iconBg: "bg-purple-50 dark:bg-purple-900/50",
       iconColor: "text-purple-600 dark:text-purple-400",
-      title: "Active Clients",
+      title: t('analytics.stats.activeClients'),
       value: (analyticsData.activeClients || 0) as string | number,
-      subtitle: "Unique clients",
+      subtitle: t('analytics.stats.uniqueClients'),
       trend: 0,
     },
     {
       icon: Clock,
       iconBg: "bg-amber-50 dark:bg-amber-900/50",
       iconColor: "text-amber-600 dark:text-amber-400",
-      title: "Avg. Duration",
+      title: t('analytics.stats.avgDuration'),
       value: `${analyticsData.averageDuration || 0}m`,
-      subtitle: "Per appointment",
+      subtitle: t('analytics.stats.perAppointment'),
       trend: 0,
     },
   ] : [];
@@ -204,7 +206,7 @@ export function AnalyticsPage() {
       <div className="flex items-center justify-center min-h-[calc(100vh-200px)] bg-white dark:bg-gray-900">
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
-          <Button onClick={loadAnalytics}>Retry</Button>
+          <Button onClick={loadAnalytics}>{t('analytics.retry')}</Button>
         </div>
       </div>
     );
@@ -219,8 +221,8 @@ export function AnalyticsPage() {
           {/* Page Title */}
           <PageTitle
             icon={<BarChart3 className="w-6 h-6 text-white" />}
-            title="Analytics"
-            description="Track performance and insights"
+            title={t('analytics.title')}
+            description={t('analytics.description')}
             actions={
               <>
                 <Button
@@ -230,7 +232,7 @@ export function AnalyticsPage() {
                   className="hidden sm:flex"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
+                  {t('common.refresh')}
                 </Button>
                 <Button
                   variant="outline"
@@ -239,7 +241,7 @@ export function AnalyticsPage() {
                   className="hidden sm:flex"
                 >
                   <Download className="w-4 h-4 mr-2" />
-                  Export
+                  {t('analytics.export')}
                 </Button>
               </>
             }
@@ -267,32 +269,32 @@ export function AnalyticsPage() {
 
           {/* Time Period Selector */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <h3 className="text-gray-900 dark:text-gray-100">Performance Overview</h3>
+            <h3 className="text-gray-900 dark:text-gray-100">{t('analytics.performanceOverview')}</h3>
             <Tabs value={timePeriod} onValueChange={(value) => setTimePeriod(value as "week" | "month" | "year" | "all")}>
               <TabsList className="bg-gray-100 dark:bg-gray-800">
                 <TabsTrigger
                   value="all"
                   className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
                 >
-                  All Time
+                  {t('analytics.timePeriod.allTime')}
                 </TabsTrigger>
                 <TabsTrigger
                   value="week"
                   className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
                 >
-                  Week
+                  {t('analytics.timePeriod.week')}
                 </TabsTrigger>
                 <TabsTrigger
                   value="month"
                   className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
                 >
-                  Month
+                  {t('analytics.timePeriod.month')}
                 </TabsTrigger>
                 <TabsTrigger
                   value="year"
                   className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
                 >
-                  Year
+                  {t('analytics.timePeriod.year')}
                 </TabsTrigger>
               </TabsList>
             </Tabs>
@@ -302,16 +304,16 @@ export function AnalyticsPage() {
           <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h3 className="text-gray-900 dark:text-gray-100 mb-1">Appointments Trend</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Daily bookings over time</p>
+                <h3 className="text-gray-900 dark:text-gray-100 mb-1">{t('analytics.appointmentsTrend.title')}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.appointmentsTrend.description')}</p>
               </div>
               <Select value={selectedMetric} onValueChange={setSelectedMetric}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="appointments">Appointments</SelectItem>
-                  <SelectItem value="revenue">Revenue</SelectItem>
+                  <SelectItem value="appointments">{t('analytics.metrics.appointments')}</SelectItem>
+                  <SelectItem value="revenue">{t('analytics.metrics.revenue')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -344,14 +346,14 @@ export function AnalyticsPage() {
                       }}
                       formatter={(value: any) => [
                         selectedMetric === "appointments" 
-                          ? `${value} ${value === 1 ? 'appointment' : 'appointments'}`
+                          ? `${value} ${value === 1 ? t('analytics.tooltip.appointment') : t('analytics.tooltip.appointments')}`
                           : `$${value.toFixed(2)}`,
-                        selectedMetric === "appointments" ? "Appointments" : "Revenue"
+                        selectedMetric === "appointments" ? t('analytics.metrics.appointments') : t('analytics.metrics.revenue')
                       ]}
                       labelFormatter={(label, payload) => {
                         // Use full date from payload if available
                         const fullDate = payload?.[0]?.payload?.fullDate || label;
-                        return `Date: ${fullDate}`;
+                        return `${t('analytics.tooltip.date')}: ${fullDate}`;
                       }}
                     />
                     <Line
@@ -368,7 +370,7 @@ export function AnalyticsPage() {
             ) : (
               <div className="flex flex-col items-center justify-center h-80 text-center">
                 <BarChart3 className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
-                <p className="text-gray-500 dark:text-gray-400">No appointment data available for this period</p>
+                <p className="text-gray-500 dark:text-gray-400">{t('analytics.emptyStates.noAppointmentData')}</p>
               </div>
             )}
           </Card>
@@ -378,8 +380,8 @@ export function AnalyticsPage() {
             {/* Top Services */}
             <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="mb-6">
-                <h3 className="text-gray-900 dark:text-gray-100 mb-1">Top Services</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Most popular services</p>
+                <h3 className="text-gray-900 dark:text-gray-100 mb-1">{t('analytics.topServices.title')}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.topServices.description')}</p>
               </div>
 
               {servicesData.length > 0 ? (
@@ -393,7 +395,7 @@ export function AnalyticsPage() {
                           </div>
                           <div>
                             <p className="font-medium text-gray-900 dark:text-gray-100">{service.name}</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{service.bookings} bookings</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{service.bookings} {t('analytics.topServices.bookings')}</p>
                           </div>
                         </div>
                         <Wrench className="w-5 h-5 text-gray-400 dark:text-gray-500" style={{ color: service.color }} />
@@ -415,7 +417,7 @@ export function AnalyticsPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <Wrench className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
-                  <p className="text-gray-500 dark:text-gray-400">No services with bookings in this period</p>
+                  <p className="text-gray-500 dark:text-gray-400">{t('analytics.emptyStates.noServicesWithBookings')}</p>
                 </div>
               )}
             </Card>
@@ -423,8 +425,8 @@ export function AnalyticsPage() {
             {/* Status Distribution */}
             <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="mb-6">
-                <h3 className="text-gray-900 dark:text-gray-100 mb-1">Appointment Status</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Status distribution</p>
+                <h3 className="text-gray-900 dark:text-gray-100 mb-1">{t('analytics.appointmentStatus.title')}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.appointmentStatus.description')}</p>
               </div>
 
               {statusData.length > 0 ? (
@@ -453,8 +455,8 @@ export function AnalyticsPage() {
                             boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                             color: isDark ? "#F9FAFB" : "#111827",
                           }}
-                          formatter={(value: any) => [`${value}%`, 'Percentage']}
-                          labelFormatter={(label) => `Status: ${label}`}
+                          formatter={(value: any) => [`${value}%`, t('analytics.tooltip.percentage')]}
+                          labelFormatter={(label) => `${t('analytics.tooltip.status')}: ${label}`}
                         />
                       </PieChart>
                     </ResponsiveContainer>
@@ -479,7 +481,7 @@ export function AnalyticsPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center h-64 text-center">
                   <Calendar className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
-                  <p className="text-gray-500 dark:text-gray-400">No appointment status data available</p>
+                  <p className="text-gray-500 dark:text-gray-400">{t('analytics.emptyStates.noStatusData')}</p>
                 </div>
               )}
             </Card>
@@ -488,8 +490,8 @@ export function AnalyticsPage() {
           {/* Peak Hours */}
           <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
             <div className="mb-6">
-              <h3 className="text-gray-900 dark:text-gray-100 mb-1">Peak Hours</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Busiest times of the day</p>
+              <h3 className="text-gray-900 dark:text-gray-100 mb-1">{t('analytics.peakHours.title')}</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400">{t('analytics.peakHours.description')}</p>
             </div>
 
             {peakHoursData.length > 0 ? (
@@ -518,8 +520,8 @@ export function AnalyticsPage() {
                         boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                         color: isDark ? "#F9FAFB" : "#111827",
                       }}
-                      formatter={(value: any) => [`${value} ${value === 1 ? 'booking' : 'bookings'}`, 'Bookings']}
-                      labelFormatter={(label) => `Time: ${label}`}
+                      formatter={(value: any) => [`${value} ${value === 1 ? t('analytics.tooltip.booking') : t('analytics.tooltip.bookings')}`, t('analytics.tooltip.bookings')]}
+                      labelFormatter={(label) => `${t('analytics.tooltip.time')}: ${label}`}
                     />
                     <Bar dataKey="bookings" fill="#4F46E5" radius={[8, 8, 0, 0]} />
                   </BarChart>
@@ -528,14 +530,14 @@ export function AnalyticsPage() {
             ) : (
               <div className="flex flex-col items-center justify-center h-80 text-center">
                 <Clock className="w-12 h-12 text-gray-300 dark:text-gray-600 mb-3" />
-                <p className="text-gray-500 dark:text-gray-400">No peak hours data available</p>
+                <p className="text-gray-500 dark:text-gray-400">{t('analytics.emptyStates.noPeakHoursData')}</p>
               </div>
             )}
           </Card>
 
           {/* Quick Insights */}
           <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-            <h3 className="text-gray-900 dark:text-gray-100 mb-4">Quick Insights</h3>
+            <h3 className="text-gray-900 dark:text-gray-100 mb-4">{t('analytics.quickInsights.title')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {insights.bestDay ? (
                 <div className="flex items-start gap-3 p-4 bg-emerald-50 dark:bg-emerald-950/50 rounded-lg border border-emerald-100 dark:border-emerald-900">
@@ -543,9 +545,9 @@ export function AnalyticsPage() {
                     <ArrowUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-emerald-900 dark:text-emerald-300">Best Day</p>
+                    <p className="text-sm font-medium text-emerald-900 dark:text-emerald-300">{t('analytics.quickInsights.bestDay')}</p>
                     <p className="text-xs text-emerald-700 dark:text-emerald-400 mt-1">
-                      {insights.bestDay.formatted || `${insights.bestDay.day} ${insights.bestDay.date}`} with {insights.bestDay.bookings} bookings
+                      {insights.bestDay.formatted || `${insights.bestDay.day} ${insights.bestDay.date}`} {t('analytics.quickInsights.with')} {insights.bestDay.bookings} {t('analytics.tooltip.bookings')}
                     </p>
                   </div>
                 </div>
@@ -555,8 +557,8 @@ export function AnalyticsPage() {
                     <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Best Day</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">No data available</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('analytics.quickInsights.bestDay')}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('analytics.emptyStates.noDataAvailable')}</p>
                   </div>
                 </div>
               )}
@@ -567,9 +569,9 @@ export function AnalyticsPage() {
                     <Clock className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-blue-900 dark:text-blue-300">Peak Time</p>
+                    <p className="text-sm font-medium text-blue-900 dark:text-blue-300">{t('analytics.quickInsights.peakTime')}</p>
                     <p className="text-xs text-blue-700 dark:text-blue-400 mt-1">
-                      {insights.peakTime.hour} with {insights.peakTime.bookings} bookings
+                      {insights.peakTime.hour} {t('analytics.quickInsights.with')} {insights.peakTime.bookings} {t('analytics.tooltip.bookings')}
                     </p>
                   </div>
                 </div>
@@ -579,8 +581,8 @@ export function AnalyticsPage() {
                     <Clock className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Peak Time</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">No data available</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('analytics.quickInsights.peakTime')}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('analytics.emptyStates.noDataAvailable')}</p>
                   </div>
                 </div>
               )}
@@ -591,9 +593,9 @@ export function AnalyticsPage() {
                     <TrendingUp className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-purple-900 dark:text-purple-300">Top Service</p>
+                    <p className="text-sm font-medium text-purple-900 dark:text-purple-300">{t('analytics.quickInsights.topService')}</p>
                     <p className="text-xs text-purple-700 dark:text-purple-400 mt-1">
-                      {insights.topService.serviceName} with {insights.topService.bookings} bookings
+                      {insights.topService.serviceName} {t('analytics.quickInsights.with')} {insights.topService.bookings} {t('analytics.tooltip.bookings')}
                     </p>
                   </div>
                 </div>
@@ -603,8 +605,8 @@ export function AnalyticsPage() {
                     <Wrench className="w-5 h-5 text-gray-400 dark:text-gray-500" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Top Service</p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">No data available</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{t('analytics.quickInsights.topService')}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{t('analytics.emptyStates.noDataAvailable')}</p>
                   </div>
                 </div>
               )}
