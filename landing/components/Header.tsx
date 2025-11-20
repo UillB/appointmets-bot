@@ -117,6 +117,38 @@ export default function Header() {
                   >
                     🇮🇱 עברית
                   </button>
+                  <button
+                    onClick={() => changeLanguage('de')}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                      currentLocale === 'de' ? 'text-primary-600 font-medium' : 'text-gray-600'
+                    }`}
+                  >
+                    🇩🇪 Deutsch
+                  </button>
+                  <button
+                    onClick={() => changeLanguage('fr')}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                      currentLocale === 'fr' ? 'text-primary-600 font-medium' : 'text-gray-600'
+                    }`}
+                  >
+                    🇫🇷 Français
+                  </button>
+                  <button
+                    onClick={() => changeLanguage('es')}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                      currentLocale === 'es' ? 'text-primary-600 font-medium' : 'text-gray-600'
+                    }`}
+                  >
+                    🇪🇸 Español
+                  </button>
+                  <button
+                    onClick={() => changeLanguage('pt')}
+                    className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors ${
+                      currentLocale === 'pt' ? 'text-primary-600 font-medium' : 'text-gray-600'
+                    }`}
+                  >
+                    🇵🇹 Português
+                  </button>
                 </div>
               </div>
             </div>
@@ -172,8 +204,8 @@ export default function Header() {
 
                 {/* Mobile Language Selector */}
                 <div className="pt-4 border-t border-gray-200">
-                  <p className="text-sm font-medium text-gray-900 mb-3">Язык / Language / שפה</p>
-                  <div className="flex space-x-2">
+                  <p className="text-sm font-medium text-gray-900 mb-3">Language</p>
+                  <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => changeLanguage('ru')}
                       className={`px-3 py-2 text-sm rounded-lg transition-colors ${
@@ -203,6 +235,46 @@ export default function Header() {
                       }`}
                     >
                       🇮🇱 HE
+                    </button>
+                    <button
+                      onClick={() => changeLanguage('de')}
+                      className={`px-3 py-2 text-sm rounded-lg transition-colors ${
+                        currentLocale === 'de' 
+                          ? 'bg-primary-100 text-primary-700' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      🇩🇪 DE
+                    </button>
+                    <button
+                      onClick={() => changeLanguage('fr')}
+                      className={`px-3 py-2 text-sm rounded-lg transition-colors ${
+                        currentLocale === 'fr' 
+                          ? 'bg-primary-100 text-primary-700' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      🇫🇷 FR
+                    </button>
+                    <button
+                      onClick={() => changeLanguage('es')}
+                      className={`px-3 py-2 text-sm rounded-lg transition-colors ${
+                        currentLocale === 'es' 
+                          ? 'bg-primary-100 text-primary-700' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      🇪🇸 ES
+                    </button>
+                    <button
+                      onClick={() => changeLanguage('pt')}
+                      className={`px-3 py-2 text-sm rounded-lg transition-colors ${
+                        currentLocale === 'pt' 
+                          ? 'bg-primary-100 text-primary-700' 
+                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      }`}
+                    >
+                      🇵🇹 PT
                     </button>
                   </div>
                 </div>

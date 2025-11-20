@@ -483,7 +483,7 @@ export function SettingsPage() {
                       <Label htmlFor="language">{t('settings.system.languageTheme.language')}</Label>
                       <div className="relative">
                         <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
-                        <Select value={language} onValueChange={(value) => setLanguage(value as 'ru' | 'en' | 'he')}>
+                        <Select value={language} onValueChange={(value) => setLanguage(value as 'ru' | 'en' | 'he' | 'de' | 'fr' | 'es' | 'pt')}>
                           <SelectTrigger id="language" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue />
                           </SelectTrigger>
@@ -491,6 +491,10 @@ export function SettingsPage() {
                             <SelectItem value="en" className="text-gray-900 dark:text-gray-100">🇬🇧 English</SelectItem>
                             <SelectItem value="ru" className="text-gray-900 dark:text-gray-100">🇷🇺 Русский</SelectItem>
                             <SelectItem value="he" className="text-gray-900 dark:text-gray-100">🇮🇱 עברית</SelectItem>
+                            <SelectItem value="de" className="text-gray-900 dark:text-gray-100">🇩🇪 Deutsch</SelectItem>
+                            <SelectItem value="fr" className="text-gray-900 dark:text-gray-100">🇫🇷 Français</SelectItem>
+                            <SelectItem value="es" className="text-gray-900 dark:text-gray-100">🇪🇸 Español</SelectItem>
+                            <SelectItem value="pt" className="text-gray-900 dark:text-gray-100">🇵🇹 Português</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>

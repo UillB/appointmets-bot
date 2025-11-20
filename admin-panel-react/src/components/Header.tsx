@@ -26,6 +26,10 @@ import { useWebSocket } from "../hooks/useWebSocket";
 import ru from "../i18n/lang/ru.json";
 import en from "../i18n/lang/en.json";
 import he from "../i18n/lang/he.json";
+import de from "../i18n/lang/de.json";
+import fr from "../i18n/lang/fr.json";
+import es from "../i18n/lang/es.json";
+import pt from "../i18n/lang/pt.json";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -50,8 +54,18 @@ export function Header({ onMenuClick }: HeaderProps) {
 
   // Helper function to get language name in a specific language
   const getLanguageName = (targetLang: Language, displayLang: Language): string => {
-    const translations: Record<Language, any> = { ru, en, he };
-    return translations[displayLang]?.language?.[targetLang === 'ru' ? 'russian' : targetLang === 'en' ? 'english' : 'hebrew'] || targetLang.toUpperCase();
+    const translations: Record<Language, any> = { ru, en, he, de, fr, es, pt };
+    const langKeyMap: Record<Language, string> = {
+      ru: 'russian',
+      en: 'english',
+      he: 'hebrew',
+      de: 'german',
+      fr: 'french',
+      es: 'spanish',
+      pt: 'portuguese'
+    };
+    const langKey = langKeyMap[targetLang];
+    return translations[displayLang]?.language?.[langKey] || targetLang.toUpperCase();
   };
 
   const handleLanguageChange = (lang: Language) => {
@@ -196,6 +210,34 @@ export function Header({ onMenuClick }: HeaderProps) {
               >
                 <span>🇮🇱 {t("language.hebrew")}</span>
                 {language === 'he' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('de')}
+                className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <span>🇩🇪 {t("language.german")}</span>
+                {language === 'de' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('fr')}
+                className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <span>🇫🇷 {t("language.french")}</span>
+                {language === 'fr' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('es')}
+                className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <span>🇪🇸 {t("language.spanish")}</span>
+                {language === 'es' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('pt')}
+                className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <span>🇵🇹 {t("language.portuguese")}</span>
+                {language === 'pt' && <Check className="w-4 h-4" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

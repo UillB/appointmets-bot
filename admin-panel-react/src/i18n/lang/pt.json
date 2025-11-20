@@ -1,0 +1,1179 @@
+{
+  "common": {
+    "systemOnline": "Sistema online",
+    "updatedJustNow": "Atualizado agora mesmo",
+    "refresh": "Atualizar",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "search": "Buscar",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "close": "Fechar",
+    "yes": "Sim",
+    "no": "Não",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "user": "Usuário",
+    "organization": "Organização",
+    "notAvailable": "N/D",
+    "optional": "Opcional",
+    "retry": "Tentar novamente"
+  },
+  "header": {
+    "logout": "Sair",
+    "connected": "Conectado",
+    "offline": "Desconectado",
+    "liveUpdates": "Atualizações em tempo real",
+    "theme": {
+      "light": "Claro",
+      "dark": "Escuro",
+      "system": "Sistema"
+    },
+    "help": {
+      "title": "Precisa de ajuda?",
+      "description": "Tem alguma dúvida, precisa de ajuda ou suporte? Entre em contato com nossa equipe de suporte. Responderemos o mais rápido possível para ajudá-lo com qualquer solicitação.",
+      "supportEmail": "support@yourbrand.com"
+    },
+    "profile": {
+      "profile": "Perfil",
+      "settings": "Configurações",
+      "logout": "Sair"
+    }
+  },
+  "navigation": {
+    "appName": "Agendamentos",
+    "appSubtitle": "Gerenciador de Negócios",
+    "dashboard": "Painel",
+    "appointments": "Agendamentos",
+    "services": "Serviços",
+    "analytics": "Análises",
+    "organizations": "Organizações",
+    "botManagement": "Gerenciamento do Bot",
+    "aiAssistant": "Assistente IA",
+    "settings": "Configurações",
+    "badges": {
+      "new": "NOVO",
+      "beta": "BETA"
+    },
+    "adminStatus": "Status de Administrador",
+    "telegramLinked": "Telegram vinculado",
+    "notLinked": "Não vinculado",
+    "today": "Hoje",
+    "thisWeek": "Esta semana",
+    "appointmentsShort": "agendamentos",
+    "logout": "Sair"
+  },
+  "organizations": {
+    "title": "Organizações",
+    "description": "Gerencie suas organizações e suas configurações",
+    "newOrganization": "Nova Organização",
+    "refresh": "Atualizar",
+    "searchPlaceholder": "Buscar organizações...",
+    "sortBy": "Ordenar por...",
+    "sortByName": "Por nome",
+    "sortByUsers": "Por usuários",
+    "sortByServices": "Por serviços",
+    "sortByDate": "Por data",
+    "clearFilters": "Limpar filtros",
+    "noOrganizationsFound": "Nenhuma organização encontrada",
+    "tryAdjustingSearch": "Tente ajustar sua busca ou filtros",
+    "getStarted": "Comece criando sua primeira organização",
+    "showing": "Mostrando {{count}} de {{total}} organizações"
+  },
+  "appointments": {
+    "title": "Agendamentos",
+    "description": "Gerencie agendamentos e reservas",
+    "all": "Todos",
+    "confirmed": "Confirmados",
+    "pending": "Pendentes",
+    "cancelled": "Cancelados",
+    "rejected": "Rejeitados",
+    "newAppointment": "Novo Agendamento",
+    "searchPlaceholder": "Buscar...",
+    "searchPlaceholderDesktop": "Buscar por ID de chat ou serviço...",
+    "filters": "Filtros",
+    "service": "Serviço",
+    "allServices": "Todos os serviços",
+    "date": "Data",
+    "pickDate": "Selecionar data",
+    "clearFilters": "Limpar filtros",
+    "clear": "Limpar",
+    "clearDateFilter": "Limpar filtro de data",
+    "chatId": "ID do chat",
+    "id": "ID",
+    "unknown": "Desconhecido",
+    "unknownService": "Serviço desconhecido",
+    "noDate": "Sem data",
+    "noTime": "Sem hora",
+    "noTimeInfo": "Sem informação de hora",
+    "notAvailable": "N/D",
+    "minutes": "min",
+    "showing": "Mostrando {{count}} de {{total}} agendamentos",
+    "stats": {
+      "totalAppointments": "Total de agendamentos",
+      "allTimeBookings": "Reservas de todos os tempos",
+      "successfullyConfirmed": "Confirmados com sucesso",
+      "awaitingConfirmation": "Aguardando confirmação",
+      "cancelledRejected": "Cancelados e rejeitados",
+      "cancelledRejectedBookings": "Reservas canceladas e rejeitadas"
+    },
+    "tableHeaders": {
+      "service": "Serviço",
+      "dateTime": "Data e hora",
+      "clientChatId": "Cliente / ID do chat",
+      "duration": "Duração",
+      "status": "Status",
+      "created": "Criado",
+      "actions": "Ações"
+    },
+    "actions": {
+      "viewDetails": "Ver detalhes",
+      "edit": "Editar",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar"
+    },
+    "emptyStates": {
+      "noAppointmentsFound": "Nenhum agendamento encontrado",
+      "noAppointmentsForDate": "Nenhum agendamento encontrado para {{date}}",
+      "tryDifferentDate": "Tente selecionar uma data diferente ou limpe o filtro de data para ver todos os agendamentos",
+      "createFirstAppointment": "Crie seu primeiro agendamento"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Próximo"
+    }
+  },
+  "analytics": {
+    "title": "Análises",
+    "description": "Acompanhe o desempenho e estatísticas",
+    "export": "Exportar",
+    "retry": "Tentar novamente",
+    "performanceOverview": "Visão geral de desempenho",
+    "timePeriod": {
+      "allTime": "Todo o tempo",
+      "week": "Semana",
+      "month": "Mês",
+      "year": "Ano"
+    },
+    "stats": {
+      "totalBookings": "Total de reservas",
+      "allTime": "Todo o tempo",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mês",
+      "thisYear": "Este ano",
+      "growthRate": "Taxa de crescimento",
+      "vsPreviousPeriod": "vs período anterior",
+      "vsLastWeek": "vs semana passada",
+      "vsLastMonth": "vs mês passado",
+      "vsLastYear": "vs ano passado",
+      "activeClients": "Clientes ativos",
+      "uniqueClients": "Clientes únicos",
+      "avgDuration": "Duração média",
+      "perAppointment": "Por agendamento"
+    },
+    "appointmentsTrend": {
+      "title": "Tendência de agendamentos",
+      "description": "Reservas diárias ao longo do tempo"
+    },
+    "metrics": {
+      "appointments": "Agendamentos",
+      "revenue": "Receita"
+    },
+    "tooltip": {
+      "appointment": "agendamento",
+      "appointments": "agendamentos",
+      "booking": "reserva",
+      "bookings": "reservas",
+      "date": "Data",
+      "time": "Hora",
+      "status": "Status",
+      "percentage": "Porcentagem"
+    },
+    "topServices": {
+      "title": "Serviços principais",
+      "description": "Serviços mais populares",
+      "bookings": "reservas"
+    },
+    "appointmentStatus": {
+      "title": "Status de agendamentos",
+      "description": "Distribuição de status"
+    },
+    "peakHours": {
+      "title": "Horários de pico",
+      "description": "Horários mais movimentados do dia"
+    },
+    "quickInsights": {
+      "title": "Estatísticas rápidas",
+      "bestDay": "Melhor dia",
+      "peakTime": "Horário de pico",
+      "topService": "Serviço principal",
+      "with": "com"
+    },
+    "emptyStates": {
+      "noAppointmentData": "Nenhum dado de agendamento disponível para este período",
+      "noServicesWithBookings": "Nenhum serviço com reservas neste período",
+      "noStatusData": "Nenhum dado de status de agendamento disponível",
+      "noPeakHoursData": "Nenhum dado de horários de pico disponível",
+      "noDataAvailable": "Nenhum dado disponível"
+    },
+    "errors": {
+      "failedToLoad": "Erro ao carregar análises",
+      "failedToLoadData": "Erro ao carregar dados de análises"
+    }
+  },
+  "slots": {
+    "title": "Horários",
+    "description": "Horários gerados automaticamente para seus serviços",
+    "searchPlaceholder": "Buscar horários...",
+    "minutes": "min",
+    "unknownService": "Serviço desconhecido",
+    "stats": {
+      "totalSlots": "Total de horários",
+      "available": "Disponíveis",
+      "booked": "Reservados",
+      "utilization": "Utilização"
+    },
+    "status": {
+      "available": "Disponível",
+      "booked": "Reservado",
+      "conflict": "Conflito"
+    },
+    "dates": {
+      "today": "Hoje",
+      "tomorrow": "Amanhã",
+      "yesterday": "Ontem"
+    },
+    "infoBanner": {
+      "title": "Horários gerados automaticamente",
+      "description": "Os horários são gerados automaticamente quando você cria serviços. Eles cobrem 1 ano à frente com horários de trabalho padrão (9h - 18h, segunda a sexta). Não é necessária gestão manual!"
+    },
+    "filters": {
+      "allServices": "Todos os serviços",
+      "allStatus": "Todos os status",
+      "filterByDate": "Filtrar por data"
+    },
+    "table": {
+      "title": "Horários",
+      "showing": "{{count}} de {{total}} horários",
+      "headers": {
+        "service": "Serviço",
+        "date": "Data",
+        "time": "Hora",
+        "duration": "Duração",
+        "status": "Status",
+        "capacity": "Capacidade"
+      }
+    },
+    "emptyStates": {
+      "noSlotsFound": "Nenhum horário encontrado",
+      "createServiceToGenerate": "Crie um serviço para gerar horários automaticamente",
+      "tryAdjustingFilters": "Tente ajustar seus filtros"
+    }
+  },
+  "slotsManagement": {
+    "title": "Gerenciamento de horários",
+    "subtitle": "Ver e gerenciar horários gerados automaticamente",
+    "back": "Voltar",
+    "infoBanner": {
+      "title": "Horários gerados automaticamente",
+      "description": "Os horários são criados automaticamente quando você adiciona serviços. Eles cobrem 1 ano à frente com horários de trabalho padrão (9h - 18h, segunda a sexta). Não é necessária configuração manual!"
+    },
+    "filters": {
+      "service": "Serviço",
+      "selectService": "Selecionar um serviço",
+      "date": "Data",
+      "filterByDate": "Filtrar por data"
+    },
+    "table": {
+      "title": "Horários",
+      "slotsFound": "{{count}} horários encontrados",
+      "headers": {
+        "date": "Data",
+        "time": "Hora",
+        "duration": "Duração",
+        "status": "Status",
+        "capacity": "Capacidade"
+      }
+    },
+    "emptyStates": {
+      "selectService": "Selecionar um serviço",
+      "chooseServiceToView": "Escolha um serviço para ver seus horários gerados automaticamente",
+      "noSlotsFound": "Nenhum horário encontrado",
+      "noSlotsForDate": "Nenhum horário encontrado para a data selecionada",
+      "noSlotsYet": "Este serviço ainda não tem horários"
+    }
+  },
+  "dashboard": {
+    "title": "Painel",
+    "welcome": "Bem-vindo de volta, {{name}}!",
+    "statisticsOverview": "Estatísticas e visão geral",
+    "viewAll": "Ver tudo",
+    "setupBanners": {
+      "services": {
+        "message": "Você atualmente não tem serviços (o que você vende). Crie seu primeiro serviço agora - isso é necessário para começar a trabalhar e leva apenas um minuto.",
+        "actionLabel": "Criar serviço"
+      },
+      "bot": {
+        "message": "Seu bot do Telegram não está conectado. Por favor, conecte seu bot para compartilhá-lo com as pessoas e começar a receber agendamentos hoje.",
+        "actionLabel": "Conectar bot"
+      },
+      "admin": {
+        "message": "Sua conta de administrador do Telegram não está vinculada. Vincule agora para habilitar recursos de administrador, como acessar o sistema de gerenciamento (painel de administração) do Telegram.",
+        "actionLabel": "Vincular administrador"
+      }
+    },
+    "stats": {
+      "totalAppointments": "Total de agendamentos",
+      "allTime": "todo o tempo",
+      "todaysBookings": "Reservas de hoje",
+      "scheduledForToday": "Agendadas para hoje",
+      "pendingApprovals": "Aprovações pendentes",
+      "awaitingConfirmation": "Aguardando confirmação",
+      "activeServices": "Serviços ativos",
+      "availableForBooking": "Disponíveis para reservar"
+    },
+    "quickActions": {
+      "appointments": {
+        "title": "Agendamentos",
+        "description": "Gerenciar reservas"
+      },
+      "services": {
+        "title": "Serviços",
+        "description": "Configurar ofertas"
+      },
+      "organizations": {
+        "title": "Organizações",
+        "description": "Gerenciar localizações"
+      },
+      "settings": {
+        "title": "Configurações",
+        "description": "Configuração do sistema"
+      },
+      "today": "hoje",
+      "available": "disponíveis",
+      "active": "ativos",
+      "account": "Conta"
+    },
+    "calendar": {
+      "title": "Calendário",
+      "selected": "Selecionado",
+      "selectDate": "Selecionar data",
+      "days": {
+        "sun": "Dom",
+        "mon": "Seg",
+        "tue": "Ter",
+        "wed": "Qua",
+        "thu": "Qui",
+        "fri": "Sex",
+        "sat": "Sáb"
+      }
+    },
+    "emptyStates": {
+      "noAppointmentsForDate": "Nenhum agendamento para a data selecionada",
+      "clickDateToView": "Clique em uma data no calendário para ver os agendamentos"
+    }
+  },
+  "services": {
+    "title": "Serviços",
+    "description": "Gerencie seus serviços e acompanhe seu desempenho",
+    "addService": "Adicionar serviço",
+    "searchPlaceholder": "Buscar serviços...",
+    "searchPlaceholderDesktop": "Buscar serviços por nome...",
+    "filters": "Filtros",
+    "filterByName": "Filtrar serviços por nome",
+    "clearFilters": "Limpar filtros",
+    "clear": "Limpar",
+    "noServicesFound": "Nenhum serviço encontrado",
+    "createFirstService": "Crie seu primeiro serviço",
+    "showing": "Mostrando {{count}} de {{total}} serviços",
+    "stats": {
+      "totalServices": "Total de serviços",
+      "activeServices": "Serviços ativos",
+      "totalBookings": "Total de reservas",
+      "allTimeBookings": "Reservas de todos os tempos",
+      "averageOccupancy": "Ocupação média (mês atual)",
+      "capacityUtilization": "Utilização de capacidade"
+    },
+    "autoGeneratedSlots": {
+      "title": "Horários gerados automaticamente",
+      "description": "Os horários são gerados automaticamente por 1 ano quando você cria serviços. Não é necessária gestão manual de horários - apenas crie seus serviços e comece a reservar!"
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "description": "Gerencie sua conta e preferências do sistema",
+    "profileTab": "Perfil",
+    "systemTab": "Sistema",
+    "accountStatus": "Status da conta",
+    "securityLevel": "Nível de segurança",
+    "memberSince": "Membro desde",
+    "stats": {
+      "accountStatus": "Status da conta",
+      "active": "Ativo",
+      "sinceOct2023": "Desde Out 2023",
+      "securityLevel": "Nível de segurança",
+      "high": "Alto",
+      "twoFAEnabled": "2FA habilitado",
+      "memberSince": "Membro desde",
+      "activeUser": "Usuário ativo"
+    },
+    "tabs": {
+      "userProfile": "Perfil do usuário",
+      "systemSettings": "Configurações do sistema"
+    },
+    "profile": {
+      "title": "Perfil do usuário",
+      "description": "Gerencie suas informações pessoais",
+      "updateTitle": "Atualizar perfil",
+      "updateDescription": "Atualize as informações do seu perfil",
+      "updateButton": "Atualizar perfil",
+      "fields": {
+        "fullName": "Nome completo",
+        "emailAddress": "Endereço de e-mail",
+        "role": "Função",
+        "organization": "Organização",
+        "memberSince": "Membro desde"
+      },
+      "placeholders": {
+        "fullName": "Digite seu nome completo",
+        "email": "Digite seu e-mail"
+      },
+      "role": {
+        "manager": "Gerente"
+      }
+    },
+    "password": {
+      "title": "Alterar senha",
+      "description": "Atualize sua senha para manter sua conta segura",
+      "changeButton": "Alterar senha",
+      "fields": {
+        "currentPassword": "Senha atual",
+        "newPassword": "Nova senha",
+        "confirmPassword": "Confirmar senha"
+      },
+      "placeholders": {
+        "currentPassword": "Digite a senha atual",
+        "newPassword": "Digite a nova senha",
+        "confirmPassword": "Confirme a nova senha"
+      },
+      "requirements": {
+        "title": "Requisitos de senha:",
+        "minLength": "Pelo menos 8 caracteres",
+        "uppercaseLowercase": "Incluir letras maiúsculas e minúsculas",
+        "number": "Incluir pelo menos um número",
+        "specialCharacter": "Incluir pelo menos um caractere especial"
+      }
+    },
+    "system": {
+      "languageTheme": {
+        "title": "Idioma e tema",
+        "description": "Configurar preferências do sistema",
+        "language": "Idioma",
+        "theme": "Tema",
+        "themeOptions": {
+          "light": "Tema claro",
+          "dark": "Tema escuro",
+          "auto": "Automático (Sistema)"
+        }
+      },
+      "notifications": {
+        "title": "Notificações",
+        "description": "Gerencie como você recebe notificações",
+        "emailNotifications": "Notificações por e-mail",
+        "emailNotificationsDescription": "Receber notificações por e-mail",
+        "pushNotifications": "Notificações push",
+        "pushNotificationsDescription": "Receber notificações push no navegador"
+      },
+      "preferences": {
+        "title": "Preferências do sistema",
+        "description": "Configurar data, hora e configurações de atualização",
+        "timezone": "Fuso horário",
+        "dateFormat": "Formato de data",
+        "timeFormat": "Formato de hora",
+        "timeFormat12": "12 horas (AM/PM)",
+        "timeFormat24": "24 horas",
+        "refreshInterval": "Intervalo de atualização (segundos)",
+        "refreshInterval15": "15 segundos",
+        "refreshInterval30": "30 segundos",
+        "refreshInterval60": "1 minuto",
+        "refreshInterval300": "5 minutos",
+        "refreshIntervalManual": "Apenas manual"
+      },
+      "saveButton": "Salvar configurações"
+    },
+    "errors": {
+      "fillAllRequiredFields": "Por favor, preencha todos os campos obrigatórios",
+      "fillAllPasswordFields": "Por favor, preencha todos os campos de senha",
+      "passwordsDoNotMatch": "As novas senhas não coincidem",
+      "passwordMinLength": "A senha deve ter pelo menos 8 caracteres"
+    },
+    "profileUpdatedSuccessfully": "Perfil atualizado com sucesso",
+    "passwordChangedSuccessfully": "Senha alterada com sucesso",
+    "systemSettingsSavedSuccessfully": "Configurações do sistema salvas com sucesso"
+  },
+  "dialogs": {
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "close": "Fechar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "create": "Criar",
+    "saving": "Salvando...",
+    "service": {
+      "editTitle": "Editar serviço",
+      "createTitle": "Criar novo serviço",
+      "editDescription": "Atualizar informações e configurações do serviço.",
+      "createDescription": "Siga os passos abaixo para adicionar um novo serviço",
+      "nameRequired": "O nome do serviço é obrigatório",
+      "durationRequired": "Uma duração válida é obrigatória",
+      "organizationIdRequired": "O ID da organização é obrigatório",
+      "updated": "Serviço atualizado com sucesso",
+      "created": "Serviço criado com sucesso",
+      "saveFailed": "Erro ao salvar o serviço",
+      "firstServiceMessage": "Parabéns! Seu serviço foi criado com sucesso. Você pode criar serviços adicionais a qualquer momento. Agora vamos completar a configuração e conectar seu bot do Telegram para que você possa começar a receber agendamentos imediatamente.",
+      "connectBot": "Conectar bot",
+      "serviceName": "Nome do serviço",
+      "serviceNamePlaceholder": "ex., Corte de cabelo, Massagem, Consulta",
+      "description": "Descrição",
+      "descriptionPlaceholder": "Descreva o serviço...",
+      "duration": "Duração (minutos)",
+      "price": "Preço (opcional)",
+      "currency": "Moeda",
+      "step1": {
+        "title": "Informações básicas",
+        "description": "Nome e descrição do serviço"
+      },
+      "step2": {
+        "title": "Preço e duração",
+        "description": "Definir o preço e o tempo necessário"
+      },
+      "step3": {
+        "title": "Horário de trabalho",
+        "description": "Configurar quando este serviço está disponível"
+      },
+      "startTime": "Hora de início",
+      "endTime": "Hora de término",
+      "lunchStart": "Início do intervalo (opcional)",
+      "lunchEnd": "Fim do intervalo (opcional)",
+      "workingDays": "Dias de trabalho",
+      "updateService": "Atualizar serviço",
+      "createService": "Criar serviço"
+    },
+    "organization": {
+      "viewTitle": "Ver organização",
+      "editTitle": "Editar organização",
+      "createTitle": "Criar nova organização",
+      "viewDescription": "Ver detalhes da organização",
+      "editDescription": "Atualizar informações da organização",
+      "createDescription": "Siga os passos abaixo para adicionar uma nova organização",
+      "nameRequired": "O nome da organização é obrigatório",
+      "updated": "Organização atualizada com sucesso",
+      "created": "Organização criada com sucesso",
+      "saveFailed": "Erro ao salvar a organização",
+      "fields": {
+        "organizationName": "Nome da organização",
+        "description": "Descrição",
+        "email": "Endereço de e-mail",
+        "phone": "Número de telefone",
+        "address": "Endereço"
+      },
+      "placeholders": {
+        "name": "ex., Corporação Acme",
+        "description": "Breve descrição da organização...",
+        "email": "contato@exemplo.com",
+        "phone": "+55 (11) 1234-5678",
+        "address": "Rua Principal, 123, Cidade, Estado, CEP"
+      },
+      "step1": {
+        "title": "Informações básicas",
+        "description": "Nome e descrição da organização"
+      },
+      "step2": {
+        "title": "Informações de contato",
+        "description": "E-mail, telefone e endereço"
+      },
+      "saveChanges": "Salvar alterações",
+      "createOrganization": "Criar organização"
+    },
+    "appointment": {
+      "title": "Criar novo agendamento",
+      "description": "Siga os passos abaixo para criar um novo agendamento",
+      "step1": {
+        "title": "Informações do cliente",
+        "description": "Inserir detalhes do cliente"
+      },
+      "step2": {
+        "title": "Serviço e horário",
+        "description": "Selecionar serviço e horário"
+      },
+      "clientId": "ID do cliente / Telefone",
+      "clientIdPlaceholder": "Digite o ID do cliente ou número de telefone",
+      "service": "Serviço",
+      "loadingServices": "Carregando serviços...",
+      "selectServicePlaceholder": "Selecionar um serviço",
+      "selectService": "Por favor, selecione um serviço",
+      "noServices": "Nenhum serviço disponível",
+      "date": "Data",
+      "pickDate": "Selecionar data",
+      "selectDate": "Por favor, selecione uma data",
+      "timeSlot": "Horário",
+      "selectSlot": "Por favor, selecione um horário",
+      "selectDateFirst": "Selecione uma data primeiro",
+      "selectServiceFirst": "Selecione um serviço primeiro",
+      "loadingSlots": "Carregando horários...",
+      "noSlots": "Nenhum horário disponível",
+      "selectSlotPlaceholder": "Selecionar um horário",
+      "noSlotsForDate": "Nenhum horário disponível para esta data",
+      "slotConflict": "Conflito",
+      "loadingAvailableSlots": "Carregando horários disponíveis...",
+      "created": "Agendamento criado com sucesso",
+      "createFailed": "Erro ao criar agendamento",
+      "createButton": "Criar agendamento",
+      "creating": "Criando..."
+    }
+  },
+  "aiAssistant": {
+    "title": "Assistente IA",
+    "description": "Configure e gerencie seu assistente de chatbot inteligente",
+    "refreshed": "Dados do assistente IA atualizados",
+    "configSaved": "Configuração salva com sucesso",
+    "configSaveFailed": "Erro ao salvar configuração",
+    "enableFirst": "Por favor, habilite o assistente IA primeiro",
+    "testSuccessful": "Teste do assistente IA bem-sucedido!",
+    "testResponse": "Resposta: {{response}}",
+    "testFailed": "Teste do assistente IA falhou",
+    "enterApiKey": "Por favor, digite a chave API",
+    "apiKeyVerified": "Chave API verificada com sucesso",
+    "configReset": "Configuração redefinida para padrões",
+    "controls": {
+      "title": "Controles do assistente IA",
+      "description": "Habilitar e configurar respostas alimentadas por IA",
+      "enableAi": "Habilitar assistente IA",
+      "enableAiDescription": "Ativar respostas alimentadas por IA para consultas de clientes",
+      "autoReply": "Modo de resposta automática",
+      "autoReplyDescription": "Responder automaticamente a todas as mensagens do Telegram",
+      "activeTitle": "Assistente IA está ativo",
+      "activeDescription": "Seu assistente IA agora está pronto para ajudar clientes em seu bot do Telegram com base nas instruções abaixo."
+    },
+    "config": {
+      "title": "Configuração de IA",
+      "description": "Configurar modelo e comportamento de IA",
+      "modelLabel": "Modelo LLM",
+      "modelHint": "Modelos mais avançados fornecem melhores respostas, mas custam mais",
+      "models": {
+        "gpt4": "GPT-4 (Mais inteligente)",
+        "gpt4Turbo": "GPT-4 Turbo (Rápido e inteligente)",
+        "gpt35Turbo": "GPT-3.5 Turbo (Rápido e econômico)",
+        "claude3Opus": "Claude 3 Opus",
+        "claude3Sonnet": "Claude 3 Sonnet"
+      },
+      "temperatureLabel": "Temperatura",
+      "temperaturePrecise": "Preciso (0)",
+      "temperatureBalanced": "Equilibrado (1)",
+      "temperatureCreative": "Criativo (2)",
+      "temperatureHint": "Mais baixo = mais focado e consistente. Mais alto = mais criativo e variado."
+    },
+    "instructions": {
+      "title": "Instruções personalizadas",
+      "description": "Ensine a IA como se comunicar - defina personalidade, tom e estilo",
+      "label": "Prompt / Instruções",
+      "placeholder": "Exemplo: Você é David, um assistente amigável e profissional. Você deve ser alegre, prestativo e responder em um tom casual, mas respeitoso. Sempre cumprimente os clientes calorosamente e use o nome deles quando possível...",
+      "characterCount": "{{count}} caracteres",
+      "hint": "Pense nisso como treinar um novo funcionário",
+      "tipsTitle": "Dicas de instrução",
+      "tip1": "Defina o nome e a personalidade da IA",
+      "tip2": "Especifique o tom: formal, casual, amigável, etc.",
+      "tip3": "Defina preferências de idioma e região",
+      "tip4": "Mencione políticas ou diretrizes específicas",
+      "tip5": "Mantenha claro e conciso"
+    },
+    "test": {
+      "title": "Testar assistente IA",
+      "description": "Envie uma mensagem de teste para verificar a configuração e respostas da IA",
+      "runTest": "Executar teste"
+    }
+  },
+  "toasts": {
+    "success": "Sucesso",
+    "error": "Erro",
+    "warning": "Aviso",
+    "info": "Informação",
+    "organizationsRefreshed": "Organizações atualizadas",
+    "filtersCleared": "Filtros limpos",
+    "appointmentsRefreshed": "Agendamentos atualizados",
+    "failedToLoadOrganizations": "Erro ao carregar dados de organizações",
+    "failedToSaveOrganization": "Erro ao salvar organização",
+    "failedToLoadAppointments": "Erro ao carregar dados de agendamentos",
+    "failedToLoadDashboard": "Erro ao carregar dados do painel",
+    "settingsRefreshed": "Configurações atualizadas",
+    "failedToLoadServices": "Erro ao carregar serviços",
+    "failedToLoadStatistics": "Erro ao carregar estatísticas",
+    "failedToRefreshServices": "Erro ao atualizar serviços",
+    "failedToLoadSlots": "Erro ao carregar dados de horários"
+  },
+  "botManagement": {
+    "title": "Gerenciamento do bot",
+    "description": "Criar e configurar bot do Telegram para reservas automáticas de clientes",
+    "botActive": "Bot ativo",
+    "botInactive": "Bot inativo",
+    "botWorking": "✓ Funcionando",
+    "botNotWorking": "✗ Não funcionando",
+    "botReady": "O bot do Telegram está pronto e aceitando reservas",
+    "botNeedsActivation": "Ativação do bot necessária para começar a trabalhar",
+    "organization": "Organização",
+    "botLink": "Link do bot",
+    "setupProgress": "Progresso da configuração do bot",
+    "setupComplete": "Configuração completa",
+    "completed": "concluído",
+    "inProgress": "Em progresso",
+    "instructions": "Instruções",
+    "activation": "Ativação",
+    "settings": "Configurações",
+    "howToCreateBot": "Como criar um bot do Telegram",
+    "stepByStepGuide": "Guia passo a passo simples para iniciantes",
+    "step1Title": "Abra o Telegram e encontre @BotFather",
+    "step1Description": "BotFather é o bot oficial do Telegram para criar novos bots. Simplesmente digite @BotFather na busca e abra o chat.",
+    "step1HowTo": "Como encontrar BotFather:",
+    "step1List1": "Abra o aplicativo Telegram no seu telefone ou computador",
+    "step1List2": "Digite @BotFather na busca",
+    "step1List3": "Clique no bot e pressione o botão \"Iniciar\"",
+    "step2Title": "Envie o comando /newbot",
+    "step2Description": "BotFather pedirá para você especificar o nome e nome de usuário do bot. O nome de usuário deve terminar com \"bot\" (ex., MeuBotIncrível).",
+    "step2HowTo": "Criar um bot:",
+    "step2List1": "Envie o comando /newbot para o chat do BotFather",
+    "step2List2": "Digite o nome do seu bot (ex., \"Minha Clínica\")",
+    "step2List3": "Digite o nome de usuário do bot (deve terminar com \"bot\")",
+    "step2List4": "Certifique-se de que o nome de usuário seja único e disponível",
+    "step3Title": "Obter token de acesso",
+    "step3Description": "Após criar o bot, BotFather enviará um token. Copie-o e use-o na aba \"Ativação\" para conectar o bot.",
+    "step3Format": "Formato do token:",
+    "step3Important": "Importante: O token deve ser copiado completamente, incluindo todos os caracteres",
+    "step3GoToActivation": "Ir para ativação",
+    "securityWarning": "Importante: Segurança do token",
+    "securityWarning1": "Nunca compartilhe o token com outros",
+    "securityWarning2": "Não publique o token publicamente",
+    "securityWarning3": "Armazene o token em um lugar seguro",
+    "activationTitle": "Ativação do bot",
+    "activationDescription": "Digite o token do seu bot do Telegram para ativar",
+    "botNotActiveAlert": "O bot não está ativo. Ative-o para começar a trabalhar.",
+    "botToken": "Token do bot *",
+    "botTokenPlaceholder": "123456789:ABCdefGHijKlMNOpqrsTUVwxyz",
+    "dontKnowHowToActivate": "Não sabe como ativar? Vá para instruções",
+    "tokenFormat": "Formato do token",
+    "tokenFormatDescription": "O token deve ter o seguinte formato:",
+    "tokenFormatGetFrom": "Obtenha o token de @BotFather após criar o bot",
+    "clear": "Limpar",
+    "validateToken": "Validar token",
+    "validating": "Validando...",
+    "activateBot": "Ativar bot",
+    "activating": "Ativando bot...",
+    "botStatus": "Status do bot",
+    "loadingBotStatus": "Carregando status do bot...",
+    "botName": "Nome do bot",
+    "botUsername": "Nome de usuário",
+    "botLinkLabel": "Link do bot",
+    "canJoinGroups": "Pode entrar em grupos",
+    "canReadAllGroupMessages": "Pode ler todas as mensagens do grupo",
+    "notSpecified": "Não especificado",
+    "botNotActivated": "Bot não ativado",
+    "botNotActivatedDescription": "Para usar as configurações do bot, você precisa ativá-lo primeiro na aba \"Ativação\".",
+    "goToActivation": "Ir para ativação",
+    "basicSettings": "Configurações básicas",
+    "basicSettingsDescription": "Configure o nome e descrição do seu bot",
+    "botNameLabel": "Nome do bot *",
+    "botNamePlaceholder": "Digite o nome do bot",
+    "botDescription": "Descrição do bot",
+    "botDescriptionPlaceholder": "Breve descrição das funções do bot...",
+    "updating": "Atualizando...",
+    "updateSettings": "Atualizar configurações",
+    "shareBot": "Compartilhar bot",
+    "shareBotDescription": "Compartilhe o link do seu bot com os clientes",
+    "scanQRCode": "Escanear código QR para acesso rápido ao bot",
+    "hoverToCopy": "Passe o mouse sobre o código QR para copiar",
+    "generatingQR": "Gerando código QR...",
+    "qrCodeAvailableAfterActivation": "O código QR estará disponível após a ativação do bot",
+    "open": "Abrir",
+    "downloadQR": "Baixar QR",
+    "copyQR": "Copiar QR",
+    "copyLink": "Copiar link",
+    "shareBotLabel": "Compartilhar bot",
+    "refreshStatus": "Atualizar status",
+    "statusUpdated": "Status atualizado",
+    "instructionsOpened": "Instruções de criação do bot abertas",
+    "instructionsDescription": "Siga o guia passo a passo",
+    "linkCopied": "Link copiado para a área de transferência",
+    "openingBot": "Abrindo bot no Telegram",
+    "qrCodeDownloaded": "Código QR baixado com sucesso",
+    "qrCodeDownloadedDescription": "Imagem salva na pasta de downloads",
+    "qrCodeCopied": "Código QR copiado!",
+    "qrCodeCopiedDescription": "Imagem pronta para colar",
+    "qrCodeCopyFailed": "Erro ao copiar código QR",
+    "qrCodeCopyFailedDescription": "Tente baixar a imagem",
+    "shareToTelegram": "Janela aberta para compartilhar no Telegram",
+    "shareToWhatsApp": "Janela aberta para compartilhar no WhatsApp",
+    "shareToEmail": "Cliente de e-mail aberto",
+    "botLinkNotAvailable": "Link do bot não disponível",
+    "enterBotToken": "Digite o token do bot",
+    "tokenValid": "Token válido! Bot encontrado.",
+    "invalidToken": "Token do bot inválido",
+    "tokenValidationError": "Erro ao validar token",
+    "botActivated": "Bot ativado com sucesso!",
+    "botActivationError": "Erro ao ativar bot",
+    "organizationIdError": "Erro: ID da organização não encontrado",
+    "botSettingsUpdated": "Configurações do bot atualizadas!",
+    "botSettingsUpdateError": "Erro ao atualizar configurações",
+    "failedToLoadStatus": "Erro ao carregar status do bot",
+    "failedToGenerateQR": "Erro ao gerar código QR",
+    "loadingUser": "Carregando usuário...",
+    "emptyState": {
+      "title": "Iniciar configuração do bot",
+      "description": "Crie um bot do Telegram em 3 passos simples e comece a aceitar reservas de clientes",
+      "step1": {
+        "title": "Criar bot",
+        "description": "Encontre @BotFather no Telegram"
+      },
+      "step2": {
+        "title": "Obter token",
+        "description": "Copie o token do BotFather"
+      },
+      "step3": {
+        "title": "Ativar",
+        "description": "Cole o token no sistema"
+      },
+      "startButton": "Iniciar configuração",
+      "footer": "Siga as instruções abaixo para o guia passo a passo"
+    },
+    "shareBotText": "Confira nosso bot do Telegram: {{bot}}",
+    "shareEmailSubject": "Bot do Telegram para agendamentos",
+    "shareEmailBody": "Olá!\n\nConfira nosso bot do Telegram para agendamentos:\n{{link}}\n\nUse o código QR para acesso rápido.",
+    "botMustBeActivated": "O bot deve estar ativado para gerar link de administrador",
+    "yes": "Sim",
+    "no": "Não",
+    "bot": "bot",
+    "botNameDisplay": "Nome do bot",
+    "usernameDisplay": "Nome de usuário",
+    "botLinkDisplay": "Link do bot"
+  },
+  "language": {
+    "switch": "Trocar idioma",
+    "languageChanged": "Idioma alterado para {{lang}}",
+    "russian": "Russo",
+    "english": "Inglês",
+    "hebrew": "Hebraico",
+    "german": "Alemão",
+    "french": "Francês",
+    "spanish": "Espanhol",
+    "portuguese": "Português"
+  },
+  "login": {
+    "fillAllFields": "Por favor, preencha todos os campos",
+    "invalidEmail": "Por favor, digite um endereço de e-mail válido",
+    "welcomeBack": "Bem-vindo de volta!",
+    "loginSuccess": "Você fez login com sucesso",
+    "backToLanding": "Voltar para a página inicial",
+    "branding": {
+      "title": "Bot de Agendamentos",
+      "subtitle": "Gerencie suas reservas com facilidade"
+    },
+    "form": {
+      "title": "Bem-vindo de volta",
+      "subtitle": "Faça login para acessar seu painel",
+      "emailLabel": "Endereço de e-mail",
+      "emailPlaceholder": "seu@email.com",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Digite sua senha",
+      "rememberMe": "Lembrar-me",
+      "forgotPassword": "Esqueceu a senha?",
+      "forgotPasswordToast": "Link de redefinição de senha enviado para seu e-mail",
+      "signIn": "Entrar",
+      "signingIn": "Entrando...",
+      "newToApp": "Novo no Bot de Agendamentos?",
+      "createAccount": "Criar uma conta",
+      "demoCredentials": "Credenciais de demonstração",
+      "demoEmail": "E-mail",
+      "demoPassword": "Senha"
+    },
+    "features": {
+      "fast": {
+        "title": "Super rápido",
+        "description": "Confirmações de reserva instantâneas e atualizações em tempo real"
+      },
+      "secure": {
+        "title": "Seguro e privado",
+        "description": "Seus dados estão criptografados e protegidos o tempo todo"
+      },
+      "easy": {
+        "title": "Fácil de usar",
+        "description": "Interface intuitiva projetada para eficiência"
+      }
+    },
+    "stats": {
+      "users": "Usuários",
+      "bookings": "Reservas",
+      "uptime": "Tempo de atividade"
+    }
+  },
+  "register": {
+    "fillAllFields": "Por favor, preencha todos os campos",
+    "invalidEmail": "Por favor, digite um endereço de e-mail válido",
+    "passwordMinLength": "A senha deve ter pelo menos 6 caracteres",
+    "passwordsDoNotMatch": "As senhas não coincidem",
+    "agreeToTerms": "Por favor, aceite os termos e condições",
+    "accountCreated": "Conta criada com sucesso!",
+    "welcomeMessage": "Bem-vindo ao Bot de Agendamentos",
+    "branding": {
+      "title": "Junte-se hoje",
+      "subtitle": "Comece a gerenciar agendamentos sem esforço"
+    },
+    "form": {
+      "title": "Criar conta",
+      "subtitle": "Junte-se a milhares de usuários gerenciando agendamentos",
+      "fullNameLabel": "Nome completo",
+      "fullNamePlaceholder": "João Silva",
+      "emailLabel": "Endereço de e-mail",
+      "emailPlaceholder": "seu@email.com",
+      "organizationLabel": "Nome da organização",
+      "organizationPlaceholder": "Digite o nome da organização",
+      "passwordLabel": "Senha",
+      "passwordPlaceholder": "Mín. 6 caracteres",
+      "confirmPasswordLabel": "Confirmar senha",
+      "confirmPasswordPlaceholder": "Digite a senha novamente",
+      "agreeToTerms": "Eu concordo com os",
+      "termsAndConditions": "Termos e condições",
+      "and": "e",
+      "privacyPolicy": "Política de privacidade",
+      "createAccount": "Criar conta",
+      "creatingAccount": "Criando conta...",
+      "alreadyHaveAccount": "Já tem uma conta?",
+      "signInInstead": "Entrar em vez disso"
+    },
+    "features": {
+      "free": {
+        "title": "Grátis para começar",
+        "description": "Crie sua conta e comece a gerenciar reservas imediatamente"
+      },
+      "setup": {
+        "title": "Configuração rápida",
+        "description": "Comece a trabalhar em minutos com nosso processo de integração guiado"
+      },
+      "security": {
+        "title": "Segurança empresarial",
+        "description": "Criptografia de nível bancário para manter seus dados seguros"
+      }
+    }
+  },
+  "cards": {
+    "organization": {
+      "user": "Usuário",
+      "users": "Usuários",
+      "service": "Serviço",
+      "services": "Serviços",
+      "view": "Ver",
+      "edit": "Editar"
+    },
+    "appointmentsSummary": {
+      "totalAppointments": "Total de agendamentos",
+      "allTimeRecords": "Registros de todos os tempos",
+      "confirmed": "Confirmados",
+      "pending": "Pendentes",
+      "rejected": "Rejeitados",
+      "botStatus": "Status do bot",
+      "adminStatus": "Administrador",
+      "active": "Ativo",
+      "inactive": "Inativo",
+      "linked": "Vinculado",
+      "notLinked": "Não vinculado",
+      "confirmation": "Confirmação",
+      "rejectionRate": "/ {{rate}}%"
+    },
+    "service": {
+      "minuteAbbr": "m",
+      "hourAbbr": "h",
+      "free": "Grátis",
+      "badge": "Serviço",
+      "bookings": "{{count}} reservas",
+      "edit": "Editar serviço",
+      "manageAppointments": "Gerenciar agendamentos",
+      "delete": "Excluir serviço",
+      "occupancyLabel": "Ocupação (mês atual)",
+      "occupancyTooltip": "{{booked}} de {{total}} horários reservados este mês",
+      "noSlotsThisMonth": "Nenhum horário disponível este mês",
+      "occupancyValue": "{{occupancy}}% de ocupação para o mês atual",
+      "slotsSummary": "{{booked}} / {{total}} horários",
+      "totalSlotsSummary": "{{booked}} de {{total}} horários totais reservados"
+    },
+    "appointment": {
+      "status": {
+        "confirmed": "Confirmado",
+        "cancelled": "Cancelado",
+        "pending": "Pendente",
+        "unknown": "Desconhecido"
+      },
+      "chatIdDisplay": "ID do chat: {{chatId}}",
+      "unknown": "Desconhecido",
+      "notAvailable": "N/D",
+      "labels": {
+        "name": "Nome:",
+        "username": "Nome de usuário:",
+        "chatId": "ID do chat:",
+        "service": "Serviço:",
+        "date": "Data:",
+        "time": "Hora:"
+      }
+    },
+    "mobileAppointment": {
+      "viewDetails": "Ver detalhes",
+      "edit": "Editar",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "clientLabel": "ID do cliente: {{client}}"
+    }
+  },
+  "notifications": {
+    "appointments": {
+      "created": "Agendamento criado",
+      "createdDescription": "Novo agendamento foi criado com sucesso",
+      "updated": "Agendamento atualizado",
+      "updatedDescription": "Os detalhes do agendamento foram atualizados",
+      "updatedForClient": "Agendamento para {clientName} foi atualizado",
+      "deleted": "Agendamento excluído",
+      "deletedDescription": "O agendamento foi removido do sistema",
+      "confirmed": "Agendamento confirmado",
+      "confirmedDescription": "O agendamento foi confirmado",
+      "confirmedForClient": "O agendamento de {clientName} foi confirmado",
+      "cancelled": "Agendamento cancelado",
+      "cancelledDescription": "O agendamento foi cancelado",
+      "cancelledForClient": "O agendamento de {clientName} foi cancelado",
+      "rejected": "Agendamento rejeitado",
+      "rejectedDescription": "O agendamento foi rejeitado",
+      "rejectedForClient": "O agendamento de {clientName} foi rejeitado",
+      "rejectedWithReason": "O agendamento foi rejeitado: {reason}",
+      "rejectedForClientWithReason": "O agendamento de {clientName} foi rejeitado: {reason}",
+      "pending": "Agendamento pendente",
+      "pendingDescription": "Aguardando confirmação"
+    },
+    "services": {
+      "created": "Serviço criado",
+      "createdDescription": "Serviço criado com horários para 1 ano",
+      "createdWithName": "{serviceName} foi criado com horários gerados automaticamente",
+      "updated": "Serviço atualizado",
+      "updatedDescription": "Os detalhes do serviço foram atualizados",
+      "updatedWithName": "{serviceName} foi atualizado",
+      "deleted": "Serviço excluído",
+      "deletedDescription": "O serviço foi removido do sistema",
+      "deletedWithName": "{serviceName} foi removido",
+      "slotsGenerated": "Horários gerados",
+      "slotsGeneratedDescription": "Horários gerados automaticamente para 1 ano",
+      "slotsGeneratedWithName": "Horários para {serviceName} gerados para 1 ano"
+    },
+    "organizations": {
+      "created": "Organização criada",
+      "createdDescription": "Nova organização foi criada",
+      "createdWithName": "{orgName} foi adicionada",
+      "updated": "Organização atualizada",
+      "updatedDescription": "Os detalhes da organização foram atualizados",
+      "updatedWithName": "{orgName} foi atualizada",
+      "deleted": "Organização excluída",
+      "deletedDescription": "A organização foi removida do sistema",
+      "deletedWithName": "{orgName} foi removida"
+    },
+    "realtime": {
+      "newAppointment": "Novo agendamento recebido",
+      "newAppointmentDescription": "Um novo agendamento foi recebido",
+      "newAppointmentForClient": "{clientName} acabou de reservar um agendamento",
+      "appointmentConfirmed": "Agendamento confirmado",
+      "appointmentConfirmedDescription": "O cliente confirmou seu agendamento",
+      "appointmentConfirmedForClient": "{clientName} confirmou seu agendamento",
+      "appointmentCancelled": "Agendamento cancelado",
+      "appointmentCancelledDescription": "O cliente cancelou seu agendamento",
+      "appointmentCancelledForClient": "{clientName} cancelou seu agendamento",
+      "appointmentRejected": "Agendamento rejeitado",
+      "appointmentRejectedDescription": "O agendamento foi rejeitado",
+      "appointmentRejectedForClient": "O agendamento de {clientName} foi rejeitado",
+      "appointmentRejectedWithReason": "O agendamento foi rejeitado: {reason}",
+      "appointmentRescheduled": "Agendamento reagendado",
+      "appointmentRescheduledDescription": "O cliente reagendou seu agendamento",
+      "appointmentRescheduledForClient": "{clientName} reagendou seu agendamento"
+    },
+    "system": {
+      "refreshed": "Dados atualizados",
+      "refreshedDescription": "Últimos dados carregados",
+      "refreshedForPage": "Os dados de {page} foram atualizados",
+      "exported": "Exportação iniciada",
+      "exportedDescription": "Seu arquivo estará pronto em breve",
+      "exportedForType": "A exportação de {type} está sendo preparada",
+      "saved": "Alterações salvas",
+      "savedDescription": "Suas alterações foram salvas com sucesso",
+      "autoSaved": "Salvo automaticamente",
+      "autoSavedDescription": "Alterações salvas automaticamente",
+      "connectionLost": "Conexão perdida",
+      "connectionLostDescription": "Tentando reconectar...",
+      "connectionRestored": "Conexão restaurada",
+      "connectionRestoredDescription": "Você está de volta online"
+    },
+    "errors": {
+      "general": "Erro",
+      "generalDescription": "Algo deu errado. Por favor, tente novamente.",
+      "network": "Erro de rede",
+      "networkDescription": "Não é possível conectar. Verifique sua conexão com a internet.",
+      "validation": "Erro de validação",
+      "validationDescription": "Por favor, verifique o formulário e tente novamente.",
+      "unauthorized": "Não autorizado",
+      "unauthorizedDescription": "Por favor, faça login para continuar.",
+      "notFound": "Não encontrado",
+      "notFoundDescription": "O item solicitado não foi encontrado.",
+      "notFoundForItem": "{item} não encontrado"
+    },
+    "warnings": {
+      "unsavedChanges": "Alterações não salvas",
+      "unsavedChangesDescription": "Você tem alterações não salvas. Salve antes de sair.",
+      "limitReached": "Limite atingido",
+      "limitReachedDescription": "Você atingiu seu limite para esta ação.",
+      "deprecated": "Recurso obsoleto",
+      "deprecatedDescription": "Este recurso está obsoleto",
+      "deprecatedForFeature": "{feature} será removido em breve"
+    },
+    "info": {
+      "loading": "Carregando...",
+      "general": "Informação"
+    },
+    "settings": {
+      "saved": "Configurações salvas",
+      "savedDescription": "Suas preferências foram atualizadas",
+      "reset": "Configurações redefinidas",
+      "resetDescription": "Todas as configurações foram restauradas para os padrões"
+    },
+    "bot": {
+      "activated": "Bot ativado",
+      "activatedDescription": "Seu bot do Telegram agora está ativo e pronto para receber agendamentos",
+      "deactivated": "Bot desativado",
+      "deactivatedDescription": "Seu bot do Telegram foi desativado",
+      "settingsUpdated": "Configurações do bot atualizadas",
+      "settingsUpdatedDescription": "A configuração do bot foi salva",
+      "tokenValidated": "Token validado",
+      "tokenValidatedDescription": "O token do bot é válido e pronto para usar",
+      "adminLinked": "Administrador vinculado",
+      "adminLinkedDescription": "Sua conta do Telegram foi vinculada ao bot",
+      "adminUnlinked": "Administrador desvinculado",
+      "adminUnlinkedDescription": "Sua conta do Telegram foi desvinculada do bot"
+    },
+    "notificationCenter": {
+      "allCleared": "Todas as notificações limpas",
+      "clearFailed": "Erro ao limpar todas as notificações",
+      "newAppointment": "Novo agendamento",
+      "appointmentUpdated": "Agendamento atualizado",
+      "appointmentCancelled": "Agendamento cancelado",
+      "appointmentConfirmed": "Agendamento confirmado",
+      "newService": "Novo serviço",
+      "serviceUpdated": "Serviço atualizado",
+      "serviceDeleted": "Serviço excluído",
+      "botMessage": "Mensagem do bot",
+      "bookingCompleted": "Reserva concluída",
+      "systemEvent": "Evento do sistema"
+    }
+  }
+}

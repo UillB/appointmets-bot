@@ -1,0 +1,103 @@
+{
+  "start": { "welcome": "👋 ¡Bienvenido!\n\nPuedo ayudarte a reservar una cita. Elige la función que necesitas:" },
+  "book": {
+    "chooseService": "Elige un servicio:",
+    "openCalendar": "Abre el calendario:",
+    "chooseTime": "📅 Fecha: {date}\nElige una hora:",
+    "noSlotsDay": "No hay horarios disponibles el {date}.",
+    "chooseSlot": "📅 Elige un horario disponible:",
+    "noSlotsAvailable": "❌ No hay horarios disponibles para este servicio."
+  },
+  "confirm": {
+    "ok": "✅ ¡Reserva confirmada!",
+    "details": "Servicio: {service}\nHora: {when}"
+  },
+  "errors": {
+    "generic": "⚠️ Algo salió mal. Por favor, intenta de nuevo.",
+    "webappDate": "⚠️ No se pudo obtener la fecha de la aplicación web.",
+    "webappService": "⚠️ Falta el serviceId.",
+    "slotTaken": "❌ Este horario ya está ocupado, elige otro.",
+    "slotNotFound": "Horario no encontrado o ya no disponible.",
+    "telegramIdRequired": "Se requiere el ID de Telegram",
+    "invalidLinkToken": "❌ Enlace inválido. Por favor, usa el enlace correcto.",
+    "linkTokenExpired": "❌ El enlace ha expirado. Por favor, genera un nuevo enlace.",
+    "linkFailed": "❌ Error al vincular cuenta. Por favor, intenta más tarde."
+  },
+  "lang": {
+    "usage": "Uso: /lang ru|en|he|de|fr|es|pt",
+    "choose": "🌐 Elige idioma:",
+    "set": "Idioma establecido en: {lang}."
+  },
+  "group": {
+    "openPm": "El calendario solo se puede usar en chat privado. Haz clic para continuar con el bot:"
+  },
+  "admin": {
+    "notifyHeader": "🔔 Nueva reserva",
+    "notifyGroupHeader": "👥 Nueva reserva",
+    "cancelHeader": "❌ Reserva cancelada",
+    "user": "Usuario",
+    "service": "Servicio",
+    "time": "Hora"
+  },
+  "progress": {
+    "confirming": "⏳ Confirmando reserva…",
+    "dateReceived": "✅ Fecha recibida. Buscando horarios…"
+  },
+  "my": {
+    "noAppointments": "No tienes citas activas.",
+    "time": "Hora",
+    "cancel": "Cancelar",
+    "appointmentNotFound": "Esta cita no fue encontrada o no te pertenece.",
+    "cancelled": "❎ Cita cancelada:"
+  },
+  "slots": {
+    "noServices": "No hay servicios disponibles.",
+    "chooseService": "Elige un servicio para ver horarios:",
+    "choosePeriod": "Elige período:",
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "week": "Semana",
+    "noSlotsDay": "No hay horarios disponibles el {date}.",
+    "noSlotsWeek": "No hay horarios disponibles esta semana.",
+    "weekView": "Vista semanal:",
+    "available": "disponible",
+    "occupied": "ocupado",
+    "bookNow": "Reservar ahora"
+  },
+  "menu": {
+    "book": "Reservar cita",
+    "viewSlots": "Ver horarios",
+    "myAppointments": "Mis citas",
+    "language": "Idioma",
+    "adminPanel": "Panel de administración"
+  },
+  "help": {
+    "text": "📖 Ayuda de comandos:\n\n📅 /book - Reservar una cita\n👀 /slots - Ver horarios disponibles\n📋 /my - Mis citas\n🌐 /lang - Cambiar idioma\n❓ /help - Mostrar esta ayuda\n\nO usa los botones a continuación:"
+  },
+  "commands": {
+    "start": "Comenzar a trabajar con el bot",
+    "book": "Reservar una cita",
+    "my": "Mis citas",
+    "help": "Ayuda",
+    "cancel": "Cancelar cita"
+  },
+  "ai": {
+    "appointmentStatus": {
+      "confirmed": "Confirmada",
+      "pending": "Esperando confirmación"
+    },
+    "cancelHint": "💡 Para cancelar una cita, escribe \"cancelar\" o \"cambié de opinión\"",
+    "bookingCreated": "📅 ¡Cita creada!\n\n",
+    "service": "Servicio",
+    "date": "Fecha",
+    "duration": "Duración",
+    "minutes": "minutos",
+    "confirmHint": "Para confirmar la cita, escribe \"confirmar\" o \"sí, quiero reservar\"\n",
+    "cancelHintShort": "Para cancelar, escribe \"cancelar\" o \"cambié de opinión\""
+  },
+  "admin": {
+    "openPanel": "Abrir panel de administración",
+    "accessDenied": "Acceso denegado. Se requieren privilegios de administrador.",
+    "linkSuccess": "✅ ¡Tu cuenta de Telegram ha sido vinculada exitosamente! Ahora puedes usar el bot para gestionar citas."
+  }
+}

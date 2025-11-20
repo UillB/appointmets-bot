@@ -12,7 +12,7 @@ export const i18nMw: MiddlewareFn<Context> = async (ctx, next) => {
   // Сначала проверяем, есть ли сохраненный язык в сессии
   const savedLang = (ctx.session as any)?.lang;
   
-  if (savedLang && ["ru", "en", "he"].includes(savedLang)) {
+  if (savedLang && ["ru", "en", "he", "de", "fr", "es", "pt"].includes(savedLang)) {
     // Используем сохраненный язык
     ctx.lang = savedLang as Lang;
   } else {

@@ -1,0 +1,1179 @@
+{
+  "common": {
+    "systemOnline": "Sistema en línea",
+    "updatedJustNow": "Actualizado hace un momento",
+    "refresh": "Actualizar",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "search": "Buscar",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "close": "Cerrar",
+    "yes": "Sí",
+    "no": "No",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "user": "Usuario",
+    "organization": "Organización",
+    "notAvailable": "N/D",
+    "optional": "Opcional",
+    "retry": "Reintentar"
+  },
+  "header": {
+    "logout": "Cerrar sesión",
+    "connected": "Conectado",
+    "offline": "Desconectado",
+    "liveUpdates": "Actualizaciones en vivo",
+    "theme": {
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "help": {
+      "title": "¿Necesitas ayuda?",
+      "description": "¿Tienes alguna pregunta, necesitas ayuda o soporte? No dudes en contactar con nuestro equipo de soporte. Responderemos lo antes posible para ayudarte con cualquier solicitud.",
+      "supportEmail": "support@yourbrand.com"
+    },
+    "profile": {
+      "profile": "Perfil",
+      "settings": "Configuración",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "navigation": {
+    "appName": "Citas",
+    "appSubtitle": "Gestor de Negocios",
+    "dashboard": "Panel",
+    "appointments": "Citas",
+    "services": "Servicios",
+    "analytics": "Analíticas",
+    "organizations": "Organizaciones",
+    "botManagement": "Gestión del Bot",
+    "aiAssistant": "Asistente IA",
+    "settings": "Configuración",
+    "badges": {
+      "new": "NUEVO",
+      "beta": "BETA"
+    },
+    "adminStatus": "Estado de Administrador",
+    "telegramLinked": "Telegram vinculado",
+    "notLinked": "No vinculado",
+    "today": "Hoy",
+    "thisWeek": "Esta semana",
+    "appointmentsShort": "citas",
+    "logout": "Cerrar sesión"
+  },
+  "organizations": {
+    "title": "Organizaciones",
+    "description": "Gestiona tus organizaciones y sus configuraciones",
+    "newOrganization": "Nueva Organización",
+    "refresh": "Actualizar",
+    "searchPlaceholder": "Buscar organizaciones...",
+    "sortBy": "Ordenar por...",
+    "sortByName": "Por nombre",
+    "sortByUsers": "Por usuarios",
+    "sortByServices": "Por servicios",
+    "sortByDate": "Por fecha",
+    "clearFilters": "Limpiar filtros",
+    "noOrganizationsFound": "No se encontraron organizaciones",
+    "tryAdjustingSearch": "Intenta ajustar tu búsqueda o filtros",
+    "getStarted": "Comienza creando tu primera organización",
+    "showing": "Mostrando {{count}} de {{total}} organizaciones"
+  },
+  "appointments": {
+    "title": "Citas",
+    "description": "Gestiona citas y reservas",
+    "all": "Todas",
+    "confirmed": "Confirmadas",
+    "pending": "Pendientes",
+    "cancelled": "Canceladas",
+    "rejected": "Rechazadas",
+    "newAppointment": "Nueva Cita",
+    "searchPlaceholder": "Buscar...",
+    "searchPlaceholderDesktop": "Buscar por ID de chat o servicio...",
+    "filters": "Filtros",
+    "service": "Servicio",
+    "allServices": "Todos los servicios",
+    "date": "Fecha",
+    "pickDate": "Seleccionar fecha",
+    "clearFilters": "Limpiar filtros",
+    "clear": "Limpiar",
+    "clearDateFilter": "Limpiar filtro de fecha",
+    "chatId": "ID de chat",
+    "id": "ID",
+    "unknown": "Desconocido",
+    "unknownService": "Servicio desconocido",
+    "noDate": "Sin fecha",
+    "noTime": "Sin hora",
+    "noTimeInfo": "Sin información de hora",
+    "notAvailable": "N/D",
+    "minutes": "min",
+    "showing": "Mostrando {{count}} de {{total}} citas",
+    "stats": {
+      "totalAppointments": "Total de citas",
+      "allTimeBookings": "Reservas de todos los tiempos",
+      "successfullyConfirmed": "Confirmadas exitosamente",
+      "awaitingConfirmation": "Esperando confirmación",
+      "cancelledRejected": "Canceladas y rechazadas",
+      "cancelledRejectedBookings": "Reservas canceladas y rechazadas"
+    },
+    "tableHeaders": {
+      "service": "Servicio",
+      "dateTime": "Fecha y hora",
+      "clientChatId": "Cliente / ID de chat",
+      "duration": "Duración",
+      "status": "Estado",
+      "created": "Creado",
+      "actions": "Acciones"
+    },
+    "actions": {
+      "viewDetails": "Ver detalles",
+      "edit": "Editar",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar"
+    },
+    "emptyStates": {
+      "noAppointmentsFound": "No se encontraron citas",
+      "noAppointmentsForDate": "No se encontraron citas para {{date}}",
+      "tryDifferentDate": "Intenta seleccionar una fecha diferente o limpia el filtro de fecha para ver todas las citas",
+      "createFirstAppointment": "Crea tu primera cita"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente"
+    }
+  },
+  "analytics": {
+    "title": "Analíticas",
+    "description": "Rastrea el rendimiento y las estadísticas",
+    "export": "Exportar",
+    "retry": "Reintentar",
+    "performanceOverview": "Resumen de rendimiento",
+    "timePeriod": {
+      "allTime": "Todo el tiempo",
+      "week": "Semana",
+      "month": "Mes",
+      "year": "Año"
+    },
+    "stats": {
+      "totalBookings": "Total de reservas",
+      "allTime": "Todo el tiempo",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "thisYear": "Este año",
+      "growthRate": "Tasa de crecimiento",
+      "vsPreviousPeriod": "vs período anterior",
+      "vsLastWeek": "vs semana pasada",
+      "vsLastMonth": "vs mes pasado",
+      "vsLastYear": "vs año pasado",
+      "activeClients": "Clientes activos",
+      "uniqueClients": "Clientes únicos",
+      "avgDuration": "Duración promedio",
+      "perAppointment": "Por cita"
+    },
+    "appointmentsTrend": {
+      "title": "Tendencia de citas",
+      "description": "Reservas diarias a lo largo del tiempo"
+    },
+    "metrics": {
+      "appointments": "Citas",
+      "revenue": "Ingresos"
+    },
+    "tooltip": {
+      "appointment": "cita",
+      "appointments": "citas",
+      "booking": "reserva",
+      "bookings": "reservas",
+      "date": "Fecha",
+      "time": "Hora",
+      "status": "Estado",
+      "percentage": "Porcentaje"
+    },
+    "topServices": {
+      "title": "Servicios principales",
+      "description": "Servicios más populares",
+      "bookings": "reservas"
+    },
+    "appointmentStatus": {
+      "title": "Estado de citas",
+      "description": "Distribución de estados"
+    },
+    "peakHours": {
+      "title": "Horas pico",
+      "description": "Horarios más ocupados del día"
+    },
+    "quickInsights": {
+      "title": "Estadísticas rápidas",
+      "bestDay": "Mejor día",
+      "peakTime": "Hora pico",
+      "topService": "Servicio principal",
+      "with": "con"
+    },
+    "emptyStates": {
+      "noAppointmentData": "No hay datos de citas disponibles para este período",
+      "noServicesWithBookings": "No hay servicios con reservas en este período",
+      "noStatusData": "No hay datos de estado de citas disponibles",
+      "noPeakHoursData": "No hay datos de horas pico disponibles",
+      "noDataAvailable": "No hay datos disponibles"
+    },
+    "errors": {
+      "failedToLoad": "Error al cargar analíticas",
+      "failedToLoadData": "Error al cargar datos de analíticas"
+    }
+  },
+  "slots": {
+    "title": "Horarios",
+    "description": "Horarios generados automáticamente para tus servicios",
+    "searchPlaceholder": "Buscar horarios...",
+    "minutes": "min",
+    "unknownService": "Servicio desconocido",
+    "stats": {
+      "totalSlots": "Total de horarios",
+      "available": "Disponibles",
+      "booked": "Reservados",
+      "utilization": "Utilización"
+    },
+    "status": {
+      "available": "Disponible",
+      "booked": "Reservado",
+      "conflict": "Conflicto"
+    },
+    "dates": {
+      "today": "Hoy",
+      "tomorrow": "Mañana",
+      "yesterday": "Ayer"
+    },
+    "infoBanner": {
+      "title": "Horarios generados automáticamente",
+      "description": "Los horarios se generan automáticamente cuando creas servicios. Cubren 1 año adelante con horarios laborales estándar (9 AM - 6 PM, lunes-viernes). ¡No se necesita gestión manual!"
+    },
+    "filters": {
+      "allServices": "Todos los servicios",
+      "allStatus": "Todos los estados",
+      "filterByDate": "Filtrar por fecha"
+    },
+    "table": {
+      "title": "Horarios",
+      "showing": "{{count}} de {{total}} horarios",
+      "headers": {
+        "service": "Servicio",
+        "date": "Fecha",
+        "time": "Hora",
+        "duration": "Duración",
+        "status": "Estado",
+        "capacity": "Capacidad"
+      }
+    },
+    "emptyStates": {
+      "noSlotsFound": "No se encontraron horarios",
+      "createServiceToGenerate": "Crea un servicio para generar horarios automáticamente",
+      "tryAdjustingFilters": "Intenta ajustar tus filtros"
+    }
+  },
+  "slotsManagement": {
+    "title": "Gestión de horarios",
+    "subtitle": "Ver y gestionar horarios generados automáticamente",
+    "back": "Atrás",
+    "infoBanner": {
+      "title": "Horarios generados automáticamente",
+      "description": "Los horarios se crean automáticamente cuando agregas servicios. Cubren 1 año adelante con horarios laborales estándar (9 AM - 6 PM, lunes-viernes). ¡No se requiere configuración manual!"
+    },
+    "filters": {
+      "service": "Servicio",
+      "selectService": "Seleccionar un servicio",
+      "date": "Fecha",
+      "filterByDate": "Filtrar por fecha"
+    },
+    "table": {
+      "title": "Horarios",
+      "slotsFound": "{{count}} horarios encontrados",
+      "headers": {
+        "date": "Fecha",
+        "time": "Hora",
+        "duration": "Duración",
+        "status": "Estado",
+        "capacity": "Capacidad"
+      }
+    },
+    "emptyStates": {
+      "selectService": "Seleccionar un servicio",
+      "chooseServiceToView": "Elige un servicio para ver sus horarios generados automáticamente",
+      "noSlotsFound": "No se encontraron horarios",
+      "noSlotsForDate": "No se encontraron horarios para la fecha seleccionada",
+      "noSlotsYet": "Este servicio aún no tiene horarios"
+    }
+  },
+  "dashboard": {
+    "title": "Panel",
+    "welcome": "¡Bienvenido de nuevo, {{name}}!",
+    "statisticsOverview": "Estadísticas y resumen",
+    "viewAll": "Ver todo",
+    "setupBanners": {
+      "services": {
+        "message": "Actualmente no tienes servicios (lo que vendes). Crea tu primer servicio ahora - esto es necesario para comenzar a trabajar y solo toma un minuto.",
+        "actionLabel": "Crear servicio"
+      },
+      "bot": {
+        "message": "Tu bot de Telegram no está conectado. Por favor, conecta tu bot para compartirlo con las personas y comenzar a recibir citas hoy.",
+        "actionLabel": "Conectar bot"
+      },
+      "admin": {
+        "message": "Tu cuenta de administrador de Telegram no está vinculada. Víncula ahora para habilitar funciones de administrador como acceder al sistema de gestión (panel de administración) desde Telegram.",
+        "actionLabel": "Vincular administrador"
+      }
+    },
+    "stats": {
+      "totalAppointments": "Total de citas",
+      "allTime": "todo el tiempo",
+      "todaysBookings": "Reservas de hoy",
+      "scheduledForToday": "Programadas para hoy",
+      "pendingApprovals": "Aprobaciones pendientes",
+      "awaitingConfirmation": "Esperando confirmación",
+      "activeServices": "Servicios activos",
+      "availableForBooking": "Disponibles para reservar"
+    },
+    "quickActions": {
+      "appointments": {
+        "title": "Citas",
+        "description": "Gestionar reservas"
+      },
+      "services": {
+        "title": "Servicios",
+        "description": "Configurar ofertas"
+      },
+      "organizations": {
+        "title": "Organizaciones",
+        "description": "Gestionar ubicaciones"
+      },
+      "settings": {
+        "title": "Configuración",
+        "description": "Configuración del sistema"
+      },
+      "today": "hoy",
+      "available": "disponibles",
+      "active": "activos",
+      "account": "Cuenta"
+    },
+    "calendar": {
+      "title": "Calendario",
+      "selected": "Seleccionado",
+      "selectDate": "Seleccionar fecha",
+      "days": {
+        "sun": "Dom",
+        "mon": "Lun",
+        "tue": "Mar",
+        "wed": "Mié",
+        "thu": "Jue",
+        "fri": "Vie",
+        "sat": "Sáb"
+      }
+    },
+    "emptyStates": {
+      "noAppointmentsForDate": "No hay citas para la fecha seleccionada",
+      "clickDateToView": "Haz clic en una fecha del calendario para ver las citas"
+    }
+  },
+  "services": {
+    "title": "Servicios",
+    "description": "Gestiona tus servicios y rastrea su rendimiento",
+    "addService": "Agregar servicio",
+    "searchPlaceholder": "Buscar servicios...",
+    "searchPlaceholderDesktop": "Buscar servicios por nombre...",
+    "filters": "Filtros",
+    "filterByName": "Filtrar servicios por nombre",
+    "clearFilters": "Limpiar filtros",
+    "clear": "Limpiar",
+    "noServicesFound": "No se encontraron servicios",
+    "createFirstService": "Crea tu primer servicio",
+    "showing": "Mostrando {{count}} de {{total}} servicios",
+    "stats": {
+      "totalServices": "Total de servicios",
+      "activeServices": "Servicios activos",
+      "totalBookings": "Total de reservas",
+      "allTimeBookings": "Reservas de todos los tiempos",
+      "averageOccupancy": "Ocupación promedio (mes actual)",
+      "capacityUtilization": "Utilización de capacidad"
+    },
+    "autoGeneratedSlots": {
+      "title": "Horarios generados automáticamente",
+      "description": "Los horarios se generan automáticamente por 1 año cuando creas servicios. ¡No se necesita gestión manual de horarios - solo crea tus servicios y comienza a reservar!"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Gestiona tu cuenta y preferencias del sistema",
+    "profileTab": "Perfil",
+    "systemTab": "Sistema",
+    "accountStatus": "Estado de la cuenta",
+    "securityLevel": "Nivel de seguridad",
+    "memberSince": "Miembro desde",
+    "stats": {
+      "accountStatus": "Estado de la cuenta",
+      "active": "Activo",
+      "sinceOct2023": "Desde Oct 2023",
+      "securityLevel": "Nivel de seguridad",
+      "high": "Alto",
+      "twoFAEnabled": "2FA habilitado",
+      "memberSince": "Miembro desde",
+      "activeUser": "Usuario activo"
+    },
+    "tabs": {
+      "userProfile": "Perfil de usuario",
+      "systemSettings": "Configuración del sistema"
+    },
+    "profile": {
+      "title": "Perfil de usuario",
+      "description": "Gestiona tu información personal",
+      "updateTitle": "Actualizar perfil",
+      "updateDescription": "Actualiza la información de tu perfil",
+      "updateButton": "Actualizar perfil",
+      "fields": {
+        "fullName": "Nombre completo",
+        "emailAddress": "Dirección de correo electrónico",
+        "role": "Rol",
+        "organization": "Organización",
+        "memberSince": "Miembro desde"
+      },
+      "placeholders": {
+        "fullName": "Ingresa tu nombre completo",
+        "email": "Ingresa tu correo electrónico"
+      },
+      "role": {
+        "manager": "Gerente"
+      }
+    },
+    "password": {
+      "title": "Cambiar contraseña",
+      "description": "Actualiza tu contraseña para mantener tu cuenta segura",
+      "changeButton": "Cambiar contraseña",
+      "fields": {
+        "currentPassword": "Contraseña actual",
+        "newPassword": "Nueva contraseña",
+        "confirmPassword": "Confirmar contraseña"
+      },
+      "placeholders": {
+        "currentPassword": "Ingresa la contraseña actual",
+        "newPassword": "Ingresa la nueva contraseña",
+        "confirmPassword": "Confirma la nueva contraseña"
+      },
+      "requirements": {
+        "title": "Requisitos de contraseña:",
+        "minLength": "Al menos 8 caracteres",
+        "uppercaseLowercase": "Incluir letras mayúsculas y minúsculas",
+        "number": "Incluir al menos un número",
+        "specialCharacter": "Incluir al menos un carácter especial"
+      }
+    },
+    "system": {
+      "languageTheme": {
+        "title": "Idioma y tema",
+        "description": "Configurar preferencias del sistema",
+        "language": "Idioma",
+        "theme": "Tema",
+        "themeOptions": {
+          "light": "Tema claro",
+          "dark": "Tema oscuro",
+          "auto": "Automático (Sistema)"
+        }
+      },
+      "notifications": {
+        "title": "Notificaciones",
+        "description": "Gestiona cómo recibes notificaciones",
+        "emailNotifications": "Notificaciones por correo",
+        "emailNotificationsDescription": "Recibir notificaciones por correo electrónico",
+        "pushNotifications": "Notificaciones push",
+        "pushNotificationsDescription": "Recibir notificaciones push en el navegador"
+      },
+      "preferences": {
+        "title": "Preferencias del sistema",
+        "description": "Configurar fecha, hora y ajustes de actualización",
+        "timezone": "Zona horaria",
+        "dateFormat": "Formato de fecha",
+        "timeFormat": "Formato de hora",
+        "timeFormat12": "12 horas (AM/PM)",
+        "timeFormat24": "24 horas",
+        "refreshInterval": "Intervalo de actualización (segundos)",
+        "refreshInterval15": "15 segundos",
+        "refreshInterval30": "30 segundos",
+        "refreshInterval60": "1 minuto",
+        "refreshInterval300": "5 minutos",
+        "refreshIntervalManual": "Solo manual"
+      },
+      "saveButton": "Guardar configuración"
+    },
+    "errors": {
+      "fillAllRequiredFields": "Por favor, completa todos los campos requeridos",
+      "fillAllPasswordFields": "Por favor, completa todos los campos de contraseña",
+      "passwordsDoNotMatch": "Las nuevas contraseñas no coinciden",
+      "passwordMinLength": "La contraseña debe tener al menos 8 caracteres"
+    },
+    "profileUpdatedSuccessfully": "Perfil actualizado exitosamente",
+    "passwordChangedSuccessfully": "Contraseña cambiada exitosamente",
+    "systemSettingsSavedSuccessfully": "Configuración del sistema guardada exitosamente"
+  },
+  "dialogs": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "saving": "Guardando...",
+    "service": {
+      "editTitle": "Editar servicio",
+      "createTitle": "Crear nuevo servicio",
+      "editDescription": "Actualizar información y configuración del servicio.",
+      "createDescription": "Sigue los pasos a continuación para agregar un nuevo servicio",
+      "nameRequired": "El nombre del servicio es requerido",
+      "durationRequired": "Se requiere una duración válida",
+      "organizationIdRequired": "Se requiere el ID de organización",
+      "updated": "Servicio actualizado exitosamente",
+      "created": "Servicio creado exitosamente",
+      "saveFailed": "Error al guardar el servicio",
+      "firstServiceMessage": "¡Felicitaciones! Tu servicio ha sido creado exitosamente. Puedes crear servicios adicionales en cualquier momento. Ahora completemos la configuración y conecta tu bot de Telegram para que puedas comenzar a recibir citas de inmediato.",
+      "connectBot": "Conectar bot",
+      "serviceName": "Nombre del servicio",
+      "serviceNamePlaceholder": "ej., Corte de pelo, Masaje, Consulta",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Describe el servicio...",
+      "duration": "Duración (minutos)",
+      "price": "Precio (opcional)",
+      "currency": "Moneda",
+      "step1": {
+        "title": "Información básica",
+        "description": "Nombre y descripción del servicio"
+      },
+      "step2": {
+        "title": "Precio y duración",
+        "description": "Establecer el precio y el tiempo requerido"
+      },
+      "step3": {
+        "title": "Horario laboral",
+        "description": "Configurar cuándo este servicio está disponible"
+      },
+      "startTime": "Hora de inicio",
+      "endTime": "Hora de fin",
+      "lunchStart": "Inicio del descanso (opcional)",
+      "lunchEnd": "Fin del descanso (opcional)",
+      "workingDays": "Días laborales",
+      "updateService": "Actualizar servicio",
+      "createService": "Crear servicio"
+    },
+    "organization": {
+      "viewTitle": "Ver organización",
+      "editTitle": "Editar organización",
+      "createTitle": "Crear nueva organización",
+      "viewDescription": "Ver detalles de la organización",
+      "editDescription": "Actualizar información de la organización",
+      "createDescription": "Sigue los pasos a continuación para agregar una nueva organización",
+      "nameRequired": "El nombre de la organización es requerido",
+      "updated": "Organización actualizada exitosamente",
+      "created": "Organización creada exitosamente",
+      "saveFailed": "Error al guardar la organización",
+      "fields": {
+        "organizationName": "Nombre de la organización",
+        "description": "Descripción",
+        "email": "Dirección de correo electrónico",
+        "phone": "Número de teléfono",
+        "address": "Dirección"
+      },
+      "placeholders": {
+        "name": "ej., Corporación Acme",
+        "description": "Breve descripción de la organización...",
+        "email": "contacto@ejemplo.com",
+        "phone": "+1 (555) 123-4567",
+        "address": "123 Calle Principal, Ciudad, Estado, Código Postal"
+      },
+      "step1": {
+        "title": "Información básica",
+        "description": "Nombre y descripción de la organización"
+      },
+      "step2": {
+        "title": "Información de contacto",
+        "description": "Correo electrónico, teléfono y dirección"
+      },
+      "saveChanges": "Guardar cambios",
+      "createOrganization": "Crear organización"
+    },
+    "appointment": {
+      "title": "Crear nueva cita",
+      "description": "Sigue los pasos a continuación para crear una nueva cita",
+      "step1": {
+        "title": "Información del cliente",
+        "description": "Ingresar detalles del cliente"
+      },
+      "step2": {
+        "title": "Servicio y hora",
+        "description": "Seleccionar servicio y horario"
+      },
+      "clientId": "ID del cliente / Teléfono",
+      "clientIdPlaceholder": "Ingresa el ID del cliente o número de teléfono",
+      "service": "Servicio",
+      "loadingServices": "Cargando servicios...",
+      "selectServicePlaceholder": "Seleccionar un servicio",
+      "selectService": "Por favor, selecciona un servicio",
+      "noServices": "No hay servicios disponibles",
+      "date": "Fecha",
+      "pickDate": "Seleccionar fecha",
+      "selectDate": "Por favor, selecciona una fecha",
+      "timeSlot": "Horario",
+      "selectSlot": "Por favor, selecciona un horario",
+      "selectDateFirst": "Selecciona una fecha primero",
+      "selectServiceFirst": "Selecciona un servicio primero",
+      "loadingSlots": "Cargando horarios...",
+      "noSlots": "No hay horarios disponibles",
+      "selectSlotPlaceholder": "Seleccionar un horario",
+      "noSlotsForDate": "No hay horarios disponibles para esta fecha",
+      "slotConflict": "Conflicto",
+      "loadingAvailableSlots": "Cargando horarios disponibles...",
+      "created": "Cita creada exitosamente",
+      "createFailed": "Error al crear la cita",
+      "createButton": "Crear cita",
+      "creating": "Creando..."
+    }
+  },
+  "aiAssistant": {
+    "title": "Asistente IA",
+    "description": "Configura y gestiona tu asistente de chatbot inteligente",
+    "refreshed": "Datos del asistente IA actualizados",
+    "configSaved": "Configuración guardada exitosamente",
+    "configSaveFailed": "Error al guardar la configuración",
+    "enableFirst": "Por favor, habilita el asistente IA primero",
+    "testSuccessful": "¡Prueba del asistente IA exitosa!",
+    "testResponse": "Respuesta: {{response}}",
+    "testFailed": "Prueba del asistente IA fallida",
+    "enterApiKey": "Por favor, ingresa la clave API",
+    "apiKeyVerified": "Clave API verificada exitosamente",
+    "configReset": "Configuración restablecida a valores predeterminados",
+    "controls": {
+      "title": "Controles del asistente IA",
+      "description": "Habilitar y configurar respuestas impulsadas por IA",
+      "enableAi": "Habilitar asistente IA",
+      "enableAiDescription": "Activar respuestas impulsadas por IA para consultas de clientes",
+      "autoReply": "Modo de respuesta automática",
+      "autoReplyDescription": "Responder automáticamente a todos los mensajes de Telegram",
+      "activeTitle": "El asistente IA está activo",
+      "activeDescription": "Tu asistente IA ahora está listo para ayudar a los clientes en tu bot de Telegram basado en las instrucciones a continuación."
+    },
+    "config": {
+      "title": "Configuración de IA",
+      "description": "Configurar modelo y comportamiento de IA",
+      "modelLabel": "Modelo LLM",
+      "modelHint": "Los modelos más avanzados proporcionan mejores respuestas pero cuestan más",
+      "models": {
+        "gpt4": "GPT-4 (Más inteligente)",
+        "gpt4Turbo": "GPT-4 Turbo (Rápido e inteligente)",
+        "gpt35Turbo": "GPT-3.5 Turbo (Rápido y económico)",
+        "claude3Opus": "Claude 3 Opus",
+        "claude3Sonnet": "Claude 3 Sonnet"
+      },
+      "temperatureLabel": "Temperatura",
+      "temperaturePrecise": "Preciso (0)",
+      "temperatureBalanced": "Equilibrado (1)",
+      "temperatureCreative": "Creativo (2)",
+      "temperatureHint": "Más bajo = más enfocado y consistente. Más alto = más creativo y variado."
+    },
+    "instructions": {
+      "title": "Instrucciones personalizadas",
+      "description": "Enseña a la IA cómo comunicarse - define personalidad, tono y estilo",
+      "label": "Prompt / Instrucciones",
+      "placeholder": "Ejemplo: Eres David, un asistente amigable y profesional. Debes ser alegre, servicial y responder en un tono casual pero respetuoso. Siempre saluda a los clientes cálidamente y usa su nombre cuando sea posible...",
+      "characterCount": "{{count}} caracteres",
+      "hint": "Piensa en esto como entrenar a un nuevo empleado",
+      "tipsTitle": "Consejos de instrucción",
+      "tip1": "Define el nombre y la personalidad de la IA",
+      "tip2": "Especifica el tono: formal, casual, amigable, etc.",
+      "tip3": "Establece preferencias de idioma y región",
+      "tip4": "Menciona políticas o pautas específicas",
+      "tip5": "Manténlo claro y conciso"
+    },
+    "test": {
+      "title": "Probar asistente IA",
+      "description": "Envía un mensaje de prueba para verificar la configuración y respuestas de la IA",
+      "runTest": "Ejecutar prueba"
+    }
+  },
+  "toasts": {
+    "success": "Éxito",
+    "error": "Error",
+    "warning": "Advertencia",
+    "info": "Información",
+    "organizationsRefreshed": "Organizaciones actualizadas",
+    "filtersCleared": "Filtros limpiados",
+    "appointmentsRefreshed": "Citas actualizadas",
+    "failedToLoadOrganizations": "Error al cargar datos de organizaciones",
+    "failedToSaveOrganization": "Error al guardar la organización",
+    "failedToLoadAppointments": "Error al cargar datos de citas",
+    "failedToLoadDashboard": "Error al cargar datos del panel",
+    "settingsRefreshed": "Configuración actualizada",
+    "failedToLoadServices": "Error al cargar servicios",
+    "failedToLoadStatistics": "Error al cargar estadísticas",
+    "failedToRefreshServices": "Error al actualizar servicios",
+    "failedToLoadSlots": "Error al cargar datos de horarios"
+  },
+  "botManagement": {
+    "title": "Gestión del bot",
+    "description": "Crear y configurar bot de Telegram para reservas automáticas de clientes",
+    "botActive": "Bot activo",
+    "botInactive": "Bot inactivo",
+    "botWorking": "✓ Funcionando",
+    "botNotWorking": "✗ No funcionando",
+    "botReady": "El bot de Telegram está listo y aceptando reservas",
+    "botNeedsActivation": "Se requiere activación del bot para comenzar a trabajar",
+    "organization": "Organización",
+    "botLink": "Enlace del bot",
+    "setupProgress": "Progreso de configuración del bot",
+    "setupComplete": "Configuración completa",
+    "completed": "completado",
+    "inProgress": "En progreso",
+    "instructions": "Instrucciones",
+    "activation": "Activación",
+    "settings": "Configuración",
+    "howToCreateBot": "Cómo crear un bot de Telegram",
+    "stepByStepGuide": "Guía paso a paso simple para principiantes",
+    "step1Title": "Abre Telegram y busca @BotFather",
+    "step1Description": "BotFather es el bot oficial de Telegram para crear nuevos bots. Simplemente escribe @BotFather en la búsqueda y abre el chat.",
+    "step1HowTo": "Cómo encontrar BotFather:",
+    "step1List1": "Abre la aplicación Telegram en tu teléfono o computadora",
+    "step1List2": "Escribe @BotFather en la búsqueda",
+    "step1List3": "Haz clic en el bot y presiona el botón \"Iniciar\"",
+    "step2Title": "Envía el comando /newbot",
+    "step2Description": "BotFather te pedirá que especifiques el nombre y nombre de usuario del bot. El nombre de usuario debe terminar con \"bot\" (ej., MiBotIncreíble).",
+    "step2HowTo": "Crear un bot:",
+    "step2List1": "Envía el comando /newbot al chat de BotFather",
+    "step2List2": "Ingresa el nombre de tu bot (ej., \"Mi Clínica\")",
+    "step2List3": "Ingresa el nombre de usuario del bot (debe terminar con \"bot\")",
+    "step2List4": "Asegúrate de que el nombre de usuario sea único y disponible",
+    "step3Title": "Obtener token de acceso",
+    "step3Description": "Después de crear el bot, BotFather te enviará un token. Cópialo y úsalo en la pestaña \"Activación\" para conectar el bot.",
+    "step3Format": "Formato del token:",
+    "step3Important": "Importante: El token debe copiarse completamente, incluyendo todos los caracteres",
+    "step3GoToActivation": "Ir a activación",
+    "securityWarning": "Importante: Seguridad del token",
+    "securityWarning1": "Nunca compartas el token con otros",
+    "securityWarning2": "No publiques el token en público",
+    "securityWarning3": "Guarda el token en un lugar seguro",
+    "activationTitle": "Activación del bot",
+    "activationDescription": "Ingresa el token de tu bot de Telegram para activar",
+    "botNotActiveAlert": "El bot no está activo. Actívalo para comenzar a trabajar.",
+    "botToken": "Token del bot *",
+    "botTokenPlaceholder": "123456789:ABCdefGHijKlMNOpqrsTUVwxyz",
+    "dontKnowHowToActivate": "¿No sabes cómo activar? Ve a instrucciones",
+    "tokenFormat": "Formato del token",
+    "tokenFormatDescription": "El token debe tener el siguiente formato:",
+    "tokenFormatGetFrom": "Obtén el token de @BotFather después de crear el bot",
+    "clear": "Limpiar",
+    "validateToken": "Validar token",
+    "validating": "Validando...",
+    "activateBot": "Activar bot",
+    "activating": "Activando bot...",
+    "botStatus": "Estado del bot",
+    "loadingBotStatus": "Cargando estado del bot...",
+    "botName": "Nombre del bot",
+    "botUsername": "Nombre de usuario",
+    "botLinkLabel": "Enlace del bot",
+    "canJoinGroups": "Puede unirse a grupos",
+    "canReadAllGroupMessages": "Puede leer todos los mensajes del grupo",
+    "notSpecified": "No especificado",
+    "botNotActivated": "Bot no activado",
+    "botNotActivatedDescription": "Para usar la configuración del bot, primero necesitas activarlo en la pestaña \"Activación\".",
+    "goToActivation": "Ir a activación",
+    "basicSettings": "Configuración básica",
+    "basicSettingsDescription": "Configura el nombre y descripción de tu bot",
+    "botNameLabel": "Nombre del bot *",
+    "botNamePlaceholder": "Ingresa el nombre del bot",
+    "botDescription": "Descripción del bot",
+    "botDescriptionPlaceholder": "Breve descripción de las funciones del bot...",
+    "updating": "Actualizando...",
+    "updateSettings": "Actualizar configuración",
+    "shareBot": "Compartir bot",
+    "shareBotDescription": "Comparte el enlace de tu bot con los clientes",
+    "scanQRCode": "Escanear código QR para acceso rápido al bot",
+    "hoverToCopy": "Pasa el mouse sobre el código QR para copiar",
+    "generatingQR": "Generando código QR...",
+    "qrCodeAvailableAfterActivation": "El código QR estará disponible después de la activación del bot",
+    "open": "Abrir",
+    "downloadQR": "Descargar QR",
+    "copyQR": "Copiar QR",
+    "copyLink": "Copiar enlace",
+    "shareBotLabel": "Compartir bot",
+    "refreshStatus": "Actualizar estado",
+    "statusUpdated": "Estado actualizado",
+    "instructionsOpened": "Instrucciones de creación del bot abiertas",
+    "instructionsDescription": "Sigue la guía paso a paso",
+    "linkCopied": "Enlace copiado al portapapeles",
+    "openingBot": "Abriendo bot en Telegram",
+    "qrCodeDownloaded": "Código QR descargado exitosamente",
+    "qrCodeDownloadedDescription": "Imagen guardada en la carpeta de descargas",
+    "qrCodeCopied": "¡Código QR copiado!",
+    "qrCodeCopiedDescription": "Imagen lista para pegar",
+    "qrCodeCopyFailed": "Error al copiar código QR",
+    "qrCodeCopyFailedDescription": "Intenta descargar la imagen",
+    "shareToTelegram": "Ventana abierta para compartir en Telegram",
+    "shareToWhatsApp": "Ventana abierta para compartir en WhatsApp",
+    "shareToEmail": "Cliente de correo abierto",
+    "botLinkNotAvailable": "Enlace del bot no disponible",
+    "enterBotToken": "Ingresa el token del bot",
+    "tokenValid": "¡Token válido! Bot encontrado.",
+    "invalidToken": "Token de bot inválido",
+    "tokenValidationError": "Error al validar token",
+    "botActivated": "¡Bot activado exitosamente!",
+    "botActivationError": "Error al activar bot",
+    "organizationIdError": "Error: ID de organización no encontrado",
+    "botSettingsUpdated": "¡Configuración del bot actualizada!",
+    "botSettingsUpdateError": "Error al actualizar configuración",
+    "failedToLoadStatus": "Error al cargar estado del bot",
+    "failedToGenerateQR": "Error al generar código QR",
+    "loadingUser": "Cargando usuario...",
+    "emptyState": {
+      "title": "Iniciar configuración del bot",
+      "description": "Crea un bot de Telegram en 3 pasos simples y comienza a aceptar reservas de clientes",
+      "step1": {
+        "title": "Crear bot",
+        "description": "Busca @BotFather en Telegram"
+      },
+      "step2": {
+        "title": "Obtener token",
+        "description": "Copia el token de BotFather"
+      },
+      "step3": {
+        "title": "Activar",
+        "description": "Pega el token en el sistema"
+      },
+      "startButton": "Iniciar configuración",
+      "footer": "Sigue las instrucciones a continuación para la guía paso a paso"
+    },
+    "shareBotText": "Echa un vistazo a nuestro bot de Telegram: {{bot}}",
+    "shareEmailSubject": "Bot de Telegram para citas",
+    "shareEmailBody": "¡Hola!\n\nEcha un vistazo a nuestro bot de Telegram para citas:\n{{link}}\n\nUsa el código QR para acceso rápido.",
+    "botMustBeActivated": "El bot debe estar activado para generar enlace de administrador",
+    "yes": "Sí",
+    "no": "No",
+    "bot": "bot",
+    "botNameDisplay": "Nombre del bot",
+    "usernameDisplay": "Nombre de usuario",
+    "botLinkDisplay": "Enlace del bot"
+  },
+  "language": {
+    "switch": "Cambiar idioma",
+    "languageChanged": "Idioma cambiado a {{lang}}",
+    "russian": "Ruso",
+    "english": "Inglés",
+    "hebrew": "Hebreo",
+    "german": "Alemán",
+    "french": "Francés",
+    "spanish": "Español",
+    "portuguese": "Portugués"
+  },
+  "login": {
+    "fillAllFields": "Por favor, completa todos los campos",
+    "invalidEmail": "Por favor, ingresa una dirección de correo electrónico válida",
+    "welcomeBack": "¡Bienvenido de nuevo!",
+    "loginSuccess": "Has iniciado sesión exitosamente",
+    "backToLanding": "Volver a la página principal",
+    "branding": {
+      "title": "Bot de Citas",
+      "subtitle": "Gestiona tus reservas con facilidad"
+    },
+    "form": {
+      "title": "Bienvenido de nuevo",
+      "subtitle": "Inicia sesión para acceder a tu panel",
+      "emailLabel": "Dirección de correo electrónico",
+      "emailPlaceholder": "tu@correo.com",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "rememberMe": "Recordarme",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "forgotPasswordToast": "Enlace de restablecimiento de contraseña enviado a tu correo",
+      "signIn": "Iniciar sesión",
+      "signingIn": "Iniciando sesión...",
+      "newToApp": "¿Nuevo en Bot de Citas?",
+      "createAccount": "Crear una cuenta",
+      "demoCredentials": "Credenciales de demostración",
+      "demoEmail": "Correo electrónico",
+      "demoPassword": "Contraseña"
+    },
+    "features": {
+      "fast": {
+        "title": "Súper rápido",
+        "description": "Confirmaciones de reserva instantáneas y actualizaciones en tiempo real"
+      },
+      "secure": {
+        "title": "Seguro y privado",
+        "description": "Tus datos están encriptados y protegidos en todo momento"
+      },
+      "easy": {
+        "title": "Fácil de usar",
+        "description": "Interfaz intuitiva diseñada para la eficiencia"
+      }
+    },
+    "stats": {
+      "users": "Usuarios",
+      "bookings": "Reservas",
+      "uptime": "Tiempo activo"
+    }
+  },
+  "register": {
+    "fillAllFields": "Por favor, completa todos los campos",
+    "invalidEmail": "Por favor, ingresa una dirección de correo electrónico válida",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "agreeToTerms": "Por favor, acepta los términos y condiciones",
+    "accountCreated": "¡Cuenta creada exitosamente!",
+    "welcomeMessage": "Bienvenido a Bot de Citas",
+    "branding": {
+      "title": "Únete hoy",
+      "subtitle": "Comienza a gestionar citas sin esfuerzo"
+    },
+    "form": {
+      "title": "Crear cuenta",
+      "subtitle": "Únete a miles de usuarios gestionando citas",
+      "fullNameLabel": "Nombre completo",
+      "fullNamePlaceholder": "Juan Pérez",
+      "emailLabel": "Dirección de correo electrónico",
+      "emailPlaceholder": "tu@correo.com",
+      "organizationLabel": "Nombre de la organización",
+      "organizationPlaceholder": "Ingresa el nombre de la organización",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Mín. 6 caracteres",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Vuelve a ingresar la contraseña",
+      "agreeToTerms": "Acepto los",
+      "termsAndConditions": "Términos y condiciones",
+      "and": "y",
+      "privacyPolicy": "Política de privacidad",
+      "createAccount": "Crear cuenta",
+      "creatingAccount": "Creando cuenta...",
+      "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+      "signInInstead": "Iniciar sesión en su lugar"
+    },
+    "features": {
+      "free": {
+        "title": "Gratis para empezar",
+        "description": "Crea tu cuenta y comienza a gestionar reservas inmediatamente"
+      },
+      "setup": {
+        "title": "Configuración rápida",
+        "description": "Ponte en marcha en minutos con nuestro proceso de incorporación guiado"
+      },
+      "security": {
+        "title": "Seguridad empresarial",
+        "description": "Encriptación de nivel bancario para mantener tus datos seguros"
+      }
+    }
+  },
+  "cards": {
+    "organization": {
+      "user": "Usuario",
+      "users": "Usuarios",
+      "service": "Servicio",
+      "services": "Servicios",
+      "view": "Ver",
+      "edit": "Editar"
+    },
+    "appointmentsSummary": {
+      "totalAppointments": "Total de citas",
+      "allTimeRecords": "Registros de todos los tiempos",
+      "confirmed": "Confirmadas",
+      "pending": "Pendientes",
+      "rejected": "Rechazadas",
+      "botStatus": "Estado del bot",
+      "adminStatus": "Administrador",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "linked": "Vinculado",
+      "notLinked": "No vinculado",
+      "confirmation": "Confirmación",
+      "rejectionRate": "/ {{rate}}%"
+    },
+    "service": {
+      "minuteAbbr": "m",
+      "hourAbbr": "h",
+      "free": "Gratis",
+      "badge": "Servicio",
+      "bookings": "{{count}} reservas",
+      "edit": "Editar servicio",
+      "manageAppointments": "Gestionar citas",
+      "delete": "Eliminar servicio",
+      "occupancyLabel": "Ocupación (mes actual)",
+      "occupancyTooltip": "{{booked}} de {{total}} horarios reservados este mes",
+      "noSlotsThisMonth": "No hay horarios disponibles este mes",
+      "occupancyValue": "{{occupancy}}% de ocupación para el mes actual",
+      "slotsSummary": "{{booked}} / {{total}} horarios",
+      "totalSlotsSummary": "{{booked}} de {{total}} horarios totales reservados"
+    },
+    "appointment": {
+      "status": {
+        "confirmed": "Confirmada",
+        "cancelled": "Cancelada",
+        "pending": "Pendiente",
+        "unknown": "Desconocida"
+      },
+      "chatIdDisplay": "ID de chat: {{chatId}}",
+      "unknown": "Desconocido",
+      "notAvailable": "N/D",
+      "labels": {
+        "name": "Nombre:",
+        "username": "Nombre de usuario:",
+        "chatId": "ID de chat:",
+        "service": "Servicio:",
+        "date": "Fecha:",
+        "time": "Hora:"
+      }
+    },
+    "mobileAppointment": {
+      "viewDetails": "Ver detalles",
+      "edit": "Editar",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "clientLabel": "ID del cliente: {{client}}"
+    }
+  },
+  "notifications": {
+    "appointments": {
+      "created": "Cita creada",
+      "createdDescription": "Nueva cita ha sido creada exitosamente",
+      "updated": "Cita actualizada",
+      "updatedDescription": "Los detalles de la cita han sido actualizados",
+      "updatedForClient": "La cita para {clientName} ha sido actualizada",
+      "deleted": "Cita eliminada",
+      "deletedDescription": "La cita ha sido eliminada del sistema",
+      "confirmed": "Cita confirmada",
+      "confirmedDescription": "La cita ha sido confirmada",
+      "confirmedForClient": "La cita de {clientName} ha sido confirmada",
+      "cancelled": "Cita cancelada",
+      "cancelledDescription": "La cita ha sido cancelada",
+      "cancelledForClient": "La cita de {clientName} ha sido cancelada",
+      "rejected": "Cita rechazada",
+      "rejectedDescription": "La cita ha sido rechazada",
+      "rejectedForClient": "La cita de {clientName} ha sido rechazada",
+      "rejectedWithReason": "La cita ha sido rechazada: {reason}",
+      "rejectedForClientWithReason": "La cita de {clientName} ha sido rechazada: {reason}",
+      "pending": "Cita pendiente",
+      "pendingDescription": "Esperando confirmación"
+    },
+    "services": {
+      "created": "Servicio creado",
+      "createdDescription": "Servicio creado con horarios para 1 año",
+      "createdWithName": "{serviceName} ha sido creado con horarios generados automáticamente",
+      "updated": "Servicio actualizado",
+      "updatedDescription": "Los detalles del servicio han sido actualizados",
+      "updatedWithName": "{serviceName} ha sido actualizado",
+      "deleted": "Servicio eliminado",
+      "deletedDescription": "El servicio ha sido eliminado del sistema",
+      "deletedWithName": "{serviceName} ha sido eliminado",
+      "slotsGenerated": "Horarios generados",
+      "slotsGeneratedDescription": "Horarios generados automáticamente para 1 año",
+      "slotsGeneratedWithName": "Horarios para {serviceName} generados para 1 año"
+    },
+    "organizations": {
+      "created": "Organización creada",
+      "createdDescription": "Nueva organización ha sido creada",
+      "createdWithName": "{orgName} ha sido agregada",
+      "updated": "Organización actualizada",
+      "updatedDescription": "Los detalles de la organización han sido actualizados",
+      "updatedWithName": "{orgName} ha sido actualizada",
+      "deleted": "Organización eliminada",
+      "deletedDescription": "La organización ha sido eliminada del sistema",
+      "deletedWithName": "{orgName} ha sido eliminada"
+    },
+    "realtime": {
+      "newAppointment": "Nueva cita recibida",
+      "newAppointmentDescription": "Una nueva cita ha sido recibida",
+      "newAppointmentForClient": "{clientName} acaba de reservar una cita",
+      "appointmentConfirmed": "Cita confirmada",
+      "appointmentConfirmedDescription": "El cliente confirmó su cita",
+      "appointmentConfirmedForClient": "{clientName} confirmó su cita",
+      "appointmentCancelled": "Cita cancelada",
+      "appointmentCancelledDescription": "El cliente canceló su cita",
+      "appointmentCancelledForClient": "{clientName} canceló su cita",
+      "appointmentRejected": "Cita rechazada",
+      "appointmentRejectedDescription": "La cita fue rechazada",
+      "appointmentRejectedForClient": "La cita de {clientName} fue rechazada",
+      "appointmentRejectedWithReason": "La cita fue rechazada: {reason}",
+      "appointmentRescheduled": "Cita reprogramada",
+      "appointmentRescheduledDescription": "El cliente reprogramó su cita",
+      "appointmentRescheduledForClient": "{clientName} reprogramó su cita"
+    },
+    "system": {
+      "refreshed": "Datos actualizados",
+      "refreshedDescription": "Últimos datos cargados",
+      "refreshedForPage": "Los datos de {page} han sido actualizados",
+      "exported": "Exportación iniciada",
+      "exportedDescription": "Tu archivo estará listo en breve",
+      "exportedForType": "La exportación de {type} se está preparando",
+      "saved": "Cambios guardados",
+      "savedDescription": "Tus cambios han sido guardados exitosamente",
+      "autoSaved": "Guardado automático",
+      "autoSavedDescription": "Cambios guardados automáticamente",
+      "connectionLost": "Conexión perdida",
+      "connectionLostDescription": "Intentando reconectar...",
+      "connectionRestored": "Conexión restaurada",
+      "connectionRestoredDescription": "Estás de vuelta en línea"
+    },
+    "errors": {
+      "general": "Error",
+      "generalDescription": "Algo salió mal. Por favor, intenta de nuevo.",
+      "network": "Error de red",
+      "networkDescription": "No se puede conectar. Verifica tu conexión a internet.",
+      "validation": "Error de validación",
+      "validationDescription": "Por favor, revisa el formulario e intenta de nuevo.",
+      "unauthorized": "No autorizado",
+      "unauthorizedDescription": "Por favor, inicia sesión para continuar.",
+      "notFound": "No encontrado",
+      "notFoundDescription": "El elemento solicitado no fue encontrado.",
+      "notFoundForItem": "{item} no encontrado"
+    },
+    "warnings": {
+      "unsavedChanges": "Cambios sin guardar",
+      "unsavedChangesDescription": "Tienes cambios sin guardar. Guarda antes de salir.",
+      "limitReached": "Límite alcanzado",
+      "limitReachedDescription": "Has alcanzado tu límite para esta acción.",
+      "deprecated": "Función obsoleta",
+      "deprecatedDescription": "Esta función está obsoleta",
+      "deprecatedForFeature": "{feature} será eliminado pronto"
+    },
+    "info": {
+      "loading": "Cargando...",
+      "general": "Información"
+    },
+    "settings": {
+      "saved": "Configuración guardada",
+      "savedDescription": "Tus preferencias han sido actualizadas",
+      "reset": "Configuración restablecida",
+      "resetDescription": "Todas las configuraciones han sido restauradas a los valores predeterminados"
+    },
+    "bot": {
+      "activated": "Bot activado",
+      "activatedDescription": "Tu bot de Telegram ahora está activo y listo para recibir citas",
+      "deactivated": "Bot desactivado",
+      "deactivatedDescription": "Tu bot de Telegram ha sido desactivado",
+      "settingsUpdated": "Configuración del bot actualizada",
+      "settingsUpdatedDescription": "La configuración del bot ha sido guardada",
+      "tokenValidated": "Token validado",
+      "tokenValidatedDescription": "El token del bot es válido y listo para usar",
+      "adminLinked": "Administrador vinculado",
+      "adminLinkedDescription": "Tu cuenta de Telegram ha sido vinculada al bot",
+      "adminUnlinked": "Administrador desvinculado",
+      "adminUnlinkedDescription": "Tu cuenta de Telegram ha sido desvinculada del bot"
+    },
+    "notificationCenter": {
+      "allCleared": "Todas las notificaciones limpiadas",
+      "clearFailed": "Error al limpiar todas las notificaciones",
+      "newAppointment": "Nueva cita",
+      "appointmentUpdated": "Cita actualizada",
+      "appointmentCancelled": "Cita cancelada",
+      "appointmentConfirmed": "Cita confirmada",
+      "newService": "Nuevo servicio",
+      "serviceUpdated": "Servicio actualizado",
+      "serviceDeleted": "Servicio eliminado",
+      "botMessage": "Mensaje del bot",
+      "bookingCompleted": "Reserva completada",
+      "systemEvent": "Evento del sistema"
+    }
+  }
+}
