@@ -867,7 +867,9 @@
     "german": "Alemán",
     "french": "Francés",
     "spanish": "Español",
-    "portuguese": "Portugués"
+    "portuguese": "Portugués",
+    "japanese": "Japonés",
+    "chinese": "Chino"
   },
   "login": {
     "fillAllFields": "Por favor, completa todos los campos",

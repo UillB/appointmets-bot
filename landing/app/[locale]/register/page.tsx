@@ -20,6 +20,7 @@ import {
   Building,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
+import AppointexoLogo from '@/components/AppointexoLogo'
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -112,7 +113,7 @@ export default function RegisterPage() {
           adminPanelUrl.searchParams.set('user', encodeURIComponent(JSON.stringify(result.user)))
           
           toast.success('Account created successfully!', {
-            description: 'Welcome to Appointments Bot',
+            description: 'Welcome to Appointexo',
           })
           
           // Redirect to admin panel with token in URL
@@ -161,19 +162,19 @@ export default function RegisterPage() {
         {/* Left Side - Branding */}
         <div className="hidden lg:flex flex-col justify-center space-y-8">
           {/* Logo */}
-          <div className="space-y-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl">
-              <Calendar className="w-12 h-12 text-white" />
+          <Link href={`/${locale}`} className="space-y-4 group">
+            <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-105 transition-transform">
+              <AppointexoLogo size={48} className="text-white" />
             </div>
             <div>
-              <h1 className="text-5xl mb-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 dark:from-indigo-400 dark:via-purple-400 dark:to-indigo-500 bg-clip-text text-transparent">
-                Join Us Today
+              <h1 className="text-5xl mb-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 dark:from-indigo-400 dark:via-purple-400 dark:to-indigo-500 bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
+                Appointexo
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300">
                 Start managing appointments effortlessly
               </p>
             </div>
-          </div>
+          </Link>
 
           {/* Benefits */}
           <div className="space-y-6">
@@ -250,14 +251,14 @@ export default function RegisterPage() {
         <div className="flex items-center justify-center">
           <div className="w-full max-w-md p-8 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-2xl rounded-2xl border border-white/60 dark:border-gray-800/60">
             {/* Mobile Logo */}
-            <div className="lg:hidden mb-8 text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-4">
-                <Calendar className="w-10 h-10 text-white" />
+            <Link href={`/${locale}`} className="lg:hidden mb-8 text-center block group">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl mx-auto mb-4 group-hover:scale-105 transition-transform">
+                <AppointexoLogo size={40} className="text-white" />
               </div>
-              <h2 className="text-2xl mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 dark:from-indigo-400 dark:via-purple-400 dark:to-indigo-500 bg-clip-text text-transparent">
-                Appointments Bot
+              <h2 className="text-2xl mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 dark:from-indigo-400 dark:via-purple-400 dark:to-indigo-500 bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
+                Appointexo
               </h2>
-            </div>
+            </Link>
 
             {/* Header */}
             <div className="text-center mb-8">

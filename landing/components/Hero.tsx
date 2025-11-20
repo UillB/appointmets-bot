@@ -175,7 +175,7 @@ export default function Hero() {
                 <div className="bg-white rounded-[2.5rem] overflow-hidden">
                   {/* Status Bar */}
                   <div className="bg-primary-600 h-12 flex items-center justify-between px-6 text-white text-sm">
-                    <span className="font-medium">Bookly Bot</span>
+                    <span className="font-medium">Appointexo Bot</span>
                     <div className="flex items-center space-x-1">
                       <div className="w-1 h-1 bg-white rounded-full"></div>
                       <div className="w-1 h-1 bg-white rounded-full"></div>

@@ -248,7 +248,7 @@ export const handleLang = (organizationId?: number) => async (ctx: Context) => {
   const arg = String(text || "").split(/\s+/)[1]?.toLowerCase();
   
   // Если передан аргумент, устанавливаем язык напрямую (для обратной совместимости)
-  if (arg && ["ru", "en", "he", "de", "fr", "es", "pt"].includes(arg)) {
+  if (arg && ["ru", "en", "he", "de", "fr", "es", "pt", "ja", "zh", "ar"].includes(arg)) {
     // Сохраняем язык в сессии
     if (!ctx.session) ctx.session = {};
     (ctx.session as any).lang = arg;
@@ -266,7 +266,10 @@ export const handleLang = (organizationId?: number) => async (ctx: Context) => {
     [Markup.button.callback("🇩🇪 Deutsch", "lang_de")],
     [Markup.button.callback("🇫🇷 Français", "lang_fr")],
     [Markup.button.callback("🇪🇸 Español", "lang_es")],
-    [Markup.button.callback("🇵🇹 Português", "lang_pt")]
+    [Markup.button.callback("🇵🇹 Português", "lang_pt")],
+    [Markup.button.callback("🇯🇵 日本語", "lang_ja")],
+    [Markup.button.callback("🇨🇳 中文", "lang_zh")],
+    [Markup.button.callback("🇸🇦 العربية", "lang_ar")]
   ]);
   
   await ctx.reply(ctx.tt("lang.choose"), keyboard);
@@ -321,16 +324,19 @@ export function registerLangCallbacks(bot: Telegraf, organizationId?: number) {
       [Markup.button.callback("🇩🇪 Deutsch", "lang_de")],
       [Markup.button.callback("🇫🇷 Français", "lang_fr")],
       [Markup.button.callback("🇪🇸 Español", "lang_es")],
-      [Markup.button.callback("🇵🇹 Português", "lang_pt")]
+      [Markup.button.callback("🇵🇹 Português", "lang_pt")],
+      [Markup.button.callback("🇯🇵 日本語", "lang_ja")],
+      [Markup.button.callback("🇨🇳 中文", "lang_zh")],
+      [Markup.button.callback("🇸🇦 العربية", "lang_ar")]
     ]);
     
     await ctx.editMessageText(ctx.tt("lang.choose"), keyboard);
   });
 
   // Выбор конкретного языка
-  bot.action(/^lang_(ru|en|he|de|fr|es|pt)$/, async (ctx) => {
+  bot.action(/^lang_(ru|en|he|de|fr|es|pt|ja|zh|ar)$/, async (ctx) => {
     await ctx.answerCbQuery();
-    const lang = ctx.match[1] as "ru" | "en" | "he" | "de" | "fr" | "es" | "pt";
+    const lang = ctx.match[1] as "ru" | "en" | "he" | "de" | "fr" | "es" | "pt" | "ja" | "zh" | "ar";
     
     // Сохраняем язык в сессии
     if (!ctx.session) ctx.session = {};

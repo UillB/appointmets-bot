@@ -13,7 +13,7 @@
     "title": "Sistema de Reservas de Telegram Revolucionario",
     "badge_new": "Nueva versión disponible",
     "subtitle": "¡Crea tu bot en 10 minutos y comienza a aceptar citas hoy!",
-    "description": "Bookly es un sistema moderno de gestión de citas con integración única de bot de Telegram. Perfecto para clínicas, salones de belleza, consultores y cualquier negocio de servicios.",
+    "description": "Appointexo es un sistema moderno de gestión de citas con integración única de bot de Telegram. Perfecto para clínicas, salones de belleza, consultores y cualquier negocio de servicios.",
     "cta_primary": "Comenzar gratis",
     "cta_secondary": "Ver demo",
     "stats": {
@@ -38,7 +38,7 @@
     }
   },
   "features": {
-    "title": "¿Por qué elegir Bookly?",
+    "title": "¿Por qué elegir Appointexo?",
     "subtitle": "Todo lo que necesitas para una gestión eficiente de citas",
     "learn_more": "Saber más",
     "telegram_integration": {
@@ -67,7 +67,7 @@
     },
     "more": {
       "title": "Y mucho más",
-      "description": "Bookly proporciona un conjunto completo de herramientas para gestionar citas y hacer crecer tu negocio.",
+      "description": "Appointexo proporciona un conjunto completo de herramientas para gestionar citas y hacer crecer tu negocio.",
       "list": [
         "Generación automática de horarios",
         "Notificaciones en tiempo real",
@@ -130,7 +130,7 @@
     },
     "results": {
       "title": "Resultados de clientes",
-      "subtitle": "Ve cómo Bookly ayuda a las empresas a crecer y optimizar",
+      "subtitle": "Ve cómo Appointexo ayuda a las empresas a crecer y optimizar",
       "stats": [
         { "value": "95%", "label": "Satisfacción del cliente" },
         { "value": "3x", "label": "Más reservas" },
@@ -204,7 +204,7 @@
       "mobile": "Móvil"
     },
     "testimonial1": {
-      "text": "Bookly ha cambiado completamente cómo funciona nuestra clínica. ¡Ahora el 80% de las citas vienen a través de nuestro bot de Telegram!",
+      "text": "Appointexo ha cambiado completamente cómo funciona nuestra clínica. ¡Ahora el 80% de las citas vienen a través de nuestro bot de Telegram!",
       "author": "Dra. Anna Petrova",
       "role": "Propietaria de Clínica Dental"
     },
@@ -221,7 +221,7 @@
   },
   "faq": {
     "title": "Preguntas frecuentes",
-    "subtitle": "Respuestas a preguntas populares sobre Bookly",
+    "subtitle": "Respuestas a preguntas populares sobre Appointexo",
     "contact": {
       "title": "¿No encontraste una respuesta?",
       "subtitle": "Nuestro equipo de soporte está aquí para ayudar 24/7",
@@ -251,7 +251,7 @@
   },
   "cta": {
     "title": "¿Listo para comenzar?",
-    "subtitle": "Únete a miles de usuarios satisfechos de Bookly",
+    "subtitle": "Únete a miles de usuarios satisfechos de Appointexo",
     "description": "¡Crea tu bot en 10 minutos y comienza a aceptar citas hoy!",
     "button": "Comenzar gratis",
     "guarantee": "30 días gratis • Sin tarjeta de crédito • Cancela en cualquier momento",
@@ -281,7 +281,7 @@
     },
     "register": {
       "title": "Crear cuenta",
-      "subtitle": "Comienza tu viaje con Bookly",
+      "subtitle": "Comienza tu viaje con Appointexo",
       "name": "Nombre",
       "email": "Correo electrónico",
       "password": "Contraseña",
@@ -312,7 +312,7 @@
     }
   },
   "footer": {
-    "description": "Bookly - sistema revolucionario de gestión de citas con integración de bot de Telegram.",
+    "description": "Appointexo - sistema revolucionario de gestión de citas con integración de bot de Telegram.",
     "product": "Producto",
     "company": "Empresa",
     "support": "Soporte",
@@ -329,7 +329,7 @@
     "terms_link": "Términos de servicio",
     "privacy_link": "Política de privacidad",
     "cookies_link": "Política de cookies",
-    "copyright": "© 2025 Bookly. Todos los derechos reservados.",
+    "copyright": "© 2025 Appointexo. Todos los derechos reservados.",
     "made_with": "Hecho con ❤️",
     "newsletter": {
       "title": "Suscríbete para actualizaciones",

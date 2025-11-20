@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Moon, Sun, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User, Wifi, WifiOff, Mail } from "lucide-react";
+import { AppointexoLogo } from "./AppointexoLogo";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Avatar, AvatarFallback } from "./ui/avatar";
@@ -30,6 +31,9 @@ import de from "../i18n/lang/de.json";
 import fr from "../i18n/lang/fr.json";
 import es from "../i18n/lang/es.json";
 import pt from "../i18n/lang/pt.json";
+import ja from "../i18n/lang/ja.json";
+import zh from "../i18n/lang/zh.json";
+import ar from "../i18n/lang/ar.json";
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -54,7 +58,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
   // Helper function to get language name in a specific language
   const getLanguageName = (targetLang: Language, displayLang: Language): string => {
-    const translations: Record<Language, any> = { ru, en, he, de, fr, es, pt };
+    const translations: Record<Language, any> = { ru, en, he, de, fr, es, pt, ja, zh, ar };
     const langKeyMap: Record<Language, string> = {
       ru: 'russian',
       en: 'english',
@@ -62,7 +66,10 @@ export function Header({ onMenuClick }: HeaderProps) {
       de: 'german',
       fr: 'french',
       es: 'spanish',
-      pt: 'portuguese'
+      pt: 'portuguese',
+      ja: 'japanese',
+      zh: 'chinese',
+      ar: 'arabic'
     };
     const langKey = langKeyMap[targetLang];
     return translations[displayLang]?.language?.[langKey] || targetLang.toUpperCase();
@@ -103,6 +110,14 @@ export function Header({ onMenuClick }: HeaderProps) {
           >
             <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
           </Button>
+          
+          {/* Logo */}
+          <div className="hidden sm:flex items-center gap-2.5">
+            <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-600 dark:to-purple-700 rounded-lg flex items-center justify-center shadow-md">
+              <AppointexoLogo size={24} className="text-white" />
+            </div>
+            <span className="font-bold text-gray-900 dark:text-gray-100 text-base sm:text-lg">Appointexo</span>
+          </div>
           
             <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -238,6 +253,27 @@ export function Header({ onMenuClick }: HeaderProps) {
               >
                 <span>🇵🇹 {t("language.portuguese")}</span>
                 {language === 'pt' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('ja')}
+                className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <span>🇯🇵 {t("language.japanese")}</span>
+                {language === 'ja' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('zh')}
+                className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <span>🇨🇳 {t("language.chinese")}</span>
+                {language === 'zh' && <Check className="w-4 h-4" />}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleLanguageChange('ar')}
+                className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <span>🇸🇦 {t("language.arabic")}</span>
+                {language === 'ar' && <Check className="w-4 h-4" />}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

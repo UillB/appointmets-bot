@@ -1,0 +1,341 @@
+{
+  "navigation": {
+    "home": "ホーム",
+    "features": "機能",
+    "pricing": "料金",
+    "about": "について",
+    "contact": "お問い合わせ",
+    "login": "ログイン",
+    "register": "新規登録",
+    "dashboard": "ダッシュボード"
+  },
+  "hero": {
+    "title": "革新的なTelegram予約システム",
+    "badge_new": "新バージョン利用可能",
+    "subtitle": "10分でボットを作成し、今日から予約を受け付けましょう！",
+    "description": "Appointexoは、独自のTelegramボット統合を備えた最新の予約管理システムです。クリニック、美容院、コンサルタント、あらゆるサービス事業に最適です。",
+    "cta_primary": "無料で始める",
+    "cta_secondary": "デモを見る",
+    "stats": {
+      "users": "1000人以上のユーザー",
+      "appointments": "50,000件以上の予約",
+      "countries": "15か国"
+    },
+    "labels": {
+      "users": "ユーザー",
+      "appointments": "予約",
+      "countries": "国"
+    },
+    "bot": {
+      "greeting": "こんにちは！👋 予約のお手伝いをいたします。サービスを選択してください：",
+      "service1": { "title": "相談", "price": "30分 • $20" },
+      "service2": { "title": "治療", "price": "60分 • $50" },
+      "userChoice": "相談を選択します"
+    },
+    "calendar": {
+      "select": "日付を選択：",
+      "weekdays": { "mon": "月", "tue": "火", "wed": "水", "thu": "木", "fri": "金", "sat": "土", "sun": "日" }
+    }
+  },
+  "features": {
+    "title": "なぜAppointexoを選ぶのか？",
+    "subtitle": "効率的な予約管理に必要なすべて",
+    "learn_more": "詳細を見る",
+    "telegram_integration": {
+      "title": "Telegram統合",
+      "description": "お客様はTelegramで直接予約できます - 最も人気のあるメッセンジャー"
+    },
+    "multilingual": {
+      "title": "多言語対応",
+      "description": "ロシア語、英語、ヘブライ語をすぐにサポート"
+    },
+    "easy_setup": {
+      "title": "簡単セットアップ",
+      "description": "10分でボットを作成し、予約を受け付け開始"
+    },
+    "admin_panel": {
+      "title": "美しい管理パネル",
+      "description": "Material Design 3のモダンなインターフェース"
+    },
+    "analytics": {
+      "title": "分析とレポート",
+      "description": "統計を追跡し、作業を最適化"
+    },
+    "security": {
+      "title": "セキュリティ",
+      "description": "JWT認証とロールベースのアクセス制御"
+    },
+    "more": {
+      "title": "そしてさらに多くの機能",
+      "description": "Appointexoは、予約を管理し、ビジネスを成長させるための完全なツールキットを提供します。",
+      "list": [
+        "自動スロット生成",
+        "リアルタイム通知",
+        "カレンダー統合",
+        "モバイル対応",
+        "開発者API",
+        "24/7サポート"
+      ],
+      "dashboard_title": "ダッシュボード",
+      "today_appointments": "今日の予約",
+      "occupancy": "稼働率",
+      "activity": {
+        "new_appointment": "新しい予約：相談",
+        "cancel": "キャンセル：治療",
+        "schedule_update": "スケジュール更新"
+      }
+    }
+  },
+  "how_it_works": {
+    "title": "どのように機能しますか？",
+    "subtitle": "起動するには3つの簡単なステップだけ",
+    "ready_in_5min": "5分で準備完了",
+    "step1": {
+      "title": "ボットを作成",
+      "description": "@BotFather経由でTelegramボットを作成するためのステップバイステップの説明に従う"
+    },
+    "step2": {
+      "title": "サービスを設定",
+      "description": "サービス、価格、営業時間を追加"
+    },
+    "step3": {
+      "title": "受け付け開始",
+      "description": "ボットリンクをお客様と共有し、予約を受け付け開始"
+    },
+    "cta": {
+      "title": "準備はできましたか？",
+      "subtitle": "10分でボットを作成し、今日から予約を受け付けましょう！",
+      "primary": "無料でボットを作成",
+      "secondary": "デモを見る"
+    }
+  },
+  "benefits": {
+    "title": "ビジネスへのメリット",
+    "subtitle": "効率と顧客満足度を向上",
+    "benefit1": {
+      "title": "24/7利用可能",
+      "description": "お客様はいつでも予約できます。あなたが寝ている間でも"
+    },
+    "benefit2": {
+      "title": "自動化",
+      "description": "電話が減り、お客様との作業時間が増えます"
+    },
+    "benefit3": {
+      "title": "お客様の利便性",
+      "description": "使い慣れたTelegramインターフェース - 学習不要"
+    },
+    "benefit4": {
+      "title": "モビリティ",
+      "description": "任意のデバイスから予約を管理"
+    },
+    "results": {
+      "title": "顧客の成果",
+      "subtitle": "Appointexoがビジネスの成長と最適化にどのように役立つかを見る",
+      "stats": [
+        { "value": "95%", "label": "顧客満足度" },
+        { "value": "3倍", "label": "予約数増加" },
+        { "value": "50%", "label": "管理時間削減" },
+        { "value": "24/7", "label": "常に利用可能" }
+      ]
+    },
+    "stories": {
+      "1": {"title": "Bright Clinic", "role": "医療センター", "text": "3か月で予約が3倍になりました。お客様は予約の簡単さを気に入っています。", "metric": "+150%予約"},
+      "2": {"title": "Glow Salon", "role": "美容院", "text": "現在、予約の80%がボット経由です。お客様との時間が増え、電話対応の時間が減りました。", "metric": "+80%自動化"},
+      "3": {"title": "Dr. Smith", "role": "個人診療", "text": "セットアップは数分でした。お客様はいつでも予約でき、即座に通知を受け取ります。", "metric": "100%満足のお客様"}
+    }
+  },
+  "pricing": {
+    "title": "シンプルで透明な料金",
+    "subtitle": "ビジネスに合ったプランを選択",
+    "free": {
+      "name": "無料",
+      "price": "$0",
+      "period": "永久",
+      "description": "始めるのに最適",
+      "features": ["月50件までの予約","1組織","Telegramボット","基本分析","メールサポート"],
+      "cta": "無料で始める"
+    },
+    "professional": {
+      "name": "プロフェッショナル",
+      "price": "$29",
+      "period": "月額",
+      "description": "成長するビジネス向け",
+      "features": ["月500件までの予約","3組織","高度な分析","メール通知","優先サポート","ボットカスタマイズ"],
+      "cta": "プランを選択",
+      "popular": "人気"
+    },
+    "business": {
+      "name": "ビジネス",
+      "price": "$99",
+      "period": "月額",
+      "description": "大規模ビジネス向け",
+      "features": ["無制限の予約","無制限の組織","完全な分析","SMS通知","CRM統合","専任マネージャー","APIアクセス"],
+      "cta": "お問い合わせ"
+    },
+    "contact": {
+      "title": "カスタムプランが必要ですか？",
+      "text": "エンタープライズソリューションと特別条件についてお問い合わせください。",
+      "primary": "お問い合わせ",
+      "secondary": "デモをリクエスト"
+    },
+    "faq": {
+      "title": "料金FAQ",
+      "q1": { "title": "プランを変更できますか？", "text": "はい、いつでもプランを変更できます。変更は次の請求サイクルで有効になります。"},
+      "q2": { "title": "トライアル期間はありますか？", "text": "はい、有料プランには14日間の無料トライアルが含まれています。"},
+      "q3": { "title": "制限を超えた場合はどうなりますか？", "text": "事前に通知します。アップグレードするか、追加の予約を購入できます。"},
+      "q4": { "title": "利用可能な支払い方法は？", "text": "クレジットカード、PayPal、企業向けの銀行振込を受け付けています。"}
+    }
+  },
+  "faq": {
+    "title": "料金FAQ",
+    "q1": {"title": "プランを変更できますか？", "text": "はい、いつでもプランを変更できます。変更は次の請求サイクルで有効になります。"},
+    "q2": {"title": "トライアル期間はありますか？", "text": "はい、有料プランには14日間の無料トライアルが含まれています。"},
+    "q3": {"title": "制限を超えた場合はどうなりますか？", "text": "事前に通知します。アップグレードするか、追加の予約を購入できます。"},
+    "q4": {"title": "利用可能な支払い方法は？", "text": "クレジットカード、PayPal、企業向けの銀行振込を受け付けています。"}
+  },
+  "testimonials": {
+    "title": "お客様の声",
+    "subtitle": "世界中で1000人以上の満足したユーザー",
+    "trusted_by": "信頼されている",
+    "badges": {
+      "security": "セキュリティ",
+      "fast_setup": "高速セットアップ",
+      "multilingual": "多言語対応",
+      "mobile": "モバイル"
+    },
+    "testimonial1": {
+      "text": "Appointexoは私たちのクリニックの働き方を完全に変えました。現在、予約の80%がTelegramボット経由です！",
+      "author": "Anna Petrova医師",
+      "role": "歯科クリニックオーナー"
+    },
+    "testimonial2": {
+      "text": "とても便利です！お客様が自分で予約し、通知を受け取ります。時間を大幅に節約できます。",
+      "author": "Maria Ivanova",
+      "role": "ネイルアーティスト"
+    },
+    "testimonial3": {
+      "text": "セットアップは文字通り15分でした。今ではプロフェッショナルな予約システムを持っています。",
+      "author": "Alexey Smirnov",
+      "role": "ビジネスコンサルタント"
+    }
+  },
+  "faq": {
+    "title": "よくある質問",
+    "subtitle": "Appointexoに関する人気の質問への回答",
+    "contact": {
+      "title": "答えが見つかりませんでしたか？",
+      "subtitle": "サポートチームが24/7サポートします",
+      "primary": "サポートに連絡",
+      "secondary": "ドキュメントを表示"
+    },
+    "q1": {
+      "question": "セットアップにはどのくらい時間がかかりますか？",
+      "answer": "完全なシステムセットアップはわずか10-15分です。画像付きのステップバイステップの説明を提供します。"
+    },
+    "q2": {
+      "question": "技術知識は必要ですか？",
+      "answer": "いいえ！当社のシステムは一般ユーザー向けに設計されています。すべての操作は直感的です。"
+    },
+    "q3": {
+      "question": "モバイルで使用できますか？",
+      "answer": "はい！レスポンシブな管理パネルとモバイル管理用のTelegram Web Appがあります。"
+    },
+    "q4": {
+      "question": "お客様の制限はありますか？",
+      "answer": "無料プランには月50件までの予約が含まれます。有料プランには実質的に制限がありません。"
+    },
+    "q5": {
+      "question": "他のシステムと統合できますか？",
+      "answer": "はい、CRM、カレンダー、その他のシステムとの統合用のAPIがあります。"
+    }
+  },
+  "cta": {
+    "title": "準備はできましたか？",
+    "subtitle": "数千人の満足したAppointexoユーザーに参加",
+    "description": "10分でボットを作成し、今日から予約を受け付けましょう！",
+    "button": "無料で始める",
+    "guarantee": "30日間無料 • クレジットカード不要 • いつでもキャンセル可能",
+    "guarantees": {
+      "free30days": "30日間無料",
+      "noCard": "クレジットカード不要",
+      "cancelAnytime": "いつでもキャンセル可能"
+    },
+    "stats": {
+      "happyCustomers": "満足した顧客",
+      "successfulBookings": "成功した予約",
+      "uptime": "稼働時間"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "サインイン",
+      "subtitle": "おかえりなさい！",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "remember": "ログイン状態を保持",
+      "forgot": "パスワードをお忘れですか？",
+      "button": "サインイン",
+      "no_account": "アカウントをお持ちでないですか？",
+      "register_link": "新規登録",
+      "back_to_home": "ホームに戻る"
+    },
+    "register": {
+      "title": "アカウントを作成",
+      "subtitle": "Appointexoで旅を始めましょう",
+      "name": "名前",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "confirm_password": "パスワード確認",
+      "organization": "組織名",
+      "phone": "電話番号",
+      "terms": "同意します",
+      "terms_link": "利用規約",
+      "privacy": "および",
+      "privacy_link": "プライバシーポリシー",
+      "button": "アカウントを作成",
+      "has_account": "すでにアカウントをお持ちですか？",
+      "login_link": "サインイン",
+      "back_to_home": "ホームに戻る"
+    },
+    "errors": {
+      "required": "この項目は必須です",
+      "email_invalid": "有効なメールアドレスを入力してください",
+      "password_short": "パスワードは最低6文字である必要があります",
+      "passwords_not_match": "パスワードが一致しません",
+      "login_failed": "メールアドレスまたはパスワードが無効です",
+      "register_failed": "登録に失敗しました",
+      "network_error": "ネットワークエラー。後でもう一度お試しください"
+    },
+    "success": {
+      "login": "ようこそ！",
+      "register": "アカウントが正常に作成されました！"
+    }
+  },
+  "footer": {
+    "description": "Appointexo - Telegramボット統合を備えた革新的な予約管理システム。",
+    "product": "製品",
+    "company": "会社",
+    "support": "サポート",
+    "legal": "法的",
+    "features_link": "機能",
+    "pricing_link": "料金",
+    "demo_link": "デモ",
+    "about_link": "について",
+    "contact_link": "お問い合わせ",
+    "blog_link": "ブログ",
+    "help_link": "ヘルプ",
+    "docs_link": "ドキュメント",
+    "status_link": "ステータス",
+    "terms_link": "利用規約",
+    "privacy_link": "プライバシーポリシー",
+    "cookies_link": "Cookieポリシー",
+    "copyright": "© 2025 Appointexo. 全著作権所有。",
+    "made_with": "❤️ で作成",
+    "newsletter": {
+      "title": "更新情報を購読",
+      "subtitle": "新機能とリリースのニュースを受け取る",
+      "placeholder": "メールアドレス",
+      "button": "購読"
+    }
+  }
+}

@@ -1,0 +1,1181 @@
+{
+  "common": {
+    "systemOnline": "システムオンライン",
+    "updatedJustNow": "今更新されました",
+    "refresh": "更新",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "create": "作成",
+    "search": "検索",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "success": "成功",
+    "close": "閉じる",
+    "yes": "はい",
+    "no": "いいえ",
+    "active": "アクティブ",
+    "inactive": "非アクティブ",
+    "user": "ユーザー",
+    "organization": "組織",
+    "notAvailable": "利用不可",
+    "optional": "オプション",
+    "retry": "再試行"
+  },
+  "header": {
+    "logout": "ログアウト",
+    "connected": "接続済み",
+    "offline": "オフライン",
+    "liveUpdates": "ライブ更新",
+    "theme": {
+      "light": "ライト",
+      "dark": "ダーク",
+      "system": "システム"
+    },
+    "help": {
+      "title": "ヘルプが必要ですか？",
+      "description": "ご質問やサポートが必要ですか？お気軽にサポートチームまでお問い合わせください。できるだけ早くご返信いたします。",
+      "supportEmail": "support@yourbrand.com"
+    },
+    "profile": {
+      "profile": "プロフィール",
+      "settings": "設定",
+      "logout": "ログアウト"
+    }
+  },
+  "navigation": {
+    "appName": "予約管理",
+    "appSubtitle": "ビジネスマネージャー",
+    "dashboard": "ダッシュボード",
+    "appointments": "予約",
+    "services": "サービス",
+    "analytics": "分析",
+    "organizations": "組織",
+    "botManagement": "ボット管理",
+    "aiAssistant": "AIアシスタント",
+    "settings": "設定",
+    "badges": {
+      "new": "新着",
+      "beta": "ベータ"
+    },
+    "adminStatus": "管理者ステータス",
+    "telegramLinked": "Telegram連携済み",
+    "notLinked": "未連携",
+    "today": "今日",
+    "thisWeek": "今週",
+    "appointmentsShort": "予約",
+    "logout": "ログアウト"
+  },
+  "organizations": {
+    "title": "組織",
+    "description": "組織とその設定を管理",
+    "newOrganization": "新しい組織",
+    "refresh": "更新",
+    "searchPlaceholder": "組織を検索...",
+    "sortBy": "並び替え...",
+    "sortByName": "名前順",
+    "sortByUsers": "ユーザー数順",
+    "sortByServices": "サービス数順",
+    "sortByDate": "日付順",
+    "clearFilters": "フィルターをクリア",
+    "noOrganizationsFound": "組織が見つかりません",
+    "tryAdjustingSearch": "検索条件やフィルターを調整してみてください",
+    "getStarted": "最初の組織を作成して始めましょう",
+    "showing": "{{total}}件中{{count}}件を表示"
+  },
+  "appointments": {
+    "title": "予約",
+    "description": "予約と予約管理",
+    "all": "すべて",
+    "confirmed": "確認済み",
+    "pending": "保留中",
+    "cancelled": "キャンセル済み",
+    "rejected": "拒否済み",
+    "newAppointment": "新しい予約",
+    "searchPlaceholder": "検索...",
+    "searchPlaceholderDesktop": "チャットIDまたはサービスで検索...",
+    "filters": "フィルター",
+    "service": "サービス",
+    "allServices": "すべてのサービス",
+    "date": "日付",
+    "pickDate": "日付を選択",
+    "clearFilters": "フィルターをクリア",
+    "clear": "クリア",
+    "clearDateFilter": "日付フィルターをクリア",
+    "chatId": "チャットID",
+    "id": "ID",
+    "unknown": "不明",
+    "unknownService": "不明なサービス",
+    "noDate": "日付なし",
+    "noTime": "時間なし",
+    "noTimeInfo": "時間情報なし",
+    "notAvailable": "利用不可",
+    "minutes": "分",
+    "showing": "{{total}}件中{{count}}件の予約を表示",
+    "stats": {
+      "totalAppointments": "総予約数",
+      "allTimeBookings": "全期間の予約",
+      "successfullyConfirmed": "正常に確認済み",
+      "awaitingConfirmation": "確認待ち",
+      "cancelledRejected": "キャンセル・拒否",
+      "cancelledRejectedBookings": "キャンセルおよび拒否された予約"
+    },
+    "tableHeaders": {
+      "service": "サービス",
+      "dateTime": "日時",
+      "clientChatId": "クライアント/チャットID",
+      "duration": "時間",
+      "status": "ステータス",
+      "created": "作成日",
+      "actions": "操作"
+    },
+    "actions": {
+      "viewDetails": "詳細を表示",
+      "edit": "編集",
+      "confirm": "確認",
+      "cancel": "キャンセル"
+    },
+    "emptyStates": {
+      "noAppointmentsFound": "予約が見つかりません",
+      "noAppointmentsForDate": "{{date}}の予約が見つかりません",
+      "tryDifferentDate": "別の日付を選択するか、日付フィルターをクリアしてすべての予約を表示してください",
+      "createFirstAppointment": "最初の予約を作成"
+    },
+    "pagination": {
+      "previous": "前へ",
+      "next": "次へ"
+    }
+  },
+  "analytics": {
+    "title": "分析",
+    "description": "パフォーマンスとインサイトを追跡",
+    "export": "エクスポート",
+    "retry": "再試行",
+    "performanceOverview": "パフォーマンス概要",
+    "timePeriod": {
+      "allTime": "全期間",
+      "week": "週",
+      "month": "月",
+      "year": "年"
+    },
+    "stats": {
+      "totalBookings": "総予約数",
+      "allTime": "全期間",
+      "thisWeek": "今週",
+      "thisMonth": "今月",
+      "thisYear": "今年",
+      "growthRate": "成長率",
+      "vsPreviousPeriod": "前期比",
+      "vsLastWeek": "先週比",
+      "vsLastMonth": "先月比",
+      "vsLastYear": "昨年比",
+      "activeClients": "アクティブクライアント",
+      "uniqueClients": "ユニーククライアント",
+      "avgDuration": "平均時間",
+      "perAppointment": "予約あたり"
+    },
+    "appointmentsTrend": {
+      "title": "予約トレンド",
+      "description": "時系列での日次予約数"
+    },
+    "metrics": {
+      "appointments": "予約",
+      "revenue": "収益"
+    },
+    "tooltip": {
+      "appointment": "予約",
+      "appointments": "予約",
+      "booking": "予約",
+      "bookings": "予約",
+      "date": "日付",
+      "time": "時間",
+      "status": "ステータス",
+      "percentage": "パーセンテージ"
+    },
+    "topServices": {
+      "title": "人気サービス",
+      "description": "最も人気のあるサービス",
+      "bookings": "予約"
+    },
+    "appointmentStatus": {
+      "title": "予約ステータス",
+      "description": "ステータス分布"
+    },
+    "peakHours": {
+      "title": "ピーク時間",
+      "description": "1日の中で最も忙しい時間帯"
+    },
+    "quickInsights": {
+      "title": "クイックインサイト",
+      "bestDay": "ベストデー",
+      "peakTime": "ピークタイム",
+      "topService": "トップサービス",
+      "with": "で"
+    },
+    "emptyStates": {
+      "noAppointmentData": "この期間の予約データがありません",
+      "noServicesWithBookings": "この期間に予約があるサービスがありません",
+      "noStatusData": "予約ステータスデータがありません",
+      "noPeakHoursData": "ピーク時間データがありません",
+      "noDataAvailable": "データがありません"
+    },
+    "errors": {
+      "failedToLoad": "分析データの読み込みに失敗しました",
+      "failedToLoadData": "分析データの読み込みに失敗しました"
+    }
+  },
+  "slots": {
+    "title": "時間枠",
+    "description": "サービスの自動生成時間枠",
+    "searchPlaceholder": "時間枠を検索...",
+    "minutes": "分",
+    "unknownService": "不明なサービス",
+    "stats": {
+      "totalSlots": "総時間枠数",
+      "available": "利用可能",
+      "booked": "予約済み",
+      "utilization": "利用率"
+    },
+    "status": {
+      "available": "利用可能",
+      "booked": "予約済み",
+      "conflict": "競合"
+    },
+    "dates": {
+      "today": "今日",
+      "tomorrow": "明日",
+      "yesterday": "昨日"
+    },
+    "infoBanner": {
+      "title": "自動生成時間枠",
+      "description": "サービスを作成すると、時間枠が自動的に生成されます。標準営業時間（午前9時〜午後6時、月曜日〜金曜日）で1年先までカバーします。手動管理は不要です！"
+    },
+    "filters": {
+      "allServices": "すべてのサービス",
+      "allStatus": "すべてのステータス",
+      "filterByDate": "日付でフィルター"
+    },
+    "table": {
+      "title": "時間枠",
+      "showing": "{{total}}件中{{count}}件の時間枠",
+      "headers": {
+        "service": "サービス",
+        "date": "日付",
+        "time": "時間",
+        "duration": "時間",
+        "status": "ステータス",
+        "capacity": "定員"
+      }
+    },
+    "emptyStates": {
+      "noSlotsFound": "時間枠が見つかりません",
+      "createServiceToGenerate": "サービスを作成して時間枠を自動生成",
+      "tryAdjustingFilters": "フィルターを調整してみてください"
+    }
+  },
+  "slotsManagement": {
+    "title": "時間枠管理",
+    "subtitle": "自動生成時間枠の表示と管理",
+    "back": "戻る",
+    "infoBanner": {
+      "title": "自動生成時間枠",
+      "description": "サービスを追加すると、時間枠が自動的に作成されます。標準営業時間（午前9時〜午後6時、月曜日〜金曜日）で1年先までカバーします。手動設定は不要です！"
+    },
+    "filters": {
+      "service": "サービス",
+      "selectService": "サービスを選択",
+      "date": "日付",
+      "filterByDate": "日付でフィルター"
+    },
+    "table": {
+      "title": "時間枠",
+      "slotsFound": "{{count}}件の時間枠が見つかりました",
+      "headers": {
+        "date": "日付",
+        "time": "時間",
+        "duration": "時間",
+        "status": "ステータス",
+        "capacity": "定員"
+      }
+    },
+    "emptyStates": {
+      "selectService": "サービスを選択",
+      "chooseServiceToView": "自動生成された時間枠を表示するサービスを選択",
+      "noSlotsFound": "時間枠が見つかりません",
+      "noSlotsForDate": "選択した日付の時間枠が見つかりません",
+      "noSlotsYet": "このサービスにはまだ時間枠がありません"
+    }
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "welcome": "おかえりなさい、{{name}}さん！",
+    "statisticsOverview": "統計と概要",
+    "viewAll": "すべて表示",
+    "setupBanners": {
+      "services": {
+        "message": "現在サービス（販売するもの）がありません。今すぐ最初のサービスを作成してください - これは作業を開始するために必要で、わずか1分で完了します。",
+        "actionLabel": "サービスを作成"
+      },
+      "bot": {
+        "message": "Telegramボットが接続されていません。ボットを接続して、人々と共有し、今日から予約を受け取り始めましょう。",
+        "actionLabel": "ボットを接続"
+      },
+      "admin": {
+        "message": "Telegram管理者アカウントがリンクされていません。今すぐリンクして、Telegramから管理システム（管理パネル）にアクセスするなどの管理者機能を有効にしてください。",
+        "actionLabel": "管理者をリンク"
+      }
+    },
+    "stats": {
+      "totalAppointments": "総予約数",
+      "allTime": "全期間",
+      "todaysBookings": "今日の予約",
+      "scheduledForToday": "今日予定",
+      "pendingApprovals": "承認待ち",
+      "awaitingConfirmation": "確認待ち",
+      "activeServices": "アクティブサービス",
+      "availableForBooking": "予約可能"
+    },
+    "quickActions": {
+      "appointments": {
+        "title": "予約",
+        "description": "予約を管理"
+      },
+      "services": {
+        "title": "サービス",
+        "description": "提供内容を設定"
+      },
+      "organizations": {
+        "title": "組織",
+        "description": "場所を管理"
+      },
+      "settings": {
+        "title": "設定",
+        "description": "システム設定"
+      },
+      "today": "今日",
+      "available": "利用可能",
+      "active": "アクティブ",
+      "account": "アカウント"
+    },
+    "calendar": {
+      "title": "カレンダー",
+      "selected": "選択済み",
+      "selectDate": "日付を選択",
+      "days": {
+        "sun": "日",
+        "mon": "月",
+        "tue": "火",
+        "wed": "水",
+        "thu": "木",
+        "fri": "金",
+        "sat": "土"
+      }
+    },
+    "emptyStates": {
+      "noAppointmentsForDate": "選択した日付の予約がありません",
+      "clickDateToView": "カレンダーの日付をクリックして予約を表示"
+    }
+  },
+  "services": {
+    "title": "サービス",
+    "description": "サービスを管理し、パフォーマンスを追跡",
+    "addService": "サービスを追加",
+    "searchPlaceholder": "サービスを検索...",
+    "searchPlaceholderDesktop": "サービス名で検索...",
+    "filters": "フィルター",
+    "filterByName": "サービス名でフィルター",
+    "clearFilters": "フィルターをクリア",
+    "clear": "クリア",
+    "noServicesFound": "サービスが見つかりません",
+    "createFirstService": "最初のサービスを作成",
+    "showing": "{{total}}件中{{count}}件のサービスを表示",
+    "stats": {
+      "totalServices": "総サービス数",
+      "activeServices": "アクティブサービス",
+      "totalBookings": "総予約数",
+      "allTimeBookings": "全期間の予約",
+      "averageOccupancy": "平均稼働率（今月）",
+      "capacityUtilization": "定員利用率"
+    },
+    "autoGeneratedSlots": {
+      "title": "自動生成時間枠",
+      "description": "サービスを作成すると、1年分の時間枠が自動的に生成されます。手動での時間枠管理は不要 - サービスを作成して予約を開始するだけです！"
+    }
+  },
+  "settings": {
+    "title": "設定",
+    "description": "アカウントとシステム設定を管理",
+    "profileTab": "プロフィール",
+    "systemTab": "システム",
+    "accountStatus": "アカウントステータス",
+    "securityLevel": "セキュリティレベル",
+    "memberSince": "メンバー登録日",
+    "stats": {
+      "accountStatus": "アカウントステータス",
+      "active": "アクティブ",
+      "sinceOct2023": "2023年10月から",
+      "securityLevel": "セキュリティレベル",
+      "high": "高",
+      "twoFAEnabled": "2FA有効",
+      "memberSince": "メンバー登録日",
+      "activeUser": "アクティブユーザー"
+    },
+    "tabs": {
+      "userProfile": "ユーザープロフィール",
+      "systemSettings": "システム設定"
+    },
+    "profile": {
+      "title": "ユーザープロフィール",
+      "description": "個人情報を管理",
+      "updateTitle": "プロフィールを更新",
+      "updateDescription": "プロフィール情報を更新",
+      "updateButton": "プロフィールを更新",
+      "fields": {
+        "fullName": "氏名",
+        "emailAddress": "メールアドレス",
+        "role": "役割",
+        "organization": "組織",
+        "memberSince": "メンバー登録日"
+      },
+      "placeholders": {
+        "fullName": "氏名を入力",
+        "email": "メールアドレスを入力"
+      },
+      "role": {
+        "manager": "マネージャー"
+      }
+    },
+    "password": {
+      "title": "パスワードを変更",
+      "description": "アカウントを保護するためにパスワードを更新",
+      "changeButton": "パスワードを変更",
+      "fields": {
+        "currentPassword": "現在のパスワード",
+        "newPassword": "新しいパスワード",
+        "confirmPassword": "パスワード確認"
+      },
+      "placeholders": {
+        "currentPassword": "現在のパスワードを入力",
+        "newPassword": "新しいパスワードを入力",
+        "confirmPassword": "新しいパスワードを確認"
+      },
+      "requirements": {
+        "title": "パスワード要件：",
+        "minLength": "最低8文字",
+        "uppercaseLowercase": "大文字と小文字を含む",
+        "number": "少なくとも1つの数字を含む",
+        "specialCharacter": "少なくとも1つの特殊文字を含む"
+      }
+    },
+    "system": {
+      "languageTheme": {
+        "title": "言語とテーマ",
+        "description": "システム設定を構成",
+        "language": "言語",
+        "theme": "テーマ",
+        "themeOptions": {
+          "light": "ライトテーマ",
+          "dark": "ダークテーマ",
+          "auto": "自動（システム）"
+        }
+      },
+      "notifications": {
+        "title": "通知",
+        "description": "通知の受信方法を管理",
+        "emailNotifications": "メール通知",
+        "emailNotificationsDescription": "メールで通知を受信",
+        "pushNotifications": "プッシュ通知",
+        "pushNotificationsDescription": "ブラウザでプッシュ通知を受信"
+      },
+      "preferences": {
+        "title": "システム設定",
+        "description": "日付、時間、更新設定を構成",
+        "timezone": "タイムゾーン",
+        "dateFormat": "日付形式",
+        "timeFormat": "時間形式",
+        "timeFormat12": "12時間制（AM/PM）",
+        "timeFormat24": "24時間制",
+        "refreshInterval": "更新間隔（秒）",
+        "refreshInterval15": "15秒",
+        "refreshInterval30": "30秒",
+        "refreshInterval60": "1分",
+        "refreshInterval300": "5分",
+        "refreshIntervalManual": "手動のみ"
+      },
+      "saveButton": "設定を保存"
+    },
+    "errors": {
+      "fillAllRequiredFields": "すべての必須項目を入力してください",
+      "fillAllPasswordFields": "すべてのパスワード項目を入力してください",
+      "passwordsDoNotMatch": "新しいパスワードが一致しません",
+      "passwordMinLength": "パスワードは最低8文字である必要があります"
+    },
+    "profileUpdatedSuccessfully": "プロフィールが正常に更新されました",
+    "passwordChangedSuccessfully": "パスワードが正常に変更されました",
+    "systemSettingsSavedSuccessfully": "システム設定が正常に保存されました"
+  },
+  "dialogs": {
+    "save": "保存",
+    "cancel": "キャンセル",
+    "close": "閉じる",
+    "delete": "削除",
+    "edit": "編集",
+    "create": "作成",
+    "saving": "保存中...",
+    "service": {
+      "editTitle": "サービスを編集",
+      "createTitle": "新しいサービスを作成",
+      "editDescription": "サービス情報と設定を更新します。",
+      "createDescription": "以下の手順に従って新しいサービスを追加",
+      "nameRequired": "サービス名は必須です",
+      "durationRequired": "有効な時間は必須です",
+      "organizationIdRequired": "組織IDは必須です",
+      "updated": "サービスが正常に更新されました",
+      "created": "サービスが正常に作成されました",
+      "saveFailed": "サービスの保存に失敗しました",
+      "firstServiceMessage": "おめでとうございます！サービスが正常に作成されました。いつでも追加のサービスを作成できます。次に、セットアップを完了してTelegramボットを接続し、すぐに予約を受け取り始めましょう。",
+      "connectBot": "ボットを接続",
+      "serviceName": "サービス名",
+      "serviceNamePlaceholder": "例：カット、マッサージ、相談",
+      "description": "説明",
+      "descriptionPlaceholder": "サービスを説明...",
+      "duration": "時間（分）",
+      "price": "価格（オプション）",
+      "currency": "通貨",
+      "step1": {
+        "title": "基本情報",
+        "description": "サービス名と説明"
+      },
+      "step2": {
+        "title": "価格と時間",
+        "description": "価格と必要な時間を設定"
+      },
+      "step3": {
+        "title": "営業時間",
+        "description": "このサービスの利用可能時間を設定"
+      },
+      "startTime": "開始時間",
+      "endTime": "終了時間",
+      "lunchStart": "昼休み開始（オプション）",
+      "lunchEnd": "昼休み終了（オプション）",
+      "workingDays": "営業日",
+      "updateService": "サービスを更新",
+      "createService": "サービスを作成"
+    },
+    "organization": {
+      "viewTitle": "組織を表示",
+      "editTitle": "組織を編集",
+      "createTitle": "新しい組織を作成",
+      "viewDescription": "組織の詳細を表示",
+      "editDescription": "組織情報を更新",
+      "createDescription": "以下の手順に従って新しい組織を追加",
+      "nameRequired": "組織名は必須です",
+      "updated": "組織が正常に更新されました",
+      "created": "組織が正常に作成されました",
+      "saveFailed": "組織の保存に失敗しました",
+      "fields": {
+        "organizationName": "組織名",
+        "description": "説明",
+        "email": "メールアドレス",
+        "phone": "電話番号",
+        "address": "住所"
+      },
+      "placeholders": {
+        "name": "例：株式会社エイム",
+        "description": "組織の簡単な説明...",
+        "email": "contact@example.com",
+        "phone": "+81-3-1234-5678",
+        "address": "東京都渋谷区〇〇1-2-3"
+      },
+      "step1": {
+        "title": "基本情報",
+        "description": "組織名と説明"
+      },
+      "step2": {
+        "title": "連絡先情報",
+        "description": "メール、電話、住所"
+      },
+      "saveChanges": "変更を保存",
+      "createOrganization": "組織を作成"
+    },
+    "appointment": {
+      "title": "新しい予約を作成",
+      "description": "以下の手順に従って新しい予約を作成",
+      "step1": {
+        "title": "クライアント情報",
+        "description": "クライアントの詳細を入力"
+      },
+      "step2": {
+        "title": "サービスと時間",
+        "description": "サービスと時間枠を選択"
+      },
+      "clientId": "クライアントID/電話番号",
+      "clientIdPlaceholder": "クライアントIDまたは電話番号を入力",
+      "service": "サービス",
+      "loadingServices": "サービスを読み込み中...",
+      "selectServicePlaceholder": "サービスを選択",
+      "selectService": "サービスを選択してください",
+      "noServices": "利用可能なサービスがありません",
+      "date": "日付",
+      "pickDate": "日付を選択",
+      "selectDate": "日付を選択してください",
+      "timeSlot": "時間枠",
+      "selectSlot": "時間枠を選択してください",
+      "selectDateFirst": "まず日付を選択してください",
+      "selectServiceFirst": "まずサービスを選択してください",
+      "loadingSlots": "時間枠を読み込み中...",
+      "noSlots": "利用可能な時間枠がありません",
+      "selectSlotPlaceholder": "時間枠を選択",
+      "noSlotsForDate": "この日付の利用可能な時間枠がありません",
+      "slotConflict": "競合",
+      "loadingAvailableSlots": "利用可能な時間枠を読み込み中...",
+      "created": "予約が正常に作成されました",
+      "createFailed": "予約の作成に失敗しました",
+      "createButton": "予約を作成",
+      "creating": "作成中..."
+    }
+  },
+  "aiAssistant": {
+    "title": "AIアシスタント",
+    "description": "インテリジェントチャットボットアシスタントを設定および管理",
+    "refreshed": "AIアシスタントデータが更新されました",
+    "configSaved": "設定が正常に保存されました",
+    "configSaveFailed": "設定の保存に失敗しました",
+    "enableFirst": "まずAIアシスタントを有効にしてください",
+    "testSuccessful": "AIアシスタントテスト成功！",
+    "testResponse": "応答：{{response}}",
+    "testFailed": "AIアシスタントテスト失敗",
+    "enterApiKey": "APIキーを入力してください",
+    "apiKeyVerified": "APIキーが正常に確認されました",
+    "configReset": "設定がデフォルトにリセットされました",
+    "controls": {
+      "title": "AIアシスタント制御",
+      "description": "AI対応の応答を有効にして設定",
+      "enableAi": "AIアシスタントを有効化",
+      "enableAiDescription": "クライアントの問い合わせに対するAI対応の応答をオンにする",
+      "autoReply": "自動返信モード",
+      "autoReplyDescription": "すべてのTelegramメッセージに自動的に返信",
+      "activeTitle": "AIアシスタントがアクティブです",
+      "activeDescription": "AIアシスタントは、以下の指示に基づいてTelegramボットでクライアントをサポートする準備ができています。"
+    },
+    "config": {
+      "title": "AI設定",
+      "description": "AIモデルと動作を設定",
+      "modelLabel": "LLMモデル",
+      "modelHint": "より高度なモデルはより良い応答を提供しますが、コストがかかります",
+      "models": {
+        "gpt4": "GPT-4（最もインテリジェント）",
+        "gpt4Turbo": "GPT-4 Turbo（高速でスマート）",
+        "gpt35Turbo": "GPT-3.5 Turbo（高速で経済的）",
+        "claude3Opus": "Claude 3 Opus",
+        "claude3Sonnet": "Claude 3 Sonnet"
+      },
+      "temperatureLabel": "温度",
+      "temperaturePrecise": "精密（0）",
+      "temperatureBalanced": "バランス（1）",
+      "temperatureCreative": "創造的（2）",
+      "temperatureHint": "低い = より集中し一貫性がある。高い = より創造的で多様。"
+    },
+    "instructions": {
+      "title": "カスタム指示",
+      "description": "AIのコミュニケーション方法を教える - 性格、トーン、スタイルを定義",
+      "label": "プロンプト/指示",
+      "placeholder": "例：あなたはデビッド、親しみやすくプロフェッショナルなアシスタントです。明るく、親切で、カジュアルだが敬意を払ったトーンで応答する必要があります。常にクライアントを温かく迎え、可能な限り名前を使用してください...",
+      "characterCount": "{{count}}文字",
+      "hint": "新しい従業員を訓練するように考えてください",
+      "tipsTitle": "指示のヒント",
+      "tip1": "AIの名前と性格を定義",
+      "tip2": "トーンを指定：正式、カジュアル、親しみやすいなど",
+      "tip3": "言語と地域の設定を設定",
+      "tip4": "特定のポリシーやガイドラインに言及",
+      "tip5": "明確で簡潔に保つ"
+    },
+    "test": {
+      "title": "AIアシスタントをテスト",
+      "description": "テストメッセージを送信してAI設定と応答を確認",
+      "runTest": "テストを実行"
+    }
+  },
+  "toasts": {
+    "success": "成功",
+    "error": "エラー",
+    "warning": "警告",
+    "info": "情報",
+    "organizationsRefreshed": "組織が更新されました",
+    "filtersCleared": "フィルターがクリアされました",
+    "appointmentsRefreshed": "予約が更新されました",
+    "failedToLoadOrganizations": "組織データの読み込みに失敗しました",
+    "failedToSaveOrganization": "組織の保存に失敗しました",
+    "failedToLoadAppointments": "予約データの読み込みに失敗しました",
+    "failedToLoadDashboard": "ダッシュボードデータの読み込みに失敗しました",
+    "settingsRefreshed": "設定が更新されました",
+    "failedToLoadServices": "サービスの読み込みに失敗しました",
+    "failedToLoadStatistics": "統計の読み込みに失敗しました",
+    "failedToRefreshServices": "サービスの更新に失敗しました",
+    "failedToLoadSlots": "時間枠データの読み込みに失敗しました"
+  },
+  "botManagement": {
+    "title": "ボット管理",
+    "description": "自動クライアント予約用のTelegramボットを作成および設定",
+    "botActive": "ボットアクティブ",
+    "botInactive": "ボット非アクティブ",
+    "botWorking": "✓ 動作中",
+    "botNotWorking": "✗ 動作していません",
+    "botReady": "Telegramボットは準備ができており、予約を受け付けています",
+    "botNeedsActivation": "作業を開始するにはボットの有効化が必要です",
+    "organization": "組織",
+    "botLink": "ボットリンク",
+    "setupProgress": "ボットセットアップ進捗",
+    "setupComplete": "セットアップ完了",
+    "completed": "完了",
+    "inProgress": "進行中",
+    "instructions": "説明",
+    "activation": "有効化",
+    "settings": "設定",
+    "howToCreateBot": "Telegramボットの作成方法",
+    "stepByStepGuide": "初心者向けの簡単なステップバイステップガイド",
+    "step1Title": "Telegramを開いて@BotFatherを検索",
+    "step1Description": "BotFatherは新しいボットを作成するための公式Telegramボットです。検索で@BotFatherと入力してチャットを開くだけです。",
+    "step1HowTo": "BotFatherの見つけ方：",
+    "step1List1": "電話またはコンピューターでTelegramアプリを開く",
+    "step1List2": "検索で@BotFatherと入力",
+    "step1List3": "ボットをクリックして「開始」ボタンを押す",
+    "step2Title": "/newbotコマンドを送信",
+    "step2Description": "BotFatherはボット名とユーザー名を指定するよう求めます。ユーザー名は「bot」で終わる必要があります（例：MyAwesomeBot）。",
+    "step2HowTo": "ボットの作成：",
+    "step2List1": "BotFatherチャットに/newbotコマンドを送信",
+    "step2List2": "ボット名を入力（例：「私のクリニック」）",
+    "step2List3": "ボットユーザー名を入力（「bot」で終わる必要があります）",
+    "step2List4": "ユーザー名が一意で利用可能であることを確認",
+    "step3Title": "アクセストークンを取得",
+    "step3Description": "ボットを作成した後、BotFatherがトークンを送信します。それをコピーして「有効化」タブで使用し、ボットを接続します。",
+    "step3Format": "トークン形式：",
+    "step3Important": "重要：トークンはすべての文字を含めて完全にコピーする必要があります",
+    "step3GoToActivation": "有効化に移動",
+    "securityWarning": "重要：トークンのセキュリティ",
+    "securityWarning1": "トークンを他の人と共有しないでください",
+    "securityWarning2": "トークンを公開しないでください",
+    "securityWarning3": "トークンを安全な場所に保管してください",
+    "activationTitle": "ボットの有効化",
+    "activationDescription": "Telegramボットトークンを入力して有効化",
+    "botNotActiveAlert": "ボットはアクティブではありません。作業を開始するには有効化してください。",
+    "botToken": "ボットトークン *",
+    "botTokenPlaceholder": "123456789:ABCdefGHijKlMNOpqrsTUVwxyz",
+    "dontKnowHowToActivate": "有効化方法がわからない？説明に移動",
+    "tokenFormat": "トークン形式",
+    "tokenFormatDescription": "トークンは次の形式である必要があります：",
+    "tokenFormatGetFrom": "ボット作成後、@BotFatherからトークンを取得",
+    "clear": "クリア",
+    "validateToken": "トークンを検証",
+    "validating": "検証中...",
+    "activateBot": "ボットを有効化",
+    "activating": "ボットを有効化中...",
+    "botStatus": "ボットステータス",
+    "loadingBotStatus": "ボットステータスを読み込み中...",
+    "botName": "ボット名",
+    "botUsername": "ユーザー名",
+    "botLinkLabel": "ボットリンク",
+    "canJoinGroups": "グループに参加可能",
+    "canReadAllGroupMessages": "すべてのグループメッセージを読み取り可能",
+    "notSpecified": "指定なし",
+    "botNotActivated": "ボットが有効化されていません",
+    "botNotActivatedDescription": "ボット設定を使用するには、まず「有効化」タブで有効化する必要があります。",
+    "goToActivation": "有効化に移動",
+    "basicSettings": "基本設定",
+    "basicSettingsDescription": "ボット名と説明を設定",
+    "botNameLabel": "ボット名 *",
+    "botNamePlaceholder": "ボット名を入力",
+    "botDescription": "ボットの説明",
+    "botDescriptionPlaceholder": "ボット機能の簡単な説明...",
+    "updating": "更新中...",
+    "updateSettings": "設定を更新",
+    "shareBot": "ボットを共有",
+    "shareBotDescription": "クライアントとボットリンクを共有",
+    "scanQRCode": "QRコードをスキャンしてボットにすばやくアクセス",
+    "hoverToCopy": "QRコードにマウスを合わせてコピー",
+    "generatingQR": "QRコードを生成中...",
+    "qrCodeAvailableAfterActivation": "QRコードはボット有効化後に利用可能になります",
+    "open": "開く",
+    "downloadQR": "QRをダウンロード",
+    "copyQR": "QRをコピー",
+    "copyLink": "リンクをコピー",
+    "shareBotLabel": "ボットを共有",
+    "refreshStatus": "ステータスを更新",
+    "statusUpdated": "ステータスが更新されました",
+    "instructionsOpened": "ボット作成説明が開かれました",
+    "instructionsDescription": "ステップバイステップガイドに従ってください",
+    "linkCopied": "リンクがクリップボードにコピーされました",
+    "openingBot": "Telegramでボットを開いています",
+    "qrCodeDownloaded": "QRコードが正常にダウンロードされました",
+    "qrCodeDownloadedDescription": "画像がダウンロードフォルダに保存されました",
+    "qrCodeCopied": "QRコードがコピーされました！",
+    "qrCodeCopiedDescription": "貼り付け準備ができた画像",
+    "qrCodeCopyFailed": "QRコードのコピーに失敗しました",
+    "qrCodeCopyFailedDescription": "画像をダウンロードしてみてください",
+    "shareToTelegram": "Telegramへの共有ウィンドウが開かれました",
+    "shareToWhatsApp": "WhatsAppへの共有ウィンドウが開かれました",
+    "shareToEmail": "メールクライアントが開かれました",
+    "botLinkNotAvailable": "ボットリンクが利用できません",
+    "enterBotToken": "ボットトークンを入力",
+    "tokenValid": "トークン有効！ボットが見つかりました。",
+    "invalidToken": "無効なボットトークン",
+    "tokenValidationError": "トークンの検証エラー",
+    "botActivated": "ボットが正常に有効化されました！",
+    "botActivationError": "ボットの有効化エラー",
+    "organizationIdError": "エラー：組織IDが見つかりません",
+    "botSettingsUpdated": "ボット設定が更新されました！",
+    "botSettingsUpdateError": "設定の更新エラー",
+    "failedToLoadStatus": "ボットステータスの読み込みに失敗しました",
+    "failedToGenerateQR": "QRコードの生成に失敗しました",
+    "loadingUser": "ユーザーを読み込み中...",
+    "emptyState": {
+      "title": "ボットセットアップを開始",
+      "description": "3つの簡単なステップでTelegramボットを作成し、クライアントからの予約を受け付け始めましょう",
+      "step1": {
+        "title": "ボットを作成",
+        "description": "Telegramで@BotFatherを検索"
+      },
+      "step2": {
+        "title": "トークンを取得",
+        "description": "BotFatherからトークンをコピー"
+      },
+      "step3": {
+        "title": "有効化",
+        "description": "システムにトークンを貼り付け"
+      },
+      "startButton": "セットアップを開始",
+      "footer": "ステップバイステップガイドについては、以下の説明に従ってください"
+    },
+    "shareBotText": "Telegramボットをご覧ください：{{bot}}",
+    "shareEmailSubject": "予約用Telegramボット",
+    "shareEmailBody": "こんにちは！\n\n予約用のTelegramボットをご覧ください：\n{{link}}\n\nQRコードで簡単にアクセスできます。",
+    "botMustBeActivated": "管理者リンクを生成するにはボットを有効化する必要があります",
+    "yes": "はい",
+    "no": "いいえ",
+    "bot": "ボット",
+    "botNameDisplay": "ボット名",
+    "usernameDisplay": "ユーザー名",
+    "botLinkDisplay": "ボットリンク"
+  },
+  "language": {
+    "switch": "言語切り替え",
+    "languageChanged": "言語が{{lang}}に変更されました",
+    "russian": "ロシア語",
+    "english": "英語",
+    "hebrew": "ヘブライ語",
+    "german": "ドイツ語",
+    "french": "フランス語",
+    "spanish": "スペイン語",
+    "portuguese": "ポルトガル語",
+    "japanese": "日本語",
+    "chinese": "中国語"
+  },
+  "login": {
+    "fillAllFields": "すべての項目を入力してください",
+    "invalidEmail": "有効なメールアドレスを入力してください",
+    "welcomeBack": "おかえりなさい！",
+    "loginSuccess": "正常にログインしました",
+    "backToLanding": "ランディングページに戻る",
+    "branding": {
+      "title": "予約管理ボット",
+      "subtitle": "予約を簡単に管理"
+    },
+    "form": {
+      "title": "おかえりなさい",
+      "subtitle": "ダッシュボードにアクセスするためにサインイン",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "パスワードを入力",
+      "rememberMe": "ログイン状態を保持",
+      "forgotPassword": "パスワードをお忘れですか？",
+      "forgotPasswordToast": "パスワードリセットリンクがメールに送信されました",
+      "signIn": "サインイン",
+      "signingIn": "サインイン中...",
+      "newToApp": "予約管理ボットは初めてですか？",
+      "createAccount": "アカウントを作成",
+      "demoCredentials": "デモ認証情報",
+      "demoEmail": "メール",
+      "demoPassword": "パスワード"
+    },
+    "features": {
+      "fast": {
+        "title": "超高速",
+        "description": "即座の予約確認とリアルタイム更新"
+      },
+      "secure": {
+        "title": "セキュアでプライベート",
+        "description": "データは常に暗号化され保護されています"
+      },
+      "easy": {
+        "title": "使いやすい",
+        "description": "効率性を考慮して設計された直感的なインターフェース"
+      }
+    },
+    "stats": {
+      "users": "ユーザー",
+      "bookings": "予約",
+      "uptime": "稼働時間"
+    }
+  },
+  "register": {
+    "fillAllFields": "すべての項目を入力してください",
+    "invalidEmail": "有効なメールアドレスを入力してください",
+    "passwordMinLength": "パスワードは最低6文字である必要があります",
+    "passwordsDoNotMatch": "パスワードが一致しません",
+    "agreeToTerms": "利用規約に同意してください",
+    "accountCreated": "アカウントが正常に作成されました！",
+    "welcomeMessage": "予約管理ボットへようこそ",
+    "branding": {
+      "title": "今すぐ参加",
+      "subtitle": "簡単に予約管理を開始"
+    },
+    "form": {
+      "title": "アカウントを作成",
+      "subtitle": "何千人ものユーザーと一緒に予約を管理",
+      "fullNameLabel": "氏名",
+      "fullNamePlaceholder": "山田太郎",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "your@email.com",
+      "organizationLabel": "組織名",
+      "organizationPlaceholder": "組織名を入力",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "最低6文字",
+      "confirmPasswordLabel": "パスワード確認",
+      "confirmPasswordPlaceholder": "パスワードを再入力",
+      "agreeToTerms": "同意します",
+      "termsAndConditions": "利用規約",
+      "and": "および",
+      "privacyPolicy": "プライバシーポリシー",
+      "createAccount": "アカウントを作成",
+      "creatingAccount": "アカウントを作成中...",
+      "alreadyHaveAccount": "すでにアカウントをお持ちですか？",
+      "signInInstead": "代わりにサインイン"
+    },
+    "features": {
+      "free": {
+        "title": "無料で開始",
+        "description": "アカウントを作成してすぐに予約管理を開始"
+      },
+      "setup": {
+        "title": "クイックセットアップ",
+        "description": "ガイド付きオンボーディングで数分で起動"
+      },
+      "security": {
+        "title": "エンタープライズセキュリティ",
+        "description": "銀行レベルの暗号化でデータを安全に保護"
+      }
+    }
+  },
+  "cards": {
+    "organization": {
+      "user": "ユーザー",
+      "users": "ユーザー",
+      "service": "サービス",
+      "services": "サービス",
+      "view": "表示",
+      "edit": "編集"
+    },
+    "appointmentsSummary": {
+      "totalAppointments": "総予約数",
+      "allTimeRecords": "全期間の記録",
+      "confirmed": "確認済み",
+      "pending": "保留中",
+      "rejected": "拒否済み",
+      "botStatus": "ボットステータス",
+      "adminStatus": "管理者",
+      "active": "アクティブ",
+      "inactive": "非アクティブ",
+      "linked": "リンク済み",
+      "notLinked": "未リンク",
+      "confirmation": "確認",
+      "rejectionRate": "/ {{rate}}%"
+    },
+    "service": {
+      "minuteAbbr": "分",
+      "hourAbbr": "時間",
+      "free": "無料",
+      "badge": "サービス",
+      "bookings": "{{count}}件の予約",
+      "edit": "サービスを編集",
+      "manageAppointments": "予約を管理",
+      "delete": "サービスを削除",
+      "occupancyLabel": "稼働率（今月）",
+      "occupancyTooltip": "今月予約された{{total}}件中{{booked}}件",
+      "noSlotsThisMonth": "今月利用可能な時間枠がありません",
+      "occupancyValue": "今月の稼働率{{occupancy}}%",
+      "slotsSummary": "{{booked}} / {{total}}時間枠",
+      "totalSlotsSummary": "総{{total}}時間枠中{{booked}}件が予約済み"
+    },
+    "appointment": {
+      "status": {
+        "confirmed": "確認済み",
+        "cancelled": "キャンセル済み",
+        "pending": "保留中",
+        "unknown": "不明"
+      },
+      "chatIdDisplay": "チャットID：{{chatId}}",
+      "unknown": "不明",
+      "notAvailable": "利用不可",
+      "labels": {
+        "name": "名前：",
+        "username": "ユーザー名：",
+        "chatId": "チャットID：",
+        "service": "サービス：",
+        "date": "日付：",
+        "time": "時間："
+      }
+    },
+    "mobileAppointment": {
+      "viewDetails": "詳細を表示",
+      "edit": "編集",
+      "confirm": "確認",
+      "cancel": "キャンセル",
+      "clientLabel": "クライアントID：{{client}}"
+    }
+  },
+  "notifications": {
+    "appointments": {
+      "created": "予約が作成されました",
+      "createdDescription": "新しい予約が正常に作成されました",
+      "updated": "予約が更新されました",
+      "updatedDescription": "予約の詳細が更新されました",
+      "updatedForClient": "{clientName}の予約が更新されました",
+      "deleted": "予約が削除されました",
+      "deletedDescription": "予約がシステムから削除されました",
+      "confirmed": "予約が確認されました",
+      "confirmedDescription": "予約が確認されました",
+      "confirmedForClient": "{clientName}の予約が確認されました",
+      "cancelled": "予約がキャンセルされました",
+      "cancelledDescription": "予約がキャンセルされました",
+      "cancelledForClient": "{clientName}の予約がキャンセルされました",
+      "rejected": "予約が拒否されました",
+      "rejectedDescription": "予約が拒否されました",
+      "rejectedForClient": "{clientName}の予約が拒否されました",
+      "rejectedWithReason": "予約が拒否されました：{reason}",
+      "rejectedForClientWithReason": "{clientName}の予約が拒否されました：{reason}",
+      "pending": "予約保留中",
+      "pendingDescription": "確認待ち"
+    },
+    "services": {
+      "created": "サービスが作成されました",
+      "createdDescription": "1年分の時間枠付きでサービスが作成されました",
+      "createdWithName": "{serviceName}が自動生成時間枠付きで作成されました",
+      "updated": "サービスが更新されました",
+      "updatedDescription": "サービスの詳細が更新されました",
+      "updatedWithName": "{serviceName}が更新されました",
+      "deleted": "サービスが削除されました",
+      "deletedDescription": "サービスがシステムから削除されました",
+      "deletedWithName": "{serviceName}が削除されました",
+      "slotsGenerated": "時間枠が生成されました",
+      "slotsGeneratedDescription": "1年分の時間枠が自動生成されました",
+      "slotsGeneratedWithName": "{serviceName}の1年分の時間枠が生成されました"
+    },
+    "organizations": {
+      "created": "組織が作成されました",
+      "createdDescription": "新しい組織が作成されました",
+      "createdWithName": "{orgName}が追加されました",
+      "updated": "組織が更新されました",
+      "updatedDescription": "組織の詳細が更新されました",
+      "updatedWithName": "{orgName}が更新されました",
+      "deleted": "組織が削除されました",
+      "deletedDescription": "組織がシステムから削除されました",
+      "deletedWithName": "{orgName}が削除されました"
+    },
+    "realtime": {
+      "newAppointment": "新しい予約を受信しました",
+      "newAppointmentDescription": "新しい予約が受信されました",
+      "newAppointmentForClient": "{clientName}が予約しました",
+      "appointmentConfirmed": "予約が確認されました",
+      "appointmentConfirmedDescription": "クライアントが予約を確認しました",
+      "appointmentConfirmedForClient": "{clientName}が予約を確認しました",
+      "appointmentCancelled": "予約がキャンセルされました",
+      "appointmentCancelledDescription": "クライアントが予約をキャンセルしました",
+      "appointmentCancelledForClient": "{clientName}が予約をキャンセルしました",
+      "appointmentRejected": "予約が拒否されました",
+      "appointmentRejectedDescription": "予約が拒否されました",
+      "appointmentRejectedForClient": "{clientName}の予約が拒否されました",
+      "appointmentRejectedWithReason": "予約が拒否されました：{reason}",
+      "appointmentRescheduled": "予約が再スケジュールされました",
+      "appointmentRescheduledDescription": "クライアントが予約を再スケジュールしました",
+      "appointmentRescheduledForClient": "{clientName}が予約を再スケジュールしました"
+    },
+    "system": {
+      "refreshed": "データが更新されました",
+      "refreshedDescription": "最新データが読み込まれました",
+      "refreshedForPage": "{page}データが更新されました",
+      "exported": "エクスポートが開始されました",
+      "exportedDescription": "ファイルはすぐに準備できます",
+      "exportedForType": "{type}エクスポートを準備中",
+      "saved": "変更が保存されました",
+      "savedDescription": "変更が正常に保存されました",
+      "autoSaved": "自動保存",
+      "autoSavedDescription": "変更が自動的に保存されました",
+      "connectionLost": "接続が切断されました",
+      "connectionLostDescription": "再接続を試みています...",
+      "connectionRestored": "接続が復元されました",
+      "connectionRestoredDescription": "オンラインに戻りました"
+    },
+    "errors": {
+      "general": "エラー",
+      "generalDescription": "問題が発生しました。もう一度お試しください。",
+      "network": "ネットワークエラー",
+      "networkDescription": "接続できません。インターネット接続を確認してください。",
+      "validation": "検証エラー",
+      "validationDescription": "フォームを確認してもう一度お試しください。",
+      "unauthorized": "認証されていません",
+      "unauthorizedDescription": "続行するにはログインしてください。",
+      "notFound": "見つかりません",
+      "notFoundDescription": "リクエストされた項目が見つかりませんでした。",
+      "notFoundForItem": "{item}が見つかりません"
+    },
+    "warnings": {
+      "unsavedChanges": "未保存の変更",
+      "unsavedChangesDescription": "未保存の変更があります。終了する前に保存してください。",
+      "limitReached": "制限に達しました",
+      "limitReachedDescription": "このアクションの制限に達しました。",
+      "deprecated": "機能が非推奨",
+      "deprecatedDescription": "この機能は非推奨です",
+      "deprecatedForFeature": "{feature}は間もなく削除されます"
+    },
+    "info": {
+      "loading": "読み込み中...",
+      "general": "情報"
+    },
+    "settings": {
+      "saved": "設定が保存されました",
+      "savedDescription": "設定が更新されました",
+      "reset": "設定がリセットされました",
+      "resetDescription": "すべての設定がデフォルトに復元されました"
+    },
+    "bot": {
+      "activated": "ボットが有効化されました",
+      "activatedDescription": "Telegramボットがアクティブになり、予約を受け付ける準備ができました",
+      "deactivated": "ボットが無効化されました",
+      "deactivatedDescription": "Telegramボットが無効化されました",
+      "settingsUpdated": "ボット設定が更新されました",
+      "settingsUpdatedDescription": "ボット設定が保存されました",
+      "tokenValidated": "トークンが検証されました",
+      "tokenValidatedDescription": "ボットトークンが有効で使用準備ができています",
+      "adminLinked": "管理者がリンクされました",
+      "adminLinkedDescription": "Telegramアカウントがボットにリンクされました",
+      "adminUnlinked": "管理者のリンクが解除されました",
+      "adminUnlinkedDescription": "Telegramアカウントがボットからリンク解除されました"
+    },
+    "notificationCenter": {
+      "allCleared": "すべての通知がクリアされました",
+      "clearFailed": "すべての通知のクリアに失敗しました",
+      "newAppointment": "新しい予約",
+      "appointmentUpdated": "予約が更新されました",
+      "appointmentCancelled": "予約がキャンセルされました",
+      "appointmentConfirmed": "予約が確認されました",
+      "newService": "新しいサービス",
+      "serviceUpdated": "サービスが更新されました",
+      "serviceDeleted": "サービスが削除されました",
+      "botMessage": "ボットメッセージ",
+      "bookingCompleted": "予約が完了しました",
+      "systemEvent": "システムイベント"
+    }
+  }
+}

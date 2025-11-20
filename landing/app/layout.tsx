@@ -5,18 +5,18 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Bookly - Умная система записи через Telegram',
-  description: 'Революционная система управления записями на прием с интеграцией Telegram бота. Создайте своего бота за 10 минут и начните принимать записи уже сегодня!',
-  keywords: 'запись на прием, telegram бот, система записи, онлайн бронирование, медицинские записи, салоны красоты, консультации',
-  authors: [{ name: 'Bookly Team' }],
-  creator: 'Bookly',
-  publisher: 'Bookly',
+  title: 'Appointexo - Smart Appointment Management Platform',
+  description: 'Revolutionary appointment management system with Telegram bot integration. Create your bot in 10 minutes and start accepting appointments today!',
+  keywords: 'appointment booking, telegram bot, appointment system, online booking, medical appointments, beauty salons, consultations',
+  authors: [{ name: 'Appointexo Team' }],
+  creator: 'Appointexo',
+  publisher: 'Appointexo',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://bookly.app'),
+  metadataBase: new URL('https://appointexo.com'),
   alternates: {
     canonical: '/',
     languages: {
@@ -26,16 +26,16 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Bookly - Умная система записи через Telegram',
-    description: 'Революционная система управления записями на прием с интеграцией Telegram бота. Создайте своего бота за 10 минут!',
-    url: 'https://bookly.app',
-    siteName: 'Bookly',
+    title: 'Appointexo - Smart Appointment Management Platform',
+    description: 'Revolutionary appointment management system with Telegram bot integration. Create your bot in 10 minutes!',
+    url: 'https://appointexo.com',
+    siteName: 'Appointexo',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Bookly - Система записи через Telegram',
+        alt: 'Appointexo - Appointment Management Platform',
       },
     ],
     locale: 'ru_RU',
@@ -43,8 +43,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Bookly - Умная система записи через Telegram',
-    description: 'Революционная система управления записями на прием с интеграцией Telegram бота.',
+    title: 'Appointexo - Smart Appointment Management Platform',
+    description: 'Revolutionary appointment management system with Telegram bot integration.',
     images: ['/og-image.jpg'],
   },
   robots: {

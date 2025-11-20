@@ -13,7 +13,7 @@
     "title": "Revolutionary Telegram Booking System",
     "badge_new": "New version available",
     "subtitle": "Create your bot in 10 minutes and start accepting appointments today!",
-    "description": "Bookly is a modern appointment management system with unique Telegram bot integration. Perfect for clinics, beauty salons, consultants, and any service business.",
+    "description": "Appointexo is a modern appointment management system with unique Telegram bot integration. Perfect for clinics, beauty salons, consultants, and any service business.",
     "cta_primary": "Start Free",
     "cta_secondary": "Watch Demo",
     "stats": {
@@ -38,7 +38,7 @@
     }
   },
   "features": {
-    "title": "Why Choose Bookly?",
+    "title": "Why Choose Appointexo?",
     "subtitle": "Everything you need for efficient appointment management",
     "learn_more": "Learn more",
     "telegram_integration": {
@@ -67,7 +67,7 @@
     },
     "more": {
       "title": "And so much more",
-      "description": "Bookly provides a complete toolkit to manage appointments and grow your business.",
+      "description": "Appointexo provides a complete toolkit to manage appointments and grow your business.",
       "list": [
         "Automatic slot generation",
         "Real-time notifications",
@@ -130,7 +130,7 @@
     },
     "results": {
       "title": "Customer Results",
-      "subtitle": "See how Bookly helps businesses grow and optimize",
+      "subtitle": "See how Appointexo helps businesses grow and optimize",
       "stats": [
         { "value": "95%", "label": "Customer satisfaction" },
         { "value": "3x", "label": "More bookings" },
@@ -204,7 +204,7 @@
       "mobile": "Mobile"
     },
     "testimonial1": {
-      "text": "Bookly has completely changed how our clinic works. Now 80% of appointments come through our Telegram bot!",
+      "text": "Appointexo has completely changed how our clinic works. Now 80% of appointments come through our Telegram bot!",
       "author": "Dr. Anna Petrova",
       "role": "Dental Clinic Owner"
     },
@@ -221,7 +221,7 @@
   },
   "faq": {
     "title": "Frequently Asked Questions",
-    "subtitle": "Answers to popular questions about Bookly",
+    "subtitle": "Answers to popular questions about Appointexo",
     "contact": {
       "title": "Didn't find an answer?",
       "subtitle": "Our support team is here to help 24/7",
@@ -251,7 +251,7 @@
   },
   "cta": {
     "title": "Ready to Start?",
-    "subtitle": "Join thousands of satisfied Bookly users",
+    "subtitle": "Join thousands of satisfied Appointexo users",
     "description": "Create your bot in 10 minutes and start accepting appointments today!",
     "button": "Start Free",
     "guarantee": "30 days free • No credit card • Cancel anytime",
@@ -281,7 +281,7 @@
     },
     "register": {
       "title": "Create Account",
-      "subtitle": "Start your journey with Bookly",
+      "subtitle": "Start your journey with Appointexo",
       "name": "Name",
       "email": "Email",
       "password": "Password",
@@ -312,7 +312,7 @@
     }
   },
   "footer": {
-    "description": "Bookly - revolutionary appointment management system with Telegram bot integration.",
+    "description": "Appointexo - revolutionary appointment management system with Telegram bot integration.",
     "product": "Product",
     "company": "Company",
     "support": "Support",
@@ -329,7 +329,7 @@
     "terms_link": "Terms of Service",
     "privacy_link": "Privacy Policy",
     "cookies_link": "Cookie Policy",
-    "copyright": "© 2025 Bookly. All rights reserved.",
+    "copyright": "© 2025 Appointexo. All rights reserved.",
     "made_with": "Made with ❤️",
     "newsletter": {
       "title": "Subscribe for updates",

@@ -865,7 +865,11 @@
     "english": "Englisch",
     "hebrew": "Hebräisch",
     "german": "Deutsch",
-    "french": "Französisch"
+    "french": "Französisch",
+    "spanish": "Spanisch",
+    "portuguese": "Portugiesisch",
+    "japanese": "Japanisch",
+    "chinese": "Chinesisch"
   },
   "login": {
     "fillAllFields": "Bitte füllen Sie alle Felder aus",
@@ -874,7 +878,7 @@
     "loginSuccess": "Sie haben sich erfolgreich angemeldet",
     "backToLanding": "Zurück zur Startseite",
     "branding": {
-      "title": "Appointments Bot",
+      "title": "Appointexo",
       "subtitle": "Verwalten Sie Ihre Buchungen mit Leichtigkeit"
     },
     "form": {
@@ -889,7 +893,7 @@
       "forgotPasswordToast": "Passwort-Reset-Link wurde an Ihre E-Mail gesendet",
       "signIn": "Anmelden",
       "signingIn": "Anmeldung...",
-      "newToApp": "Neu bei Appointments Bot?",
+      "newToApp": "Neu bei Appointexo?",
       "createAccount": "Konto erstellen",
       "demoCredentials": "Demo-Anmeldedaten",
       "demoEmail": "E-Mail",
@@ -922,7 +926,7 @@
     "passwordsDoNotMatch": "Passwörter stimmen nicht überein",
     "agreeToTerms": "Bitte stimmen Sie den Allgemeinen Geschäftsbedingungen zu",
     "accountCreated": "Konto erfolgreich erstellt!",
-    "welcomeMessage": "Willkommen bei Appointments Bot",
+    "welcomeMessage": "Willkommen bei Appointexo",
     "branding": {
       "title": "Treten Sie uns noch heute bei",
       "subtitle": "Beginnen Sie, Termine mühelos zu verwalten"

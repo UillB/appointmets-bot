@@ -139,6 +139,25 @@ const webappTexts: Record<string, CalendarTexts> = {
     timezoneLabel: "Horários mostrados em {timezone}",
     weekdays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
     weekStartsOn: 0
+  },
+  ar: {
+    title: "اختر التاريخ",
+    subtitle: "راجع الأيام المتاحة وأكد حجزك",
+    send: "تأكيد التاريخ",
+    sent: "تم إرسال التاريخ. يمكنك إغلاق النافذة.",
+    error: "فشل في إرسال البيانات. يرجى إعادة الفتح من Telegram.",
+    monthPrev: "السابق",
+    monthNext: "التالي",
+    serviceMissing: "معلومات الخدمة مفقودة. أعد الفتح من Telegram.",
+    emptyState: "لا توجد مواعيد متاحة هذا الشهر.",
+    legendTitle: "مفتاح",
+    legendAvailable: "متاح",
+    legendBooked: "مكتمل",
+    legendDisabled: "غير متاح",
+    legendHint: "الأيام الزرقاء متاحة للحجز.",
+    timezoneLabel: "الأوقات معروضة في {timezone}",
+    weekdays: ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],
+    weekStartsOn: 0
   }
 };
 
@@ -282,7 +301,7 @@ r.get("/admin", (req: any, res: any) => {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Panel</title>
+  <title>Appointexo - Admin Panel</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu; background: var(--tg-theme-bg-color, #ffffff); color: var(--tg-theme-text-color, #000000); }

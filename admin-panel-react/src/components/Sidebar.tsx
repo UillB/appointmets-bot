@@ -19,6 +19,7 @@ import { apiClient } from "../services/api";
 import { useAuth } from "../hooks/useAuth";
 import { useWebSocket } from "../hooks/useWebSocket";
 import { useLanguage } from "../i18n";
+import { AppointexoLogo } from "./AppointexoLogo";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -202,11 +203,11 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
           {/* Logo */}
           <div className="p-4 sm:p-6 flex-shrink-0">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 dark:bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                <Calendar className="w-4 h-4 sm:w-6 sm:h-6" />
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-500/30 to-purple-600/30 dark:from-indigo-400/20 dark:to-purple-500/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
+                <AppointexoLogo size={32} className="sm:w-8 sm:h-8 text-white" />
               </div>
               <div>
-                <h1 className="font-semibold text-sm sm:text-base">{t("navigation.appName")}</h1>
+                <h1 className="font-bold text-base sm:text-lg text-white">Appointexo</h1>
                 <p className="text-[10px] sm:text-xs text-white/70 dark:text-white/60">{t("navigation.appSubtitle")}</p>
               </div>
             </div>

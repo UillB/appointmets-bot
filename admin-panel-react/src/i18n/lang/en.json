@@ -45,7 +45,7 @@
     }
   },
   "navigation": {
-    "appName": "Appointments",
+    "appName": "Appointexo",
     "appSubtitle": "Business Manager",
     "dashboard": "Dashboard",
     "appointments": "Appointments",
@@ -867,7 +867,10 @@
     "german": "German",
     "french": "French",
     "spanish": "Spanish",
-    "portuguese": "Portuguese"
+    "portuguese": "Portuguese",
+    "japanese": "Japanese",
+    "chinese": "Chinese",
+    "arabic": "Arabic"
   },
   "login": {
     "fillAllFields": "Please fill in all fields",
@@ -876,7 +879,7 @@
     "loginSuccess": "You have successfully logged in",
     "backToLanding": "Back to Landing",
     "branding": {
-      "title": "Appointments Bot",
+      "title": "Appointexo",
       "subtitle": "Manage your bookings with ease"
     },
     "form": {
@@ -891,7 +894,7 @@
       "forgotPasswordToast": "Password reset link sent to your email",
       "signIn": "Sign In",
       "signingIn": "Signing in...",
-      "newToApp": "New to Appointments Bot?",
+      "newToApp": "New to Appointexo?",
       "createAccount": "Create an Account",
       "demoCredentials": "Demo Credentials",
       "demoEmail": "Email",
@@ -924,7 +927,7 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "agreeToTerms": "Please agree to the terms and conditions",
     "accountCreated": "Account created successfully!",
-    "welcomeMessage": "Welcome to Appointments Bot",
+    "welcomeMessage": "Welcome to Appointexo",
     "branding": {
       "title": "Join Us Today",
       "subtitle": "Start managing appointments effortlessly"

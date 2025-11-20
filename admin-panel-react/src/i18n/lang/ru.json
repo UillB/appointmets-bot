@@ -836,7 +836,13 @@
     "languageChanged": "Язык изменен на {{lang}}",
     "russian": "Русский",
     "english": "English",
-    "hebrew": "עברית"
+    "hebrew": "עברית",
+    "german": "Deutsch",
+    "french": "Français",
+    "spanish": "Español",
+    "portuguese": "Português",
+    "japanese": "日本語",
+    "chinese": "中文"
   },
   "login": {
     "fillAllFields": "Пожалуйста, заполните все поля",
@@ -845,7 +851,7 @@
     "loginSuccess": "Вы успешно вошли в систему",
     "backToLanding": "Вернуться на главную",
     "branding": {
-      "title": "Appointments Bot",
+      "title": "Appointexo",
       "subtitle": "Управляйте своими бронированиями с легкостью"
     },
     "form": {
@@ -860,7 +866,7 @@
       "forgotPasswordToast": "Ссылка для сброса пароля отправлена на вашу почту",
       "signIn": "Войти",
       "signingIn": "Вход...",
-      "newToApp": "Впервые в Appointments Bot?",
+      "newToApp": "Впервые в Appointexo?",
       "createAccount": "Создать аккаунт",
       "demoCredentials": "Демо учетные данные",
       "demoEmail": "Email",
@@ -893,7 +899,7 @@
     "passwordsDoNotMatch": "Пароли не совпадают",
     "agreeToTerms": "Пожалуйста, согласитесь с условиями использования",
     "accountCreated": "Аккаунт успешно создан!",
-    "welcomeMessage": "Добро пожаловать в Appointments Bot",
+    "welcomeMessage": "Добро пожаловать в Appointexo",
     "branding": {
       "title": "Присоединяйтесь к нам сегодня",
       "subtitle": "Начните управлять записями без усилий"

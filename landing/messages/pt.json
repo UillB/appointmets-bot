@@ -13,7 +13,7 @@
     "title": "Sistema de Agendamento do Telegram Revolucionário",
     "badge_new": "Nova versão disponível",
     "subtitle": "Crie seu bot em 10 minutos e comece a aceitar agendamentos hoje!",
-    "description": "Bookly é um sistema moderno de gerenciamento de agendamentos com integração única de bot do Telegram. Perfeito para clínicas, salões de beleza, consultores e qualquer negócio de serviços.",
+    "description": "Appointexo é um sistema moderno de gerenciamento de agendamentos com integração única de bot do Telegram. Perfeito para clínicas, salões de beleza, consultores e qualquer negócio de serviços.",
     "cta_primary": "Começar grátis",
     "cta_secondary": "Assistir demo",
     "stats": {
@@ -38,7 +38,7 @@
     }
   },
   "features": {
-    "title": "Por que escolher Bookly?",
+    "title": "Por que escolher Appointexo?",
     "subtitle": "Tudo que você precisa para gerenciamento eficiente de agendamentos",
     "learn_more": "Saiba mais",
     "telegram_integration": {
@@ -67,7 +67,7 @@
     },
     "more": {
       "title": "E muito mais",
-      "description": "Bookly fornece um conjunto completo de ferramentas para gerenciar agendamentos e fazer crescer seu negócio.",
+      "description": "Appointexo fornece um conjunto completo de ferramentas para gerenciar agendamentos e fazer crescer seu negócio.",
       "list": [
         "Geração automática de horários",
         "Notificações em tempo real",
@@ -130,7 +130,7 @@
     },
     "results": {
       "title": "Resultados dos clientes",
-      "subtitle": "Veja como Bookly ajuda empresas a crescer e otimizar",
+      "subtitle": "Veja como Appointexo ajuda empresas a crescer e otimizar",
       "stats": [
         { "value": "95%", "label": "Satisfação do cliente" },
         { "value": "3x", "label": "Mais reservas" },
@@ -204,7 +204,7 @@
       "mobile": "Móvel"
     },
     "testimonial1": {
-      "text": "Bookly mudou completamente como nossa clínica funciona. Agora 80% dos agendamentos vêm através do nosso bot do Telegram!",
+      "text": "Appointexo mudou completamente como nossa clínica funciona. Agora 80% dos agendamentos vêm através do nosso bot do Telegram!",
       "author": "Dra. Anna Petrova",
       "role": "Proprietária de Clínica Odontológica"
     },
@@ -221,7 +221,7 @@
   },
   "faq": {
     "title": "Perguntas frequentes",
-    "subtitle": "Respostas a perguntas populares sobre Bookly",
+    "subtitle": "Respostas a perguntas populares sobre Appointexo",
     "contact": {
       "title": "Não encontrou uma resposta?",
       "subtitle": "Nossa equipe de suporte está aqui para ajudar 24/7",
@@ -251,7 +251,7 @@
   },
   "cta": {
     "title": "Pronto para começar?",
-    "subtitle": "Junte-se a milhares de usuários satisfeitos do Bookly",
+    "subtitle": "Junte-se a milhares de usuários satisfeitos do Appointexo",
     "description": "Crie seu bot em 10 minutos e comece a aceitar agendamentos hoje!",
     "button": "Começar grátis",
     "guarantee": "30 dias grátis • Sem cartão de crédito • Cancele a qualquer momento",
@@ -281,7 +281,7 @@
     },
     "register": {
       "title": "Criar conta",
-      "subtitle": "Comece sua jornada com Bookly",
+      "subtitle": "Comece sua jornada com Appointexo",
       "name": "Nome",
       "email": "E-mail",
       "password": "Senha",
@@ -312,7 +312,7 @@
     }
   },
   "footer": {
-    "description": "Bookly - sistema revolucionário de gerenciamento de agendamentos com integração de bot do Telegram.",
+    "description": "Appointexo - sistema revolucionário de gerenciamento de agendamentos com integração de bot do Telegram.",
     "product": "Produto",
     "company": "Empresa",
     "support": "Suporte",
@@ -329,7 +329,7 @@
     "terms_link": "Termos de serviço",
     "privacy_link": "Política de privacidade",
     "cookies_link": "Política de cookies",
-    "copyright": "© 2025 Bookly. Todos os direitos reservados.",
+    "copyright": "© 2025 Appointexo. Todos os direitos reservados.",
     "made_with": "Feito com ❤️",
     "newsletter": {
       "title": "Inscreva-se para atualizações",

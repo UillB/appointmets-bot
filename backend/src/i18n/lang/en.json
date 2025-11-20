@@ -24,7 +24,7 @@
     "linkFailed": "❌ Error linking account. Please try again later."
   },
   "lang": {
-    "usage": "Usage: /lang ru|en|he|de|fr|es|pt",
+    "usage": "Usage: /lang ru|en|he|de|fr|es|pt|ja|zh|ar",
     "choose": "🌐 Choose language:",
     "set": "Language set to: {lang}."
   },

@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 import { motion } from 'framer-motion'
 import { 
   MessageSquare, 
@@ -14,30 +15,20 @@ import {
   Heart
 } from 'lucide-react'
 import Link from 'next/link'
+import AppointexoLogo from './AppointexoLogo'
 
 export default function Footer() {
   const t = useTranslations('footer')
+  const locale = useLocale()
 
   const footerLinks = {
     product: [
       { name: t('features_link'), href: '#features' },
-      { name: t('pricing_link'), href: '#pricing' },
-      { name: t('demo_link'), href: '/demo' },
+      { name: t('pricing_link'), href: `/${locale}/pricing` },
     ],
     company: [
-      { name: t('about_link'), href: '/about' },
-      { name: t('contact_link'), href: '/contact' },
-      { name: t('blog_link'), href: '/blog' },
-    ],
-    support: [
-      { name: t('help_link'), href: '/help' },
-      { name: t('docs_link'), href: '/docs' },
-      { name: t('status_link'), href: '/status' },
-    ],
-    legal: [
-      { name: t('terms_link'), href: '/terms' },
-      { name: t('privacy_link'), href: '/privacy' },
-      { name: t('cookies_link'), href: '/cookies' },
+      { name: t('contact_link'), href: `/${locale}/contact` },
+      { name: t('privacy_link'), href: `/${locale}/privacy` },
     ]
   }
 
@@ -51,8 +42,8 @@ export default function Footer() {
   const contactInfo = [
     {
       icon: Mail,
-      text: 'hello@bookly.app',
-      href: 'mailto:hello@bookly.app'
+      text: 'hello@appointexo.com',
+      href: 'mailto:hello@appointexo.com'
     },
     // Phone and address intentionally omitted to keep neutral/international tone
   ]
@@ -73,10 +64,10 @@ export default function Footer() {
             >
               {/* Logo */}
               <Link href="/" className="flex items-center space-x-2 mb-6">
-                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
-                  <span className="text-primary-600 font-bold text-xl">B</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <AppointexoLogo size={24} className="text-white" />
                 </div>
-                <span className="text-2xl font-bold">Bookly</span>
+                <span className="text-2xl font-bold">Appointexo</span>
               </Link>
 
               {/* Description */}
@@ -113,7 +104,7 @@ export default function Footer() {
                 viewport={{ once: true }}
               >
                 <h3 className="text-lg font-semibold mb-6 capitalize">
-                  {t(section as keyof typeof t)}
+                  {section === 'product' ? 'Product' : 'Company'}
                 </h3>
                 <ul className="space-y-3">
                   {links.map((link, index) => (

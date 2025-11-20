@@ -865,7 +865,11 @@
     "english": "Anglais",
     "hebrew": "Hébreu",
     "german": "Allemand",
-    "french": "Français"
+    "french": "Français",
+    "spanish": "Espagnol",
+    "portuguese": "Portugais",
+    "japanese": "Japonais",
+    "chinese": "Chinois"
   },
   "login": {
     "fillAllFields": "Veuillez remplir tous les champs",
@@ -874,7 +878,7 @@
     "loginSuccess": "Vous vous êtes connecté avec succès",
     "backToLanding": "Retour à la page d'accueil",
     "branding": {
-      "title": "Appointments Bot",
+      "title": "Appointexo",
       "subtitle": "Gérez vos réservations en toute simplicité"
     },
     "form": {
@@ -889,7 +893,7 @@
       "forgotPasswordToast": "Lien de réinitialisation du mot de passe envoyé à votre e-mail",
       "signIn": "Se connecter",
       "signingIn": "Connexion...",
-      "newToApp": "Nouveau sur Appointments Bot ?",
+      "newToApp": "Nouveau sur Appointexo ?",
       "createAccount": "Créer un compte",
       "demoCredentials": "Identifiants de démonstration",
       "demoEmail": "E-mail",
@@ -922,7 +926,7 @@
     "passwordsDoNotMatch": "Les mots de passe ne correspondent pas",
     "agreeToTerms": "Veuillez accepter les conditions générales",
     "accountCreated": "Compte créé avec succès !",
-    "welcomeMessage": "Bienvenue sur Appointments Bot",
+    "welcomeMessage": "Bienvenue sur Appointexo",
     "branding": {
       "title": "Rejoignez-nous aujourd'hui",
       "subtitle": "Commencez à gérer les rendez-vous sans effort"

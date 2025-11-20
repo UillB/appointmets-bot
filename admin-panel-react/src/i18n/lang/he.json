@@ -829,7 +829,13 @@
     "languageChanged": "השפה שונתה ל-{{lang}}",
     "russian": "רוסית",
     "english": "אנגלית",
-    "hebrew": "עברית"
+    "hebrew": "עברית",
+    "german": "גרמנית",
+    "french": "צרפתית",
+    "spanish": "ספרדית",
+    "portuguese": "פורטוגזית",
+    "japanese": "יפנית",
+    "chinese": "סינית"
   },
   "login": {
     "fillAllFields": "אנא מלא את כל השדות",
@@ -838,7 +844,7 @@
     "loginSuccess": "התחברת בהצלחה",
     "backToLanding": "חזרה לעמוד הבית",
     "branding": {
-      "title": "Appointments Bot",
+      "title": "Appointexo",
       "subtitle": "נהל את ההזמנות שלך בקלות"
     },
     "form": {
@@ -853,7 +859,7 @@
       "forgotPasswordToast": "קישור איפוס סיסמה נשלח לאימייל שלך",
       "signIn": "התחבר",
       "signingIn": "מתחבר...",
-      "newToApp": "חדש ב-Appointments Bot?",
+      "newToApp": "חדש ב-Appointexo?",
       "createAccount": "צור חשבון",
       "demoCredentials": "פרטי התחברות לדמו",
       "demoEmail": "אימייל",
@@ -886,7 +892,7 @@
     "passwordsDoNotMatch": "הסיסמאות אינן תואמות",
     "agreeToTerms": "אנא הסכם לתנאים וההגבלות",
     "accountCreated": "החשבון נוצר בהצלחה!",
-    "welcomeMessage": "ברוך הבא ל-Appointments Bot",
+    "welcomeMessage": "ברוך הבא ל-Appointexo",
     "branding": {
       "title": "הצטרף אלינו היום",
       "subtitle": "התחל לנהל תורים ללא מאמץ"

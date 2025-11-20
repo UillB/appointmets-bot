@@ -6,8 +6,11 @@ import de from './lang/de.json';
 import fr from './lang/fr.json';
 import es from './lang/es.json';
 import pt from './lang/pt.json';
+import ja from './lang/ja.json';
+import zh from './lang/zh.json';
+import ar from './lang/ar.json';
 
-export type Language = 'ru' | 'en' | 'he' | 'de' | 'fr' | 'es' | 'pt';
+export type Language = 'ru' | 'en' | 'he' | 'de' | 'fr' | 'es' | 'pt' | 'ja' | 'zh' | 'ar';
 
 const translations: Record<Language, any> = {
   ru,
@@ -17,6 +20,9 @@ const translations: Record<Language, any> = {
   fr,
   es,
   pt,
+  ja,
+  zh,
+  ar,
 };
 
 interface LanguageContextType {
@@ -33,7 +39,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
     // Try to get language from localStorage
     const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    const validLanguages: Language[] = ['ru', 'en', 'he', 'de', 'fr', 'es', 'pt'];
+    const validLanguages: Language[] = ['ru', 'en', 'he', 'de', 'fr', 'es', 'pt', 'ja', 'zh', 'ar'];
     if (stored && validLanguages.includes(stored as Language)) {
       return stored as Language;
     }
@@ -48,6 +54,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     if (browserLang.startsWith('fr')) return 'fr';
     if (browserLang.startsWith('es')) return 'es';
     if (browserLang.startsWith('pt')) return 'pt';
+    if (browserLang.startsWith('ja')) return 'ja';
+    if (browserLang.startsWith('zh')) return 'zh';
+    if (browserLang.startsWith('ar')) return 'ar';
     if (browserLang.startsWith('en')) return 'en';
     if (browserLang.startsWith('ru')) return 'ru';
     // Default to English
@@ -130,6 +139,9 @@ export function getLanguageName(lang: Language): string {
     fr: 'Français',
     es: 'Español',
     pt: 'Português',
+    ja: '日本語',
+    zh: '中文',
+    ar: 'العربية',
   };
   return names[lang];
 }
