@@ -379,8 +379,8 @@
   "settings": {
     "title": "Настройки",
     "description": "Управляйте своим аккаунтом и системными настройками",
-    "profile": "Профиль",
-    "system": "Система",
+    "profileTab": "Профиль",
+    "systemTab": "Система",
     "accountStatus": "Статус аккаунта",
     "securityLevel": "Уровень безопасности",
     "memberSince": "Участник с",
@@ -819,7 +819,17 @@
       },
       "startButton": "Начать настройку",
       "footer": "Следуйте инструкциям ниже для пошагового руководства"
-    }
+    },
+    "shareBotText": "Проверьте нашего Telegram бота: {{bot}}",
+    "shareEmailSubject": "Telegram бот для записи",
+    "shareEmailBody": "Привет!\n\nПроверьте нашего Telegram бота для записи на прием:\n{{link}}\n\nИспользуйте QR-код для быстрого доступа.",
+    "botMustBeActivated": "Бот должен быть активирован для генерации ссылки администратора",
+    "yes": "Да",
+    "no": "Нет",
+    "bot": "бот",
+    "botNameDisplay": "Имя бота",
+    "usernameDisplay": "Username",
+    "botLinkDisplay": "Ссылка на бота"
   },
   "language": {
     "switch": "Переключение языка",

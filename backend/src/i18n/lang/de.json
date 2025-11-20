@@ -1,0 +1,104 @@
+{
+  "start": { "welcome": "👋 Willkommen!\n\nIch kann Ihnen bei der Terminbuchung helfen. Wählen Sie die gewünschte Funktion:" },
+  "book": {
+    "chooseService": "Wählen Sie einen Service:",
+    "openCalendar": "Kalender öffnen:",
+    "chooseTime": "📅 Datum: {date}\nWählen Sie eine Uhrzeit:",
+    "noSlotsDay": "Keine verfügbaren Termine am {date}.",
+    "chooseSlot": "📅 Verfügbaren Zeitslot wählen:",
+    "noSlotsAvailable": "❌ Keine verfügbaren Termine für diesen Service."
+  },
+  "confirm": {
+    "ok": "✅ Buchung bestätigt!",
+    "details": "Service: {service}\nZeit: {when}"
+  },
+  "errors": {
+    "generic": "⚠️ Etwas ist schief gelaufen. Bitte versuchen Sie es erneut.",
+    "webappDate": "⚠️ Datum konnte nicht aus der Web-App abgerufen werden.",
+    "webappService": "⚠️ serviceId fehlt.",
+    "slotTaken": "❌ Dieser Termin ist bereits belegt, wählen Sie einen anderen.",
+    "slotNotFound": "Termin nicht gefunden oder nicht mehr verfügbar.",
+    "telegramIdRequired": "Telegram-ID ist erforderlich",
+    "invalidLinkToken": "❌ Ungültiger Link. Bitte verwenden Sie den korrekten Link.",
+    "linkTokenExpired": "❌ Der Link ist abgelaufen. Bitte generieren Sie einen neuen Link.",
+    "linkFailed": "❌ Fehler beim Verknüpfen des Kontos. Bitte versuchen Sie es später erneut."
+  },
+  "lang": {
+    "usage": "Verwendung: /lang ru|en|he|de|fr|es|pt",
+    "choose": "🌐 Sprache wählen:",
+    "set": "Sprache auf {lang} gesetzt."
+  },
+  "group": {
+    "openPm": "Kalender kann nur im privaten Chat verwendet werden. Klicken Sie, um mit dem Bot fortzufahren:"
+  },
+  "admin": {
+    "notifyHeader": "🔔 Neue Buchung",
+    "notifyGroupHeader": "👥 Neue Buchung",
+    "cancelHeader": "❌ Buchung storniert",
+    "user": "Benutzer",
+    "service": "Service",
+    "time": "Zeit"
+  },
+  "progress": {
+    "confirming": "⏳ Buchung wird bestätigt…",
+    "dateReceived": "✅ Datum erhalten. Suche nach Terminen…"
+  },
+  "my": {
+    "noAppointments": "Sie haben keine aktiven Termine.",
+    "time": "Zeit",
+    "cancel": "Stornieren",
+    "appointmentNotFound": "Dieser Termin wurde nicht gefunden oder gehört Ihnen nicht.",
+    "cancelled": "❎ Termin storniert:"
+  },
+  "slots": {
+    "noServices": "Keine Services verfügbar.",
+    "chooseService": "Wählen Sie einen Service, um Termine anzuzeigen:",
+    "choosePeriod": "Zeitraum wählen:",
+    "today": "Heute",
+    "tomorrow": "Morgen",
+    "week": "Woche",
+    "noSlotsDay": "Keine Termine verfügbar am {date}.",
+    "noSlotsWeek": "Keine Termine verfügbar diese Woche.",
+    "weekView": "Wochenübersicht:",
+    "available": "verfügbar",
+    "occupied": "belegt",
+    "bookNow": "Jetzt buchen"
+  },
+  "menu": {
+    "book": "Termin buchen",
+    "viewSlots": "Termine anzeigen",
+    "myAppointments": "Meine Termine",
+    "language": "Sprache",
+    "adminPanel": "Admin-Panel"
+  },
+  "help": {
+    "text": "📖 Befehlsübersicht:\n\n📅 /book - Termin buchen\n👀 /slots - Verfügbare Termine anzeigen\n📋 /my - Meine Termine\n🌐 /lang - Sprache ändern\n❓ /help - Diese Hilfe anzeigen\n\nOder verwenden Sie die Buttons unten:"
+  },
+  "commands": {
+    "start": "Mit dem Bot arbeiten",
+    "book": "Termin buchen",
+    "my": "Meine Termine",
+    "help": "Hilfe",
+    "cancel": "Termin stornieren"
+  },
+  "ai": {
+    "appointmentStatus": {
+      "confirmed": "Bestätigt",
+      "pending": "Wartet auf Bestätigung"
+    },
+    "cancelHint": "💡 Um einen Termin zu stornieren, schreiben Sie \"cancel\" oder \"Ich habe es mir anders überlegt\"",
+    "bookingCreated": "📅 Termin erstellt!\n\n",
+    "service": "Service",
+    "date": "Datum",
+    "duration": "Dauer",
+    "minutes": "Minuten",
+    "confirmHint": "Um den Termin zu bestätigen, schreiben Sie \"confirm\" oder \"ja, ich möchte buchen\"\n",
+    "cancelHintShort": "Um zu stornieren, schreiben Sie \"cancel\" oder \"Ich habe es mir anders überlegt\""
+  },
+  "admin": {
+    "openPanel": "Admin-Panel öffnen",
+    "accessDenied": "Zugriff verweigert. Administratorrechte erforderlich.",
+    "linkSuccess": "✅ Ihr Telegram-Konto wurde erfolgreich verknüpft! Sie können den Bot jetzt verwenden, um Termine zu verwalten."
+  }
+}
+

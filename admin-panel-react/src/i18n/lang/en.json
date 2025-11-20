@@ -406,8 +406,8 @@
   "settings": {
     "title": "Settings",
     "description": "Manage your account and system preferences",
-    "profile": "Profile",
-    "system": "System",
+    "profileTab": "Profile",
+    "systemTab": "System",
     "accountStatus": "Account Status",
     "securityLevel": "Security Level",
     "memberSince": "Member Since",
@@ -846,14 +846,28 @@
       },
       "startButton": "Start Setup",
       "footer": "Follow the instructions below for step-by-step guide"
-    }
+    },
+    "shareBotText": "Check out our Telegram bot: {{bot}}",
+    "shareEmailSubject": "Telegram bot for appointments",
+    "shareEmailBody": "Hello!\n\nCheck out our Telegram bot for appointments:\n{{link}}\n\nUse the QR code for quick access.",
+    "botMustBeActivated": "Bot must be activated to generate admin link",
+    "yes": "Yes",
+    "no": "No",
+    "bot": "bot",
+    "botNameDisplay": "Bot Name",
+    "usernameDisplay": "Username",
+    "botLinkDisplay": "Bot Link"
   },
   "language": {
     "switch": "Language Switch",
     "languageChanged": "Language changed to {{lang}}",
     "russian": "Russian",
     "english": "English",
-    "hebrew": "Hebrew"
+    "hebrew": "Hebrew",
+    "german": "German",
+    "french": "French",
+    "spanish": "Spanish",
+    "portuguese": "Portuguese"
   },
   "login": {
     "fillAllFields": "Please fill in all fields",
@@ -1017,6 +1031,149 @@
       "confirm": "Confirm",
       "cancel": "Cancel",
       "clientLabel": "Client ID: {{client}}"
+    }
+  },
+  "notifications": {
+    "appointments": {
+      "created": "Appointment created",
+      "createdDescription": "New appointment has been successfully created",
+      "updated": "Appointment updated",
+      "updatedDescription": "Appointment details have been updated",
+      "updatedForClient": "Appointment for {clientName} has been updated",
+      "deleted": "Appointment deleted",
+      "deletedDescription": "Appointment has been removed from the system",
+      "confirmed": "Appointment confirmed",
+      "confirmedDescription": "Appointment has been confirmed",
+      "confirmedForClient": "{clientName}'s appointment has been confirmed",
+      "cancelled": "Appointment cancelled",
+      "cancelledDescription": "Appointment has been cancelled",
+      "cancelledForClient": "{clientName}'s appointment has been cancelled",
+      "rejected": "Appointment rejected",
+      "rejectedDescription": "Appointment has been rejected",
+      "rejectedForClient": "{clientName}'s appointment has been rejected",
+      "rejectedWithReason": "Appointment has been rejected: {reason}",
+      "rejectedForClientWithReason": "{clientName}'s appointment has been rejected: {reason}",
+      "pending": "Appointment pending",
+      "pendingDescription": "Waiting for confirmation"
+    },
+    "services": {
+      "created": "Service created",
+      "createdDescription": "Service created with slots for 1 year",
+      "createdWithName": "{serviceName} has been created with auto-generated slots",
+      "updated": "Service updated",
+      "updatedDescription": "Service details have been updated",
+      "updatedWithName": "{serviceName} has been updated",
+      "deleted": "Service deleted",
+      "deletedDescription": "Service has been removed from the system",
+      "deletedWithName": "{serviceName} has been removed",
+      "slotsGenerated": "Slots generated",
+      "slotsGeneratedDescription": "Time slots automatically generated for 1 year",
+      "slotsGeneratedWithName": "Time slots for {serviceName} generated for 1 year"
+    },
+    "organizations": {
+      "created": "Organization created",
+      "createdDescription": "New organization has been created",
+      "createdWithName": "{orgName} has been added",
+      "updated": "Organization updated",
+      "updatedDescription": "Organization details have been updated",
+      "updatedWithName": "{orgName} has been updated",
+      "deleted": "Organization deleted",
+      "deletedDescription": "Organization has been removed from the system",
+      "deletedWithName": "{orgName} has been removed"
+    },
+    "realtime": {
+      "newAppointment": "New appointment received",
+      "newAppointmentDescription": "A new appointment has been received",
+      "newAppointmentForClient": "{clientName} just booked an appointment",
+      "appointmentConfirmed": "Appointment confirmed",
+      "appointmentConfirmedDescription": "Client confirmed their appointment",
+      "appointmentConfirmedForClient": "{clientName} confirmed their appointment",
+      "appointmentCancelled": "Appointment cancelled",
+      "appointmentCancelledDescription": "Client cancelled their appointment",
+      "appointmentCancelledForClient": "{clientName} cancelled their appointment",
+      "appointmentRejected": "Appointment rejected",
+      "appointmentRejectedDescription": "Appointment was rejected",
+      "appointmentRejectedForClient": "{clientName}'s appointment was rejected",
+      "appointmentRejectedWithReason": "Appointment was rejected: {reason}",
+      "appointmentRescheduled": "Appointment rescheduled",
+      "appointmentRescheduledDescription": "Client rescheduled their appointment",
+      "appointmentRescheduledForClient": "{clientName} rescheduled their appointment"
+    },
+    "system": {
+      "refreshed": "Data refreshed",
+      "refreshedDescription": "Latest data loaded",
+      "refreshedForPage": "{page} data has been updated",
+      "exported": "Export started",
+      "exportedDescription": "Your file will be ready shortly",
+      "exportedForType": "{type} export is being prepared",
+      "saved": "Changes saved",
+      "savedDescription": "Your changes have been saved successfully",
+      "autoSaved": "Auto-saved",
+      "autoSavedDescription": "Changes saved automatically",
+      "connectionLost": "Connection lost",
+      "connectionLostDescription": "Trying to reconnect...",
+      "connectionRestored": "Connection restored",
+      "connectionRestoredDescription": "You're back online"
+    },
+    "errors": {
+      "general": "Error",
+      "generalDescription": "Something went wrong. Please try again.",
+      "network": "Network error",
+      "networkDescription": "Unable to connect. Check your internet connection.",
+      "validation": "Validation error",
+      "validationDescription": "Please check the form and try again.",
+      "unauthorized": "Unauthorized",
+      "unauthorizedDescription": "Please log in to continue.",
+      "notFound": "Not found",
+      "notFoundDescription": "The requested item was not found.",
+      "notFoundForItem": "{item} not found"
+    },
+    "warnings": {
+      "unsavedChanges": "Unsaved changes",
+      "unsavedChangesDescription": "You have unsaved changes. Save before leaving.",
+      "limitReached": "Limit reached",
+      "limitReachedDescription": "You've reached your limit for this action.",
+      "deprecated": "Feature deprecated",
+      "deprecatedDescription": "This feature is deprecated",
+      "deprecatedForFeature": "{feature} will be removed soon"
+    },
+    "info": {
+      "loading": "Loading...",
+      "general": "Info"
+    },
+    "settings": {
+      "saved": "Settings saved",
+      "savedDescription": "Your preferences have been updated",
+      "reset": "Settings reset",
+      "resetDescription": "All settings have been restored to defaults"
+    },
+    "bot": {
+      "activated": "Bot activated",
+      "activatedDescription": "Your Telegram bot is now active and ready to receive appointments",
+      "deactivated": "Bot deactivated",
+      "deactivatedDescription": "Your Telegram bot has been deactivated",
+      "settingsUpdated": "Bot settings updated",
+      "settingsUpdatedDescription": "Bot configuration has been saved",
+      "tokenValidated": "Token validated",
+      "tokenValidatedDescription": "Bot token is valid and ready to use",
+      "adminLinked": "Admin linked",
+      "adminLinkedDescription": "Your Telegram account has been linked to the bot",
+      "adminUnlinked": "Admin unlinked",
+      "adminUnlinkedDescription": "Your Telegram account has been unlinked from the bot"
+    },
+    "notificationCenter": {
+      "allCleared": "All notifications cleared",
+      "clearFailed": "Failed to clear all notifications",
+      "newAppointment": "New Appointment",
+      "appointmentUpdated": "Appointment Updated",
+      "appointmentCancelled": "Appointment Cancelled",
+      "appointmentConfirmed": "Appointment Confirmed",
+      "newService": "New Service",
+      "serviceUpdated": "Service Updated",
+      "serviceDeleted": "Service Deleted",
+      "botMessage": "Bot Message",
+      "bookingCompleted": "Booking Completed",
+      "systemEvent": "System Event"
     }
   }
 }

@@ -17,6 +17,8 @@ export function AppointmentCard({ clientName, clientId, time, status, appointmen
     en: "en-US",
     ru: "ru-RU",
     he: "he-IL",
+    de: "de-DE",
+    fr: "fr-FR",
   };
   const locale = localeMap[language] || "en-US";
   const getStatusColor = () => {

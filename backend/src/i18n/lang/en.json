@@ -24,7 +24,7 @@
     "linkFailed": "❌ Error linking account. Please try again later."
   },
   "lang": {
-    "usage": "Usage: /lang ru|en|he",
+    "usage": "Usage: /lang ru|en|he|de|fr|es|pt",
     "choose": "🌐 Choose language:",
     "set": "Language set to: {lang}."
   },
@@ -73,6 +73,27 @@
   },
   "help": {
     "text": "📖 Command help:\n\n📅 /book - Book an appointment\n👀 /slots - View available slots\n📋 /my - My appointments\n🌐 /lang - Change language\n❓ /help - Show this help\n\nOr use the buttons below:"
+  },
+  "commands": {
+    "start": "Start working with the bot",
+    "book": "Book an appointment",
+    "my": "My appointments",
+    "help": "Help",
+    "cancel": "Cancel appointment"
+  },
+  "ai": {
+    "appointmentStatus": {
+      "confirmed": "Confirmed",
+      "pending": "Awaiting confirmation"
+    },
+    "cancelHint": "💡 To cancel an appointment, write \"cancel\" or \"I changed my mind\"",
+    "bookingCreated": "📅 Appointment created!\n\n",
+    "service": "Service",
+    "date": "Date",
+    "duration": "Duration",
+    "minutes": "minutes",
+    "confirmHint": "To confirm the appointment, write \"confirm\" or \"yes, I want to book\"\n",
+    "cancelHintShort": "To cancel, write \"cancel\" or \"I changed my mind\""
   },
   "admin": {
     "openPanel": "Open admin panel",

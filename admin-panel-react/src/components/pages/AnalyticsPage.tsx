@@ -38,13 +38,14 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { toastNotifications } from "../toast-notifications";
+import { createToastNotifications } from "../toast-notifications";
 import { apiClient } from "../../services/api";
 import { useTheme } from "../../hooks/useTheme";
 import { useLanguage } from "../../i18n";
 
 export function AnalyticsPage() {
   const { t } = useLanguage();
+  const toastNotifications = createToastNotifications(t);
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
   const { events } = useWebSocket();

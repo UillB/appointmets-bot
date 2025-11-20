@@ -38,13 +38,14 @@ import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { apiClient, Service } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
-import { toastNotifications } from "../toast-notifications";
+import { createToastNotifications } from "../toast-notifications";
 import { SetupSuccessModal } from "../SetupSuccessModal";
 import { listenToSetupWizardModal, SetupWizardModalData } from "../../utils/setupWizardEvents";
 import { useLanguage } from "../../i18n";
 
 export function ServicesPage() {
   const { t } = useLanguage();
+  const toastNotifications = createToastNotifications(t);
   const { events } = useWebSocket();
   const location = useLocation();
   const navigate = useNavigate();

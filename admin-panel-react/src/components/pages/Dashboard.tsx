@@ -27,7 +27,7 @@ import { apiClient } from "../../services/api";
 import { useAuth } from "../../hooks/useAuth";
 import { useWebSocket } from "../../hooks/useWebSocket";
 import { useSetupWizard } from "../../hooks/useSetupWizard";
-import { toastNotifications } from "../toast-notifications";
+import { createToastNotifications } from "../toast-notifications";
 import { formatTimeToLocal, isSameDay } from "../../utils/dateUtils";
 import { SetupBanner } from "../SetupBanner";
 import { SetupSuccessModal } from "../SetupSuccessModal";
@@ -47,6 +47,7 @@ interface DashboardStats {
 
 export function Dashboard() {
   const { t } = useLanguage();
+  const toastNotifications = createToastNotifications(t);
   const navigate = useNavigate();
   const { user } = useAuth();
   const { events } = useWebSocket();
