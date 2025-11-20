@@ -1,7 +1,7 @@
 {
-  "name": "Bookly - Система записи через Telegram",
-  "short_name": "Bookly",
-  "description": "Революционная система управления записями на прием с интеграцией Telegram бота",
+  "name": "Appointexo - Appointment Management Platform",
+  "short_name": "Appointexo",
+  "description": "Revolutionary appointment management system with Telegram bot integration",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

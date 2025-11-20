@@ -32,10 +32,12 @@ import {
   Check,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useLanguage } from "../../i18n";
 
 export function IntegratedLoginPage() {
   const { login, register, isLoading } = useAuth();
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const { t } = useLanguage();
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   
@@ -63,19 +65,19 @@ export function IntegratedLoginPage() {
     e.preventDefault();
     
     if (!loginData.email || !loginData.password) {
-      toast.error("Please fill in all fields");
+      toast.error(t('login.fillAllFields'));
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(loginData.email)) {
-      toast.error("Please enter a valid email address");
+      toast.error(t('login.invalidEmail'));
       return;
     }
 
     try {
       await login(loginData.email, loginData.password);
-      toast.success("Welcome back!", {
-        description: "You have successfully logged in",
+      toast.success(t('login.welcomeBack'), {
+        description: t('login.loginSuccess'),
       });
     } catch (error) {
       // Error is handled in the hook
@@ -87,27 +89,27 @@ export function IntegratedLoginPage() {
     
     // Validation
     if (!registerData.fullName || !registerData.email || !registerData.password || !registerData.confirmPassword || !registerData.organizationName) {
-      toast.error("Please fill in all fields");
+      toast.error(t('register.fillAllFields'));
       return;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerData.email)) {
-      toast.error("Please enter a valid email address");
+      toast.error(t('register.invalidEmail'));
       return;
     }
 
     if (registerData.password.length < 6) {
-      toast.error("Password must be at least 6 characters long");
+      toast.error(t('register.passwordMinLength'));
       return;
     }
 
     if (registerData.password !== registerData.confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error(t('register.passwordsDoNotMatch'));
       return;
     }
 
     if (!registerData.agreeToTerms) {
-      toast.error("Please agree to the terms and conditions");
+      toast.error(t('register.agreeToTerms'));
       return;
     }
 
@@ -118,8 +120,8 @@ export function IntegratedLoginPage() {
         registerData.fullName,
         registerData.organizationName
       );
-      toast.success("Account created successfully!", {
-        description: "Welcome to Appointments Bot",
+      toast.success(t('register.accountCreated'), {
+        description: t('register.welcomeMessage'),
       });
     } catch (error) {
       // Error is handled in the hook
@@ -154,7 +156,7 @@ export function IntegratedLoginPage() {
               }}
               className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-800"
             >
-              <span>Light</span>
+              <span>{t('header.theme.light')}</span>
               {resolvedTheme === "light" && <Check className="w-4 h-4" />}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -166,7 +168,7 @@ export function IntegratedLoginPage() {
               }}
               className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-800"
             >
-              <span>Dark</span>
+              <span>{t('header.theme.dark')}</span>
               {resolvedTheme === "dark" && <Check className="w-4 h-4" />}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -178,7 +180,7 @@ export function IntegratedLoginPage() {
               }}
               className="flex items-center justify-between cursor-pointer text-gray-900 dark:text-gray-100 focus:bg-gray-100 dark:focus:bg-gray-800"
             >
-              <span>System</span>
+              <span>{t('header.theme.system')}</span>
               {theme === "auto" && <Check className="w-4 h-4" />}
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -202,12 +204,12 @@ export function IntegratedLoginPage() {
             </div>
             <div>
               <h1 className="text-5xl mb-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 dark:from-indigo-400 dark:via-purple-400 dark:to-indigo-500 bg-clip-text text-transparent">
-                {isLoginMode ? "Appointments Bot" : "Join Us Today"}
+                {isLoginMode ? t('login.branding.title') : t('register.branding.title')}
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-300">
                 {isLoginMode 
-                  ? "Manage your bookings with ease" 
-                  : "Start managing appointments effortlessly"
+                  ? t('login.branding.subtitle')
+                  : t('register.branding.subtitle')
                 }
               </p>
             </div>
@@ -223,9 +225,9 @@ export function IntegratedLoginPage() {
                     <Zap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Lightning Fast</h3>
+                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('login.features.fast.title')}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      Instant booking confirmations and real-time updates
+                      {t('login.features.fast.description')}
                     </p>
                   </div>
                 </div>
@@ -235,9 +237,9 @@ export function IntegratedLoginPage() {
                     <Shield className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Secure & Private</h3>
+                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('login.features.secure.title')}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      Your data is encrypted and protected at all times
+                      {t('login.features.secure.description')}
                     </p>
                   </div>
                 </div>
@@ -247,9 +249,9 @@ export function IntegratedLoginPage() {
                     <CheckCircle2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Easy to Use</h3>
+                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('login.features.easy.title')}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      Intuitive interface designed for efficiency
+                      {t('login.features.easy.description')}
                     </p>
                   </div>
                 </div>
@@ -262,9 +264,9 @@ export function IntegratedLoginPage() {
                     <CheckCircle2 className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Free to Start</h3>
+                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('register.features.free.title')}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      Create your account and start managing bookings immediately
+                      {t('register.features.free.description')}
                     </p>
                   </div>
                 </div>
@@ -274,9 +276,9 @@ export function IntegratedLoginPage() {
                     <Zap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Quick Setup</h3>
+                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('register.features.setup.title')}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      Get up and running in minutes with our guided onboarding
+                      {t('register.features.setup.description')}
                     </p>
                   </div>
                 </div>
@@ -286,9 +288,9 @@ export function IntegratedLoginPage() {
                     <Shield className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Enterprise Security</h3>
+                    <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('register.features.security.title')}</h3>
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      Bank-level encryption to keep your data safe and secure
+                      {t('register.features.security.description')}
                     </p>
                   </div>
                 </div>
@@ -300,15 +302,15 @@ export function IntegratedLoginPage() {
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center p-4 bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm rounded-xl border border-white/40 dark:border-gray-700/40">
               <div className="text-3xl text-indigo-600 dark:text-indigo-400 mb-1">10K+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-300">Users</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{t('login.stats.users')}</div>
             </div>
             <div className="text-center p-4 bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm rounded-xl border border-white/40 dark:border-gray-700/40">
               <div className="text-3xl text-purple-600 dark:text-purple-400 mb-1">50K+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-300">Bookings</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{t('login.stats.bookings')}</div>
             </div>
             <div className="text-center p-4 bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm rounded-xl border border-white/40 dark:border-gray-700/40">
               <div className="text-3xl text-pink-600 dark:text-pink-400 mb-1">99.9%</div>
-              <div className="text-sm text-gray-600 dark:text-gray-300">Uptime</div>
+              <div className="text-sm text-gray-600 dark:text-gray-300">{t('login.stats.uptime')}</div>
             </div>
           </div>
         </div>
@@ -322,7 +324,7 @@ export function IntegratedLoginPage() {
               className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors mb-4 lg:absolute lg:top-6 lg:left-6"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span className="text-sm">Back to Landing</span>
+              <span className="text-sm">{t('login.backToLanding')}</span>
             </a>
             
             {/* Mobile Logo */}
@@ -331,7 +333,7 @@ export function IntegratedLoginPage() {
                 <Calendar className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-2xl mb-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 bg-clip-text text-transparent">
-                Appointments Bot
+                {t('login.branding.title')}
               </h2>
             </div>
 
@@ -345,12 +347,12 @@ export function IntegratedLoginPage() {
                 )}
               </div>
               <h2 className="text-2xl mb-2 text-gray-900 dark:text-gray-100">
-                {isLoginMode ? "Welcome Back" : "Create Account"}
+                {isLoginMode ? t('login.form.title') : t('register.form.title')}
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {isLoginMode 
-                  ? "Sign in to access your dashboard" 
-                  : "Join thousands of users managing appointments"
+                  ? t('login.form.subtitle')
+                  : t('register.form.subtitle')
                 }
               </p>
             </div>
@@ -361,7 +363,7 @@ export function IntegratedLoginPage() {
                 {/* Email */}
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-gray-900 dark:text-gray-100 font-medium">
-                    Email Address <span className="text-red-500">*</span>
+                    {t('login.form.emailLabel')} <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -371,7 +373,7 @@ export function IntegratedLoginPage() {
                       value={loginData.email}
                       onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
                       className="pl-11 h-10 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-                      placeholder="your@email.com"
+                      placeholder={t('login.form.emailPlaceholder')}
                       disabled={isLoading}
                     />
                   </div>
@@ -380,7 +382,7 @@ export function IntegratedLoginPage() {
                 {/* Password */}
                 <div className="space-y-2">
                   <Label htmlFor="password" className="text-gray-900 dark:text-gray-100 font-medium">
-                    Password <span className="text-red-500">*</span>
+                    {t('login.form.passwordLabel')} <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -390,7 +392,7 @@ export function IntegratedLoginPage() {
                       value={loginData.password}
                       onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
                       className="pl-11 pr-11 h-10 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-                      placeholder="Enter your password"
+                      placeholder={t('login.form.passwordPlaceholder')}
                       disabled={isLoading}
                     />
                     <button
@@ -423,7 +425,7 @@ export function IntegratedLoginPage() {
                       htmlFor="remember"
                       className="text-sm cursor-pointer select-none text-gray-900 dark:text-gray-100"
                     >
-                      Remember me
+                      {t('login.form.rememberMe')}
                     </Label>
                   </div>
                   <Button
@@ -431,9 +433,9 @@ export function IntegratedLoginPage() {
                     variant="ghost"
                     className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 px-0"
                     disabled={isLoading}
-                    onClick={() => toast.info("Password reset link sent to your email")}
+                    onClick={() => toast.info(t('login.form.forgotPasswordToast'))}
                   >
-                    Forgot password?
+                    {t('login.form.forgotPassword')}
                   </Button>
                 </div>
 
@@ -446,11 +448,11 @@ export function IntegratedLoginPage() {
                   {isLoading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                      Signing in...
+                      {t('login.form.signingIn')}
                     </>
                   ) : (
                     <>
-                      Sign In
+                      {t('login.form.signIn')}
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </>
                   )}
@@ -462,7 +464,7 @@ export function IntegratedLoginPage() {
                 {/* Full Name */}
                 <div className="space-y-2">
                   <Label htmlFor="fullName" className="text-gray-900 dark:text-gray-100 font-medium">
-                    Full Name <span className="text-red-500">*</span>
+                    {t('register.form.fullNameLabel')} <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -472,7 +474,7 @@ export function IntegratedLoginPage() {
                       value={registerData.fullName}
                       onChange={(e) => setRegisterData({ ...registerData, fullName: e.target.value })}
                       className="pl-11 h-10 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-                      placeholder="John Doe"
+                      placeholder={t('register.form.fullNamePlaceholder')}
                       disabled={isLoading}
                     />
                   </div>
@@ -481,7 +483,7 @@ export function IntegratedLoginPage() {
                 {/* Email */}
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-gray-900 dark:text-gray-100 font-medium">
-                    Email Address <span className="text-red-500">*</span>
+                    {t('register.form.emailLabel')} <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -491,7 +493,7 @@ export function IntegratedLoginPage() {
                       value={registerData.email}
                       onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
                       className="pl-11 h-10 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-                      placeholder="your@email.com"
+                      placeholder={t('register.form.emailPlaceholder')}
                       disabled={isLoading}
                     />
                   </div>
@@ -500,7 +502,7 @@ export function IntegratedLoginPage() {
                 {/* Organization */}
                 <div className="space-y-2">
                   <Label htmlFor="organization" className="text-gray-900 dark:text-gray-100 font-medium">
-                    Organization Name <span className="text-red-500">*</span>
+                    {t('register.form.organizationLabel')} <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -510,7 +512,7 @@ export function IntegratedLoginPage() {
                       value={registerData.organizationName}
                       onChange={(e) => setRegisterData({ ...registerData, organizationName: e.target.value })}
                       className="pl-11 h-10 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-                      placeholder="Enter organization name"
+                      placeholder={t('register.form.organizationPlaceholder')}
                       disabled={isLoading}
                     />
                   </div>
@@ -519,7 +521,7 @@ export function IntegratedLoginPage() {
                 {/* Password */}
                 <div className="space-y-2">
                   <Label htmlFor="password" className="text-gray-900 dark:text-gray-100 font-medium">
-                    Password <span className="text-red-500">*</span>
+                    {t('register.form.passwordLabel')} <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -529,7 +531,7 @@ export function IntegratedLoginPage() {
                       value={registerData.password}
                       onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
                       className="pl-11 pr-11 h-10 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-                      placeholder="Min. 6 characters"
+                      placeholder={t('register.form.passwordPlaceholder')}
                       disabled={isLoading}
                     />
                     <button
@@ -550,7 +552,7 @@ export function IntegratedLoginPage() {
                 {/* Confirm Password */}
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword" className="text-gray-900 dark:text-gray-100 font-medium">
-                    Confirm Password <span className="text-red-500">*</span>
+                    {t('register.form.confirmPasswordLabel')} <span className="text-red-500">*</span>
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -560,7 +562,7 @@ export function IntegratedLoginPage() {
                       value={registerData.confirmPassword}
                       onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })}
                       className="pl-11 pr-11 h-10 bg-white/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:ring-indigo-500 dark:focus:ring-indigo-400"
-                      placeholder="Re-enter password"
+                      placeholder={t('register.form.confirmPasswordPlaceholder')}
                       disabled={isLoading}
                     />
                     <button
@@ -593,21 +595,21 @@ export function IntegratedLoginPage() {
                     htmlFor="terms"
                     className="text-sm cursor-pointer select-none leading-relaxed text-gray-900 dark:text-gray-100"
                   >
-                    I agree to the{" "}
+                    {t('register.form.agreeToTerms')}{" "}
                     <button
                       type="button"
                       className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline"
-                      onClick={() => toast.info("Terms & Conditions")}
+                      onClick={() => toast.info(t('register.form.termsAndConditions'))}
                     >
-                      Terms & Conditions
+                      {t('register.form.termsAndConditions')}
                     </button>{" "}
-                    and{" "}
+                    {t('register.form.and')}{" "}
                     <button
                       type="button"
                       className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline"
-                      onClick={() => toast.info("Privacy Policy")}
+                      onClick={() => toast.info(t('register.form.privacyPolicy'))}
                     >
-                      Privacy Policy
+                      {t('register.form.privacyPolicy')}
                     </button>
                   </Label>
                 </div>
@@ -621,11 +623,11 @@ export function IntegratedLoginPage() {
                   {isLoading ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-                      Creating account...
+                      {t('register.form.creatingAccount')}
                     </>
                   ) : (
                     <>
-                      Create Account
+                      {t('register.form.createAccount')}
                       <ArrowRight className="w-5 h-5 ml-2" />
                     </>
                   )}
@@ -640,7 +642,7 @@ export function IntegratedLoginPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-4 bg-white/80 dark:bg-gray-900/80 text-gray-500 dark:text-gray-400">
-                  {isLoginMode ? "New to Appointments Bot?" : "Already have an account?"}
+                  {isLoginMode ? t('login.form.newToApp') : t('register.form.alreadyHaveAccount')}
                 </span>
               </div>
             </div>
@@ -652,7 +654,7 @@ export function IntegratedLoginPage() {
               className="w-full h-10 border-2 border-indigo-200 dark:border-indigo-800 hover:border-indigo-300 dark:hover:border-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950 transition-colors text-gray-900 dark:text-gray-100"
               onClick={() => setIsLoginMode(!isLoginMode)}
             >
-              {isLoginMode ? "Create an Account" : "Sign In Instead"}
+              {isLoginMode ? t('login.form.createAccount') : t('register.form.signInInstead')}
             </Button>
 
             {/* Demo Credentials */}
@@ -664,10 +666,10 @@ export function IntegratedLoginPage() {
                   </svg>
                 </div>
                 <div className="text-sm text-blue-700 dark:text-blue-200">
-                  <p className="font-medium mb-1">Demo Credentials</p>
+                  <p className="font-medium mb-1">{t('login.form.demoCredentials')}</p>
                   <p className="text-xs">
-                    Email: some@example.com<br />
-                    Password: Test1234
+                    {t('login.form.demoEmail')}: some@example.com<br />
+                    {t('login.form.demoPassword')}: Test1234
                   </p>
                 </div>
               </div>

@@ -151,7 +151,7 @@ export default function PricingPage() {
                 <Calendar className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
               </div>
               <span className="text-lg lg:text-2xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-bold">
-                AppointBot
+                Appointexo
               </span>
             </div>
 

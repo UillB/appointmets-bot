@@ -16,10 +16,704 @@
     "yes": "Yes",
     "no": "No",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "user": "User",
+    "organization": "Organization",
+    "notAvailable": "N/A",
+    "optional": "Optional",
+    "retry": "Retry"
   },
   "header": {
+    "logout": "Logout",
+    "connected": "Connected",
+    "offline": "Offline",
+    "liveUpdates": "Live updates",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "help": {
+      "title": "Need Help?",
+      "description": "Have any questions, need any help or support? Feel free to contact our support team. We will reply as soon as possible to help you with any request.",
+      "supportEmail": "support@yourbrand.com"
+    },
+    "profile": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout"
+    }
+  },
+  "navigation": {
+    "appName": "Appointexo",
+    "appSubtitle": "Business Manager",
+    "dashboard": "Dashboard",
+    "appointments": "Appointments",
+    "services": "Services",
+    "analytics": "Analytics",
+    "organizations": "Organizations",
+    "botManagement": "Bot Management",
+    "aiAssistant": "AI Assistant",
+    "settings": "Settings",
+    "badges": {
+      "new": "NEW",
+      "beta": "BETA"
+    },
+    "adminStatus": "Admin Status",
+    "telegramLinked": "Telegram Linked",
+    "notLinked": "Not Linked",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "appointmentsShort": "appts",
     "logout": "Logout"
+  },
+  "organizations": {
+    "title": "Organizations",
+    "description": "Manage your organizations and their settings",
+    "newOrganization": "New Organization",
+    "refresh": "Refresh",
+    "searchPlaceholder": "Search organizations...",
+    "sortBy": "Sort by...",
+    "sortByName": "By Name",
+    "sortByUsers": "By Users",
+    "sortByServices": "By Services",
+    "sortByDate": "By Date",
+    "clearFilters": "Clear Filters",
+    "noOrganizationsFound": "No organizations found",
+    "tryAdjustingSearch": "Try adjusting your search or filters",
+    "getStarted": "Get started by creating your first organization",
+    "showing": "Showing {{count}} of {{total}} organizations"
+  },
+  "appointments": {
+    "title": "Appointments",
+    "description": "Manage appointments and bookings",
+    "all": "All",
+    "confirmed": "Confirmed",
+    "pending": "Pending",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected",
+    "newAppointment": "New Appointment",
+    "searchPlaceholder": "Search...",
+    "searchPlaceholderDesktop": "Search by Chat ID or service...",
+    "filters": "Filters",
+    "service": "Service",
+    "allServices": "All Services",
+    "date": "Date",
+    "pickDate": "Pick a date",
+    "clearFilters": "Clear Filters",
+    "clear": "Clear",
+    "clearDateFilter": "Clear Date Filter",
+    "chatId": "Chat ID",
+    "id": "ID",
+    "unknown": "Unknown",
+    "unknownService": "Unknown Service",
+    "noDate": "No date",
+    "noTime": "No time",
+    "noTimeInfo": "No time info",
+    "notAvailable": "N/A",
+    "minutes": "min",
+    "showing": "Showing {{count}} of {{total}} appointments",
+    "stats": {
+      "totalAppointments": "Total Appointments",
+      "allTimeBookings": "All time bookings",
+      "successfullyConfirmed": "Successfully confirmed",
+      "awaitingConfirmation": "Awaiting confirmation",
+      "cancelledRejected": "Cancelled & Rejected",
+      "cancelledRejectedBookings": "Cancelled and rejected bookings"
+    },
+    "tableHeaders": {
+      "service": "Service",
+      "dateTime": "Date & Time",
+      "clientChatId": "Client / Chat ID",
+      "duration": "Duration",
+      "status": "Status",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "confirm": "Confirm",
+      "cancel": "Cancel"
+    },
+    "emptyStates": {
+      "noAppointmentsFound": "No appointments found",
+      "noAppointmentsForDate": "No appointments found for {{date}}",
+      "tryDifferentDate": "Try selecting a different date or clear the date filter to see all appointments",
+      "createFirstAppointment": "Create your first appointment"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "description": "Track performance and insights",
+    "export": "Export",
+    "retry": "Retry",
+    "performanceOverview": "Performance Overview",
+    "timePeriod": {
+      "allTime": "All Time",
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    },
+    "stats": {
+      "totalBookings": "Total Bookings",
+      "allTime": "All time",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "thisYear": "This year",
+      "growthRate": "Growth Rate",
+      "vsPreviousPeriod": "vs previous period",
+      "vsLastWeek": "vs last week",
+      "vsLastMonth": "vs last month",
+      "vsLastYear": "vs last year",
+      "activeClients": "Active Clients",
+      "uniqueClients": "Unique clients",
+      "avgDuration": "Avg. Duration",
+      "perAppointment": "Per appointment"
+    },
+    "appointmentsTrend": {
+      "title": "Appointments Trend",
+      "description": "Daily bookings over time"
+    },
+    "metrics": {
+      "appointments": "Appointments",
+      "revenue": "Revenue"
+    },
+    "tooltip": {
+      "appointment": "appointment",
+      "appointments": "appointments",
+      "booking": "booking",
+      "bookings": "bookings",
+      "date": "Date",
+      "time": "Time",
+      "status": "Status",
+      "percentage": "Percentage"
+    },
+    "topServices": {
+      "title": "Top Services",
+      "description": "Most popular services",
+      "bookings": "bookings"
+    },
+    "appointmentStatus": {
+      "title": "Appointment Status",
+      "description": "Status distribution"
+    },
+    "peakHours": {
+      "title": "Peak Hours",
+      "description": "Busiest times of the day"
+    },
+    "quickInsights": {
+      "title": "Quick Insights",
+      "bestDay": "Best Day",
+      "peakTime": "Peak Time",
+      "topService": "Top Service",
+      "with": "with"
+    },
+    "emptyStates": {
+      "noAppointmentData": "No appointment data available for this period",
+      "noServicesWithBookings": "No services with bookings in this period",
+      "noStatusData": "No appointment status data available",
+      "noPeakHoursData": "No peak hours data available",
+      "noDataAvailable": "No data available"
+    },
+    "errors": {
+      "failedToLoad": "Failed to load analytics",
+      "failedToLoadData": "Failed to load analytics data"
+    }
+  },
+  "slots": {
+    "title": "Time Slots",
+    "description": "Auto-generated slots for your services",
+    "searchPlaceholder": "Search slots...",
+    "minutes": "min",
+    "unknownService": "Unknown Service",
+    "stats": {
+      "totalSlots": "Total Slots",
+      "available": "Available",
+      "booked": "Booked",
+      "utilization": "Utilization"
+    },
+    "status": {
+      "available": "Available",
+      "booked": "Booked",
+      "conflict": "Conflict"
+    },
+    "dates": {
+      "today": "Today",
+      "tomorrow": "Tomorrow",
+      "yesterday": "Yesterday"
+    },
+    "infoBanner": {
+      "title": "Auto-Generated Slots",
+      "description": "Slots are automatically generated when you create services. They cover 1 year ahead with standard working hours (9 AM - 6 PM, Monday-Friday). No manual management needed!"
+    },
+    "filters": {
+      "allServices": "All Services",
+      "allStatus": "All Status",
+      "filterByDate": "Filter by date"
+    },
+    "table": {
+      "title": "Time Slots",
+      "showing": "{{count}} of {{total}} slots",
+      "headers": {
+        "service": "Service",
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration",
+        "status": "Status",
+        "capacity": "Capacity"
+      }
+    },
+    "emptyStates": {
+      "noSlotsFound": "No slots found",
+      "createServiceToGenerate": "Create a service to auto-generate slots",
+      "tryAdjustingFilters": "Try adjusting your filters"
+    }
+  },
+  "slotsManagement": {
+    "title": "Slots Management",
+    "subtitle": "View and manage auto-generated time slots",
+    "back": "Back",
+    "infoBanner": {
+      "title": "Auto-Generated Slots",
+      "description": "Slots are automatically created when you add services. They cover 1 year ahead with standard working hours (9 AM - 6 PM, Monday-Friday). No manual setup required!"
+    },
+    "filters": {
+      "service": "Service",
+      "selectService": "Select a service",
+      "date": "Date",
+      "filterByDate": "Filter by date"
+    },
+    "table": {
+      "title": "Time Slots",
+      "slotsFound": "{{count}} slots found",
+      "headers": {
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration",
+        "status": "Status",
+        "capacity": "Capacity"
+      }
+    },
+    "emptyStates": {
+      "selectService": "Select a Service",
+      "chooseServiceToView": "Choose a service to view its auto-generated slots",
+      "noSlotsFound": "No slots found",
+      "noSlotsForDate": "No slots found for the selected date",
+      "noSlotsYet": "This service doesn't have any slots yet"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome back, {{name}}!",
+    "statisticsOverview": "Statistics & Overview",
+    "viewAll": "View All",
+    "setupBanners": {
+      "services": {
+        "message": "You currently have no services (what you sell). Create your first service now - this is necessary to start working and takes just one minute.",
+        "actionLabel": "Create Service"
+      },
+      "bot": {
+        "message": "Your Telegram bot is not connected. Please connect your bot to share it with people and start receiving appointments today.",
+        "actionLabel": "Connect Bot"
+      },
+      "admin": {
+        "message": "Your Telegram admin account is not linked. Link it now to enable admin features such as accessing the management system (admin panel) from Telegram.",
+        "actionLabel": "Link Admin"
+      }
+    },
+    "stats": {
+      "totalAppointments": "Total Appointments",
+      "allTime": "all time",
+      "todaysBookings": "Today's Bookings",
+      "scheduledForToday": "Scheduled for today",
+      "pendingApprovals": "Pending Approvals",
+      "awaitingConfirmation": "Awaiting confirmation",
+      "activeServices": "Active Services",
+      "availableForBooking": "Available for booking"
+    },
+    "quickActions": {
+      "appointments": {
+        "title": "Appointments",
+        "description": "Manage bookings"
+      },
+      "services": {
+        "title": "Services",
+        "description": "Configure offerings"
+      },
+      "organizations": {
+        "title": "Organizations",
+        "description": "Manage locations"
+      },
+      "settings": {
+        "title": "Settings",
+        "description": "System configuration"
+      },
+      "today": "today",
+      "available": "available",
+      "active": "active",
+      "account": "Account"
+    },
+    "calendar": {
+      "title": "Calendar",
+      "selected": "Selected",
+      "selectDate": "Select a date",
+      "days": {
+        "sun": "Sun",
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat"
+      }
+    },
+    "emptyStates": {
+      "noAppointmentsForDate": "No appointments for selected date",
+      "clickDateToView": "Click on a date in the calendar to view appointments"
+    }
+  },
+  "services": {
+    "title": "Services",
+    "description": "Manage your services and track their performance",
+    "addService": "Add Service",
+    "searchPlaceholder": "Search services...",
+    "searchPlaceholderDesktop": "Search services by name...",
+    "filters": "Filters",
+    "filterByName": "Filter services by name",
+    "clearFilters": "Clear Filters",
+    "clear": "Clear",
+    "noServicesFound": "No services found",
+    "createFirstService": "Create your first service",
+    "showing": "Showing {{count}} of {{total}} services",
+    "stats": {
+      "totalServices": "Total Services",
+      "activeServices": "Active services",
+      "totalBookings": "Total Bookings",
+      "allTimeBookings": "All time bookings",
+      "averageOccupancy": "Average Occupancy (Current Month)",
+      "capacityUtilization": "Capacity utilization"
+    },
+    "autoGeneratedSlots": {
+      "title": "Auto-Generated Slots",
+      "description": "Time slots are automatically generated for 1 year when you create services. No manual slot management needed - just create your services and start booking!"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account and system preferences",
+    "profileTab": "Profile",
+    "systemTab": "System",
+    "accountStatus": "Account Status",
+    "securityLevel": "Security Level",
+    "memberSince": "Member Since",
+    "stats": {
+      "accountStatus": "Account Status",
+      "active": "Active",
+      "sinceOct2023": "Since Oct 2023",
+      "securityLevel": "Security Level",
+      "high": "High",
+      "twoFAEnabled": "2FA Enabled",
+      "memberSince": "Member Since",
+      "activeUser": "Active user"
+    },
+    "tabs": {
+      "userProfile": "User Profile",
+      "systemSettings": "System Settings"
+    },
+    "profile": {
+      "title": "User Profile",
+      "description": "Manage your personal information",
+      "updateTitle": "Update Profile",
+      "updateDescription": "Update your profile information",
+      "updateButton": "Update Profile",
+      "fields": {
+        "fullName": "Full Name",
+        "emailAddress": "Email Address",
+        "role": "Role",
+        "organization": "Organization",
+        "memberSince": "Member Since"
+      },
+      "placeholders": {
+        "fullName": "Enter your full name",
+        "email": "Enter your email"
+      },
+      "role": {
+        "manager": "Manager"
+      }
+    },
+    "password": {
+      "title": "Change Password",
+      "description": "Update your password to keep your account secure",
+      "changeButton": "Change Password",
+      "fields": {
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm Password"
+      },
+      "placeholders": {
+        "currentPassword": "Enter current password",
+        "newPassword": "Enter new password",
+        "confirmPassword": "Confirm new password"
+      },
+      "requirements": {
+        "title": "Password Requirements:",
+        "minLength": "At least 8 characters long",
+        "uppercaseLowercase": "Include uppercase and lowercase letters",
+        "number": "Include at least one number",
+        "specialCharacter": "Include at least one special character"
+      }
+    },
+    "system": {
+      "languageTheme": {
+        "title": "Language & Theme",
+        "description": "Configure system preferences",
+        "language": "Language",
+        "theme": "Theme",
+        "themeOptions": {
+          "light": "Light Theme",
+          "dark": "Dark Theme",
+          "auto": "Auto (System)"
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Manage how you receive notifications",
+        "emailNotifications": "Email Notifications",
+        "emailNotificationsDescription": "Receive notifications via email",
+        "pushNotifications": "Push Notifications",
+        "pushNotificationsDescription": "Receive push notifications in browser"
+      },
+      "preferences": {
+        "title": "System Preferences",
+        "description": "Configure date, time, and refresh settings",
+        "timezone": "Timezone",
+        "dateFormat": "Date Format",
+        "timeFormat": "Time Format",
+        "timeFormat12": "12 Hour (AM/PM)",
+        "timeFormat24": "24 Hour",
+        "refreshInterval": "Refresh Interval (seconds)",
+        "refreshInterval15": "15 seconds",
+        "refreshInterval30": "30 seconds",
+        "refreshInterval60": "1 minute",
+        "refreshInterval300": "5 minutes",
+        "refreshIntervalManual": "Manual only"
+      },
+      "saveButton": "Save Settings"
+    },
+    "errors": {
+      "fillAllRequiredFields": "Please fill all required fields",
+      "fillAllPasswordFields": "Please fill all password fields",
+      "passwordsDoNotMatch": "New passwords do not match",
+      "passwordMinLength": "Password must be at least 8 characters"
+    },
+    "profileUpdatedSuccessfully": "Profile updated successfully",
+    "passwordChangedSuccessfully": "Password changed successfully",
+    "systemSettingsSavedSuccessfully": "System settings saved successfully"
+  },
+  "dialogs": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "saving": "Saving...",
+    "service": {
+      "editTitle": "Edit Service",
+      "createTitle": "Create New Service",
+      "editDescription": "Update service information and settings.",
+      "createDescription": "Follow the steps below to add a new service",
+      "nameRequired": "Service name is required",
+      "durationRequired": "Valid duration is required",
+      "organizationIdRequired": "Organization ID is required",
+      "updated": "Service updated successfully",
+      "created": "Service created successfully",
+      "saveFailed": "Failed to save service",
+      "firstServiceMessage": "Congratulations! Your service has been created successfully. You can create additional services at any time. Now let's complete the setup and connect your Telegram bot so you can start receiving appointments right away.",
+      "connectBot": "Connect Bot",
+      "serviceName": "Service Name",
+      "serviceNamePlaceholder": "e.g., Haircut, Massage, Consultation",
+      "description": "Description",
+      "descriptionPlaceholder": "Describe the service...",
+      "duration": "Duration (minutes)",
+      "price": "Price (optional)",
+      "currency": "Currency",
+      "step1": {
+        "title": "Basic Information",
+        "description": "Service name and description"
+      },
+      "step2": {
+        "title": "Pricing & Duration",
+        "description": "Set the price and time required"
+      },
+      "step3": {
+        "title": "Working Hours",
+        "description": "Configure when this service is available"
+      },
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "lunchStart": "Lunch Break Start (optional)",
+      "lunchEnd": "Lunch Break End (optional)",
+      "workingDays": "Working Days",
+      "updateService": "Update Service",
+      "createService": "Create Service"
+    },
+    "organization": {
+      "viewTitle": "View Organization",
+      "editTitle": "Edit Organization",
+      "createTitle": "Create New Organization",
+      "viewDescription": "View organization details",
+      "editDescription": "Update organization information",
+      "createDescription": "Follow the steps below to add a new organization",
+      "nameRequired": "Organization name is required",
+      "updated": "Organization updated successfully",
+      "created": "Organization created successfully",
+      "saveFailed": "Failed to save organization",
+      "fields": {
+        "organizationName": "Organization Name",
+        "description": "Description",
+        "email": "Email Address",
+        "phone": "Phone Number",
+        "address": "Address"
+      },
+      "placeholders": {
+        "name": "e.g., Acme Corporation",
+        "description": "Brief description of the organization...",
+        "email": "contact@example.com",
+        "phone": "+1 (555) 123-4567",
+        "address": "123 Main Street, City, State, ZIP"
+      },
+      "step1": {
+        "title": "Basic Information",
+        "description": "Organization name and description"
+      },
+      "step2": {
+        "title": "Contact Information",
+        "description": "Email, phone, and address"
+      },
+      "saveChanges": "Save Changes",
+      "createOrganization": "Create Organization"
+    },
+    "appointment": {
+      "title": "Create New Appointment",
+      "description": "Follow the steps below to create a new appointment",
+      "step1": {
+        "title": "Client Information",
+        "description": "Enter client details"
+      },
+      "step2": {
+        "title": "Service & Time",
+        "description": "Select service and time slot"
+      },
+      "clientId": "Client ID / Phone",
+      "clientIdPlaceholder": "Enter client ID or phone number",
+      "service": "Service",
+      "loadingServices": "Loading services...",
+      "selectServicePlaceholder": "Select a service",
+      "selectService": "Please select a service",
+      "noServices": "No services available",
+      "date": "Date",
+      "pickDate": "Pick a date",
+      "selectDate": "Please select a date",
+      "timeSlot": "Time Slot",
+      "selectSlot": "Please select a time slot",
+      "selectDateFirst": "Select a date first",
+      "selectServiceFirst": "Select a service first",
+      "loadingSlots": "Loading slots...",
+      "noSlots": "No slots available",
+      "selectSlotPlaceholder": "Select a time slot",
+      "noSlotsForDate": "No slots available for this date",
+      "slotConflict": "Conflict",
+      "loadingAvailableSlots": "Loading available slots...",
+      "created": "Appointment created successfully",
+      "createFailed": "Failed to create appointment",
+      "createButton": "Create Appointment",
+      "creating": "Creating..."
+    }
+  },
+  "aiAssistant": {
+    "title": "AI Assistant",
+    "description": "Configure and manage your intelligent chatbot assistant",
+    "refreshed": "AI Assistant data refreshed",
+    "configSaved": "Configuration saved successfully",
+    "configSaveFailed": "Failed to save configuration",
+    "enableFirst": "Please enable AI Assistant first",
+    "testSuccessful": "AI Assistant test successful!",
+    "testResponse": "Response: {{response}}",
+    "testFailed": "AI Assistant test failed",
+    "enterApiKey": "Please enter API key",
+    "apiKeyVerified": "API key verified successfully",
+    "configReset": "Configuration reset to defaults",
+    "controls": {
+      "title": "AI Assistant Controls",
+      "description": "Enable and configure AI-powered responses",
+      "enableAi": "Enable AI Assistant",
+      "enableAiDescription": "Turn on AI-powered responses for client inquiries",
+      "autoReply": "Auto-Reply Mode",
+      "autoReplyDescription": "Automatically respond to all Telegram messages",
+      "activeTitle": "AI Assistant is Active",
+      "activeDescription": "Your AI assistant is now ready to help clients in your Telegram bot based on the instructions below."
+    },
+    "config": {
+      "title": "AI Configuration",
+      "description": "Configure AI model and behavior",
+      "modelLabel": "LLM Model",
+      "modelHint": "More advanced models provide better responses but cost more",
+      "models": {
+        "gpt4": "GPT-4 (Most Intelligent)",
+        "gpt4Turbo": "GPT-4 Turbo (Fast & Smart)",
+        "gpt35Turbo": "GPT-3.5 Turbo (Fast & Economical)",
+        "claude3Opus": "Claude 3 Opus",
+        "claude3Sonnet": "Claude 3 Sonnet"
+      },
+      "temperatureLabel": "Temperature",
+      "temperaturePrecise": "Precise (0)",
+      "temperatureBalanced": "Balanced (1)",
+      "temperatureCreative": "Creative (2)",
+      "temperatureHint": "Lower = more focused and consistent. Higher = more creative and varied."
+    },
+    "instructions": {
+      "title": "Custom Instructions",
+      "description": "Teach the AI how to communicate - define personality, tone, and style",
+      "label": "Prompt / Instructions",
+      "placeholder": "Example: You are David, a friendly and professional assistant. You should be cheerful, helpful, and respond in a casual but respectful tone. Always greet clients warmly and use their name when possible...",
+      "characterCount": "{{count}} characters",
+      "hint": "Think of this as training a new employee",
+      "tipsTitle": "Instruction Tips",
+      "tip1": "Define the AI's name and personality",
+      "tip2": "Specify tone: formal, casual, friendly, etc.",
+      "tip3": "Set language and regional preferences",
+      "tip4": "Mention any specific policies or guidelines",
+      "tip5": "Keep it clear and concise"
+    },
+    "test": {
+      "title": "Test AI Assistant",
+      "description": "Send a test message to verify AI configuration and responses",
+      "runTest": "Run Test"
+    }
+  },
+  "toasts": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info",
+    "organizationsRefreshed": "Organizations refreshed",
+    "filtersCleared": "Filters cleared",
+    "appointmentsRefreshed": "Appointments refreshed",
+    "failedToLoadOrganizations": "Failed to load organizations data",
+    "failedToSaveOrganization": "Failed to save organization",
+    "failedToLoadAppointments": "Failed to load appointments data",
+    "failedToLoadDashboard": "Failed to load dashboard data",
+    "settingsRefreshed": "Settings refreshed",
+    "failedToLoadServices": "Failed to load services",
+    "failedToLoadStatistics": "Failed to load statistics",
+    "failedToRefreshServices": "Failed to refresh services",
+    "failedToLoadSlots": "Failed to load slots data"
   },
   "botManagement": {
     "title": "Bot Management",
@@ -152,14 +846,337 @@
       },
       "startButton": "Start Setup",
       "footer": "Follow the instructions below for step-by-step guide"
-    }
+    },
+    "shareBotText": "Check out our Telegram bot: {{bot}}",
+    "shareEmailSubject": "Telegram bot for appointments",
+    "shareEmailBody": "Hello!\n\nCheck out our Telegram bot for appointments:\n{{link}}\n\nUse the QR code for quick access.",
+    "botMustBeActivated": "Bot must be activated to generate admin link",
+    "yes": "Yes",
+    "no": "No",
+    "bot": "bot",
+    "botNameDisplay": "Bot Name",
+    "usernameDisplay": "Username",
+    "botLinkDisplay": "Bot Link"
   },
   "language": {
     "switch": "Language Switch",
     "languageChanged": "Language changed to {{lang}}",
     "russian": "Russian",
     "english": "English",
-    "hebrew": "Hebrew"
+    "hebrew": "Hebrew",
+    "german": "German",
+    "french": "French",
+    "spanish": "Spanish",
+    "portuguese": "Portuguese",
+    "japanese": "Japanese",
+    "chinese": "Chinese",
+    "arabic": "Arabic"
+  },
+  "login": {
+    "fillAllFields": "Please fill in all fields",
+    "invalidEmail": "Please enter a valid email address",
+    "welcomeBack": "Welcome back!",
+    "loginSuccess": "You have successfully logged in",
+    "backToLanding": "Back to Landing",
+    "branding": {
+      "title": "Appointexo",
+      "subtitle": "Manage your bookings with ease"
+    },
+    "form": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to access your dashboard",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "forgotPasswordToast": "Password reset link sent to your email",
+      "signIn": "Sign In",
+      "signingIn": "Signing in...",
+      "newToApp": "New to Appointexo?",
+      "createAccount": "Create an Account",
+      "demoCredentials": "Demo Credentials",
+      "demoEmail": "Email",
+      "demoPassword": "Password"
+    },
+    "features": {
+      "fast": {
+        "title": "Lightning Fast",
+        "description": "Instant booking confirmations and real-time updates"
+      },
+      "secure": {
+        "title": "Secure & Private",
+        "description": "Your data is encrypted and protected at all times"
+      },
+      "easy": {
+        "title": "Easy to Use",
+        "description": "Intuitive interface designed for efficiency"
+      }
+    },
+    "stats": {
+      "users": "Users",
+      "bookings": "Bookings",
+      "uptime": "Uptime"
+    }
+  },
+  "register": {
+    "fillAllFields": "Please fill in all fields",
+    "invalidEmail": "Please enter a valid email address",
+    "passwordMinLength": "Password must be at least 6 characters long",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "agreeToTerms": "Please agree to the terms and conditions",
+    "accountCreated": "Account created successfully!",
+    "welcomeMessage": "Welcome to Appointexo",
+    "branding": {
+      "title": "Join Us Today",
+      "subtitle": "Start managing appointments effortlessly"
+    },
+    "form": {
+      "title": "Create Account",
+      "subtitle": "Join thousands of users managing appointments",
+      "fullNameLabel": "Full Name",
+      "fullNamePlaceholder": "John Doe",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "your@email.com",
+      "organizationLabel": "Organization Name",
+      "organizationPlaceholder": "Enter organization name",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Min. 6 characters",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Re-enter password",
+      "agreeToTerms": "I agree to the",
+      "termsAndConditions": "Terms & Conditions",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy",
+      "createAccount": "Create Account",
+      "creatingAccount": "Creating account...",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInInstead": "Sign In Instead"
+    },
+    "features": {
+      "free": {
+        "title": "Free to Start",
+        "description": "Create your account and start managing bookings immediately"
+      },
+      "setup": {
+        "title": "Quick Setup",
+        "description": "Get up and running in minutes with our guided onboarding"
+      },
+      "security": {
+        "title": "Enterprise Security",
+        "description": "Bank-level encryption to keep your data safe and secure"
+      }
+    }
+  },
+  "cards": {
+    "organization": {
+      "user": "User",
+      "users": "Users",
+      "service": "Service",
+      "services": "Services",
+      "view": "View",
+      "edit": "Edit"
+    },
+    "appointmentsSummary": {
+      "totalAppointments": "Total Appointments",
+      "allTimeRecords": "All time records",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "botStatus": "Bot Status",
+      "adminStatus": "Admin",
+      "active": "Active",
+      "inactive": "Inactive",
+      "linked": "Linked",
+      "notLinked": "Not Linked",
+      "confirmation": "Confirmation",
+      "rejectionRate": "/ {{rate}}%"
+    },
+    "service": {
+      "minuteAbbr": "m",
+      "hourAbbr": "h",
+      "free": "Free",
+      "badge": "Service",
+      "bookings": "{{count}} bookings",
+      "edit": "Edit Service",
+      "manageAppointments": "Manage Appointments",
+      "delete": "Delete Service",
+      "occupancyLabel": "Occupancy (Current Month)",
+      "occupancyTooltip": "{{booked}} of {{total}} slots booked this month",
+      "noSlotsThisMonth": "No slots available this month",
+      "occupancyValue": "{{occupancy}}% occupancy for current month",
+      "slotsSummary": "{{booked}} / {{total}} slots",
+      "totalSlotsSummary": "{{booked}} of {{total}} total slots booked"
+    },
+    "appointment": {
+      "status": {
+        "confirmed": "Confirmed",
+        "cancelled": "Cancelled",
+        "pending": "Pending",
+        "unknown": "Unknown"
+      },
+      "chatIdDisplay": "Chat ID: {{chatId}}",
+      "unknown": "Unknown",
+      "notAvailable": "N/A",
+      "labels": {
+        "name": "Name:",
+        "username": "Username:",
+        "chatId": "Chat ID:",
+        "service": "Service:",
+        "date": "Date:",
+        "time": "Time:"
+      }
+    },
+    "mobileAppointment": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "clientLabel": "Client ID: {{client}}"
+    }
+  },
+  "notifications": {
+    "appointments": {
+      "created": "Appointment created",
+      "createdDescription": "New appointment has been successfully created",
+      "updated": "Appointment updated",
+      "updatedDescription": "Appointment details have been updated",
+      "updatedForClient": "Appointment for {clientName} has been updated",
+      "deleted": "Appointment deleted",
+      "deletedDescription": "Appointment has been removed from the system",
+      "confirmed": "Appointment confirmed",
+      "confirmedDescription": "Appointment has been confirmed",
+      "confirmedForClient": "{clientName}'s appointment has been confirmed",
+      "cancelled": "Appointment cancelled",
+      "cancelledDescription": "Appointment has been cancelled",
+      "cancelledForClient": "{clientName}'s appointment has been cancelled",
+      "rejected": "Appointment rejected",
+      "rejectedDescription": "Appointment has been rejected",
+      "rejectedForClient": "{clientName}'s appointment has been rejected",
+      "rejectedWithReason": "Appointment has been rejected: {reason}",
+      "rejectedForClientWithReason": "{clientName}'s appointment has been rejected: {reason}",
+      "pending": "Appointment pending",
+      "pendingDescription": "Waiting for confirmation"
+    },
+    "services": {
+      "created": "Service created",
+      "createdDescription": "Service created with slots for 1 year",
+      "createdWithName": "{serviceName} has been created with auto-generated slots",
+      "updated": "Service updated",
+      "updatedDescription": "Service details have been updated",
+      "updatedWithName": "{serviceName} has been updated",
+      "deleted": "Service deleted",
+      "deletedDescription": "Service has been removed from the system",
+      "deletedWithName": "{serviceName} has been removed",
+      "slotsGenerated": "Slots generated",
+      "slotsGeneratedDescription": "Time slots automatically generated for 1 year",
+      "slotsGeneratedWithName": "Time slots for {serviceName} generated for 1 year"
+    },
+    "organizations": {
+      "created": "Organization created",
+      "createdDescription": "New organization has been created",
+      "createdWithName": "{orgName} has been added",
+      "updated": "Organization updated",
+      "updatedDescription": "Organization details have been updated",
+      "updatedWithName": "{orgName} has been updated",
+      "deleted": "Organization deleted",
+      "deletedDescription": "Organization has been removed from the system",
+      "deletedWithName": "{orgName} has been removed"
+    },
+    "realtime": {
+      "newAppointment": "New appointment received",
+      "newAppointmentDescription": "A new appointment has been received",
+      "newAppointmentForClient": "{clientName} just booked an appointment",
+      "appointmentConfirmed": "Appointment confirmed",
+      "appointmentConfirmedDescription": "Client confirmed their appointment",
+      "appointmentConfirmedForClient": "{clientName} confirmed their appointment",
+      "appointmentCancelled": "Appointment cancelled",
+      "appointmentCancelledDescription": "Client cancelled their appointment",
+      "appointmentCancelledForClient": "{clientName} cancelled their appointment",
+      "appointmentRejected": "Appointment rejected",
+      "appointmentRejectedDescription": "Appointment was rejected",
+      "appointmentRejectedForClient": "{clientName}'s appointment was rejected",
+      "appointmentRejectedWithReason": "Appointment was rejected: {reason}",
+      "appointmentRescheduled": "Appointment rescheduled",
+      "appointmentRescheduledDescription": "Client rescheduled their appointment",
+      "appointmentRescheduledForClient": "{clientName} rescheduled their appointment"
+    },
+    "system": {
+      "refreshed": "Data refreshed",
+      "refreshedDescription": "Latest data loaded",
+      "refreshedForPage": "{page} data has been updated",
+      "exported": "Export started",
+      "exportedDescription": "Your file will be ready shortly",
+      "exportedForType": "{type} export is being prepared",
+      "saved": "Changes saved",
+      "savedDescription": "Your changes have been saved successfully",
+      "autoSaved": "Auto-saved",
+      "autoSavedDescription": "Changes saved automatically",
+      "connectionLost": "Connection lost",
+      "connectionLostDescription": "Trying to reconnect...",
+      "connectionRestored": "Connection restored",
+      "connectionRestoredDescription": "You're back online"
+    },
+    "errors": {
+      "general": "Error",
+      "generalDescription": "Something went wrong. Please try again.",
+      "network": "Network error",
+      "networkDescription": "Unable to connect. Check your internet connection.",
+      "validation": "Validation error",
+      "validationDescription": "Please check the form and try again.",
+      "unauthorized": "Unauthorized",
+      "unauthorizedDescription": "Please log in to continue.",
+      "notFound": "Not found",
+      "notFoundDescription": "The requested item was not found.",
+      "notFoundForItem": "{item} not found"
+    },
+    "warnings": {
+      "unsavedChanges": "Unsaved changes",
+      "unsavedChangesDescription": "You have unsaved changes. Save before leaving.",
+      "limitReached": "Limit reached",
+      "limitReachedDescription": "You've reached your limit for this action.",
+      "deprecated": "Feature deprecated",
+      "deprecatedDescription": "This feature is deprecated",
+      "deprecatedForFeature": "{feature} will be removed soon"
+    },
+    "info": {
+      "loading": "Loading...",
+      "general": "Info"
+    },
+    "settings": {
+      "saved": "Settings saved",
+      "savedDescription": "Your preferences have been updated",
+      "reset": "Settings reset",
+      "resetDescription": "All settings have been restored to defaults"
+    },
+    "bot": {
+      "activated": "Bot activated",
+      "activatedDescription": "Your Telegram bot is now active and ready to receive appointments",
+      "deactivated": "Bot deactivated",
+      "deactivatedDescription": "Your Telegram bot has been deactivated",
+      "settingsUpdated": "Bot settings updated",
+      "settingsUpdatedDescription": "Bot configuration has been saved",
+      "tokenValidated": "Token validated",
+      "tokenValidatedDescription": "Bot token is valid and ready to use",
+      "adminLinked": "Admin linked",
+      "adminLinkedDescription": "Your Telegram account has been linked to the bot",
+      "adminUnlinked": "Admin unlinked",
+      "adminUnlinkedDescription": "Your Telegram account has been unlinked from the bot"
+    },
+    "notificationCenter": {
+      "allCleared": "All notifications cleared",
+      "clearFailed": "Failed to clear all notifications",
+      "newAppointment": "New Appointment",
+      "appointmentUpdated": "Appointment Updated",
+      "appointmentCancelled": "Appointment Cancelled",
+      "appointmentConfirmed": "Appointment Confirmed",
+      "newService": "New Service",
+      "serviceUpdated": "Service Updated",
+      "serviceDeleted": "Service Deleted",
+      "botMessage": "Bot Message",
+      "bookingCompleted": "Booking Completed",
+      "systemEvent": "System Event"
+    }
   }
 }
-

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useLocale } from 'next-intl'
 import Link from 'next/link'
+import AppointexoLogo from '@/components/AppointexoLogo'
 import {
   ArrowLeft,
   Calendar,
@@ -80,8 +81,8 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email",
-      value: "support@appointbot.com",
-      link: "mailto:support@appointbot.com",
+      value: "support@appointexo.com",
+      link: "mailto:support@appointexo.com",
       color: "from-blue-500 to-cyan-500",
     },
     {
@@ -94,8 +95,8 @@ export default function ContactPage() {
     {
       icon: MessageSquare,
       title: "Telegram",
-      value: "@appointbot_support",
-      link: "https://t.me/appointbot_support",
+      value: "@appointexo_support",
+      link: "https://t.me/appointexo_support",
       color: "from-indigo-500 to-purple-500",
     },
     {
@@ -131,9 +132,14 @@ export default function ContactPage() {
               <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
                 <Calendar className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-bold">
-                AppointBot
-              </span>
+              <Link href={`/${locale}`} className="flex items-center gap-3 group">
+                <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                  <AppointexoLogo size={24} className="text-white" />
+                </div>
+                <span className="text-2xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent font-bold group-hover:opacity-80 transition-opacity">
+                  Appointexo
+                </span>
+              </Link>
             </div>
 
             <div className="w-20" /> {/* Spacer for centering */}

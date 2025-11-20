@@ -1,0 +1,341 @@
+{
+  "navigation": {
+    "home": "Início",
+    "features": "Recursos",
+    "pricing": "Preços",
+    "about": "Sobre",
+    "contact": "Contato",
+    "login": "Entrar",
+    "register": "Cadastrar",
+    "dashboard": "Painel"
+  },
+  "hero": {
+    "title": "Sistema de Agendamento do Telegram Revolucionário",
+    "badge_new": "Nova versão disponível",
+    "subtitle": "Crie seu bot em 10 minutos e comece a aceitar agendamentos hoje!",
+    "description": "Appointexo é um sistema moderno de gerenciamento de agendamentos com integração única de bot do Telegram. Perfeito para clínicas, salões de beleza, consultores e qualquer negócio de serviços.",
+    "cta_primary": "Começar grátis",
+    "cta_secondary": "Assistir demo",
+    "stats": {
+      "users": "1000+ usuários",
+      "appointments": "50,000+ agendamentos",
+      "countries": "15 países"
+    },
+    "labels": {
+      "users": "usuários",
+      "appointments": "agendamentos",
+      "countries": "países"
+    },
+    "bot": {
+      "greeting": "Olá! 👋 Vou ajudá-lo a reservar um agendamento. Escolha um serviço:",
+      "service1": { "title": "Consulta", "price": "30 min • $20" },
+      "service2": { "title": "Tratamento", "price": "60 min • $50" },
+      "userChoice": "Vou escolher uma consulta"
+    },
+    "calendar": {
+      "select": "Selecione uma data:",
+      "weekdays": { "mon": "Seg", "tue": "Ter", "wed": "Qua", "thu": "Qui", "fri": "Sex", "sat": "Sáb", "sun": "Dom" }
+    }
+  },
+  "features": {
+    "title": "Por que escolher Appointexo?",
+    "subtitle": "Tudo que você precisa para gerenciamento eficiente de agendamentos",
+    "learn_more": "Saiba mais",
+    "telegram_integration": {
+      "title": "Integração com Telegram",
+      "description": "Seus clientes podem reservar agendamentos diretamente no Telegram - o mensageiro mais popular"
+    },
+    "multilingual": {
+      "title": "Multilíngue",
+      "description": "Suporte para russo, inglês, hebraico, alemão, francês, espanhol e português desde o início"
+    },
+    "easy_setup": {
+      "title": "Configuração rápida",
+      "description": "Crie um bot e comece a aceitar agendamentos em 10 minutos"
+    },
+    "admin_panel": {
+      "title": "Painel de administração bonito",
+      "description": "Interface moderna com Material Design 3"
+    },
+    "analytics": {
+      "title": "Análises e relatórios",
+      "description": "Acompanhe estatísticas e otimize seu trabalho"
+    },
+    "security": {
+      "title": "Segurança",
+      "description": "Autenticação JWT e controle de acesso baseado em funções"
+    },
+    "more": {
+      "title": "E muito mais",
+      "description": "Appointexo fornece um conjunto completo de ferramentas para gerenciar agendamentos e fazer crescer seu negócio.",
+      "list": [
+        "Geração automática de horários",
+        "Notificações em tempo real",
+        "Integrações com calendários",
+        "Compatível com dispositivos móveis",
+        "API para desenvolvedores",
+        "Suporte 24/7"
+      ],
+      "dashboard_title": "Painel",
+      "today_appointments": "Agendamentos de hoje",
+      "occupancy": "Ocupação",
+      "activity": {
+        "new_appointment": "Novo agendamento: Consulta",
+        "cancel": "Cancelamento: Tratamento",
+        "schedule_update": "Horário atualizado"
+      }
+    }
+  },
+  "how_it_works": {
+    "title": "Como funciona?",
+    "subtitle": "Apenas 3 passos simples para lançar",
+    "ready_in_5min": "Pronto em 5 minutos",
+    "step1": {
+      "title": "Criar bot",
+      "description": "Siga as instruções passo a passo para criar um bot do Telegram via @BotFather"
+    },
+    "step2": {
+      "title": "Configurar serviços",
+      "description": "Adicione seus serviços, preços e horários de trabalho"
+    },
+    "step3": {
+      "title": "Começar a aceitar",
+      "description": "Compartilhe o link do seu bot com os clientes e comece a aceitar agendamentos"
+    },
+    "cta": {
+      "title": "Pronto para começar?",
+      "subtitle": "Crie seu bot em 10 minutos e comece a aceitar agendamentos hoje!",
+      "primary": "Criar bot grátis",
+      "secondary": "Assistir demo"
+    }
+  },
+  "benefits": {
+    "title": "Benefícios para seu negócio",
+    "subtitle": "Aumente a eficiência e a satisfação do cliente",
+    "benefit1": {
+      "title": "Disponibilidade 24/7",
+      "description": "Os clientes podem reservar agendamentos a qualquer hora, mesmo quando você está dormindo"
+    },
+    "benefit2": {
+      "title": "Automação",
+      "description": "Menos chamadas, mais tempo para trabalhar com clientes"
+    },
+    "benefit3": {
+      "title": "Conveniência para o cliente",
+      "description": "Interface familiar do Telegram - não é necessário aprender"
+    },
+    "benefit4": {
+      "title": "Mobilidade",
+      "description": "Gerencie agendamentos de qualquer dispositivo"
+    },
+    "results": {
+      "title": "Resultados dos clientes",
+      "subtitle": "Veja como Appointexo ajuda empresas a crescer e otimizar",
+      "stats": [
+        { "value": "95%", "label": "Satisfação do cliente" },
+        { "value": "3x", "label": "Mais reservas" },
+        { "value": "50%", "label": "Menos tempo administrativo" },
+        { "value": "24/7", "label": "Sempre disponível" }
+      ]
+    },
+    "stories": {
+      "1": {"title": "Clínica Bright", "role": "Centro médico", "text": "Em 3 meses triplicamos nossas reservas. Os clientes adoram a simplicidade de reservar.", "metric": "+150% reservas"},
+      "2": {"title": "Salão Glow", "role": "Salão de beleza", "text": "Agora 80% das reservas vêm através do bot. Mais tempo para clientes, menos tempo atendendo chamadas.", "metric": "+80% automação"},
+      "3": {"title": "Dr. Smith", "role": "Prática privada", "text": "A configuração levou minutos. Os clientes reservam a qualquer hora e recebo notificações instantâneas.", "metric": "100% clientes satisfeitos"}
+    }
+  },
+  "pricing": {
+    "title": "Preços simples e transparentes",
+    "subtitle": "Escolha um plano que se ajuste ao seu negócio",
+    "free": {
+      "name": "Grátis",
+      "price": "$0",
+      "period": "para sempre",
+      "description": "Perfeito para começar",
+      "features": ["Até 50 agendamentos por mês","1 organização","Bot do Telegram","Análises básicas","Suporte por e-mail"],
+      "cta": "Começar grátis"
+    },
+    "professional": {
+      "name": "Profissional",
+      "price": "$29",
+      "period": "por mês",
+      "description": "Para negócios em crescimento",
+      "features": ["Até 500 agendamentos por mês","3 organizações","Análises avançadas","Notificações por e-mail","Suporte prioritário","Personalização do bot"],
+      "cta": "Escolher plano",
+      "popular": "Popular"
+    },
+    "business": {
+      "name": "Empresarial",
+      "price": "$99",
+      "period": "por mês",
+      "description": "Para grandes empresas",
+      "features": ["Agendamentos ilimitados","Organizações ilimitadas","Análises completas","Notificações SMS","Integrações CRM","Gerente pessoal","Acesso API"],
+      "cta": "Entre em contato"
+    },
+    "contact": {
+      "title": "Precisa de um plano personalizado?",
+      "text": "Entre em contato conosco para discutir soluções empresariais e termos especiais.",
+      "primary": "Entre em contato",
+      "secondary": "Solicitar demo"
+    },
+    "faq": {
+      "title": "Perguntas frequentes sobre preços",
+      "q1": { "title": "Posso mudar meu plano?", "text": "Sim, você pode mudar seu plano a qualquer momento. As mudanças entram em vigor no próximo ciclo de faturamento."},
+      "q2": { "title": "Há um período de teste?", "text": "Sim, os planos pagos incluem um teste de 14 dias sem compromisso."},
+      "q3": { "title": "E se eu exceder os limites?", "text": "Vamos notificá-lo com antecedência. Você pode atualizar ou comprar agendamentos adicionais."},
+      "q4": { "title": "Quais métodos de pagamento estão disponíveis?", "text": "Aceitamos cartões de crédito, PayPal e transferências bancárias para clientes corporativos."}
+    }
+  },
+  "faq": {
+    "title": "Perguntas frequentes sobre preços",
+    "q1": {"title": "Posso mudar meu plano?", "text": "Sim, você pode mudar seu plano a qualquer momento. As mudanças entram em vigor no próximo ciclo de faturamento."},
+    "q2": {"title": "Há um período de teste?", "text": "Sim, os planos pagos incluem um teste de 14 dias sem compromisso."},
+    "q3": {"title": "E se eu exceder os limites?", "text": "Vamos notificá-lo com antecedência. Você pode atualizar ou comprar agendamentos adicionais."},
+    "q4": {"title": "Quais métodos de pagamento estão disponíveis?", "text": "Aceitamos cartões de crédito, PayPal e transferências bancárias para clientes corporativos."}
+  },
+  "testimonials": {
+    "title": "O que nossos clientes dizem",
+    "subtitle": "Mais de 1000 usuários satisfeitos em todo o mundo",
+    "trusted_by": "Confiado por",
+    "badges": {
+      "security": "Segurança",
+      "fast_setup": "Configuração rápida",
+      "multilingual": "Multilíngue",
+      "mobile": "Móvel"
+    },
+    "testimonial1": {
+      "text": "Appointexo mudou completamente como nossa clínica funciona. Agora 80% dos agendamentos vêm através do nosso bot do Telegram!",
+      "author": "Dra. Anna Petrova",
+      "role": "Proprietária de Clínica Odontológica"
+    },
+    "testimonial2": {
+      "text": "Muito conveniente! Os clientes se reservam sozinhos e eu recebo notificações. Economiza muito tempo.",
+      "author": "Maria Ivanova",
+      "role": "Artista de unhas"
+    },
+    "testimonial3": {
+      "text": "A configuração levou literalmente 15 minutos. Agora tenho um sistema profissional de reservas.",
+      "author": "Alexey Smirnov",
+      "role": "Consultor de negócios"
+    }
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "subtitle": "Respostas a perguntas populares sobre Appointexo",
+    "contact": {
+      "title": "Não encontrou uma resposta?",
+      "subtitle": "Nossa equipe de suporte está aqui para ajudar 24/7",
+      "primary": "Contatar suporte",
+      "secondary": "Ver documentação"
+    },
+    "q1": {
+      "question": "Quanto tempo leva a configuração?",
+      "answer": "A configuração completa do sistema leva apenas 10-15 minutos. Fornecemos instruções passo a passo com imagens."
+    },
+    "q2": {
+      "question": "Preciso de conhecimento técnico?",
+      "answer": "Não! Nosso sistema é projetado para usuários regulares. Todas as ações são intuitivas."
+    },
+    "q3": {
+      "question": "Posso usá-lo no celular?",
+      "answer": "Sim! Temos um painel de administração responsivo e Telegram Web App para gerenciamento móvel."
+    },
+    "q4": {
+      "question": "Há limites de clientes?",
+      "answer": "O plano gratuito inclui até 50 agendamentos por mês. Os planos pagos praticamente não têm limites."
+    },
+    "q5": {
+      "question": "Posso integrar com outros sistemas?",
+      "answer": "Sim, temos API para integração com CRM, calendários e outros sistemas."
+    }
+  },
+  "cta": {
+    "title": "Pronto para começar?",
+    "subtitle": "Junte-se a milhares de usuários satisfeitos do Appointexo",
+    "description": "Crie seu bot em 10 minutos e comece a aceitar agendamentos hoje!",
+    "button": "Começar grátis",
+    "guarantee": "30 dias grátis • Sem cartão de crédito • Cancele a qualquer momento",
+    "guarantees": {
+      "free30days": "30 dias grátis",
+      "noCard": "Sem cartão de crédito",
+      "cancelAnytime": "Cancele a qualquer momento"
+    },
+    "stats": {
+      "happyCustomers": "Clientes satisfeitos",
+      "successfulBookings": "Reservas bem-sucedidas",
+      "uptime": "Tempo de atividade"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "subtitle": "Bem-vindo de volta!",
+      "email": "E-mail",
+      "password": "Senha",
+      "remember": "Lembrar-me",
+      "forgot": "Esqueceu a senha?",
+      "button": "Entrar",
+      "no_account": "Não tem uma conta?",
+      "register_link": "Cadastrar",
+      "back_to_home": "Voltar ao início"
+    },
+    "register": {
+      "title": "Criar conta",
+      "subtitle": "Comece sua jornada com Appointexo",
+      "name": "Nome",
+      "email": "E-mail",
+      "password": "Senha",
+      "confirm_password": "Confirmar senha",
+      "organization": "Nome da organização",
+      "phone": "Telefone",
+      "terms": "Eu concordo com os",
+      "terms_link": "Termos de serviço",
+      "privacy": "e",
+      "privacy_link": "Política de privacidade",
+      "button": "Criar conta",
+      "has_account": "Já tem uma conta?",
+      "login_link": "Entrar",
+      "back_to_home": "Voltar ao início"
+    },
+    "errors": {
+      "required": "Este campo é obrigatório",
+      "email_invalid": "Por favor, digite um e-mail válido",
+      "password_short": "A senha deve ter pelo menos 6 caracteres",
+      "passwords_not_match": "As senhas não coincidem",
+      "login_failed": "E-mail ou senha inválidos",
+      "register_failed": "Falha no cadastro",
+      "network_error": "Erro de rede. Por favor, tente novamente mais tarde"
+    },
+    "success": {
+      "login": "Bem-vindo!",
+      "register": "Conta criada com sucesso!"
+    }
+  },
+  "footer": {
+    "description": "Appointexo - sistema revolucionário de gerenciamento de agendamentos com integração de bot do Telegram.",
+    "product": "Produto",
+    "company": "Empresa",
+    "support": "Suporte",
+    "legal": "Legal",
+    "features_link": "Recursos",
+    "pricing_link": "Preços",
+    "demo_link": "Demo",
+    "about_link": "Sobre",
+    "contact_link": "Contato",
+    "blog_link": "Blog",
+    "help_link": "Ajuda",
+    "docs_link": "Documentação",
+    "status_link": "Status",
+    "terms_link": "Termos de serviço",
+    "privacy_link": "Política de privacidade",
+    "cookies_link": "Política de cookies",
+    "copyright": "© 2025 Appointexo. Todos os direitos reservados.",
+    "made_with": "Feito com ❤️",
+    "newsletter": {
+      "title": "Inscreva-se para atualizações",
+      "subtitle": "Receba notícias sobre novos recursos e lançamentos",
+      "placeholder": "Seu e-mail",
+      "button": "Inscrever-se"
+    }
+  }
+}

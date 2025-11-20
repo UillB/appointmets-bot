@@ -26,6 +26,7 @@ import {
   Moon,
   Sun,
 } from 'lucide-react'
+import Header from './Header'
 
 export default function LandingPage() {
   const router = useRouter()
@@ -157,64 +158,8 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 dark:bg-gray-950/95 backdrop-blur-lg border-b border-gray-100 dark:border-gray-800 shadow-sm transition-colors">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 lg:h-16 relative">
-            <div className="flex items-center gap-2 lg:gap-3 min-w-0 flex-1">
-              <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg lg:rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
-                <Calendar className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
-              </div>
-              <span className="text-lg lg:text-2xl bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent truncate font-bold">
-                AppointBot
-              </span>
-            </div>
-            
-            <div className="hidden lg:flex items-center gap-6 xl:gap-8 absolute left-1/2 -translate-x-1/2">
-              <a href="#features" className="text-sm text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                Features
-              </a>
-              <a href="#benefits" className="text-sm text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                Benefits
-              </a>
-              <button onClick={onViewPricing} className="text-sm text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                Pricing
-              </button>
-              <button onClick={onViewContact} className="text-sm text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
-                Contact
-              </button>
-            </div>
-
-            <div className="flex items-center gap-2 flex-shrink-0 ml-auto">
-              {/* Dark Mode Toggle */}
-              <button
-                onClick={() => setIsDark(!isDark)}
-                className="hover:bg-gray-100 dark:hover:bg-gray-800 h-8 w-8 lg:h-9 lg:w-9 rounded-lg flex items-center justify-center transition-colors"
-              >
-                {isDark ? (
-                  <Sun className="w-4 h-4 text-amber-500" />
-                ) : (
-                  <Moon className="w-4 h-4 text-gray-700 dark:text-gray-300" />
-                )}
-              </button>
-              <button
-                onClick={onLogin}
-                className="hidden lg:flex items-center hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 h-9 px-4 rounded-lg transition-colors"
-              >
-                Sign In
-              </button>
-              <button
-                onClick={onGetStarted}
-                className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 shadow-lg text-white h-8 lg:h-10 text-xs lg:text-sm px-3 lg:px-4 rounded-lg flex items-center gap-1 lg:gap-2 transition-all"
-              >
-                <span className="hidden sm:inline">Get Started</span>
-                <span className="sm:hidden">Start</span>
-                <ArrowRight className="w-3 h-3 lg:w-4 lg:h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* Header with Logo and Language Switcher */}
+      <Header />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-b from-indigo-50/50 via-white to-white dark:from-indigo-950/30 dark:via-gray-950 dark:to-gray-950 py-12 lg:py-24 xl:py-32 transition-colors">
@@ -406,7 +351,7 @@ export default function LandingPage() {
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-gray-900 dark:text-gray-100 font-bold">
               Why choose
               <span className="block mt-1 lg:mt-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                AppointBot
+                Appointexo
               </span>
             </h2>
           </div>
@@ -542,7 +487,7 @@ export default function LandingPage() {
             Ready to transform your booking process?
           </h2>
           <p className="text-base lg:text-lg xl:text-xl text-white/90 mb-6 lg:mb-8 xl:mb-10">
-            Join thousands of happy AppointBot users today
+            Join thousands of happy Appointexo users today
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 lg:gap-4">
             <button
@@ -574,7 +519,7 @@ export default function LandingPage() {
                 <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-lg lg:rounded-xl flex items-center justify-center shadow-lg">
                   <Calendar className="w-5 h-5 lg:w-6 lg:h-6 text-white" />
                 </div>
-                <span className="text-lg lg:text-xl xl:text-2xl text-white font-bold">AppointBot</span>
+                <span className="text-lg lg:text-xl xl:text-2xl text-white font-bold">Appointexo</span>
               </div>
               <p className="text-xs lg:text-sm text-gray-400 leading-relaxed">
                 Smart appointment management powered by Telegram
@@ -619,7 +564,7 @@ export default function LandingPage() {
 
           <div className="border-t border-gray-800 pt-4 lg:pt-6 xl:pt-8 flex flex-col sm:flex-row items-center justify-between gap-3 lg:gap-4">
             <p className="text-xs lg:text-sm text-gray-400">
-              © 2025 AppointBot. All rights reserved.
+              © 2025 Appointexo. All rights reserved.
             </p>
             <div className="flex gap-4 lg:gap-6 text-xs lg:text-sm">
               <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>

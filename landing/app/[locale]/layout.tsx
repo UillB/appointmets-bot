@@ -7,7 +7,7 @@ import ToastProvider from '@/components/Toaster'
 
 const inter = Inter({ subsets: ['latin'] })
 
-const locales = ['ru', 'en', 'he']
+const locales = ['ru', 'en', 'he', 'de', 'fr', 'es', 'pt', 'ja', 'zh', 'ar', 'hi']
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -28,9 +28,10 @@ export default async function LocaleLayout({
   const messages = await getMessages()
 
   return (
-    <html lang={locale} className="scroll-smooth" dir={locale === 'he' ? 'rtl' : 'ltr'}>
+    <html lang={locale} className="scroll-smooth" dir={locale === 'he' || locale === 'ar' ? 'rtl' : 'ltr'}>
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />

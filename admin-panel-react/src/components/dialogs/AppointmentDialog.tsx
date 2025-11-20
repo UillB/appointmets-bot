@@ -29,6 +29,7 @@ import { apiClient, Service, Slot } from "../../services/api";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { StepIndicator } from "../StepIndicator";
+import { useLanguage } from "../../i18n";
 
 interface AppointmentDialogProps {
   open: boolean;
@@ -41,6 +42,7 @@ export function AppointmentDialog({
   onOpenChange,
   onAppointmentSaved,
 }: AppointmentDialogProps) {
+  const { t } = useLanguage();
   const [date, setDate] = useState<Date>();
   const [services, setServices] = useState<Service[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -72,7 +74,7 @@ export function AppointmentDialog({
       setServices(response.services);
     } catch (error) {
       console.error('Failed to load services:', error);
-      toast.error("Failed to load services");
+      toast.error(t('toasts.failedToLoadServices'));
     } finally {
       setIsLoadingServices(false);
     }
@@ -86,7 +88,7 @@ export function AppointmentDialog({
       setSlots(response.slots);
     } catch (error) {
       console.error('Failed to load slots:', error);
-      toast.error("Failed to load time slots");
+      toast.error(t('toasts.failedToLoadSlots'));
     } finally {
       setIsLoadingSlots(false);
     }
@@ -104,19 +106,19 @@ export function AppointmentDialog({
 
       // Validate required fields
       if (!serviceId) {
-        toast.error("Please select a service");
+        toast.error(t('dialogs.appointment.selectService'));
         setIsSubmitting(false);
         return;
       }
 
       if (!date) {
-        toast.error("Please select a date");
+        toast.error(t('dialogs.appointment.selectDate'));
         setIsSubmitting(false);
         return;
       }
 
       if (!slotId) {
-        toast.error("Please select a time slot");
+        toast.error(t('dialogs.appointment.selectSlot'));
         setIsSubmitting(false);
         return;
       }
@@ -129,7 +131,7 @@ export function AppointmentDialog({
 
       await apiClient.createAppointment(appointmentData);
       
-      toast.success("Appointment created successfully");
+      toast.success(t('dialogs.appointment.created'));
       
       // Reset form
       setDate(undefined);
@@ -142,7 +144,7 @@ export function AppointmentDialog({
       onOpenChange(false);
     } catch (error: any) {
       console.error('Appointment creation error:', error);
-      const errorMessage = error?.message || "Failed to create appointment";
+      const errorMessage = error?.message || t('dialogs.appointment.createFailed');
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -160,10 +162,10 @@ export function AppointmentDialog({
               </div>
               <div>
                 <DrawerTitle className="text-xl text-gray-900 dark:text-gray-100">
-                  Create New Appointment
+                  {t('dialogs.appointment.title')}
                 </DrawerTitle>
                 <DrawerDescription className="text-gray-600 dark:text-gray-400">
-                  Follow the steps below to create a new appointment
+                  {t('dialogs.appointment.description')}
                 </DrawerDescription>
               </div>
             </div>
@@ -184,18 +186,18 @@ export function AppointmentDialog({
               {/* Step 1: Client Information */}
               <StepIndicator
                 stepNumber={1}
-                title="Client Information"
-                description="Enter client details"
+                title={t('dialogs.appointment.step1.title')}
+                description={t('dialogs.appointment.step1.description')}
               />
               <div className="pl-14 space-y-4 pb-6">
                 <div className="space-y-2">
                   <Label htmlFor="clientId" className="text-sm text-gray-700 dark:text-gray-300">
-                    Client ID / Phone <span className="text-red-500">*</span>
+                    {t('dialogs.appointment.clientId')} <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="clientId"
                     name="clientId"
-                    placeholder="Enter client ID or phone number"
+                    placeholder={t('dialogs.appointment.clientIdPlaceholder')}
                     className="h-11 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     required
                   />
@@ -205,14 +207,14 @@ export function AppointmentDialog({
               {/* Step 2: Service & Time */}
               <StepIndicator
                 stepNumber={2}
-                title="Service & Time"
-                description="Select service and time slot"
+                title={t('dialogs.appointment.step2.title')}
+                description={t('dialogs.appointment.step2.description')}
                 isLast={true}
               />
               <div className="pl-14 space-y-4 pb-6">
                 <div className="space-y-2">
                   <Label htmlFor="service" className="text-sm text-gray-700 dark:text-gray-300">
-                    Service <span className="text-red-500">*</span>
+                    {t('dialogs.appointment.service')} <span className="text-red-500">*</span>
                   </Label>
                   <Select 
                     name="service" 
@@ -228,11 +230,11 @@ export function AppointmentDialog({
                       className="h-11 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                       disabled={isLoadingServices}
                     >
-                      <SelectValue placeholder={isLoadingServices ? "Loading services..." : "Select a service"} />
+                      <SelectValue placeholder={isLoadingServices ? t('dialogs.appointment.loadingServices') : t('dialogs.appointment.selectServicePlaceholder')} />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                       {services.length === 0 && !isLoadingServices ? (
-                        <SelectItem value="none" disabled>No services available</SelectItem>
+                        <SelectItem value="none" disabled>{t('dialogs.appointment.noServices')}</SelectItem>
                       ) : (
                         services.map((service) => (
                           <SelectItem 
@@ -250,7 +252,7 @@ export function AppointmentDialog({
 
                 <div className="space-y-2">
                   <Label className="text-sm text-gray-700 dark:text-gray-300">
-                    Date <span className="text-red-500">*</span>
+                    {t('dialogs.appointment.date')} <span className="text-red-500">*</span>
                   </Label>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -261,7 +263,7 @@ export function AppointmentDialog({
                         }`}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : "Pick a date"}
+                        {date ? format(date, "PPP") : t('dialogs.appointment.pickDate')}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800" align="start">
@@ -285,7 +287,7 @@ export function AppointmentDialog({
 
                 <div className="space-y-2">
                   <Label htmlFor="slot" className="text-sm text-gray-700 dark:text-gray-300">
-                    Time Slot <span className="text-red-500">*</span>
+                    {t('dialogs.appointment.timeSlot')} <span className="text-red-500">*</span>
                   </Label>
                   <Select 
                     name="slot" 
@@ -297,16 +299,16 @@ export function AppointmentDialog({
                       className="h-11 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     >
                       <SelectValue placeholder={
-                        !date ? "Select a date first" :
-                        !selectedServiceId ? "Select a service first" :
-                        isLoadingSlots ? "Loading slots..." :
-                        slots.length === 0 ? "No slots available" :
-                        "Select a time slot"
+                        !date ? t('dialogs.appointment.selectDateFirst') :
+                        !selectedServiceId ? t('dialogs.appointment.selectServiceFirst') :
+                        isLoadingSlots ? t('dialogs.appointment.loadingSlots') :
+                        slots.length === 0 ? t('dialogs.appointment.noSlots') :
+                        t('dialogs.appointment.selectSlotPlaceholder')
                       } />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                       {slots.length === 0 ? (
-                        <SelectItem value="none" disabled>No slots available for this date</SelectItem>
+                        <SelectItem value="none" disabled>{t('dialogs.appointment.noSlotsForDate')}</SelectItem>
                       ) : (
                         slots
                           .filter(slot => slot.status !== 'booked' || !slot.isBooked)
@@ -319,7 +321,7 @@ export function AppointmentDialog({
                                 value={slot.id.toString()}
                                 className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
                               >
-                                {startTime} - {endTime} {slot.status === 'conflict' ? '(Conflict)' : ''}
+                                {startTime} - {endTime} {slot.status === 'conflict' ? `(${t('dialogs.appointment.slotConflict')})` : ''}
                               </SelectItem>
                             );
                           })
@@ -329,7 +331,7 @@ export function AppointmentDialog({
                   {isLoadingSlots && (
                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Loading available slots...
+                      {t('dialogs.appointment.loadingAvailableSlots')}
                     </div>
                   )}
                 </div>
@@ -345,10 +347,10 @@ export function AppointmentDialog({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Creating...
+                      {t('dialogs.appointment.creating')}
                     </>
                   ) : (
-                    "Create Appointment"
+                    t('dialogs.appointment.createButton')
                   )}
                 </Button>
                 <Button
@@ -363,7 +365,7 @@ export function AppointmentDialog({
                   disabled={isSubmitting}
                   className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-gray-100"
                 >
-                  Cancel
+                  {t('dialogs.cancel')}
                 </Button>
               </div>
             </form>

@@ -1,0 +1,104 @@
+{
+  "start": { "welcome": "👋 ようこそ！\n\n予約のお手伝いをいたします。必要な機能を選択してください：" },
+  "book": {
+    "chooseService": "サービスを選択：",
+    "openCalendar": "カレンダーを開く：",
+    "chooseTime": "📅 日付：{date}\n時間を選択：",
+    "noSlotsDay": "{date}に利用可能なスロットがありません。",
+    "chooseSlot": "📅 利用可能な時間枠を選択：",
+    "noSlotsAvailable": "❌ このサービスの利用可能なスロットがありません。"
+  },
+  "confirm": {
+    "ok": "✅ 予約が確認されました！",
+    "details": "サービス：{service}\n時間：{when}"
+  },
+  "errors": {
+    "generic": "⚠️ 問題が発生しました。もう一度お試しください。",
+    "webappDate": "⚠️ Webアプリから日付を取得できませんでした。",
+    "webappService": "⚠️ serviceIdが不足しています。",
+    "slotTaken": "❌ このスロットは既に予約済みです。別のスロットを選択してください。",
+    "slotNotFound": "スロットが見つからないか、利用できなくなりました。",
+    "telegramIdRequired": "Telegram IDが必要です",
+    "invalidLinkToken": "❌ 無効なリンクです。正しいリンクを使用してください。",
+    "linkTokenExpired": "❌ リンクの有効期限が切れました。新しいリンクを生成してください。",
+    "linkFailed": "❌ アカウントのリンクにエラーが発生しました。後でもう一度お試しください。"
+  },
+  "lang": {
+    "usage": "使用方法：/lang ru|en|he|de|fr|es|pt|ja|zh",
+    "choose": "🌐 言語を選択：",
+    "set": "言語が設定されました：{lang}。"
+  },
+  "group": {
+    "openPm": "カレンダーはプライベートチャットでのみ使用できます。ボットで続行するにはクリックしてください："
+  },
+  "admin": {
+    "notifyHeader": "🔔 新しい予約",
+    "notifyGroupHeader": "👥 新しい予約",
+    "cancelHeader": "❌ 予約がキャンセルされました",
+    "user": "ユーザー",
+    "service": "サービス",
+    "time": "時間"
+  },
+  "progress": {
+    "confirming": "⏳ 予約を確認中…",
+    "dateReceived": "✅ 日付を受信しました。スロットを検索中…"
+  },
+  "my": {
+    "noAppointments": "アクティブな予約がありません。",
+    "time": "時間",
+    "cancel": "キャンセル",
+    "appointmentNotFound": "この予約が見つからないか、あなたのものではありません。",
+    "cancelled": "❎ 予約がキャンセルされました："
+  },
+  "slots": {
+    "noServices": "利用可能なサービスがありません。",
+    "chooseService": "スロットを表示するサービスを選択：",
+    "choosePeriod": "期間を選択：",
+    "today": "今日",
+    "tomorrow": "明日",
+    "week": "週",
+    "noSlotsDay": "{date}に利用可能なスロットがありません。",
+    "noSlotsWeek": "今週利用可能なスロットがありません。",
+    "weekView": "週の概要：",
+    "available": "利用可能",
+    "occupied": "予約済み",
+    "bookNow": "今すぐ予約"
+  },
+  "menu": {
+    "book": "予約する",
+    "viewSlots": "スロットを表示",
+    "myAppointments": "私の予約",
+    "language": "言語",
+    "adminPanel": "管理パネル"
+  },
+  "help": {
+    "text": "📖 コマンドヘルプ：\n\n📅 /book - 予約する\n👀 /slots - 利用可能なスロットを表示\n📋 /my - 私の予約\n🌐 /lang - 言語を変更\n❓ /help - このヘルプを表示\n\nまたは下のボタンを使用してください："
+  },
+  "commands": {
+    "start": "ボットの使用を開始",
+    "book": "予約する",
+    "my": "私の予約",
+    "help": "ヘルプ",
+    "cancel": "予約をキャンセル"
+  },
+  "ai": {
+    "appointmentStatus": {
+      "confirmed": "確認済み",
+      "pending": "確認待ち"
+    },
+    "cancelHint": "💡 予約をキャンセルするには、「キャンセル」または「気が変わりました」と書いてください",
+    "bookingCreated": "📅 予約が作成されました！\n\n",
+    "service": "サービス",
+    "date": "日付",
+    "duration": "時間",
+    "minutes": "分",
+    "confirmHint": "予約を確認するには、「確認」または「はい、予約したい」と書いてください\n",
+    "cancelHintShort": "キャンセルするには、「キャンセル」または「気が変わりました」と書いてください"
+  },
+  "admin": {
+    "openPanel": "管理パネルを開く",
+    "accessDenied": "アクセスが拒否されました。管理者権限が必要です。",
+    "linkSuccess": "✅ あなたのTelegramアカウントが正常にリンクされました！これでボットを使用して予約を管理できます。"
+  }
+}
+

@@ -2,13 +2,27 @@ import React, { createContext, useContext, useState, useEffect, useMemo, useCall
 import ru from './lang/ru.json';
 import en from './lang/en.json';
 import he from './lang/he.json';
+import de from './lang/de.json';
+import fr from './lang/fr.json';
+import es from './lang/es.json';
+import pt from './lang/pt.json';
+import ja from './lang/ja.json';
+import zh from './lang/zh.json';
+import ar from './lang/ar.json';
 
-export type Language = 'ru' | 'en' | 'he';
+export type Language = 'ru' | 'en' | 'he' | 'de' | 'fr' | 'es' | 'pt' | 'ja' | 'zh' | 'ar';
 
 const translations: Record<Language, any> = {
   ru,
   en,
   he,
+  de,
+  fr,
+  es,
+  pt,
+  ja,
+  zh,
+  ar,
 };
 
 interface LanguageContextType {
@@ -25,12 +39,24 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>(() => {
     // Try to get language from localStorage
     const stored = localStorage.getItem(LANGUAGE_STORAGE_KEY);
-    if (stored && (stored === 'ru' || stored === 'en' || stored === 'he')) {
+    const validLanguages: Language[] = ['ru', 'en', 'he', 'de', 'fr', 'es', 'pt', 'ja', 'zh', 'ar'];
+    if (stored && validLanguages.includes(stored as Language)) {
       return stored as Language;
+    }
+    // Clean up invalid value from localStorage
+    if (stored && !validLanguages.includes(stored as Language)) {
+      localStorage.removeItem(LANGUAGE_STORAGE_KEY);
     }
     // Try to detect from browser
     const browserLang = navigator.language.toLowerCase();
     if (browserLang.startsWith('he')) return 'he';
+    if (browserLang.startsWith('de')) return 'de';
+    if (browserLang.startsWith('fr')) return 'fr';
+    if (browserLang.startsWith('es')) return 'es';
+    if (browserLang.startsWith('pt')) return 'pt';
+    if (browserLang.startsWith('ja')) return 'ja';
+    if (browserLang.startsWith('zh')) return 'zh';
+    if (browserLang.startsWith('ar')) return 'ar';
     if (browserLang.startsWith('en')) return 'en';
     if (browserLang.startsWith('ru')) return 'ru';
     // Default to English
@@ -109,6 +135,13 @@ export function getLanguageName(lang: Language): string {
     ru: 'Русский',
     en: 'English',
     he: 'עברית',
+    de: 'Deutsch',
+    fr: 'Français',
+    es: 'Español',
+    pt: 'Português',
+    ja: '日本語',
+    zh: '中文',
+    ar: 'العربية',
   };
   return names[lang];
 }

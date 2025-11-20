@@ -38,11 +38,14 @@ import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { apiClient, Service } from "../../services/api";
 import { useWebSocket } from "../../hooks/useWebSocket";
-import { toastNotifications } from "../toast-notifications";
+import { createToastNotifications } from "../toast-notifications";
 import { SetupSuccessModal } from "../SetupSuccessModal";
 import { listenToSetupWizardModal, SetupWizardModalData } from "../../utils/setupWizardEvents";
+import { useLanguage } from "../../i18n";
 
 export function ServicesPage() {
+  const { t } = useLanguage();
+  const toastNotifications = createToastNotifications(t);
   const { events } = useWebSocket();
   const location = useLocation();
   const navigate = useNavigate();
@@ -175,7 +178,7 @@ export function ServicesPage() {
       setServices(servicesData.services || []);
     } catch (error) {
       console.error('Failed to load services:', error);
-      toast.error("Failed to load services");
+      toast.error(t('toasts.failedToLoadServices'));
       throw error;
     }
   };
@@ -186,7 +189,7 @@ export function ServicesPage() {
       setStats(statsData);
     } catch (error) {
       console.error('Failed to load statistics:', error);
-      toast.error("Failed to load statistics");
+      toast.error(t('toasts.failedToLoadStatistics'));
       throw error;
     }
   };
@@ -196,25 +199,25 @@ export function ServicesPage() {
       icon: Wrench,
       iconBg: "bg-blue-50 dark:bg-blue-900/50",
       iconColor: "text-blue-600 dark:text-blue-400",
-      title: "Total Services",
+      title: t('services.stats.totalServices'),
       value: statsLoading ? "..." : stats.totalServices,
-      subtitle: "Active services",
+      subtitle: t('services.stats.activeServices'),
     },
     {
       icon: Calendar,
       iconBg: "bg-emerald-50 dark:bg-emerald-900/50",
       iconColor: "text-emerald-600 dark:text-emerald-400",
-      title: "Total Bookings",
+      title: t('services.stats.totalBookings'),
       value: statsLoading ? "..." : stats.totalAppointments,
-      subtitle: "All time bookings",
+      subtitle: t('services.stats.allTimeBookings'),
     },
     {
       icon: TrendingUp,
       iconBg: "bg-purple-50 dark:bg-purple-900/50",
       iconColor: "text-purple-600 dark:text-purple-400",
-      title: "Average Occupancy (Current Month)",
+      title: t('services.stats.averageOccupancy'),
       value: statsLoading ? "..." : `${stats.averageOccupancy}%`,
-      subtitle: "Capacity utilization",
+      subtitle: t('services.stats.capacityUtilization'),
     },
   ];
 
@@ -237,7 +240,7 @@ export function ServicesPage() {
       // Don't show toast on auto-refresh after edit/create
     } catch (error) {
       console.error('Failed to refresh services:', error);
-      toast.error("Failed to refresh services");
+      toast.error(t('toasts.failedToRefreshServices'));
     }
   };
 
@@ -290,8 +293,8 @@ export function ServicesPage() {
           {/* Page Title */}
           <PageTitle
             icon={<Wrench className="w-6 h-6 text-white" />}
-            title="Services"
-            description="Manage your services and track their performance"
+            title={t('services.title')}
+            description={t('services.description')}
             actions={
               <>
                 <Button
@@ -301,7 +304,7 @@ export function ServicesPage() {
                   className="hidden sm:flex"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
+                  {t('common.refresh')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -312,7 +315,7 @@ export function ServicesPage() {
                   className="bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  Add Service
+                  {t('services.addService')}
                 </Button>
               </>
             }
@@ -342,7 +345,7 @@ export function ServicesPage() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
-                    placeholder="Search services..."
+                    placeholder={t('services.searchPlaceholder')}
                     className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -360,8 +363,8 @@ export function ServicesPage() {
                   </SheetTrigger>
                   <SheetContent side="right" className="w-[300px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                     <SheetHeader>
-                      <SheetTitle className="text-gray-900 dark:text-gray-100">Filters</SheetTitle>
-                      <SheetDescription className="text-gray-600 dark:text-gray-400">Filter services by name</SheetDescription>
+                      <SheetTitle className="text-gray-900 dark:text-gray-100">{t('services.filters')}</SheetTitle>
+                      <SheetDescription className="text-gray-600 dark:text-gray-400">{t('services.filterByName')}</SheetDescription>
                     </SheetHeader>
                     <div className="space-y-4 pt-6">
                       {hasActiveFilters && (
@@ -370,7 +373,7 @@ export function ServicesPage() {
                           onClick={clearFilters}
                           className="w-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                         >
-                          Clear Filters
+                          {t('services.clearFilters')}
                         </Button>
                       )}
                     </div>
@@ -383,7 +386,7 @@ export function ServicesPage() {
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
                   <Input
-                    placeholder="Search services by name..."
+                    placeholder={t('services.searchPlaceholderDesktop')}
                     className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -396,7 +399,7 @@ export function ServicesPage() {
                     onClick={clearFilters}
                     className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
-                    Clear
+                    {t('services.clear')}
                   </Button>
                 )}
               </div>
@@ -407,7 +410,7 @@ export function ServicesPage() {
               <div className="text-center py-12">
                 <div className="flex flex-col items-center gap-2">
                   <Wrench className="w-12 h-12 text-gray-300 dark:text-gray-600" />
-                  <p className="text-gray-500 dark:text-gray-400">No services found</p>
+                  <p className="text-gray-500 dark:text-gray-400">{t('services.noServicesFound')}</p>
                   <Button
                     variant="link"
                     onClick={() => {
@@ -416,7 +419,7 @@ export function ServicesPage() {
                   }}
                     className="text-indigo-600 dark:text-indigo-400"
                   >
-                    Create your first service
+                    {t('services.createFirstService')}
                   </Button>
                 </div>
               </div>
@@ -427,10 +430,9 @@ export function ServicesPage() {
                   <div className="p-4 flex items-start gap-3">
                     <div className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0">ℹ️</div>
                     <div>
-                      <h3 className="font-medium text-blue-900 dark:text-blue-100">Auto-Generated Slots</h3>
+                      <h3 className="font-medium text-blue-900 dark:text-blue-100">{t('services.autoGeneratedSlots.title')}</h3>
                       <p className="text-blue-700 dark:text-blue-300 text-sm mt-1">
-                        Time slots are automatically generated for 1 year when you create services. 
-                        No manual slot management needed - just create your services and start booking!
+                        {t('services.autoGeneratedSlots.description')}
                       </p>
                     </div>
                   </div>
@@ -473,7 +475,7 @@ export function ServicesPage() {
             {filteredServices.length > 0 && (
               <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-800">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Showing {filteredServices.length} of {services.length} services
+                  {t('services.showing', { count: filteredServices.length.toString(), total: services.length.toString() })}
                 </p>
               </div>
             )}

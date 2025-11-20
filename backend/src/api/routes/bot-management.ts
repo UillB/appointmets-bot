@@ -468,12 +468,14 @@ router.get('/status/:organizationId', authenticateToken, async (req: Authenticat
 async function setupBot(token: string, organization: any) {
   try {
     // Устанавливаем команды бота
+    // Note: Command descriptions are shown in user's language by Telegram
+    // We use English as default since Telegram doesn't support per-user language for commands
     const commands = [
-      { command: 'start', description: 'Начать работу с ботом' },
-      { command: 'book', description: 'Записаться на консультацию' },
-      { command: 'my', description: 'Мои записи' },
-      { command: 'help', description: 'Помощь' },
-      { command: 'cancel', description: 'Отменить запись' }
+      { command: 'start', description: 'Start working with the bot' },
+      { command: 'book', description: 'Book an appointment' },
+      { command: 'my', description: 'My appointments' },
+      { command: 'help', description: 'Help' },
+      { command: 'cancel', description: 'Cancel appointment' }
     ];
 
     await fetch(`https://api.telegram.org/bot${token}/setMyCommands`, {

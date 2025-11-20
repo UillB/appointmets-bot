@@ -1,0 +1,103 @@
+{
+  "start": { "welcome": "👋 Bem-vindo!\n\nPosso ajudá-lo a reservar um agendamento. Escolha a função que você precisa:" },
+  "book": {
+    "chooseService": "Escolha um serviço:",
+    "openCalendar": "Abra o calendário:",
+    "chooseTime": "📅 Data: {date}\nEscolha um horário:",
+    "noSlotsDay": "Nenhum horário disponível em {date}.",
+    "chooseSlot": "📅 Escolha um horário disponível:",
+    "noSlotsAvailable": "❌ Nenhum horário disponível para este serviço."
+  },
+  "confirm": {
+    "ok": "✅ Reserva confirmada!",
+    "details": "Serviço: {service}\nHorário: {when}"
+  },
+  "errors": {
+    "generic": "⚠️ Algo deu errado. Por favor, tente novamente.",
+    "webappDate": "⚠️ Não foi possível obter a data do aplicativo web.",
+    "webappService": "⚠️ serviceId está faltando.",
+    "slotTaken": "❌ Este horário já está ocupado, escolha outro.",
+    "slotNotFound": "Horário não encontrado ou não está mais disponível.",
+    "telegramIdRequired": "ID do Telegram é obrigatório",
+    "invalidLinkToken": "❌ Link inválido. Por favor, use o link correto.",
+    "linkTokenExpired": "❌ O link expirou. Por favor, gere um novo link.",
+    "linkFailed": "❌ Erro ao vincular conta. Por favor, tente novamente mais tarde."
+  },
+  "lang": {
+    "usage": "Uso: /lang ru|en|he|de|fr|es|pt",
+    "choose": "🌐 Escolha o idioma:",
+    "set": "Idioma definido para: {lang}."
+  },
+  "group": {
+    "openPm": "O calendário só pode ser usado em chat privado. Clique para continuar com o bot:"
+  },
+  "admin": {
+    "notifyHeader": "🔔 Nova reserva",
+    "notifyGroupHeader": "👥 Nova reserva",
+    "cancelHeader": "❌ Reserva cancelada",
+    "user": "Usuário",
+    "service": "Serviço",
+    "time": "Horário"
+  },
+  "progress": {
+    "confirming": "⏳ Confirmando reserva…",
+    "dateReceived": "✅ Data recebida. Buscando horários…"
+  },
+  "my": {
+    "noAppointments": "Você não tem agendamentos ativos.",
+    "time": "Horário",
+    "cancel": "Cancelar",
+    "appointmentNotFound": "Este agendamento não foi encontrado ou não pertence a você.",
+    "cancelled": "❎ Agendamento cancelado:"
+  },
+  "slots": {
+    "noServices": "Nenhum serviço disponível.",
+    "chooseService": "Escolha um serviço para ver horários:",
+    "choosePeriod": "Escolha o período:",
+    "today": "Hoje",
+    "tomorrow": "Amanhã",
+    "week": "Semana",
+    "noSlotsDay": "Nenhum horário disponível em {date}.",
+    "noSlotsWeek": "Nenhum horário disponível esta semana.",
+    "weekView": "Visão semanal:",
+    "available": "disponível",
+    "occupied": "ocupado",
+    "bookNow": "Reservar agora"
+  },
+  "menu": {
+    "book": "Reservar agendamento",
+    "viewSlots": "Ver horários",
+    "myAppointments": "Meus agendamentos",
+    "language": "Idioma",
+    "adminPanel": "Painel de administração"
+  },
+  "help": {
+    "text": "📖 Ajuda de comandos:\n\n📅 /book - Reservar um agendamento\n👀 /slots - Ver horários disponíveis\n📋 /my - Meus agendamentos\n🌐 /lang - Alterar idioma\n❓ /help - Mostrar esta ajuda\n\nOu use os botões abaixo:"
+  },
+  "commands": {
+    "start": "Começar a trabalhar com o bot",
+    "book": "Reservar um agendamento",
+    "my": "Meus agendamentos",
+    "help": "Ajuda",
+    "cancel": "Cancelar agendamento"
+  },
+  "ai": {
+    "appointmentStatus": {
+      "confirmed": "Confirmado",
+      "pending": "Aguardando confirmação"
+    },
+    "cancelHint": "💡 Para cancelar um agendamento, escreva \"cancelar\" ou \"mudei de ideia\"",
+    "bookingCreated": "📅 Agendamento criado!\n\n",
+    "service": "Serviço",
+    "date": "Data",
+    "duration": "Duração",
+    "minutes": "minutos",
+    "confirmHint": "Para confirmar o agendamento, escreva \"confirmar\" ou \"sim, quero reservar\"\n",
+    "cancelHintShort": "Para cancelar, escreva \"cancelar\" ou \"mudei de ideia\""
+  },
+  "admin": {
+    "openPanel": "Abrir painel de administração",
+    "accessDenied": "Acesso negado. Privilégios de administrador necessários.",
+    "linkSuccess": "✅ Sua conta do Telegram foi vinculada com sucesso! Agora você pode usar o bot para gerenciar agendamentos."
+  }
+}

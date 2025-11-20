@@ -1,31 +1,163 @@
 import { Router } from "express";
 import { detectLang } from "../../i18n";
 import { prisma } from "../../lib/prisma";
+import { buildCalendarTemplate, CalendarTexts } from "../webapp/calendarTemplate";
 
 const r = Router();
 
 // Локализованные тексты для веб-календаря
-const webappTexts = {
+const webappTexts: Record<string, CalendarTexts> = {
   ru: {
-    title: "Выбор даты",
-    placeholder: "Дата",
-    send: "Отправить",
-    sent: "Отправлено… можно закрыть окно.",
-    error: "Не удалось отправить данные. Откройте из Telegram."
+    title: "Выберите дату",
+    subtitle: "Посмотрите доступные дни и подтвердите бронь",
+    send: "Подтвердить дату",
+    sent: "Дата отправлена. Можно закрыть окно.",
+    error: "Не удалось отправить данные. Откройте календарь из Telegram.",
+    monthPrev: "Назад",
+    monthNext: "Вперёд",
+    serviceMissing: "Не удалось определить услугу. Перезапустите из Telegram.",
+    emptyState: "В этом месяце нет свободных слотов.",
+    legendTitle: "Статусы дней",
+    legendAvailable: "Есть места",
+    legendBooked: "Все занято",
+    legendDisabled: "Недоступно",
+    legendHint: "Синие дни доступны для бронирования.",
+    timezoneLabel: "Время указано для {timezone}",
+    weekdays: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+    weekStartsOn: 1
   },
   en: {
-    title: "Select Date",
-    placeholder: "Date",
-    send: "Send",
-    sent: "Sent… you can close the window.",
-    error: "Failed to send data. Please open from Telegram."
+    title: "Select a date",
+    subtitle: "Review available days and confirm your booking",
+    send: "Confirm date",
+    sent: "Date shared. You can close the window.",
+    error: "Failed to send data. Please reopen from Telegram.",
+    monthPrev: "Back",
+    monthNext: "Next",
+    serviceMissing: "Missing service information. Reopen from Telegram.",
+    emptyState: "No available slots this month.",
+    legendTitle: "Legend",
+    legendAvailable: "Available",
+    legendBooked: "Fully booked",
+    legendDisabled: "Unavailable",
+    legendHint: "Blue days are open for booking.",
+    timezoneLabel: "Times shown in {timezone}",
+    weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    weekStartsOn: 0
   },
   he: {
     title: "בחירת תאריך",
-    placeholder: "תאריך",
-    send: "שליחה",
-    sent: "נשלח… ניתן לסגור את החלון.",
-    error: "לא ניתן לשלוח נתונים. פתחו מטלגרם."
+    subtitle: "בדקו ימים פנויים ואשרו את התור",
+    send: "אישור תאריך",
+    sent: "התאריך נשלח. ניתן לסגור את החלון.",
+    error: "לא ניתן לשלוח נתונים. פתחו מחדש מתוך הטלגרם.",
+    monthPrev: "הקודם",
+    monthNext: "הבא",
+    serviceMissing: "חסרים נתוני שירות. פתחו מחדש מתוך טלגרם.",
+    emptyState: "אין תורים פנויים בחודש זה.",
+    legendTitle: "מקרא",
+    legendAvailable: "פנוי",
+    legendBooked: "תפוס",
+    legendDisabled: "לא זמין",
+    legendHint: "ימים כחולים זמינים להזמנה.",
+    timezoneLabel: "השעות מוצגות באזור הזמן {timezone}",
+    weekdays: ["א", "ב", "ג", "ד", "ה", "ו", "ש"],
+    weekStartsOn: 0
+  },
+  de: {
+    title: "Datum auswählen",
+    subtitle: "Verfügbare Tage prüfen und Buchung bestätigen",
+    send: "Datum bestätigen",
+    sent: "Datum gesendet. Sie können das Fenster schließen.",
+    error: "Daten konnten nicht gesendet werden. Bitte aus Telegram erneut öffnen.",
+    monthPrev: "Zurück",
+    monthNext: "Weiter",
+    serviceMissing: "Serviceinformationen fehlen. Aus Telegram erneut öffnen.",
+    emptyState: "Keine verfügbaren Termine in diesem Monat.",
+    legendTitle: "Legende",
+    legendAvailable: "Verfügbar",
+    legendBooked: "Vollständig gebucht",
+    legendDisabled: "Nicht verfügbar",
+    legendHint: "Blaue Tage sind für Buchungen verfügbar.",
+    timezoneLabel: "Zeiten angezeigt in {timezone}",
+    weekdays: ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+    weekStartsOn: 1
+  },
+  fr: {
+    title: "Sélectionner une date",
+    subtitle: "Consultez les jours disponibles et confirmez votre réservation",
+    send: "Confirmer la date",
+    sent: "Date envoyée. Vous pouvez fermer la fenêtre.",
+    error: "Échec de l'envoi des données. Veuillez rouvrir depuis Telegram.",
+    monthPrev: "Précédent",
+    monthNext: "Suivant",
+    serviceMissing: "Informations sur le service manquantes. Rouvrez depuis Telegram.",
+    emptyState: "Aucun créneau disponible ce mois-ci.",
+    legendTitle: "Légende",
+    legendAvailable: "Disponible",
+    legendBooked: "Complet",
+    legendDisabled: "Indisponible",
+    legendHint: "Les jours bleus sont disponibles pour réservation.",
+    timezoneLabel: "Heures affichées en {timezone}",
+    weekdays: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+    weekStartsOn: 1
+  },
+  es: {
+    title: "Seleccionar fecha",
+    subtitle: "Revise los días disponibles y confirme su reserva",
+    send: "Confirmar fecha",
+    sent: "Fecha enviada. Puede cerrar la ventana.",
+    error: "Error al enviar datos. Por favor, vuelva a abrir desde Telegram.",
+    monthPrev: "Atrás",
+    monthNext: "Siguiente",
+    serviceMissing: "Faltan datos del servicio. Vuelva a abrir desde Telegram.",
+    emptyState: "No hay horarios disponibles este mes.",
+    legendTitle: "Leyenda",
+    legendAvailable: "Disponible",
+    legendBooked: "Completo",
+    legendDisabled: "No disponible",
+    legendHint: "Los días azules están disponibles para reservar.",
+    timezoneLabel: "Horarios mostrados en {timezone}",
+    weekdays: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+    weekStartsOn: 1
+  },
+  pt: {
+    title: "Selecionar data",
+    subtitle: "Revise os dias disponíveis e confirme sua reserva",
+    send: "Confirmar data",
+    sent: "Data enviada. Você pode fechar a janela.",
+    error: "Falha ao enviar dados. Por favor, abra novamente do Telegram.",
+    monthPrev: "Anterior",
+    monthNext: "Próximo",
+    serviceMissing: "Informações do serviço ausentes. Abra novamente do Telegram.",
+    emptyState: "Nenhum horário disponível neste mês.",
+    legendTitle: "Legenda",
+    legendAvailable: "Disponível",
+    legendBooked: "Completo",
+    legendDisabled: "Indisponível",
+    legendHint: "Dias azuis estão disponíveis para reserva.",
+    timezoneLabel: "Horários mostrados em {timezone}",
+    weekdays: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+    weekStartsOn: 0
+  },
+  ar: {
+    title: "اختر التاريخ",
+    subtitle: "راجع الأيام المتاحة وأكد حجزك",
+    send: "تأكيد التاريخ",
+    sent: "تم إرسال التاريخ. يمكنك إغلاق النافذة.",
+    error: "فشل في إرسال البيانات. يرجى إعادة الفتح من Telegram.",
+    monthPrev: "السابق",
+    monthNext: "التالي",
+    serviceMissing: "معلومات الخدمة مفقودة. أعد الفتح من Telegram.",
+    emptyState: "لا توجد مواعيد متاحة هذا الشهر.",
+    legendTitle: "مفتاح",
+    legendAvailable: "متاح",
+    legendBooked: "مكتمل",
+    legendDisabled: "غير متاح",
+    legendHint: "الأيام الزرقاء متاحة للحجز.",
+    timezoneLabel: "الأوقات معروضة في {timezone}",
+    weekdays: ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],
+    weekStartsOn: 0
   }
 };
 
@@ -47,10 +179,9 @@ r.get("/calendar/availability", async (req: any, res: any) => {
     return res.status(404).json({ error: "Service not found" });
   }
   
-  // Используем более простой подход - ищем все слоты для услуги
+  // Получаем все слоты для услуги
   const allSlots = await prisma.slot.findMany({
-    where: { serviceId: Number(serviceId) },
-    include: { bookings: true }
+    where: { serviceId: Number(serviceId) }
   });
   
   // Фильтруем слоты по месяцу
@@ -62,6 +193,50 @@ r.get("/calendar/availability", async (req: any, res: any) => {
     return slotDate.getUTCFullYear() === targetYear && slotDate.getUTCMonth() === targetMonth - 1;
   });
   
+  if (slots.length === 0) {
+    return res.json({});
+  }
+  
+  // Получаем все активные бронирования в организации для этого месяца
+  // ВАЖНО: учитываем ВСЕ услуги, не только выбранную
+  const monthStart = new Date(Date.UTC(targetYear, targetMonth - 1, 1, 0, 0, 0));
+  const monthEnd = new Date(Date.UTC(targetYear, targetMonth, 0, 23, 59, 59, 999));
+  
+  const allAppointments = await prisma.appointment.findMany({
+    where: {
+      service: {
+        organizationId: service.organizationId
+      },
+      status: {
+        in: ["pending", "confirmed"]
+      },
+      slot: {
+        startAt: {
+          gte: monthStart,
+          lte: monthEnd
+        }
+      }
+    },
+    include: {
+      slot: true,
+      service: true
+    }
+  });
+  
+  // Функция проверки пересечения временных интервалов
+  // Используется та же логика, что и при создании бронирования
+  function hasTimeConflict(
+    slotStart: Date,
+    slotEnd: Date,
+    appointmentSlotStart: Date,
+    appointmentServiceDuration: number
+  ): boolean {
+    const appointmentServiceEnd = new Date(appointmentSlotStart.getTime() + appointmentServiceDuration * 60 * 1000);
+    // Пересечение: наш слот начинается до окончания существующей услуги И
+    // наша услуга заканчивается после начала существующего слота
+    return slotStart < appointmentServiceEnd && slotEnd > appointmentSlotStart;
+  }
+  
   // Группируем слоты по дням и считаем доступные
   const availability = slots.reduce((acc, slot) => {
     const slotDate = new Date(slot.startAt);
@@ -69,10 +244,26 @@ r.get("/calendar/availability", async (req: any, res: any) => {
     if (!acc[day]) {
       acc[day] = { total: 0, available: 0 };
     }
-    acc[day].total++;
-    if (slot.bookings.length < slot.capacity) {
-      acc[day].available++;
+    
+    // Вычисляем временной интервал слота с учетом длительности услуги
+    const slotStart = new Date(slot.startAt);
+    const slotEnd = new Date(slot.startAt.getTime() + service.durationMin * 60 * 1000);
+    
+    // Находим все бронирования, которые пересекаются с этим временным интервалом
+    // Учитываем ВСЕ услуги в организации
+    let occupiedCount = 0;
+    for (const appointment of allAppointments) {
+      const appointmentSlotStart = new Date(appointment.slot.startAt);
+      if (hasTimeConflict(slotStart, slotEnd, appointmentSlotStart, appointment.service.durationMin)) {
+        occupiedCount++;
+      }
     }
+    
+    // Доступность = capacity - количество пересекающихся бронирований
+    const remaining = Math.max(slot.capacity - occupiedCount, 0);
+    
+    acc[day].total += slot.capacity;
+    acc[day].available += remaining;
     return acc;
   }, {} as Record<number, { total: number; available: number }>);
   
@@ -80,110 +271,21 @@ r.get("/calendar/availability", async (req: any, res: any) => {
 });
 
 r.get("/calendar", (req: any, res: any) => {
-  // Определяем язык из параметров запроса
   const lang = detectLang(req.query.lang as string);
-  const texts = webappTexts[lang];
-  
-  res.type("html").send(`
-<!doctype html>
-<html lang="${lang}">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${texts.title}</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu; margin:0; padding:16px; background:#111; color:#eee}
-    h1{font-size:18px; margin:0 0 12px}
-    .card{background:#1b1b1b; padding:12px; border-radius:12px}
-    .btn{display:block; width:100%; margin-top:12px; padding:12px; border-radius:10px; border:none; font-size:16px; background:#4b8ef7; color:white}
-    .btn[disabled]{background:#333; color:#777}
-    #status{margin-top:8px; font-size:13px; color:#999}
-    input{width:100%; padding:10px; border-radius:10px; border:1px solid #333; background:#0f0f0f; color:#eee}
-  </style>
-</head>
-<body>
-  <h1>${texts.title}</h1>
-  <div class="card">
-    <input id="date" placeholder="${texts.placeholder}" />
-    <button id="send" class="btn" disabled>${texts.send}</button>
-    <div id="status"></div>
-  </div>
+  const texts = webappTexts[lang] ?? webappTexts.en;
+  const serviceId = typeof req.query.serviceId === "string" ? req.query.serviceId : null;
+  const cutoffParam = Number(req.query.cutoffMin);
+  const cutoffMin = Number.isFinite(cutoffParam) ? cutoffParam : 30;
 
-  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script>
-    // Telegram WebApp API
-    const tg = window.Telegram?.WebApp;
-    tg && tg.ready();
-    if (tg) tg.expand();
+  const html = buildCalendarTemplate({
+    lang,
+    texts,
+    serviceId,
+    cutoffMin,
+    availabilityPath: "/webapp/calendar/availability"
+  });
 
-    // Параметры (можем принять ?serviceId=1, locale=ru и т.д.)
-    const params = new URLSearchParams(location.search);
-    const serviceId = params.get("serviceId") || null;
-    const cutoffMin = Number(params.get("cutoffMin") || "30"); // на всякий
-    const today = new Date();
-
-    // Локализованные тексты
-    const texts = ${JSON.stringify(texts)};
-
-    // Инициализация календаря
-    const input = document.getElementById('date');
-    const sendBtn = document.getElementById('send');
-    const status = document.getElementById('status');
-
-    // Функция для получения доступности дней
-    async function getAvailability(year, month) {
-      if (!serviceId) return {};
-      try {
-        const response = await fetch(\`/webapp/calendar/availability?serviceId=\${serviceId}&year=\${year}&month=\${month}\`);
-        return await response.json();
-      } catch (e) {
-        console.error('Failed to fetch availability:', e);
-        return {};
-      }
-    }
-
-    // Инициализация календаря с динамическим отключением дней
-    const fp = flatpickr(input, {
-      dateFormat: "Y-m-d",
-      minDate: today,
-      onChange: () => { sendBtn.disabled = !input.value; },
-      onMonthChange: async function(selectedDates, dateStr, instance) {
-        const year = instance.currentYear;
-        const month = instance.currentMonth + 1;
-        const availability = await getAvailability(year, month);
-        
-        // Отключаем дни без свободных слотов
-        const disabledDates = [];
-        for (let day = 1; day <= 31; day++) {
-          if (availability[day] && availability[day].available === 0) {
-            const date = new Date(year, month - 1, day);
-            if (date.getMonth() === month - 1) { // проверяем, что день существует в месяце
-              disabledDates.push(date);
-            }
-          }
-        }
-        
-        instance.set('disable', disabledDates);
-      }
-    });
-
-    sendBtn.addEventListener('click', () => {
-      if (!input.value) return;
-      const payload = { date: input.value, serviceId, source: "calendar-webapp" };
-      try {
-        tg?.sendData(JSON.stringify(payload)); // улетит в бот как web_app_data
-        status.textContent = texts.sent;
-      } catch (e) {
-        status.textContent = texts.error;
-        console.error(e);
-      }
-    });
-  </script>
-</body>
-</html>
-  `);
+  res.type("html").send(html);
 });
 
 // Admin WebApp wrapper: initializes Telegram WebApp, authenticates, and redirects to React app
@@ -199,7 +301,7 @@ r.get("/admin", (req: any, res: any) => {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Panel</title>
+  <title>Appointexo - Admin Panel</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     body { margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu; background: var(--tg-theme-bg-color, #ffffff); color: var(--tg-theme-text-color, #000000); }

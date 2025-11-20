@@ -48,7 +48,7 @@ export function SettingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState(tabParam || "profile");
-  const { language, setLanguage } = useLanguage();
+  const { t, language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
 
   // Update active tab when URL param changes
@@ -79,63 +79,63 @@ export function SettingsPage() {
       icon: User,
       iconBg: "bg-blue-50 dark:bg-blue-900/50",
       iconColor: "text-blue-600 dark:text-blue-400",
-      title: "Account Status",
-      value: "Active",
-      subtitle: "Since Oct 2023",
+      title: t('settings.stats.accountStatus'),
+      value: t('settings.stats.active'),
+      subtitle: t('settings.stats.sinceOct2023'),
     },
     {
       icon: Shield,
       iconBg: "bg-emerald-50 dark:bg-emerald-900/50",
       iconColor: "text-emerald-600 dark:text-emerald-400",
-      title: "Security Level",
-      value: "High",
-      subtitle: "2FA Enabled",
+      title: t('settings.stats.securityLevel'),
+      value: t('settings.stats.high'),
+      subtitle: t('settings.stats.twoFAEnabled'),
     },
     {
       icon: Calendar,
       iconBg: "bg-purple-50 dark:bg-purple-900/50",
       iconColor: "text-purple-600 dark:text-purple-400",
-      title: "Member Since",
-      value: "N/A",
-      subtitle: "Active user",
+      title: t('settings.stats.memberSince'),
+      value: t('common.notAvailable'),
+      subtitle: t('settings.stats.activeUser'),
     },
   ];
 
   const handleRefresh = () => {
-    toast.success("Settings refreshed");
+    toast.success(t('toasts.settingsRefreshed'));
   };
 
 
   const handleUpdateProfile = () => {
     if (!fullName || !email) {
-      toast.error("Please fill all required fields");
+      toast.error(t('settings.errors.fillAllRequiredFields'));
       return;
     }
-    toast.success("Profile updated successfully");
+    toast.success(t('settings.profileUpdatedSuccessfully'));
   };
 
   const handleChangePassword = () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("Please fill all password fields");
+      toast.error(t('settings.errors.fillAllPasswordFields'));
       return;
     }
     if (newPassword !== confirmPassword) {
-      toast.error("New passwords do not match");
+      toast.error(t('settings.errors.passwordsDoNotMatch'));
       return;
     }
     if (newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters");
+      toast.error(t('settings.errors.passwordMinLength'));
       return;
     }
     
-    toast.success("Password changed successfully");
+    toast.success(t('settings.passwordChangedSuccessfully'));
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
   };
 
   const handleSaveSettings = () => {
-    toast.success("System settings saved successfully");
+    toast.success(t('settings.systemSettingsSavedSuccessfully'));
   };
 
   return (
@@ -145,8 +145,8 @@ export function SettingsPage() {
           {/* Page Title */}
           <PageTitle
             icon={<SettingsIcon className="w-6 h-6 text-white" />}
-            title="Settings"
-            description="Manage your account and system preferences"
+            title={t('settings.title')}
+            description={t('settings.description')}
             actions={
               <>
                 <Button
@@ -156,7 +156,7 @@ export function SettingsPage() {
                   className="hidden sm:flex"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
+                  {t('common.refresh')}
                 </Button>
               </>
             }
@@ -181,11 +181,11 @@ export function SettingsPage() {
             <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 dark:bg-gray-800">
               <TabsTrigger value="profile" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400">
                 <User className="w-4 h-4" />
-                User Profile
+                {t('settings.tabs.userProfile')}
               </TabsTrigger>
               <TabsTrigger value="system" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400">
                 <SettingsIcon className="w-4 h-4" />
-                System Settings
+                {t('settings.tabs.systemSettings')}
               </TabsTrigger>
             </TabsList>
 
@@ -199,9 +199,9 @@ export function SettingsPage() {
                       <User className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg text-gray-900 dark:text-gray-100">User Profile</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.profile.title')}</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Manage your personal information
+                        {t('settings.profile.description')}
                       </p>
                     </div>
                   </div>
@@ -214,7 +214,7 @@ export function SettingsPage() {
                       <div className="flex items-center gap-3 mb-2">
                         <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         <span className="text-xs text-blue-600 dark:text-blue-400 font-medium uppercase">
-                          Full Name
+                          {t('settings.profile.fields.fullName')}
                         </span>
                       </div>
                       <p className="text-gray-900 dark:text-gray-100">{fullName}</p>
@@ -224,7 +224,7 @@ export function SettingsPage() {
                       <div className="flex items-center gap-3 mb-2">
                         <Mail className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                         <span className="text-xs text-purple-600 dark:text-purple-400 font-medium uppercase">
-                          Email Address
+                          {t('settings.profile.fields.emailAddress')}
                         </span>
                       </div>
                       <p className="text-gray-900 dark:text-gray-100">{email}</p>
@@ -234,11 +234,11 @@ export function SettingsPage() {
                       <div className="flex items-center gap-3 mb-2">
                         <Shield className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                         <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium uppercase">
-                          Role
+                          {t('settings.profile.fields.role')}
                         </span>
                       </div>
                       <Badge className="bg-emerald-600 dark:bg-emerald-500 hover:bg-emerald-700 dark:hover:bg-emerald-600">
-                        Manager
+                        {t('settings.profile.role.manager')}
                       </Badge>
                     </div>
 
@@ -246,7 +246,7 @@ export function SettingsPage() {
                       <div className="flex items-center gap-3 mb-2">
                         <Building2 className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                         <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase">
-                          Organization
+                          {t('settings.profile.fields.organization')}
                         </span>
                       </div>
                       <p className="text-gray-900 dark:text-gray-100">Demo Org</p>
@@ -256,10 +256,10 @@ export function SettingsPage() {
                       <div className="flex items-center gap-3 mb-2">
                         <Calendar className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                         <span className="text-xs text-amber-600 dark:text-amber-400 font-medium uppercase">
-                          Member Since
+                          {t('settings.profile.fields.memberSince')}
                         </span>
                       </div>
-                      <p className="text-gray-900 dark:text-gray-100">N/A</p>
+                      <p className="text-gray-900 dark:text-gray-100">{t('common.notAvailable')}</p>
                     </div>
                   </div>
                 </div>
@@ -273,9 +273,9 @@ export function SettingsPage() {
                       <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Update Profile</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.profile.updateTitle')}</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Update your profile information
+                        {t('settings.profile.updateDescription')}
                       </p>
                     </div>
                   </div>
@@ -285,7 +285,7 @@ export function SettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="fullName">
-                        Full Name <span className="text-red-500">*</span>
+                        {t('settings.profile.fields.fullName')} <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
                         <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -294,14 +294,14 @@ export function SettingsPage() {
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
                           className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
-                          placeholder="Enter your full name"
+                          placeholder={t('settings.profile.placeholders.fullName')}
                         />
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="email">
-                        Email Address <span className="text-red-500">*</span>
+                        {t('settings.profile.fields.emailAddress')} <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -311,7 +311,7 @@ export function SettingsPage() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
-                          placeholder="Enter your email"
+                          placeholder={t('settings.profile.placeholders.email')}
                         />
                       </div>
                     </div>
@@ -323,7 +323,7 @@ export function SettingsPage() {
                       className="bg-indigo-600 hover:bg-indigo-700 text-white"
                     >
                       <CheckCircle2 className="w-4 h-4 mr-2" />
-                      Update Profile
+                      {t('settings.profile.updateButton')}
                     </Button>
                   </div>
                 </div>
@@ -337,9 +337,9 @@ export function SettingsPage() {
                       <Lock className="w-5 h-5 text-red-600 dark:text-red-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Change Password</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.password.title')}</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Update your password to keep your account secure
+                        {t('settings.password.description')}
                       </p>
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export function SettingsPage() {
                   <div className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="currentPassword">
-                        Current Password <span className="text-red-500">*</span>
+                        {t('settings.password.fields.currentPassword')} <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
                         <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -359,7 +359,7 @@ export function SettingsPage() {
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
                           className="pl-10 pr-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
-                          placeholder="Enter current password"
+                          placeholder={t('settings.password.placeholders.currentPassword')}
                         />
                         <button
                           type="button"
@@ -378,7 +378,7 @@ export function SettingsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="newPassword">
-                          New Password <span className="text-red-500">*</span>
+                          {t('settings.password.fields.newPassword')} <span className="text-red-500">*</span>
                         </Label>
                         <div className="relative">
                           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -388,7 +388,7 @@ export function SettingsPage() {
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             className="pl-10 pr-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
-                            placeholder="Enter new password"
+                            placeholder={t('settings.password.placeholders.newPassword')}
                           />
                           <button
                             type="button"
@@ -406,7 +406,7 @@ export function SettingsPage() {
 
                       <div className="space-y-2">
                         <Label htmlFor="confirmPassword">
-                          Confirm Password <span className="text-red-500">*</span>
+                          {t('settings.password.fields.confirmPassword')} <span className="text-red-500">*</span>
                         </Label>
                         <div className="relative">
                           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -416,7 +416,7 @@ export function SettingsPage() {
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             className="pl-10 pr-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
-                            placeholder="Confirm new password"
+                            placeholder={t('settings.password.placeholders.confirmPassword')}
                           />
                           <button
                             type="button"
@@ -435,13 +435,13 @@ export function SettingsPage() {
 
                     <div className="bg-blue-50 dark:bg-blue-950/50 border border-blue-100 dark:border-blue-900 rounded-lg p-4">
                       <p className="text-sm text-blue-700 dark:text-blue-300">
-                        <strong>Password Requirements:</strong>
+                        <strong>{t('settings.password.requirements.title')}</strong>
                       </p>
                       <ul className="list-disc list-inside text-sm text-blue-600 dark:text-blue-400 mt-2 space-y-1">
-                        <li>At least 8 characters long</li>
-                        <li>Include uppercase and lowercase letters</li>
-                        <li>Include at least one number</li>
-                        <li>Include at least one special character</li>
+                        <li>{t('settings.password.requirements.minLength')}</li>
+                        <li>{t('settings.password.requirements.uppercaseLowercase')}</li>
+                        <li>{t('settings.password.requirements.number')}</li>
+                        <li>{t('settings.password.requirements.specialCharacter')}</li>
                       </ul>
                     </div>
 
@@ -451,7 +451,7 @@ export function SettingsPage() {
                         className="bg-red-500 hover:bg-red-600 text-white"
                       >
                         <Lock className="w-4 h-4 mr-2" />
-                        Change Password
+                        {t('settings.password.changeButton')}
                       </Button>
                     </div>
                   </div>
@@ -469,9 +469,9 @@ export function SettingsPage() {
                       <Globe className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Language & Theme</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.system.languageTheme.title')}</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Configure system preferences
+                        {t('settings.system.languageTheme.description')}
                       </p>
                     </div>
                   </div>
@@ -480,10 +480,10 @@ export function SettingsPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="language">Language</Label>
+                      <Label htmlFor="language">{t('settings.system.languageTheme.language')}</Label>
                       <div className="relative">
                         <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
-                        <Select value={language} onValueChange={(value) => setLanguage(value as 'ru' | 'en' | 'he')}>
+                        <Select value={language} onValueChange={(value) => setLanguage(value as 'ru' | 'en' | 'he' | 'de' | 'fr' | 'es' | 'pt' | 'ja' | 'zh' | 'ar')}>
                           <SelectTrigger id="language" className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
                             <SelectValue />
                           </SelectTrigger>
@@ -491,13 +491,20 @@ export function SettingsPage() {
                             <SelectItem value="en" className="text-gray-900 dark:text-gray-100">🇬🇧 English</SelectItem>
                             <SelectItem value="ru" className="text-gray-900 dark:text-gray-100">🇷🇺 Русский</SelectItem>
                             <SelectItem value="he" className="text-gray-900 dark:text-gray-100">🇮🇱 עברית</SelectItem>
+                            <SelectItem value="de" className="text-gray-900 dark:text-gray-100">🇩🇪 Deutsch</SelectItem>
+                            <SelectItem value="fr" className="text-gray-900 dark:text-gray-100">🇫🇷 Français</SelectItem>
+                            <SelectItem value="es" className="text-gray-900 dark:text-gray-100">🇪🇸 Español</SelectItem>
+                            <SelectItem value="pt" className="text-gray-900 dark:text-gray-100">🇵🇹 Português</SelectItem>
+                            <SelectItem value="ja" className="text-gray-900 dark:text-gray-100">🇯🇵 日本語</SelectItem>
+                            <SelectItem value="zh" className="text-gray-900 dark:text-gray-100">🇨🇳 中文</SelectItem>
+                            <SelectItem value="ar" className="text-gray-900 dark:text-gray-100">🇸🇦 العربية</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="theme">Theme</Label>
+                      <Label htmlFor="theme">{t('settings.system.languageTheme.theme')}</Label>
                       <div className="relative">
                         <Palette className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                         <Select value={theme} onValueChange={setTheme}>
@@ -505,9 +512,9 @@ export function SettingsPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                            <SelectItem value="light" className="text-gray-900 dark:text-gray-100">Light Theme</SelectItem>
-                            <SelectItem value="dark" className="text-gray-900 dark:text-gray-100">Dark Theme</SelectItem>
-                            <SelectItem value="auto" className="text-gray-900 dark:text-gray-100">Auto (System)</SelectItem>
+                            <SelectItem value="light" className="text-gray-900 dark:text-gray-100">{t('settings.system.languageTheme.themeOptions.light')}</SelectItem>
+                            <SelectItem value="dark" className="text-gray-900 dark:text-gray-100">{t('settings.system.languageTheme.themeOptions.dark')}</SelectItem>
+                            <SelectItem value="auto" className="text-gray-900 dark:text-gray-100">{t('settings.system.languageTheme.themeOptions.auto')}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -524,9 +531,9 @@ export function SettingsPage() {
                       <Bell className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg text-gray-900 dark:text-gray-100">Notifications</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.system.notifications.title')}</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Manage how you receive notifications
+                        {t('settings.system.notifications.description')}
                       </p>
                     </div>
                   </div>
@@ -539,10 +546,10 @@ export function SettingsPage() {
                         <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         <div>
                           <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">
-                            Email Notifications
+                            {t('settings.system.notifications.emailNotifications')}
                           </Label>
                           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            Receive notifications via email
+                            {t('settings.system.notifications.emailNotificationsDescription')}
                           </p>
                         </div>
                       </div>
@@ -558,10 +565,10 @@ export function SettingsPage() {
                         <Bell className="w-5 h-5 text-purple-600 dark:text-purple-400" />
                         <div>
                           <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">
-                            Push Notifications
+                            {t('settings.system.notifications.pushNotifications')}
                           </Label>
                           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            Receive push notifications in browser
+                            {t('settings.system.notifications.pushNotificationsDescription')}
                           </p>
                         </div>
                       </div>
@@ -583,9 +590,9 @@ export function SettingsPage() {
                       <SettingsIcon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <div>
-                      <h3 className="text-lg text-gray-900 dark:text-gray-100">System Preferences</h3>
+                      <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.system.preferences.title')}</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Configure date, time, and refresh settings
+                        {t('settings.system.preferences.description')}
                       </p>
                     </div>
                   </div>
@@ -594,7 +601,7 @@ export function SettingsPage() {
 
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="timezone" className="text-gray-900 dark:text-gray-100">Timezone</Label>
+                      <Label htmlFor="timezone" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.timezone')}</Label>
                       <div className="relative">
                         <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                         <Select value={timezone} onValueChange={setTimezone}>
@@ -625,7 +632,7 @@ export function SettingsPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="dateFormat" className="text-gray-900 dark:text-gray-100">Date Format</Label>
+                        <Label htmlFor="dateFormat" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.dateFormat')}</Label>
                         <div className="relative">
                           <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                           <Select value={dateFormat} onValueChange={setDateFormat}>
@@ -642,7 +649,7 @@ export function SettingsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="timeFormat" className="text-gray-900 dark:text-gray-100">Time Format</Label>
+                        <Label htmlFor="timeFormat" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.timeFormat')}</Label>
                         <div className="relative">
                           <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
                           <Select value={timeFormat} onValueChange={setTimeFormat}>
@@ -650,8 +657,8 @@ export function SettingsPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                              <SelectItem value="12" className="text-gray-900 dark:text-gray-100">12 Hour (AM/PM)</SelectItem>
-                              <SelectItem value="24" className="text-gray-900 dark:text-gray-100">24 Hour</SelectItem>
+                              <SelectItem value="12" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.timeFormat12')}</SelectItem>
+                              <SelectItem value="24" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.timeFormat24')}</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -660,7 +667,7 @@ export function SettingsPage() {
 
                     <div className="space-y-2">
                       <Label htmlFor="refreshInterval" className="text-gray-900 dark:text-gray-100">
-                        Refresh Interval (seconds)
+                        {t('settings.system.preferences.refreshInterval')}
                       </Label>
                       <div className="relative">
                         <Timer className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
@@ -672,11 +679,11 @@ export function SettingsPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                            <SelectItem value="15" className="text-gray-900 dark:text-gray-100">15 seconds</SelectItem>
-                            <SelectItem value="30" className="text-gray-900 dark:text-gray-100">30 seconds</SelectItem>
-                            <SelectItem value="60" className="text-gray-900 dark:text-gray-100">1 minute</SelectItem>
-                            <SelectItem value="300" className="text-gray-900 dark:text-gray-100">5 minutes</SelectItem>
-                            <SelectItem value="0" className="text-gray-900 dark:text-gray-100">Manual only</SelectItem>
+                            <SelectItem value="15" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.refreshInterval15')}</SelectItem>
+                            <SelectItem value="30" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.refreshInterval30')}</SelectItem>
+                            <SelectItem value="60" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.refreshInterval60')}</SelectItem>
+                            <SelectItem value="300" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.refreshInterval300')}</SelectItem>
+                            <SelectItem value="0" className="text-gray-900 dark:text-gray-100">{t('settings.system.preferences.refreshIntervalManual')}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -689,7 +696,7 @@ export function SettingsPage() {
                       className="bg-indigo-600 hover:bg-indigo-700 text-white"
                     >
                       <Save className="w-4 h-4 mr-2" />
-                      Save Settings
+                      {t('settings.system.saveButton')}
                     </Button>
                   </div>
                 </div>

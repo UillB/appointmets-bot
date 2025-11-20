@@ -35,8 +35,10 @@ import {
 } from "../ui/table";
 import { Badge } from "../ui/badge";
 import { format, parseISO, isToday, isTomorrow, isYesterday } from "date-fns";
+import { useLanguage } from "../../i18n";
 
 export function SlotsPage() {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [serviceFilter, setServiceFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -62,7 +64,7 @@ export function SlotsPage() {
       setServices(servicesData.services || []);
     } catch (error) {
       console.error('Failed to load slots data:', error);
-      toast.error('Failed to load slots data');
+      toast.error(t('toasts.failedToLoadSlots'));
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +75,7 @@ export function SlotsPage() {
       icon: CalendarClock,
       iconBg: "bg-blue-50 dark:bg-blue-900/50",
       iconColor: "text-blue-600 dark:text-blue-400",
-      title: "Total Slots",
+      title: t('slots.stats.totalSlots'),
       value: slots.length.toString(),
       change: "+12%",
       changeType: "positive" as const
@@ -82,7 +84,7 @@ export function SlotsPage() {
       icon: CheckCircle,
       iconBg: "bg-green-50 dark:bg-green-900/50",
       iconColor: "text-green-600 dark:text-green-400",
-      title: "Available",
+      title: t('slots.stats.available'),
       value: slots.filter(slot => !slot.isBooked).length.toString(),
       change: "+8%",
       changeType: "positive" as const
@@ -91,7 +93,7 @@ export function SlotsPage() {
       icon: XCircle,
       iconBg: "bg-red-50 dark:bg-red-900/50",
       iconColor: "text-red-600 dark:text-red-400",
-      title: "Booked",
+      title: t('slots.stats.booked'),
       value: slots.filter(slot => slot.isBooked).length.toString(),
       change: "+15%",
       changeType: "positive" as const
@@ -100,7 +102,7 @@ export function SlotsPage() {
       icon: TrendingUp,
       iconBg: "bg-purple-50 dark:bg-purple-900/50",
       iconColor: "text-purple-600 dark:text-purple-400",
-      title: "Utilization",
+      title: t('slots.stats.utilization'),
       value: slots.length > 0 ? `${Math.round((slots.filter(slot => slot.isBooked).length / slots.length) * 100)}%` : "0%",
       change: "+5%",
       changeType: "positive" as const
@@ -127,19 +129,19 @@ export function SlotsPage() {
 
   const getStatusBadge = (slot: Slot) => {
     if (slot.isBooked) {
-      return <Badge variant="destructive">Booked</Badge>;
+      return <Badge variant="destructive">{t('slots.status.booked')}</Badge>;
     }
     if (slot.hasConflict) {
-      return <Badge variant="secondary">Conflict</Badge>;
+      return <Badge variant="secondary">{t('slots.status.conflict')}</Badge>;
     }
-    return <Badge variant="default">Available</Badge>;
+    return <Badge variant="default">{t('slots.status.available')}</Badge>;
   };
 
   const getDateDisplay = (dateString: string) => {
     const date = parseISO(dateString);
-    if (isToday(date)) return "Today";
-    if (isTomorrow(date)) return "Tomorrow";
-    if (isYesterday(date)) return "Yesterday";
+    if (isToday(date)) return t('slots.dates.today');
+    if (isTomorrow(date)) return t('slots.dates.tomorrow');
+    if (isYesterday(date)) return t('slots.dates.yesterday');
     return format(date, "MMM dd, yyyy");
   };
 
@@ -150,8 +152,8 @@ export function SlotsPage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Time Slots"
-        description="Auto-generated slots for your services"
+        title={t('slots.title')}
+        description={t('slots.description')}
         icon={CalendarClock}
       />
 
@@ -160,10 +162,9 @@ export function SlotsPage() {
         <div className="p-4 flex items-start gap-3">
           <Info className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
           <div>
-            <h3 className="font-medium text-blue-900">Auto-Generated Slots</h3>
+            <h3 className="font-medium text-blue-900">{t('slots.infoBanner.title')}</h3>
             <p className="text-blue-700 text-sm mt-1">
-              Slots are automatically generated when you create services. They cover 1 year ahead 
-              with standard working hours (9 AM - 6 PM, Monday-Friday). No manual management needed!
+              {t('slots.infoBanner.description')}
             </p>
           </div>
         </div>
@@ -184,7 +185,7 @@ export function SlotsPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 h-4 w-4" />
                       <Input
-                        placeholder="Search slots..."
+                        placeholder={t('slots.searchPlaceholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
@@ -194,10 +195,10 @@ export function SlotsPage() {
 
                     <Select value={serviceFilter} onValueChange={setServiceFilter}>
               <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="All Services" />
+                <SelectValue placeholder={t('slots.filters.allServices')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Services</SelectItem>
+                        <SelectItem value="all">{t('slots.filters.allServices')}</SelectItem>
                 {services.map(service => (
                   <SelectItem key={service.id} value={service.id.toString()}>
                             {service.name}
@@ -208,18 +209,18 @@ export function SlotsPage() {
 
                     <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="All Status" />
+                <SelectValue placeholder={t('slots.filters.allStatus')} />
                       </SelectTrigger>
                       <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                        <SelectItem value="available">Available</SelectItem>
-                        <SelectItem value="booked">Booked</SelectItem>
+                <SelectItem value="all">{t('slots.filters.allStatus')}</SelectItem>
+                        <SelectItem value="available">{t('slots.status.available')}</SelectItem>
+                        <SelectItem value="booked">{t('slots.status.booked')}</SelectItem>
                       </SelectContent>
                     </Select>
 
                     <Input
                       type="date"
-              placeholder="Filter by date"
+              placeholder={t('slots.filters.filterByDate')}
                       value={dateFilter}
                       onChange={(e) => setDateFilter(e.target.value)}
               className="w-full sm:w-48"
@@ -232,7 +233,7 @@ export function SlotsPage() {
               className="w-full sm:w-auto"
             >
               <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              Refresh
+              {t('common.refresh')}
                               </Button>
                             </div>
                           </div>
@@ -242,9 +243,9 @@ export function SlotsPage() {
       <Card>
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">Time Slots</h3>
+            <h3 className="text-lg font-semibold">{t('slots.table.title')}</h3>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              {filteredSlots.length} of {slots.length} slots
+              {t('slots.table.showing', { count: filteredSlots.length.toString(), total: slots.length.toString() })}
             </div>
                     </div>
 
@@ -255,11 +256,11 @@ export function SlotsPage() {
           ) : filteredSlots.length === 0 ? (
             <div className="text-center py-8">
               <CalendarDays className="h-12 w-12 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No slots found</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">{t('slots.emptyStates.noSlotsFound')}</h3>
               <p className="text-gray-500 dark:text-gray-400">
                 {slots.length === 0 
-                  ? "Create a service to auto-generate slots" 
-                  : "Try adjusting your filters"}
+                  ? t('slots.emptyStates.createServiceToGenerate') 
+                  : t('slots.emptyStates.tryAdjustingFilters')}
               </p>
             </div>
           ) : (
@@ -267,19 +268,19 @@ export function SlotsPage() {
                       <Table>
                         <TableHeader>
                           <TableRow>
-                            <TableHead>Service</TableHead>
-                            <TableHead>Date</TableHead>
-                            <TableHead>Time</TableHead>
-                            <TableHead>Duration</TableHead>
-                    <TableHead>Status</TableHead>
-                            <TableHead>Capacity</TableHead>
+                            <TableHead>{t('slots.tableHeaders.service')}</TableHead>
+                            <TableHead>{t('slots.tableHeaders.date')}</TableHead>
+                            <TableHead>{t('slots.tableHeaders.time')}</TableHead>
+                            <TableHead>{t('slots.tableHeaders.duration')}</TableHead>
+                    <TableHead>{t('slots.tableHeaders.status')}</TableHead>
+                            <TableHead>{t('slots.tableHeaders.capacity')}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
                           {filteredSlots.map((slot) => (
                             <TableRow key={slot.id}>
                       <TableCell className="font-medium">
-                        {slot.service?.name || "Unknown Service"}
+                        {slot.service?.name || t('slots.unknownService')}
                       </TableCell>
                               <TableCell>
                         <div className="flex items-center gap-2">
@@ -294,7 +295,7 @@ export function SlotsPage() {
                                 </div>
                               </TableCell>
                       <TableCell>
-                        {slot.service?.durationMin || 30} min
+                        {slot.service?.durationMin || 30} {t('slots.minutes')}
                       </TableCell>
                       <TableCell>
                         {getStatusBadge(slot)}

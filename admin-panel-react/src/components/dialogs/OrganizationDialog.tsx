@@ -14,6 +14,7 @@ import { Textarea } from "../ui/textarea";
 import { apiClient, Organization } from "../../services/api";
 import { toast } from "sonner";
 import { StepIndicator } from "../StepIndicator";
+import { useLanguage } from "../../i18n";
 
 interface OrganizationDialogProps {
   open: boolean;
@@ -30,6 +31,7 @@ export function OrganizationDialog({
   onSave,
   readOnly = false,
 }: OrganizationDialogProps) {
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: organization?.name || "",
     email: organization?.email || "",
@@ -71,7 +73,7 @@ export function OrganizationDialog({
     
     try {
       if (!formData.name || !formData.name.trim()) {
-        toast.error("Organization name is required");
+        toast.error(t('dialogs.organization.nameRequired'));
         return;
       }
 
@@ -85,10 +87,10 @@ export function OrganizationDialog({
 
       if (organization) {
         await apiClient.updateOrganization(organization.id, organizationData);
-        toast.success("Organization updated successfully");
+        toast.success(t('dialogs.organization.updated'));
       } else {
         const result = await apiClient.createOrganization(organizationData);
-        toast.success("Organization created successfully");
+        toast.success(t('dialogs.organization.created'));
       }
 
       onSave?.(organizationData);
@@ -103,7 +105,7 @@ export function OrganizationDialog({
       });
     } catch (error) {
       console.error('Organization save error:', error);
-      toast.error("Failed to save organization");
+      toast.error(t('dialogs.organization.saveFailed'));
     }
   };
 
@@ -130,14 +132,14 @@ export function OrganizationDialog({
               </div>
               <div>
                 <DrawerTitle className="text-xl text-gray-900 dark:text-gray-100">
-                  {isViewMode ? "View Organization" : isEdit ? "Edit Organization" : "Create New Organization"}
+                  {isViewMode ? t('dialogs.organization.viewTitle') : isEdit ? t('dialogs.organization.editTitle') : t('dialogs.organization.createTitle')}
                 </DrawerTitle>
                 <DrawerDescription className="text-gray-600 dark:text-gray-400">
                   {isViewMode 
-                    ? "View organization details"
+                    ? t('dialogs.organization.viewDescription')
                     : isEdit 
-                    ? "Update organization information"
-                    : "Follow the steps below to add a new organization"}
+                    ? t('dialogs.organization.editDescription')
+                    : t('dialogs.organization.createDescription')}
                 </DrawerDescription>
               </div>
             </div>
@@ -160,46 +162,46 @@ export function OrganizationDialog({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-gray-700">
-                      Organization Name
+                      {t('dialogs.organization.fields.organizationName')}
                     </Label>
                     <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                      <p className="text-gray-900 dark:text-gray-100">{formData.name || "N/A"}</p>
+                      <p className="text-gray-900 dark:text-gray-100">{formData.name || t('common.notAvailable')}</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-gray-700">
-                      Description
+                      {t('dialogs.organization.fields.description')}
                     </Label>
                     <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 min-h-[80px]">
-                      <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{formData.description || "N/A"}</p>
+                      <p className="text-gray-900 dark:text-gray-100 whitespace-pre-wrap">{formData.description || t('common.notAvailable')}</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-gray-700">
-                      Email Address
+                      {t('dialogs.organization.fields.email')}
                     </Label>
                     <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                      <p className="text-gray-900 dark:text-gray-100">{formData.email || "N/A"}</p>
+                      <p className="text-gray-900 dark:text-gray-100">{formData.email || t('common.notAvailable')}</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-gray-700">
-                      Phone Number
+                      {t('dialogs.organization.fields.phone')}
                     </Label>
                     <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                      <p className="text-gray-900 dark:text-gray-100">{formData.phone || "N/A"}</p>
+                      <p className="text-gray-900 dark:text-gray-100">{formData.phone || t('common.notAvailable')}</p>
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <Label className="text-sm font-semibold text-gray-700">
-                      Address
+                      {t('dialogs.organization.fields.address')}
                     </Label>
                     <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                      <p className="text-gray-900 dark:text-gray-100">{formData.address || "N/A"}</p>
+                      <p className="text-gray-900 dark:text-gray-100">{formData.address || t('common.notAvailable')}</p>
                     </div>
                   </div>
                 </div>
@@ -215,7 +217,7 @@ export function OrganizationDialog({
                     }}
                     className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
                   >
-                    Close
+                    {t('dialogs.close')}
                   </Button>
                 </div>
               </div>
@@ -227,13 +229,13 @@ export function OrganizationDialog({
                   {/* Step 1: Basic Information */}
                   <StepIndicator
                     stepNumber={1}
-                    title="Basic Information"
-                    description="Organization name and description"
+                    title={t('dialogs.organization.step1.title')}
+                    description={t('dialogs.organization.step1.description')}
                   />
                   <div className="pl-14 space-y-4 pb-6">
                     <div className="space-y-2">
                       <Label htmlFor="name" className="text-sm">
-                        Organization Name <span className="text-red-500">*</span>
+                        {t('dialogs.organization.fields.organizationName')} <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
                         <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -242,7 +244,7 @@ export function OrganizationDialog({
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          placeholder="e.g., Acme Corporation"
+                          placeholder={t('dialogs.organization.placeholders.name')}
                           className="h-11 pl-10"
                           required
                           disabled={isViewMode}
@@ -253,14 +255,14 @@ export function OrganizationDialog({
 
                     <div className="space-y-2">
                       <Label htmlFor="description" className="text-sm">
-                        Description
+                        {t('dialogs.organization.fields.description')}
                       </Label>
                       <Textarea
                         id="description"
                         name="description"
                         value={formData.description}
                         onChange={handleChange}
-                        placeholder="Brief description of the organization..."
+                        placeholder={t('dialogs.organization.placeholders.description')}
                         rows={3}
                         className="resize-none"
                         disabled={isViewMode}
@@ -272,14 +274,14 @@ export function OrganizationDialog({
                   {/* Step 2: Contact Information */}
                   <StepIndicator
                     stepNumber={2}
-                    title="Contact Information"
-                    description="Email, phone, and address"
+                    title={t('dialogs.organization.step2.title')}
+                    description={t('dialogs.organization.step2.description')}
                     isLast={true}
                   />
                   <div className="pl-14 space-y-4 pb-6">
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-sm">
-                        Email Address
+                        {t('dialogs.organization.fields.email')}
                       </Label>
                       <div className="relative">
                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -289,7 +291,7 @@ export function OrganizationDialog({
                           type="email"
                           value={formData.email}
                           onChange={handleChange}
-                          placeholder="contact@example.com"
+                          placeholder={t('dialogs.organization.placeholders.email')}
                           className="h-11 pl-10"
                           disabled={isViewMode}
                           readOnly={isViewMode}
@@ -299,7 +301,7 @@ export function OrganizationDialog({
 
                     <div className="space-y-2">
                       <Label htmlFor="phone" className="text-sm">
-                        Phone Number
+                        {t('dialogs.organization.fields.phone')}
                       </Label>
                       <div className="relative">
                         <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -309,7 +311,7 @@ export function OrganizationDialog({
                           type="tel"
                           value={formData.phone}
                           onChange={handleChange}
-                          placeholder="+1 (555) 123-4567"
+                          placeholder={t('dialogs.organization.placeholders.phone')}
                           className="h-11 pl-10"
                           disabled={isViewMode}
                           readOnly={isViewMode}
@@ -319,7 +321,7 @@ export function OrganizationDialog({
 
                     <div className="space-y-2">
                       <Label htmlFor="address" className="text-sm">
-                        Address
+                        {t('dialogs.organization.fields.address')}
                       </Label>
                       <div className="relative">
                         <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -328,7 +330,7 @@ export function OrganizationDialog({
                           name="address"
                           value={formData.address}
                           onChange={handleChange}
-                          placeholder="123 Main Street, City, State, ZIP"
+                          placeholder={t('dialogs.organization.placeholders.address')}
                           className="h-11 pl-10"
                           disabled={isViewMode}
                           readOnly={isViewMode}
@@ -341,7 +343,7 @@ export function OrganizationDialog({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Organization Name *
+                      {t('dialogs.organization.fields.organizationName')} *
                     </Label>
                     <div className="relative">
                       <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -350,7 +352,7 @@ export function OrganizationDialog({
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="e.g., Acme Corporation"
+                        placeholder={t('dialogs.organization.placeholders.name')}
                         required
                         className="h-12 pl-10 text-base"
                         disabled={isViewMode}
@@ -361,14 +363,14 @@ export function OrganizationDialog({
 
                   <div className="space-y-2">
                     <Label htmlFor="description" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Description
+                      {t('dialogs.organization.fields.description')}
                     </Label>
                     <Textarea
                       id="description"
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
-                      placeholder="Brief description of the organization..."
+                        placeholder={t('dialogs.organization.placeholders.description')}
                       rows={3}
                       className="text-base"
                       disabled={isViewMode}
@@ -378,7 +380,7 @@ export function OrganizationDialog({
 
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Email Address
+                      {t('dialogs.organization.fields.email')}
                     </Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -388,7 +390,7 @@ export function OrganizationDialog({
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="contact@example.com"
+                        placeholder={t('dialogs.organization.placeholders.email')}
                         className="h-12 pl-10 text-base"
                         disabled={isViewMode}
                         readOnly={isViewMode}
@@ -398,7 +400,7 @@ export function OrganizationDialog({
 
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Phone Number
+                      {t('dialogs.organization.fields.phone')}
                     </Label>
                     <div className="relative">
                       <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -408,7 +410,7 @@ export function OrganizationDialog({
                         type="tel"
                         value={formData.phone}
                         onChange={handleChange}
-                        placeholder="+1 (555) 123-4567"
+                        placeholder={t('dialogs.organization.placeholders.phone')}
                         className="h-12 pl-10 text-base"
                         disabled={isViewMode}
                         readOnly={isViewMode}
@@ -418,7 +420,7 @@ export function OrganizationDialog({
 
                   <div className="space-y-2">
                     <Label htmlFor="address" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Address
+                      {t('dialogs.organization.fields.address')}
                     </Label>
                     <div className="relative">
                       <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -427,7 +429,7 @@ export function OrganizationDialog({
                         name="address"
                         value={formData.address}
                         onChange={handleChange}
-                        placeholder="123 Main Street, City, State, ZIP"
+                        placeholder={t('dialogs.organization.placeholders.address')}
                         className="h-12 pl-10 text-base"
                         disabled={isViewMode}
                         readOnly={isViewMode}
@@ -444,7 +446,7 @@ export function OrganizationDialog({
                     type="submit" 
                     className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
                   >
-                    {isEdit ? "Save Changes" : "Create Organization"}
+                    {isEdit ? t('dialogs.organization.saveChanges') : t('dialogs.organization.createOrganization')}
                   </Button>
                   <Button
                     type="button"
@@ -452,7 +454,7 @@ export function OrganizationDialog({
                     onClick={() => onOpenChange(false)}
                     className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
-                    Cancel
+                    {t('dialogs.cancel')}
                   </Button>
                 </div>
               )}

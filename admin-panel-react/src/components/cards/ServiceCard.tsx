@@ -16,6 +16,7 @@ import {
 } from "../ui/tooltip";
 import { Clock, DollarSign, Calendar, MoreVertical, TrendingUp } from "lucide-react";
 import { Progress } from "../ui/progress";
+import { useLanguage } from "../../i18n";
 
 interface ServiceCardProps {
   id: number;
@@ -67,6 +68,9 @@ export function ServiceCard({
   onDelete,
   onManageAppointments,
 }: ServiceCardProps) {
+  const { t } = useLanguage();
+  const minuteAbbr = t('cards.service.minuteAbbr');
+  const hourAbbr = t('cards.service.hourAbbr');
   // Use occupancy from API if available, otherwise calculate from current month data
   const slotsInCurrentMonth = _count?.slotsInCurrentMonth ?? 0;
   const appointmentsInCurrentMonth = _count?.appointmentsInCurrentMonth ?? 0;
@@ -95,10 +99,10 @@ export function ServiceCard({
   };
 
   const formatDuration = (minutes: number) => {
-    if (minutes < 60) return `${minutes}m`;
+    if (minutes < 60) return `${minutes}${minuteAbbr}`;
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+    return mins > 0 ? `${hours}${hourAbbr} ${mins}${minuteAbbr}` : `${hours}${hourAbbr}`;
   };
 
   // Currency symbols mapping
@@ -138,7 +142,7 @@ export function ServiceCard({
   };
 
   const formatPrice = (price?: number, currency?: string) => {
-    if (!price) return "Free";
+    if (!price) return t('cards.service.free');
     const symbol = getCurrencySymbol(currency);
     return `${symbol}${price}`;
   };
@@ -150,7 +154,7 @@ export function ServiceCard({
           <div className="flex items-center gap-2 mb-1">
             <h3 className="font-medium text-gray-900 dark:text-gray-100">{name}</h3>
             <Badge variant="outline" className="text-xs border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300">
-              Service
+              {t('cards.service.badge')}
             </Badge>
           </div>
           
@@ -171,7 +175,7 @@ export function ServiceCard({
             
             <div className="flex items-center gap-1.5 text-sm text-gray-600 dark:text-gray-400">
               <Calendar className="w-4 h-4" />
-              <span>{totalAppointments} bookings</span>
+              <span>{t('cards.service.bookings', { count: totalAppointments.toString() })}</span>
             </div>
           </div>
         </div>
@@ -187,10 +191,10 @@ export function ServiceCard({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-            <DropdownMenuItem onClick={onEdit} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Edit Service</DropdownMenuItem>
-            <DropdownMenuItem onClick={onManageAppointments} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Manage Appointments</DropdownMenuItem>
+            <DropdownMenuItem onClick={onEdit} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('cards.service.edit')}</DropdownMenuItem>
+            <DropdownMenuItem onClick={onManageAppointments} className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('cards.service.manageAppointments')}</DropdownMenuItem>
             <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20" onClick={onDelete}>
-              Delete Service
+              {t('cards.service.delete')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -204,14 +208,17 @@ export function ServiceCard({
                 <TooltipTrigger asChild>
                   <span className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1.5 cursor-help">
                     <TrendingUp className="w-4 h-4" />
-                    Occupancy (Current Month)
+                    {t('cards.service.occupancyLabel')}
                   </span>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="text-xs">
                     {slotsInCurrentMonth > 0 
-                      ? `${appointmentsInCurrentMonth} of ${slotsInCurrentMonth} slots booked this month`
-                      : 'No slots available this month'}
+                      ? t('cards.service.occupancyTooltip', {
+                          booked: appointmentsInCurrentMonth.toString(),
+                          total: slotsInCurrentMonth.toString(),
+                        })
+                      : t('cards.service.noSlotsThisMonth')}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -233,10 +240,13 @@ export function ServiceCard({
               </TooltipTrigger>
               <TooltipContent>
                 <p className="text-xs">
-                  {occupancy}% occupancy for current month
+                  {t('cards.service.occupancyValue', { occupancy: occupancy.toString() })}
                   {slotsInCurrentMonth > 0 && (
                     <span className="block mt-1 text-gray-400">
-                      {appointmentsInCurrentMonth} / {slotsInCurrentMonth} slots
+                      {t('cards.service.slotsSummary', {
+                        booked: appointmentsInCurrentMonth.toString(),
+                        total: slotsInCurrentMonth.toString(),
+                      })}
                     </span>
                   )}
                 </p>
@@ -249,8 +259,14 @@ export function ServiceCard({
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm text-gray-600 dark:text-gray-400">
               {slotsInCurrentMonth > 0 
-                ? `${appointmentsInCurrentMonth} of ${slotsInCurrentMonth} slots booked this month`
-                : `${totalAppointments} of ${totalSlots} total slots booked`}
+                ? t('cards.service.occupancyTooltip', {
+                    booked: appointmentsInCurrentMonth.toString(),
+                    total: slotsInCurrentMonth.toString(),
+                  })
+                : t('cards.service.totalSlotsSummary', {
+                    booked: totalAppointments.toString(),
+                    total: totalSlots.toString(),
+                  })}
             </span>
           </div>
           <Button 
@@ -260,7 +276,7 @@ export function ServiceCard({
             className="w-full text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-950/20 border-gray-200 dark:border-gray-700"
           >
             <Calendar className="w-3.5 h-3.5 mr-1.5" />
-            Manage Appointments
+            {t('cards.service.manageAppointments')}
           </Button>
         </div>
       </div>

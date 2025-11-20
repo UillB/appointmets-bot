@@ -1,0 +1,1182 @@
+{
+  "common": {
+    "systemOnline": "النظام متصل",
+    "updatedJustNow": "تم التحديث للتو",
+    "refresh": "تحديث",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "search": "بحث",
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "close": "إغلاق",
+    "yes": "نعم",
+    "no": "لا",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "user": "مستخدم",
+    "organization": "منظمة",
+    "notAvailable": "غير متاح",
+    "optional": "اختياري",
+    "retry": "إعادة المحاولة"
+  },
+  "header": {
+    "logout": "تسجيل الخروج",
+    "connected": "متصل",
+    "offline": "غير متصل",
+    "liveUpdates": "تحديثات مباشرة",
+    "theme": {
+      "light": "فاتح",
+      "dark": "داكن",
+      "system": "النظام"
+    },
+    "help": {
+      "title": "تحتاج مساعدة؟",
+      "description": "هل لديك أي أسئلة أو تحتاج مساعدة أو دعم؟ لا تتردد في الاتصال بفريق الدعم لدينا. سنرد في أقرب وقت ممكن لمساعدتك في أي طلب.",
+      "supportEmail": "support@yourbrand.com"
+    },
+    "profile": {
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
+      "logout": "تسجيل الخروج"
+    }
+  },
+  "navigation": {
+    "appName": "Appointexo",
+    "appSubtitle": "مدير الأعمال",
+    "dashboard": "لوحة التحكم",
+    "appointments": "المواعيد",
+    "services": "الخدمات",
+    "analytics": "التحليلات",
+    "organizations": "المنظمات",
+    "botManagement": "إدارة البوت",
+    "aiAssistant": "المساعد الذكي",
+    "settings": "الإعدادات",
+    "badges": {
+      "new": "جديد",
+      "beta": "تجريبي"
+    },
+    "adminStatus": "حالة المدير",
+    "telegramLinked": "Telegram مربوط",
+    "notLinked": "غير مربوط",
+    "today": "اليوم",
+    "thisWeek": "هذا الأسبوع",
+    "appointmentsShort": "مواعيد",
+    "logout": "تسجيل الخروج"
+  },
+  "organizations": {
+    "title": "المنظمات",
+    "description": "إدارة منظماتك وإعداداتها",
+    "newOrganization": "منظمة جديدة",
+    "refresh": "تحديث",
+    "searchPlaceholder": "البحث عن المنظمات...",
+    "sortBy": "ترتيب حسب...",
+    "sortByName": "حسب الاسم",
+    "sortByUsers": "حسب المستخدمين",
+    "sortByServices": "حسب الخدمات",
+    "sortByDate": "حسب التاريخ",
+    "clearFilters": "مسح المرشحات",
+    "noOrganizationsFound": "لم يتم العثور على منظمات",
+    "tryAdjustingSearch": "حاول تعديل البحث أو المرشحات",
+    "getStarted": "ابدأ بإنشاء منظمتك الأولى",
+    "showing": "عرض {{count}} من {{total}} منظمة"
+  },
+  "appointments": {
+    "title": "المواعيد",
+    "description": "إدارة المواعيد والحجوزات",
+    "all": "الكل",
+    "confirmed": "مؤكد",
+    "pending": "قيد الانتظار",
+    "cancelled": "ملغي",
+    "rejected": "مرفوض",
+    "newAppointment": "موعد جديد",
+    "searchPlaceholder": "بحث...",
+    "searchPlaceholderDesktop": "البحث حسب معرف الدردشة أو الخدمة...",
+    "filters": "المرشحات",
+    "service": "الخدمة",
+    "allServices": "جميع الخدمات",
+    "date": "التاريخ",
+    "pickDate": "اختر تاريخاً",
+    "clearFilters": "مسح المرشحات",
+    "clear": "مسح",
+    "clearDateFilter": "مسح مرشح التاريخ",
+    "chatId": "معرف الدردشة",
+    "id": "المعرف",
+    "unknown": "غير معروف",
+    "unknownService": "خدمة غير معروفة",
+    "noDate": "لا يوجد تاريخ",
+    "noTime": "لا يوجد وقت",
+    "noTimeInfo": "لا توجد معلومات عن الوقت",
+    "notAvailable": "غير متاح",
+    "minutes": "دقيقة",
+    "showing": "عرض {{count}} من {{total}} موعد",
+    "stats": {
+      "totalAppointments": "إجمالي المواعيد",
+      "allTimeBookings": "جميع الحجوزات",
+      "successfullyConfirmed": "تم التأكيد بنجاح",
+      "awaitingConfirmation": "في انتظار التأكيد",
+      "cancelledRejected": "ملغي ومرفوض",
+      "cancelledRejectedBookings": "حجوزات ملغاة ومرفوضة"
+    },
+    "tableHeaders": {
+      "service": "الخدمة",
+      "dateTime": "التاريخ والوقت",
+      "clientChatId": "العميل / معرف الدردشة",
+      "duration": "المدة",
+      "status": "الحالة",
+      "created": "تم الإنشاء",
+      "actions": "الإجراءات"
+    },
+    "actions": {
+      "viewDetails": "عرض التفاصيل",
+      "edit": "تعديل",
+      "confirm": "تأكيد",
+      "cancel": "إلغاء"
+    },
+    "emptyStates": {
+      "noAppointmentsFound": "لم يتم العثور على مواعيد",
+      "noAppointmentsForDate": "لم يتم العثور على مواعيد لـ {{date}}",
+      "tryDifferentDate": "حاول اختيار تاريخ مختلف أو امسح مرشح التاريخ لرؤية جميع المواعيد",
+      "createFirstAppointment": "أنشئ موعدك الأول"
+    },
+    "pagination": {
+      "previous": "السابق",
+      "next": "التالي"
+    }
+  },
+  "analytics": {
+    "title": "التحليلات",
+    "description": "تتبع الأداء والرؤى",
+    "export": "تصدير",
+    "retry": "إعادة المحاولة",
+    "performanceOverview": "نظرة عامة على الأداء",
+    "timePeriod": {
+      "allTime": "كل الوقت",
+      "week": "أسبوع",
+      "month": "شهر",
+      "year": "سنة"
+    },
+    "stats": {
+      "totalBookings": "إجمالي الحجوزات",
+      "allTime": "كل الوقت",
+      "thisWeek": "هذا الأسبوع",
+      "thisMonth": "هذا الشهر",
+      "thisYear": "هذه السنة",
+      "growthRate": "معدل النمو",
+      "vsPreviousPeriod": "مقارنة بالفترة السابقة",
+      "vsLastWeek": "مقارنة بالأسبوع الماضي",
+      "vsLastMonth": "مقارنة بالشهر الماضي",
+      "vsLastYear": "مقارنة بالسنة الماضية",
+      "activeClients": "العملاء النشطون",
+      "uniqueClients": "عملاء فريدون",
+      "avgDuration": "متوسط المدة",
+      "perAppointment": "لكل موعد"
+    },
+    "appointmentsTrend": {
+      "title": "اتجاه المواعيد",
+      "description": "الحجوزات اليومية مع مرور الوقت"
+    },
+    "metrics": {
+      "appointments": "المواعيد",
+      "revenue": "الإيرادات"
+    },
+    "tooltip": {
+      "appointment": "موعد",
+      "appointments": "مواعيد",
+      "booking": "حجز",
+      "bookings": "حجوزات",
+      "date": "التاريخ",
+      "time": "الوقت",
+      "status": "الحالة",
+      "percentage": "النسبة المئوية"
+    },
+    "topServices": {
+      "title": "أفضل الخدمات",
+      "description": "الخدمات الأكثر شعبية",
+      "bookings": "حجوزات"
+    },
+    "appointmentStatus": {
+      "title": "حالة الموعد",
+      "description": "توزيع الحالات"
+    },
+    "peakHours": {
+      "title": "ساعات الذروة",
+      "description": "أكثر الأوقات ازدحاماً في اليوم"
+    },
+    "quickInsights": {
+      "title": "رؤى سريعة",
+      "bestDay": "أفضل يوم",
+      "peakTime": "وقت الذروة",
+      "topService": "أفضل خدمة",
+      "with": "مع"
+    },
+    "emptyStates": {
+      "noAppointmentData": "لا توجد بيانات مواعيد متاحة لهذه الفترة",
+      "noServicesWithBookings": "لا توجد خدمات مع حجوزات في هذه الفترة",
+      "noStatusData": "لا توجد بيانات حالة مواعيد متاحة",
+      "noPeakHoursData": "لا توجد بيانات ساعات ذروة متاحة",
+      "noDataAvailable": "لا توجد بيانات متاحة"
+    },
+    "errors": {
+      "failedToLoad": "فشل تحميل التحليلات",
+      "failedToLoadData": "فشل تحميل بيانات التحليلات"
+    }
+  },
+  "slots": {
+    "title": "الأوقات المتاحة",
+    "description": "أوقات متاحة مُنشأة تلقائياً لخدماتك",
+    "searchPlaceholder": "البحث عن الأوقات...",
+    "minutes": "دقيقة",
+    "unknownService": "خدمة غير معروفة",
+    "stats": {
+      "totalSlots": "إجمالي الأوقات",
+      "available": "متاح",
+      "booked": "محجوز",
+      "utilization": "الاستخدام"
+    },
+    "status": {
+      "available": "متاح",
+      "booked": "محجوز",
+      "conflict": "تعارض"
+    },
+    "dates": {
+      "today": "اليوم",
+      "tomorrow": "غداً",
+      "yesterday": "أمس"
+    },
+    "infoBanner": {
+      "title": "أوقات مُنشأة تلقائياً",
+      "description": "يتم إنشاء الأوقات تلقائياً عند إنشاء الخدمات. تغطي سنة كاملة بساعات عمل قياسية (9 صباحاً - 6 مساءً، الاثنين-الجمعة). لا حاجة للإدارة اليدوية!"
+    },
+    "filters": {
+      "allServices": "جميع الخدمات",
+      "allStatus": "جميع الحالات",
+      "filterByDate": "تصفية حسب التاريخ"
+    },
+    "table": {
+      "title": "الأوقات المتاحة",
+      "showing": "{{count}} من {{total}} وقت",
+      "headers": {
+        "service": "الخدمة",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "duration": "المدة",
+        "status": "الحالة",
+        "capacity": "السعة"
+      }
+    },
+    "emptyStates": {
+      "noSlotsFound": "لم يتم العثور على أوقات",
+      "createServiceToGenerate": "أنشئ خدمة لإنشاء الأوقات تلقائياً",
+      "tryAdjustingFilters": "حاول تعديل المرشحات"
+    }
+  },
+  "slotsManagement": {
+    "title": "إدارة الأوقات",
+    "subtitle": "عرض وإدارة الأوقات المُنشأة تلقائياً",
+    "back": "رجوع",
+    "infoBanner": {
+      "title": "أوقات مُنشأة تلقائياً",
+      "description": "يتم إنشاء الأوقات تلقائياً عند إضافة الخدمات. تغطي سنة كاملة بساعات عمل قياسية (9 صباحاً - 6 مساءً، الاثنين-الجمعة). لا حاجة للإعداد اليدوي!"
+    },
+    "filters": {
+      "service": "الخدمة",
+      "selectService": "اختر خدمة",
+      "date": "التاريخ",
+      "filterByDate": "تصفية حسب التاريخ"
+    },
+    "table": {
+      "title": "الأوقات المتاحة",
+      "slotsFound": "تم العثور على {{count}} وقت",
+      "headers": {
+        "date": "التاريخ",
+        "time": "الوقت",
+        "duration": "المدة",
+        "status": "الحالة",
+        "capacity": "السعة"
+      }
+    },
+    "emptyStates": {
+      "selectService": "اختر خدمة",
+      "chooseServiceToView": "اختر خدمة لعرض أوقاتها المُنشأة تلقائياً",
+      "noSlotsFound": "لم يتم العثور على أوقات",
+      "noSlotsForDate": "لم يتم العثور على أوقات للتاريخ المحدد",
+      "noSlotsYet": "هذه الخدمة لا تحتوي على أوقات بعد"
+    }
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً بعودتك، {{name}}!",
+    "statisticsOverview": "الإحصائيات والنظرة العامة",
+    "viewAll": "عرض الكل",
+    "setupBanners": {
+      "services": {
+        "message": "ليس لديك خدمات حالياً (ما تبيعه). أنشئ خدمتك الأولى الآن - هذا ضروري للبدء في العمل ويستغرق دقيقة واحدة فقط.",
+        "actionLabel": "إنشاء خدمة"
+      },
+      "bot": {
+        "message": "بوت Telegram الخاص بك غير متصل. يرجى توصيل البوت لمشاركته مع الناس وبدء استقبال المواعيد اليوم.",
+        "actionLabel": "توصيل البوت"
+      },
+      "admin": {
+        "message": "حساب Telegram للمدير غير مربوط. اربطه الآن لتمكين ميزات المدير مثل الوصول إلى نظام الإدارة (لوحة الإدارة) من Telegram.",
+        "actionLabel": "ربط المدير"
+      }
+    },
+    "stats": {
+      "totalAppointments": "إجمالي المواعيد",
+      "allTime": "كل الوقت",
+      "todaysBookings": "حجوزات اليوم",
+      "scheduledForToday": "مجدولة لليوم",
+      "pendingApprovals": "موافقات قيد الانتظار",
+      "awaitingConfirmation": "في انتظار التأكيد",
+      "activeServices": "الخدمات النشطة",
+      "availableForBooking": "متاح للحجز"
+    },
+    "quickActions": {
+      "appointments": {
+        "title": "المواعيد",
+        "description": "إدارة الحجوزات"
+      },
+      "services": {
+        "title": "الخدمات",
+        "description": "تكوين العروض"
+      },
+      "organizations": {
+        "title": "المنظمات",
+        "description": "إدارة المواقع"
+      },
+      "settings": {
+        "title": "الإعدادات",
+        "description": "تكوين النظام"
+      },
+      "today": "اليوم",
+      "available": "متاح",
+      "active": "نشط",
+      "account": "الحساب"
+    },
+    "calendar": {
+      "title": "التقويم",
+      "selected": "المحدد",
+      "selectDate": "اختر تاريخاً",
+      "days": {
+        "sun": "أحد",
+        "mon": "اثنين",
+        "tue": "ثلاثاء",
+        "wed": "أربعاء",
+        "thu": "خميس",
+        "fri": "جمعة",
+        "sat": "سبت"
+      }
+    },
+    "emptyStates": {
+      "noAppointmentsForDate": "لا توجد مواعيد للتاريخ المحدد",
+      "clickDateToView": "انقر على تاريخ في التقويم لعرض المواعيد"
+    }
+  },
+  "services": {
+    "title": "الخدمات",
+    "description": "إدارة خدماتك وتتبع أدائها",
+    "addService": "إضافة خدمة",
+    "searchPlaceholder": "البحث عن الخدمات...",
+    "searchPlaceholderDesktop": "البحث عن الخدمات بالاسم...",
+    "filters": "المرشحات",
+    "filterByName": "تصفية الخدمات بالاسم",
+    "clearFilters": "مسح المرشحات",
+    "clear": "مسح",
+    "noServicesFound": "لم يتم العثور على خدمات",
+    "createFirstService": "أنشئ خدمتك الأولى",
+    "showing": "عرض {{count}} من {{total}} خدمة",
+    "stats": {
+      "totalServices": "إجمالي الخدمات",
+      "activeServices": "الخدمات النشطة",
+      "totalBookings": "إجمالي الحجوزات",
+      "allTimeBookings": "جميع الحجوزات",
+      "averageOccupancy": "متوسط الإشغال (الشهر الحالي)",
+      "capacityUtilization": "استخدام السعة"
+    },
+    "autoGeneratedSlots": {
+      "title": "أوقات مُنشأة تلقائياً",
+      "description": "يتم إنشاء الأوقات المتاحة تلقائياً لمدة سنة عند إنشاء الخدمات. لا حاجة لإدارة الأوقات يدوياً - فقط أنشئ خدماتك وابدأ الحجز!"
+    }
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "description": "إدارة حسابك وتفضيلات النظام",
+    "profileTab": "الملف الشخصي",
+    "systemTab": "النظام",
+    "accountStatus": "حالة الحساب",
+    "securityLevel": "مستوى الأمان",
+    "memberSince": "عضو منذ",
+    "stats": {
+      "accountStatus": "حالة الحساب",
+      "active": "نشط",
+      "sinceOct2023": "منذ أكتوبر 2023",
+      "securityLevel": "مستوى الأمان",
+      "high": "عالي",
+      "twoFAEnabled": "المصادقة الثنائية مفعلة",
+      "memberSince": "عضو منذ",
+      "activeUser": "مستخدم نشط"
+    },
+    "tabs": {
+      "userProfile": "الملف الشخصي للمستخدم",
+      "systemSettings": "إعدادات النظام"
+    },
+    "profile": {
+      "title": "الملف الشخصي للمستخدم",
+      "description": "إدارة معلوماتك الشخصية",
+      "updateTitle": "تحديث الملف الشخصي",
+      "updateDescription": "تحديث معلومات ملفك الشخصي",
+      "updateButton": "تحديث الملف الشخصي",
+      "fields": {
+        "fullName": "الاسم الكامل",
+        "emailAddress": "عنوان البريد الإلكتروني",
+        "role": "الدور",
+        "organization": "المنظمة",
+        "memberSince": "عضو منذ"
+      },
+      "placeholders": {
+        "fullName": "أدخل اسمك الكامل",
+        "email": "أدخل بريدك الإلكتروني"
+      },
+      "role": {
+        "manager": "مدير"
+      }
+    },
+    "password": {
+      "title": "تغيير كلمة المرور",
+      "description": "حدّث كلمة المرور للحفاظ على أمان حسابك",
+      "changeButton": "تغيير كلمة المرور",
+      "fields": {
+        "currentPassword": "كلمة المرور الحالية",
+        "newPassword": "كلمة المرور الجديدة",
+        "confirmPassword": "تأكيد كلمة المرور"
+      },
+      "placeholders": {
+        "currentPassword": "أدخل كلمة المرور الحالية",
+        "newPassword": "أدخل كلمة المرور الجديدة",
+        "confirmPassword": "أكد كلمة المرور الجديدة"
+      },
+      "requirements": {
+        "title": "متطلبات كلمة المرور:",
+        "minLength": "8 أحرف على الأقل",
+        "uppercaseLowercase": "تتضمن أحرف كبيرة وصغيرة",
+        "number": "تتضمن رقماً واحداً على الأقل",
+        "specialCharacter": "تتضمن حرفاً خاصاً واحداً على الأقل"
+      }
+    },
+    "system": {
+      "languageTheme": {
+        "title": "اللغة والمظهر",
+        "description": "تكوين تفضيلات النظام",
+        "language": "اللغة",
+        "theme": "المظهر",
+        "themeOptions": {
+          "light": "مظهر فاتح",
+          "dark": "مظهر داكن",
+          "auto": "تلقائي (النظام)"
+        }
+      },
+      "notifications": {
+        "title": "الإشعارات",
+        "description": "إدارة طريقة استلام الإشعارات",
+        "emailNotifications": "إشعارات البريد الإلكتروني",
+        "emailNotificationsDescription": "استلام الإشعارات عبر البريد الإلكتروني",
+        "pushNotifications": "الإشعارات الفورية",
+        "pushNotificationsDescription": "استلام الإشعارات الفورية في المتصفح"
+      },
+      "preferences": {
+        "title": "تفضيلات النظام",
+        "description": "تكوين إعدادات التاريخ والوقت والتحديث",
+        "timezone": "المنطقة الزمنية",
+        "dateFormat": "تنسيق التاريخ",
+        "timeFormat": "تنسيق الوقت",
+        "timeFormat12": "12 ساعة (ص/م)",
+        "timeFormat24": "24 ساعة",
+        "refreshInterval": "فترة التحديث (بالثواني)",
+        "refreshInterval15": "15 ثانية",
+        "refreshInterval30": "30 ثانية",
+        "refreshInterval60": "دقيقة واحدة",
+        "refreshInterval300": "5 دقائق",
+        "refreshIntervalManual": "يدوي فقط"
+      },
+      "saveButton": "حفظ الإعدادات"
+    },
+    "errors": {
+      "fillAllRequiredFields": "يرجى ملء جميع الحقول المطلوبة",
+      "fillAllPasswordFields": "يرجى ملء جميع حقول كلمة المرور",
+      "passwordsDoNotMatch": "كلمات المرور الجديدة غير متطابقة",
+      "passwordMinLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل"
+    },
+    "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح",
+    "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح",
+    "systemSettingsSavedSuccessfully": "تم حفظ إعدادات النظام بنجاح"
+  },
+  "dialogs": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "saving": "جاري الحفظ...",
+    "service": {
+      "editTitle": "تعديل الخدمة",
+      "createTitle": "إنشاء خدمة جديدة",
+      "editDescription": "تحديث معلومات وإعدادات الخدمة.",
+      "createDescription": "اتبع الخطوات أدناه لإضافة خدمة جديدة",
+      "nameRequired": "اسم الخدمة مطلوب",
+      "durationRequired": "المدة الصحيحة مطلوبة",
+      "organizationIdRequired": "معرف المنظمة مطلوب",
+      "updated": "تم تحديث الخدمة بنجاح",
+      "created": "تم إنشاء الخدمة بنجاح",
+      "saveFailed": "فشل حفظ الخدمة",
+      "firstServiceMessage": "تهانينا! تم إنشاء خدمتك بنجاح. يمكنك إنشاء خدمات إضافية في أي وقت. الآن دعنا نكمل الإعداد ونربط بوت Telegram الخاص بك حتى تتمكن من البدء في استقبال المواعيد فوراً.",
+      "connectBot": "توصيل البوت",
+      "serviceName": "اسم الخدمة",
+      "serviceNamePlaceholder": "مثال: قصة شعر، تدليك، استشارة",
+      "description": "الوصف",
+      "descriptionPlaceholder": "اوصف الخدمة...",
+      "duration": "المدة (بالدقائق)",
+      "price": "السعر (اختياري)",
+      "currency": "العملة",
+      "step1": {
+        "title": "المعلومات الأساسية",
+        "description": "اسم الخدمة والوصف"
+      },
+      "step2": {
+        "title": "التسعير والمدة",
+        "description": "تعيين السعر والوقت المطلوب"
+      },
+      "step3": {
+        "title": "ساعات العمل",
+        "description": "تكوين متى تكون هذه الخدمة متاحة"
+      },
+      "startTime": "وقت البدء",
+      "endTime": "وقت الانتهاء",
+      "lunchStart": "بداية استراحة الغداء (اختياري)",
+      "lunchEnd": "نهاية استراحة الغداء (اختياري)",
+      "workingDays": "أيام العمل",
+      "updateService": "تحديث الخدمة",
+      "createService": "إنشاء خدمة"
+    },
+    "organization": {
+      "viewTitle": "عرض المنظمة",
+      "editTitle": "تعديل المنظمة",
+      "createTitle": "إنشاء منظمة جديدة",
+      "viewDescription": "عرض تفاصيل المنظمة",
+      "editDescription": "تحديث معلومات المنظمة",
+      "createDescription": "اتبع الخطوات أدناه لإضافة منظمة جديدة",
+      "nameRequired": "اسم المنظمة مطلوب",
+      "updated": "تم تحديث المنظمة بنجاح",
+      "created": "تم إنشاء المنظمة بنجاح",
+      "saveFailed": "فشل حفظ المنظمة",
+      "fields": {
+        "organizationName": "اسم المنظمة",
+        "description": "الوصف",
+        "email": "عنوان البريد الإلكتروني",
+        "phone": "رقم الهاتف",
+        "address": "العنوان"
+      },
+      "placeholders": {
+        "name": "مثال: شركة أكمي",
+        "description": "وصف موجز للمنظمة...",
+        "email": "contact@example.com",
+        "phone": "+1 (555) 123-4567",
+        "address": "123 شارع الرئيسي، المدينة، الولاية، الرمز البريدي"
+      },
+      "step1": {
+        "title": "المعلومات الأساسية",
+        "description": "اسم المنظمة والوصف"
+      },
+      "step2": {
+        "title": "معلومات الاتصال",
+        "description": "البريد الإلكتروني والهاتف والعنوان"
+      },
+      "saveChanges": "حفظ التغييرات",
+      "createOrganization": "إنشاء منظمة"
+    },
+    "appointment": {
+      "title": "إنشاء موعد جديد",
+      "description": "اتبع الخطوات أدناه لإنشاء موعد جديد",
+      "step1": {
+        "title": "معلومات العميل",
+        "description": "أدخل تفاصيل العميل"
+      },
+      "step2": {
+        "title": "الخدمة والوقت",
+        "description": "اختر الخدمة والوقت المتاح"
+      },
+      "clientId": "معرف العميل / الهاتف",
+      "clientIdPlaceholder": "أدخل معرف العميل أو رقم الهاتف",
+      "service": "الخدمة",
+      "loadingServices": "جاري تحميل الخدمات...",
+      "selectServicePlaceholder": "اختر خدمة",
+      "selectService": "يرجى اختيار خدمة",
+      "noServices": "لا توجد خدمات متاحة",
+      "date": "التاريخ",
+      "pickDate": "اختر تاريخاً",
+      "selectDate": "يرجى اختيار تاريخ",
+      "timeSlot": "الوقت المتاح",
+      "selectSlot": "يرجى اختيار وقت متاح",
+      "selectDateFirst": "اختر تاريخاً أولاً",
+      "selectServiceFirst": "اختر خدمة أولاً",
+      "loadingSlots": "جاري تحميل الأوقات...",
+      "noSlots": "لا توجد أوقات متاحة",
+      "selectSlotPlaceholder": "اختر وقتاً متاحاً",
+      "noSlotsForDate": "لا توجد أوقات متاحة لهذا التاريخ",
+      "slotConflict": "تعارض",
+      "loadingAvailableSlots": "جاري تحميل الأوقات المتاحة...",
+      "created": "تم إنشاء الموعد بنجاح",
+      "createFailed": "فشل إنشاء الموعد",
+      "createButton": "إنشاء موعد",
+      "creating": "جاري الإنشاء..."
+    }
+  },
+  "aiAssistant": {
+    "title": "المساعد الذكي",
+    "description": "تكوين وإدارة مساعدك الذكي للدردشة",
+    "refreshed": "تم تحديث بيانات المساعد الذكي",
+    "configSaved": "تم حفظ التكوين بنجاح",
+    "configSaveFailed": "فشل حفظ التكوين",
+    "enableFirst": "يرجى تفعيل المساعد الذكي أولاً",
+    "testSuccessful": "نجح اختبار المساعد الذكي!",
+    "testResponse": "الرد: {{response}}",
+    "testFailed": "فشل اختبار المساعد الذكي",
+    "enterApiKey": "يرجى إدخال مفتاح API",
+    "apiKeyVerified": "تم التحقق من مفتاح API بنجاح",
+    "configReset": "تم إعادة تعيين التكوين إلى الافتراضي",
+    "controls": {
+      "title": "تحكم المساعد الذكي",
+      "description": "تفعيل وتكوين الردود المدعومة بالذكاء الاصطناعي",
+      "enableAi": "تفعيل المساعد الذكي",
+      "enableAiDescription": "تشغيل الردود المدعومة بالذكاء الاصطناعي لاستفسارات العملاء",
+      "autoReply": "وضع الرد التلقائي",
+      "autoReplyDescription": "الرد تلقائياً على جميع رسائل Telegram",
+      "activeTitle": "المساعد الذكي نشط",
+      "activeDescription": "مساعدك الذكي جاهز الآن لمساعدة العملاء في بوت Telegram الخاص بك بناءً على التعليمات أدناه."
+    },
+    "config": {
+      "title": "تكوين الذكاء الاصطناعي",
+      "description": "تكوين نموذج وسلوك الذكاء الاصطناعي",
+      "modelLabel": "نموذج LLM",
+      "modelHint": "النماذج الأكثر تقدماً توفر ردوداً أفضل لكنها تكلف أكثر",
+      "models": {
+        "gpt4": "GPT-4 (الأذكى)",
+        "gpt4Turbo": "GPT-4 Turbo (سريع وذكي)",
+        "gpt35Turbo": "GPT-3.5 Turbo (سريع واقتصادي)",
+        "claude3Opus": "Claude 3 Opus",
+        "claude3Sonnet": "Claude 3 Sonnet"
+      },
+      "temperatureLabel": "درجة الحرارة",
+      "temperaturePrecise": "دقيق (0)",
+      "temperatureBalanced": "متوازن (1)",
+      "temperatureCreative": "إبداعي (2)",
+      "temperatureHint": "أقل = أكثر تركيزاً واتساقاً. أعلى = أكثر إبداعاً وتنوعاً."
+    },
+    "instructions": {
+      "title": "تعليمات مخصصة",
+      "description": "علم الذكاء الاصطناعي كيفية التواصل - حدد الشخصية والنبرة والأسلوب",
+      "label": "الموجه / التعليمات",
+      "placeholder": "مثال: أنت ديفيد، مساعد ودود ومحترف. يجب أن تكون مرحاً ومفيداً وتستجيب بنبرة عادية لكن محترمة. دائماً رحب بالعملاء بحرارة واستخدم أسماءهم عند الإمكان...",
+      "characterCount": "{{count}} حرف",
+      "hint": "فكر في هذا كتدريب موظف جديد",
+      "tipsTitle": "نصائح التعليمات",
+      "tip1": "حدد اسم وشخصية الذكاء الاصطناعي",
+      "tip2": "حدد النبرة: رسمي، عادي، ودود، إلخ.",
+      "tip3": "حدد اللغة والتفضيلات الإقليمية",
+      "tip4": "اذكر أي سياسات أو إرشادات محددة",
+      "tip5": "اجعلها واضحة ومختصرة"
+    },
+    "test": {
+      "title": "اختبار المساعد الذكي",
+      "description": "أرسل رسالة اختبار للتحقق من تكوين وردود الذكاء الاصطناعي",
+      "runTest": "تشغيل الاختبار"
+    }
+  },
+  "toasts": {
+    "success": "نجح",
+    "error": "خطأ",
+    "warning": "تحذير",
+    "info": "معلومات",
+    "organizationsRefreshed": "تم تحديث المنظمات",
+    "filtersCleared": "تم مسح المرشحات",
+    "appointmentsRefreshed": "تم تحديث المواعيد",
+    "failedToLoadOrganizations": "فشل تحميل بيانات المنظمات",
+    "failedToSaveOrganization": "فشل حفظ المنظمة",
+    "failedToLoadAppointments": "فشل تحميل بيانات المواعيد",
+    "failedToLoadDashboard": "فشل تحميل بيانات لوحة التحكم",
+    "settingsRefreshed": "تم تحديث الإعدادات",
+    "failedToLoadServices": "فشل تحميل الخدمات",
+    "failedToLoadStatistics": "فشل تحميل الإحصائيات",
+    "failedToRefreshServices": "فشل تحديث الخدمات",
+    "failedToLoadSlots": "فشل تحميل بيانات الأوقات"
+  },
+  "botManagement": {
+    "title": "إدارة البوت",
+    "description": "إنشاء وتكوين بوت Telegram للحجز التلقائي للعملاء",
+    "botActive": "البوت نشط",
+    "botInactive": "البوت غير نشط",
+    "botWorking": "✓ يعمل",
+    "botNotWorking": "✗ لا يعمل",
+    "botReady": "بوت Telegram جاهز ويقبل الحجوزات",
+    "botNeedsActivation": "يجب تفعيل البوت للبدء في العمل",
+    "organization": "المنظمة",
+    "botLink": "رابط البوت",
+    "setupProgress": "تقدم إعداد البوت",
+    "setupComplete": "اكتمل الإعداد",
+    "completed": "مكتمل",
+    "inProgress": "قيد التنفيذ",
+    "instructions": "التعليمات",
+    "activation": "التفعيل",
+    "settings": "الإعدادات",
+    "howToCreateBot": "كيفية إنشاء بوت Telegram",
+    "stepByStepGuide": "دليل بسيط خطوة بخطوة للمبتدئين",
+    "step1Title": "افتح Telegram وابحث عن @BotFather",
+    "step1Description": "BotFather هو البوت الرسمي لـ Telegram لإنشاء بوتات جديدة. ببساطة اكتب @BotFather في البحث وافتح الدردشة.",
+    "step1HowTo": "كيفية العثور على BotFather:",
+    "step1List1": "افتح تطبيق Telegram على هاتفك أو جهاز الكمبيوتر",
+    "step1List2": "اكتب @BotFather في البحث",
+    "step1List3": "انقر على البوت واضغط زر \"ابدأ\"",
+    "step2Title": "أرسل أمر /newbot",
+    "step2Description": "سيطلب منك BotFather تحديد اسم البوت واسم المستخدم. يجب أن ينتهي اسم المستخدم بـ \"bot\" (مثال: MyAwesomeBot).",
+    "step2HowTo": "إنشاء بوت:",
+    "step2List1": "أرسل أمر /newbot إلى دردشة BotFather",
+    "step2List2": "أدخل اسم البوت (مثال: \"عيادتي\")",
+    "step2List3": "أدخل اسم مستخدم البوت (يجب أن ينتهي بـ \"bot\")",
+    "step2List4": "تأكد من أن اسم المستخدم فريد ومتاح",
+    "step3Title": "احصل على رمز الوصول",
+    "step3Description": "بعد إنشاء البوت، سيرسل لك BotFather رمزاً. انسخه واستخدمه في تبويب \"التفعيل\" لتوصيل البوت.",
+    "step3Format": "تنسيق الرمز:",
+    "step3Important": "مهم: يجب نسخ الرمز بالكامل، بما في ذلك جميع الأحرف",
+    "step3GoToActivation": "انتقل إلى التفعيل",
+    "securityWarning": "مهم: أمان الرمز",
+    "securityWarning1": "لا تشارك الرمز مع الآخرين أبداً",
+    "securityWarning2": "لا تنشر الرمز علناً",
+    "securityWarning3": "احفظ الرمز في مكان آمن",
+    "activationTitle": "تفعيل البوت",
+    "activationDescription": "أدخل رمز بوت Telegram الخاص بك للتفعيل",
+    "botNotActiveAlert": "البوت غير نشط. فعّله للبدء في العمل.",
+    "botToken": "رمز البوت *",
+    "botTokenPlaceholder": "123456789:ABCdefGHijKlMNOpqrsTUVwxyz",
+    "dontKnowHowToActivate": "لا تعرف كيفية التفعيل؟ انتقل إلى التعليمات",
+    "tokenFormat": "تنسيق الرمز",
+    "tokenFormatDescription": "يجب أن يكون للرمز التنسيق التالي:",
+    "tokenFormatGetFrom": "احصل على الرمز من @BotFather بعد إنشاء البوت",
+    "clear": "مسح",
+    "validateToken": "التحقق من الرمز",
+    "validating": "جاري التحقق...",
+    "activateBot": "تفعيل البوت",
+    "activating": "جاري تفعيل البوت...",
+    "botStatus": "حالة البوت",
+    "loadingBotStatus": "جاري تحميل حالة البوت...",
+    "botName": "اسم البوت",
+    "botUsername": "اسم المستخدم",
+    "botLinkLabel": "رابط البوت",
+    "canJoinGroups": "يمكنه الانضمام للمجموعات",
+    "canReadAllGroupMessages": "يمكنه قراءة جميع رسائل المجموعة",
+    "notSpecified": "غير محدد",
+    "botNotActivated": "البوت غير مفعّل",
+    "botNotActivatedDescription": "لاستخدام إعدادات البوت، يجب تفعيله أولاً في تبويب \"التفعيل\".",
+    "goToActivation": "انتقل إلى التفعيل",
+    "basicSettings": "الإعدادات الأساسية",
+    "basicSettingsDescription": "تكوين اسم ووصف البوت",
+    "botNameLabel": "اسم البوت *",
+    "botNamePlaceholder": "أدخل اسم البوت",
+    "botDescription": "وصف البوت",
+    "botDescriptionPlaceholder": "وصف موجز لوظائف البوت...",
+    "updating": "جاري التحديث...",
+    "updateSettings": "تحديث الإعدادات",
+    "shareBot": "مشاركة البوت",
+    "shareBotDescription": "شارك رابط البوت مع العملاء",
+    "scanQRCode": "امسح رمز QR للوصول السريع إلى البوت",
+    "hoverToCopy": "مرر الماوس فوق رمز QR للنسخ",
+    "generatingQR": "جاري إنشاء رمز QR...",
+    "qrCodeAvailableAfterActivation": "سيكون رمز QR متاحاً بعد تفعيل البوت",
+    "open": "فتح",
+    "downloadQR": "تحميل QR",
+    "copyQR": "نسخ QR",
+    "copyLink": "نسخ الرابط",
+    "shareBotLabel": "مشاركة البوت",
+    "refreshStatus": "تحديث الحالة",
+    "statusUpdated": "تم تحديث الحالة",
+    "instructionsOpened": "تم فتح تعليمات إنشاء البوت",
+    "instructionsDescription": "اتبع الدليل خطوة بخطوة",
+    "linkCopied": "تم نسخ الرابط إلى الحافظة",
+    "openingBot": "جاري فتح البوت في Telegram",
+    "qrCodeDownloaded": "تم تحميل رمز QR بنجاح",
+    "qrCodeDownloadedDescription": "تم حفظ الصورة في مجلد التحميلات",
+    "qrCodeCopied": "تم نسخ رمز QR!",
+    "qrCodeCopiedDescription": "الصورة جاهزة للصق",
+    "qrCodeCopyFailed": "فشل نسخ رمز QR",
+    "qrCodeCopyFailedDescription": "حاول تحميل الصورة",
+    "shareToTelegram": "تم فتح نافذة للمشاركة إلى Telegram",
+    "shareToWhatsApp": "تم فتح نافذة للمشاركة إلى WhatsApp",
+    "shareToEmail": "تم فتح عميل البريد الإلكتروني",
+    "botLinkNotAvailable": "رابط البوت غير متاح",
+    "enterBotToken": "أدخل رمز البوت",
+    "tokenValid": "الرمز صحيح! تم العثور على البوت.",
+    "invalidToken": "رمز بوت غير صحيح",
+    "tokenValidationError": "خطأ في التحقق من الرمز",
+    "botActivated": "تم تفعيل البوت بنجاح!",
+    "botActivationError": "خطأ في تفعيل البوت",
+    "organizationIdError": "خطأ: لم يتم العثور على معرف المنظمة",
+    "botSettingsUpdated": "تم تحديث إعدادات البوت!",
+    "botSettingsUpdateError": "خطأ في تحديث الإعدادات",
+    "failedToLoadStatus": "فشل تحميل حالة البوت",
+    "failedToGenerateQR": "فشل إنشاء رمز QR",
+    "loadingUser": "جاري تحميل المستخدم...",
+    "emptyState": {
+      "title": "ابدأ إعداد البوت",
+      "description": "أنشئ بوت Telegram في 3 خطوات بسيطة وابدأ في قبول الحجوزات من العملاء",
+      "step1": {
+        "title": "إنشاء البوت",
+        "description": "ابحث عن @BotFather في Telegram"
+      },
+      "step2": {
+        "title": "الحصول على الرمز",
+        "description": "انسخ الرمز من BotFather"
+      },
+      "step3": {
+        "title": "التفعيل",
+        "description": "الصق الرمز في النظام"
+      },
+      "startButton": "بدء الإعداد",
+      "footer": "اتبع التعليمات أدناه للحصول على دليل خطوة بخطوة"
+    },
+    "shareBotText": "تحقق من بوت Telegram الخاص بنا: {{bot}}",
+    "shareEmailSubject": "بوت Telegram للمواعيد",
+    "shareEmailBody": "مرحباً!\n\nتحقق من بوت Telegram الخاص بنا للمواعيد:\n{{link}}\n\nاستخدم رمز QR للوصول السريع.",
+    "botMustBeActivated": "يجب تفعيل البوت لإنشاء رابط المدير",
+    "yes": "نعم",
+    "no": "لا",
+    "bot": "بوت",
+    "botNameDisplay": "اسم البوت",
+    "usernameDisplay": "اسم المستخدم",
+    "botLinkDisplay": "رابط البوت"
+  },
+  "language": {
+    "switch": "تبديل اللغة",
+    "languageChanged": "تم تغيير اللغة إلى {{lang}}",
+    "russian": "الروسية",
+    "english": "الإنجليزية",
+    "hebrew": "العبرية",
+    "german": "الألمانية",
+    "french": "الفرنسية",
+    "spanish": "الإسبانية",
+    "portuguese": "البرتغالية",
+    "japanese": "اليابانية",
+    "chinese": "الصينية",
+    "arabic": "العربية"
+  },
+  "login": {
+    "fillAllFields": "يرجى ملء جميع الحقول",
+    "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+    "welcomeBack": "مرحباً بعودتك!",
+    "loginSuccess": "تم تسجيل الدخول بنجاح",
+    "backToLanding": "العودة إلى الصفحة الرئيسية",
+    "branding": {
+      "title": "Appointexo",
+      "subtitle": "إدارة حجوزاتك بسهولة"
+    },
+    "form": {
+      "title": "مرحباً بعودتك",
+      "subtitle": "سجل الدخول للوصول إلى لوحة التحكم",
+      "emailLabel": "عنوان البريد الإلكتروني",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "أدخل كلمة المرور",
+      "rememberMe": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "forgotPasswordToast": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+      "signIn": "تسجيل الدخول",
+      "signingIn": "جاري تسجيل الدخول...",
+      "newToApp": "جديد في Appointexo؟",
+      "createAccount": "إنشاء حساب",
+      "demoCredentials": "بيانات تجريبية",
+      "demoEmail": "البريد الإلكتروني",
+      "demoPassword": "كلمة المرور"
+    },
+    "features": {
+      "fast": {
+        "title": "سريع جداً",
+        "description": "تأكيدات حجز فورية وتحديثات في الوقت الفعلي"
+      },
+      "secure": {
+        "title": "آمن وخاص",
+        "description": "بياناتك مشفرة ومحمية في جميع الأوقات"
+      },
+      "easy": {
+        "title": "سهل الاستخدام",
+        "description": "واجهة بديهية مصممة للكفاءة"
+      }
+    },
+    "stats": {
+      "users": "المستخدمون",
+      "bookings": "الحجوزات",
+      "uptime": "وقت التشغيل"
+    }
+  },
+  "register": {
+    "fillAllFields": "يرجى ملء جميع الحقول",
+    "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+    "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    "passwordsDoNotMatch": "كلمات المرور غير متطابقة",
+    "agreeToTerms": "يرجى الموافقة على الشروط والأحكام",
+    "accountCreated": "تم إنشاء الحساب بنجاح!",
+    "welcomeMessage": "مرحباً بك في Appointexo",
+    "branding": {
+      "title": "انضم إلينا اليوم",
+      "subtitle": "ابدأ في إدارة المواعيد بلا عناء"
+    },
+    "form": {
+      "title": "إنشاء حساب",
+      "subtitle": "انضم إلى آلاف المستخدمين الذين يديرون المواعيد",
+      "fullNameLabel": "الاسم الكامل",
+      "fullNamePlaceholder": "أحمد محمد",
+      "emailLabel": "عنوان البريد الإلكتروني",
+      "emailPlaceholder": "your@email.com",
+      "organizationLabel": "اسم المنظمة",
+      "organizationPlaceholder": "أدخل اسم المنظمة",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "6 أحرف على الأقل",
+      "confirmPasswordLabel": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+      "agreeToTerms": "أوافق على",
+      "termsAndConditions": "الشروط والأحكام",
+      "and": "و",
+      "privacyPolicy": "سياسة الخصوصية",
+      "createAccount": "إنشاء حساب",
+      "creatingAccount": "جاري إنشاء الحساب...",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟",
+      "signInInstead": "تسجيل الدخول بدلاً من ذلك"
+    },
+    "features": {
+      "free": {
+        "title": "مجاني للبدء",
+        "description": "أنشئ حسابك وابدأ في إدارة الحجوزات فوراً"
+      },
+      "setup": {
+        "title": "إعداد سريع",
+        "description": "ابدأ العمل في دقائق مع دليلنا الإرشادي"
+      },
+      "security": {
+        "title": "أمان المؤسسات",
+        "description": "تشفير على مستوى البنوك للحفاظ على بياناتك آمنة ومحمية"
+      }
+    }
+  },
+  "cards": {
+    "organization": {
+      "user": "مستخدم",
+      "users": "مستخدمون",
+      "service": "خدمة",
+      "services": "خدمات",
+      "view": "عرض",
+      "edit": "تعديل"
+    },
+    "appointmentsSummary": {
+      "totalAppointments": "إجمالي المواعيد",
+      "allTimeRecords": "جميع السجلات",
+      "confirmed": "مؤكد",
+      "pending": "قيد الانتظار",
+      "rejected": "مرفوض",
+      "botStatus": "حالة البوت",
+      "adminStatus": "المدير",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "linked": "مربوط",
+      "notLinked": "غير مربوط",
+      "confirmation": "التأكيد",
+      "rejectionRate": "/ {{rate}}%"
+    },
+    "service": {
+      "minuteAbbr": "د",
+      "hourAbbr": "س",
+      "free": "مجاني",
+      "badge": "خدمة",
+      "bookings": "{{count}} حجز",
+      "edit": "تعديل الخدمة",
+      "manageAppointments": "إدارة المواعيد",
+      "delete": "حذف الخدمة",
+      "occupancyLabel": "الإشغال (الشهر الحالي)",
+      "occupancyTooltip": "{{booked}} من {{total}} وقت محجوز هذا الشهر",
+      "noSlotsThisMonth": "لا توجد أوقات متاحة هذا الشهر",
+      "occupancyValue": "{{occupancy}}% إشغال للشهر الحالي",
+      "slotsSummary": "{{booked}} / {{total}} وقت",
+      "totalSlotsSummary": "{{booked}} من {{total}} إجمالي الأوقات محجوز"
+    },
+    "appointment": {
+      "status": {
+        "confirmed": "مؤكد",
+        "cancelled": "ملغي",
+        "pending": "قيد الانتظار",
+        "unknown": "غير معروف"
+      },
+      "chatIdDisplay": "معرف الدردشة: {{chatId}}",
+      "unknown": "غير معروف",
+      "notAvailable": "غير متاح",
+      "labels": {
+        "name": "الاسم:",
+        "username": "اسم المستخدم:",
+        "chatId": "معرف الدردشة:",
+        "service": "الخدمة:",
+        "date": "التاريخ:",
+        "time": "الوقت:"
+      }
+    },
+    "mobileAppointment": {
+      "viewDetails": "عرض التفاصيل",
+      "edit": "تعديل",
+      "confirm": "تأكيد",
+      "cancel": "إلغاء",
+      "clientLabel": "معرف العميل: {{client}}"
+    }
+  },
+  "notifications": {
+    "appointments": {
+      "created": "تم إنشاء الموعد",
+      "createdDescription": "تم إنشاء موعد جديد بنجاح",
+      "updated": "تم تحديث الموعد",
+      "updatedDescription": "تم تحديث تفاصيل الموعد",
+      "updatedForClient": "تم تحديث الموعد لـ {clientName}",
+      "deleted": "تم حذف الموعد",
+      "deletedDescription": "تم إزالة الموعد من النظام",
+      "confirmed": "تم تأكيد الموعد",
+      "confirmedDescription": "تم تأكيد الموعد",
+      "confirmedForClient": "تم تأكيد موعد {clientName}",
+      "cancelled": "تم إلغاء الموعد",
+      "cancelledDescription": "تم إلغاء الموعد",
+      "cancelledForClient": "تم إلغاء موعد {clientName}",
+      "rejected": "تم رفض الموعد",
+      "rejectedDescription": "تم رفض الموعد",
+      "rejectedForClient": "تم رفض موعد {clientName}",
+      "rejectedWithReason": "تم رفض الموعد: {reason}",
+      "rejectedForClientWithReason": "تم رفض موعد {clientName}: {reason}",
+      "pending": "الموعد قيد الانتظار",
+      "pendingDescription": "في انتظار التأكيد"
+    },
+    "services": {
+      "created": "تم إنشاء الخدمة",
+      "createdDescription": "تم إنشاء الخدمة مع أوقات لمدة سنة",
+      "createdWithName": "تم إنشاء {serviceName} مع أوقات مُنشأة تلقائياً",
+      "updated": "تم تحديث الخدمة",
+      "updatedDescription": "تم تحديث تفاصيل الخدمة",
+      "updatedWithName": "تم تحديث {serviceName}",
+      "deleted": "تم حذف الخدمة",
+      "deletedDescription": "تم إزالة الخدمة من النظام",
+      "deletedWithName": "تم إزالة {serviceName}",
+      "slotsGenerated": "تم إنشاء الأوقات",
+      "slotsGeneratedDescription": "تم إنشاء الأوقات المتاحة تلقائياً لمدة سنة",
+      "slotsGeneratedWithName": "تم إنشاء الأوقات لـ {serviceName} لمدة سنة"
+    },
+    "organizations": {
+      "created": "تم إنشاء المنظمة",
+      "createdDescription": "تم إنشاء منظمة جديدة",
+      "createdWithName": "تم إضافة {orgName}",
+      "updated": "تم تحديث المنظمة",
+      "updatedDescription": "تم تحديث تفاصيل المنظمة",
+      "updatedWithName": "تم تحديث {orgName}",
+      "deleted": "تم حذف المنظمة",
+      "deletedDescription": "تم إزالة المنظمة من النظام",
+      "deletedWithName": "تم إزالة {orgName}"
+    },
+    "realtime": {
+      "newAppointment": "تم استلام موعد جديد",
+      "newAppointmentDescription": "تم استلام موعد جديد",
+      "newAppointmentForClient": "حجز {clientName} موعداً للتو",
+      "appointmentConfirmed": "تم تأكيد الموعد",
+      "appointmentConfirmedDescription": "أكد العميل موعده",
+      "appointmentConfirmedForClient": "أكد {clientName} موعده",
+      "appointmentCancelled": "تم إلغاء الموعد",
+      "appointmentCancelledDescription": "ألغى العميل موعده",
+      "appointmentCancelledForClient": "ألغى {clientName} موعده",
+      "appointmentRejected": "تم رفض الموعد",
+      "appointmentRejectedDescription": "تم رفض الموعد",
+      "appointmentRejectedForClient": "تم رفض موعد {clientName}",
+      "appointmentRejectedWithReason": "تم رفض الموعد: {reason}",
+      "appointmentRescheduled": "تم إعادة جدولة الموعد",
+      "appointmentRescheduledDescription": "أعاد العميل جدولة موعده",
+      "appointmentRescheduledForClient": "أعاد {clientName} جدولة موعده"
+    },
+    "system": {
+      "refreshed": "تم تحديث البيانات",
+      "refreshedDescription": "تم تحميل أحدث البيانات",
+      "refreshedForPage": "تم تحديث بيانات {page}",
+      "exported": "بدأ التصدير",
+      "exportedDescription": "سيكون ملفك جاهزاً قريباً",
+      "exportedForType": "جاري إعداد تصدير {type}",
+      "saved": "تم حفظ التغييرات",
+      "savedDescription": "تم حفظ تغييراتك بنجاح",
+      "autoSaved": "حفظ تلقائي",
+      "autoSavedDescription": "تم حفظ التغييرات تلقائياً",
+      "connectionLost": "فقد الاتصال",
+      "connectionLostDescription": "جاري إعادة الاتصال...",
+      "connectionRestored": "تم استعادة الاتصال",
+      "connectionRestoredDescription": "عدت متصلاً"
+    },
+    "errors": {
+      "general": "خطأ",
+      "generalDescription": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+      "network": "خطأ في الشبكة",
+      "networkDescription": "تعذر الاتصال. تحقق من اتصالك بالإنترنت.",
+      "validation": "خطأ في التحقق",
+      "validationDescription": "يرجى التحقق من النموذج والمحاولة مرة أخرى.",
+      "unauthorized": "غير مصرح",
+      "unauthorizedDescription": "يرجى تسجيل الدخول للمتابعة.",
+      "notFound": "غير موجود",
+      "notFoundDescription": "لم يتم العثور على العنصر المطلوب.",
+      "notFoundForItem": "لم يتم العثور على {item}"
+    },
+    "warnings": {
+      "unsavedChanges": "تغييرات غير محفوظة",
+      "unsavedChangesDescription": "لديك تغييرات غير محفوظة. احفظ قبل المغادرة.",
+      "limitReached": "تم الوصول إلى الحد",
+      "limitReachedDescription": "وصلت إلى حدك لهذا الإجراء.",
+      "deprecated": "ميزة مهملة",
+      "deprecatedDescription": "هذه الميزة مهملة",
+      "deprecatedForFeature": "سيتم إزالة {feature} قريباً"
+    },
+    "info": {
+      "loading": "جاري التحميل...",
+      "general": "معلومات"
+    },
+    "settings": {
+      "saved": "تم حفظ الإعدادات",
+      "savedDescription": "تم تحديث تفضيلاتك",
+      "reset": "تم إعادة تعيين الإعدادات",
+      "resetDescription": "تمت إعادة جميع الإعدادات إلى الافتراضي"
+    },
+    "bot": {
+      "activated": "تم تفعيل البوت",
+      "activatedDescription": "بوت Telegram الخاص بك نشط الآن وجاهز لاستقبال المواعيد",
+      "deactivated": "تم إلغاء تفعيل البوت",
+      "deactivatedDescription": "تم إلغاء تفعيل بوت Telegram الخاص بك",
+      "settingsUpdated": "تم تحديث إعدادات البوت",
+      "settingsUpdatedDescription": "تم حفظ تكوين البوت",
+      "tokenValidated": "تم التحقق من الرمز",
+      "tokenValidatedDescription": "رمز البوت صحيح وجاهز للاستخدام",
+      "adminLinked": "تم ربط المدير",
+      "adminLinkedDescription": "تم ربط حساب Telegram الخاص بك بالبوت",
+      "adminUnlinked": "تم إلغاء ربط المدير",
+      "adminUnlinkedDescription": "تم إلغاء ربط حساب Telegram الخاص بك من البوت"
+    },
+    "notificationCenter": {
+      "allCleared": "تم مسح جميع الإشعارات",
+      "clearFailed": "فشل مسح جميع الإشعارات",
+      "newAppointment": "موعد جديد",
+      "appointmentUpdated": "تم تحديث الموعد",
+      "appointmentCancelled": "تم إلغاء الموعد",
+      "appointmentConfirmed": "تم تأكيد الموعد",
+      "newService": "خدمة جديدة",
+      "serviceUpdated": "تم تحديث الخدمة",
+      "serviceDeleted": "تم حذف الخدمة",
+      "botMessage": "رسالة البوت",
+      "bookingCompleted": "اكتمل الحجز",
+      "systemEvent": "حدث النظام"
+    }
+  }
+}

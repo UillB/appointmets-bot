@@ -1,0 +1,1181 @@
+{
+  "common": {
+    "systemOnline": "系统在线",
+    "updatedJustNow": "刚刚更新",
+    "refresh": "刷新",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "search": "搜索",
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "close": "关闭",
+    "yes": "是",
+    "no": "否",
+    "active": "活跃",
+    "inactive": "非活跃",
+    "user": "用户",
+    "organization": "组织",
+    "notAvailable": "不可用",
+    "optional": "可选",
+    "retry": "重试"
+  },
+  "header": {
+    "logout": "登出",
+    "connected": "已连接",
+    "offline": "离线",
+    "liveUpdates": "实时更新",
+    "theme": {
+      "light": "浅色",
+      "dark": "深色",
+      "system": "系统"
+    },
+    "help": {
+      "title": "需要帮助？",
+      "description": "有任何问题、需要帮助或支持吗？请随时联系我们的支持团队。我们将尽快回复，帮助您解决任何问题。",
+      "supportEmail": "support@yourbrand.com"
+    },
+    "profile": {
+      "profile": "个人资料",
+      "settings": "设置",
+      "logout": "登出"
+    }
+  },
+  "navigation": {
+    "appName": "预约管理",
+    "appSubtitle": "业务管理器",
+    "dashboard": "仪表板",
+    "appointments": "预约",
+    "services": "服务",
+    "analytics": "分析",
+    "organizations": "组织",
+    "botManagement": "机器人管理",
+    "aiAssistant": "AI助手",
+    "settings": "设置",
+    "badges": {
+      "new": "新",
+      "beta": "测试版"
+    },
+    "adminStatus": "管理员状态",
+    "telegramLinked": "Telegram已关联",
+    "notLinked": "未关联",
+    "today": "今天",
+    "thisWeek": "本周",
+    "appointmentsShort": "预约",
+    "logout": "登出"
+  },
+  "organizations": {
+    "title": "组织",
+    "description": "管理您的组织及其设置",
+    "newOrganization": "新建组织",
+    "refresh": "刷新",
+    "searchPlaceholder": "搜索组织...",
+    "sortBy": "排序方式...",
+    "sortByName": "按名称",
+    "sortByUsers": "按用户数",
+    "sortByServices": "按服务数",
+    "sortByDate": "按日期",
+    "clearFilters": "清除筛选",
+    "noOrganizationsFound": "未找到组织",
+    "tryAdjustingSearch": "请尝试调整搜索条件或筛选器",
+    "getStarted": "创建您的第一个组织开始使用",
+    "showing": "显示 {{total}} 个组织中的 {{count}} 个"
+  },
+  "appointments": {
+    "title": "预约",
+    "description": "管理预约和预订",
+    "all": "全部",
+    "confirmed": "已确认",
+    "pending": "待处理",
+    "cancelled": "已取消",
+    "rejected": "已拒绝",
+    "newAppointment": "新建预约",
+    "searchPlaceholder": "搜索...",
+    "searchPlaceholderDesktop": "按聊天ID或服务搜索...",
+    "filters": "筛选",
+    "service": "服务",
+    "allServices": "所有服务",
+    "date": "日期",
+    "pickDate": "选择日期",
+    "clearFilters": "清除筛选",
+    "clear": "清除",
+    "clearDateFilter": "清除日期筛选",
+    "chatId": "聊天ID",
+    "id": "ID",
+    "unknown": "未知",
+    "unknownService": "未知服务",
+    "noDate": "无日期",
+    "noTime": "无时间",
+    "noTimeInfo": "无时间信息",
+    "notAvailable": "不可用",
+    "minutes": "分钟",
+    "showing": "显示 {{total}} 个预约中的 {{count}} 个",
+    "stats": {
+      "totalAppointments": "总预约数",
+      "allTimeBookings": "全部预订",
+      "successfullyConfirmed": "已成功确认",
+      "awaitingConfirmation": "等待确认",
+      "cancelledRejected": "已取消和已拒绝",
+      "cancelledRejectedBookings": "已取消和已拒绝的预订"
+    },
+    "tableHeaders": {
+      "service": "服务",
+      "dateTime": "日期和时间",
+      "clientChatId": "客户/聊天ID",
+      "duration": "时长",
+      "status": "状态",
+      "created": "创建时间",
+      "actions": "操作"
+    },
+    "actions": {
+      "viewDetails": "查看详情",
+      "edit": "编辑",
+      "confirm": "确认",
+      "cancel": "取消"
+    },
+    "emptyStates": {
+      "noAppointmentsFound": "未找到预约",
+      "noAppointmentsForDate": "{{date}} 未找到预约",
+      "tryDifferentDate": "请尝试选择其他日期或清除日期筛选以查看所有预约",
+      "createFirstAppointment": "创建您的第一个预约"
+    },
+    "pagination": {
+      "previous": "上一页",
+      "next": "下一页"
+    }
+  },
+  "analytics": {
+    "title": "分析",
+    "description": "跟踪性能和洞察",
+    "export": "导出",
+    "retry": "重试",
+    "performanceOverview": "性能概览",
+    "timePeriod": {
+      "allTime": "全部时间",
+      "week": "周",
+      "month": "月",
+      "year": "年"
+    },
+    "stats": {
+      "totalBookings": "总预订数",
+      "allTime": "全部时间",
+      "thisWeek": "本周",
+      "thisMonth": "本月",
+      "thisYear": "今年",
+      "growthRate": "增长率",
+      "vsPreviousPeriod": "与上一期相比",
+      "vsLastWeek": "与上周相比",
+      "vsLastMonth": "与上月相比",
+      "vsLastYear": "与去年相比",
+      "activeClients": "活跃客户",
+      "uniqueClients": "独立客户",
+      "avgDuration": "平均时长",
+      "perAppointment": "每次预约"
+    },
+    "appointmentsTrend": {
+      "title": "预约趋势",
+      "description": "每日预订时间序列"
+    },
+    "metrics": {
+      "appointments": "预约",
+      "revenue": "收入"
+    },
+    "tooltip": {
+      "appointment": "预约",
+      "appointments": "预约",
+      "booking": "预订",
+      "bookings": "预订",
+      "date": "日期",
+      "time": "时间",
+      "status": "状态",
+      "percentage": "百分比"
+    },
+    "topServices": {
+      "title": "热门服务",
+      "description": "最受欢迎的服务",
+      "bookings": "预订"
+    },
+    "appointmentStatus": {
+      "title": "预约状态",
+      "description": "状态分布"
+    },
+    "peakHours": {
+      "title": "高峰时段",
+      "description": "一天中最繁忙的时间"
+    },
+    "quickInsights": {
+      "title": "快速洞察",
+      "bestDay": "最佳日期",
+      "peakTime": "高峰时间",
+      "topService": "热门服务",
+      "with": "包含"
+    },
+    "emptyStates": {
+      "noAppointmentData": "此期间没有预约数据",
+      "noServicesWithBookings": "此期间没有预订的服务",
+      "noStatusData": "没有预约状态数据",
+      "noPeakHoursData": "没有高峰时段数据",
+      "noDataAvailable": "无可用数据"
+    },
+    "errors": {
+      "failedToLoad": "加载分析数据失败",
+      "failedToLoadData": "加载分析数据失败"
+    }
+  },
+  "slots": {
+    "title": "时间段",
+    "description": "服务的自动生成时间段",
+    "searchPlaceholder": "搜索时间段...",
+    "minutes": "分钟",
+    "unknownService": "未知服务",
+    "stats": {
+      "totalSlots": "总时间段数",
+      "available": "可用",
+      "booked": "已预订",
+      "utilization": "利用率"
+    },
+    "status": {
+      "available": "可用",
+      "booked": "已预订",
+      "conflict": "冲突"
+    },
+    "dates": {
+      "today": "今天",
+      "tomorrow": "明天",
+      "yesterday": "昨天"
+    },
+    "infoBanner": {
+      "title": "自动生成时间段",
+      "description": "创建服务时，时间段会自动生成。它们覆盖未来1年，使用标准工作时间（上午9点至下午6点，周一至周五）。无需手动管理！"
+    },
+    "filters": {
+      "allServices": "所有服务",
+      "allStatus": "所有状态",
+      "filterByDate": "按日期筛选"
+    },
+    "table": {
+      "title": "时间段",
+      "showing": "{{total}} 个时间段中的 {{count}} 个",
+      "headers": {
+        "service": "服务",
+        "date": "日期",
+        "time": "时间",
+        "duration": "时长",
+        "status": "状态",
+        "capacity": "容量"
+      }
+    },
+    "emptyStates": {
+      "noSlotsFound": "未找到时间段",
+      "createServiceToGenerate": "创建服务以自动生成时间段",
+      "tryAdjustingFilters": "请尝试调整筛选器"
+    }
+  },
+  "slotsManagement": {
+    "title": "时间段管理",
+    "subtitle": "查看和管理自动生成的时间段",
+    "back": "返回",
+    "infoBanner": {
+      "title": "自动生成时间段",
+      "description": "添加服务时，时间段会自动创建。它们覆盖未来1年，使用标准工作时间（上午9点至下午6点，周一至周五）。无需手动设置！"
+    },
+    "filters": {
+      "service": "服务",
+      "selectService": "选择服务",
+      "date": "日期",
+      "filterByDate": "按日期筛选"
+    },
+    "table": {
+      "title": "时间段",
+      "slotsFound": "找到 {{count}} 个时间段",
+      "headers": {
+        "date": "日期",
+        "time": "时间",
+        "duration": "时长",
+        "status": "状态",
+        "capacity": "容量"
+      }
+    },
+    "emptyStates": {
+      "selectService": "选择服务",
+      "chooseServiceToView": "选择服务以查看其自动生成的时间段",
+      "noSlotsFound": "未找到时间段",
+      "noSlotsForDate": "所选日期未找到时间段",
+      "noSlotsYet": "此服务还没有时间段"
+    }
+  },
+  "dashboard": {
+    "title": "仪表板",
+    "welcome": "欢迎回来，{{name}}！",
+    "statisticsOverview": "统计和概览",
+    "viewAll": "查看全部",
+    "setupBanners": {
+      "services": {
+        "message": "您目前没有服务（您销售的内容）。请立即创建您的第一个服务 - 这是开始工作所必需的，只需一分钟即可完成。",
+        "actionLabel": "创建服务"
+      },
+      "bot": {
+        "message": "您的Telegram机器人未连接。请连接您的机器人以与他人分享，并从今天开始接收预约。",
+        "actionLabel": "连接机器人"
+      },
+      "admin": {
+        "message": "您的Telegram管理员账户未关联。请立即关联以启用管理员功能，例如从Telegram访问管理系统（管理面板）。",
+        "actionLabel": "关联管理员"
+      }
+    },
+    "stats": {
+      "totalAppointments": "总预约数",
+      "allTime": "全部时间",
+      "todaysBookings": "今日预订",
+      "scheduledForToday": "今日安排",
+      "pendingApprovals": "待审批",
+      "awaitingConfirmation": "等待确认",
+      "activeServices": "活跃服务",
+      "availableForBooking": "可预订"
+    },
+    "quickActions": {
+      "appointments": {
+        "title": "预约",
+        "description": "管理预订"
+      },
+      "services": {
+        "title": "服务",
+        "description": "配置服务内容"
+      },
+      "organizations": {
+        "title": "组织",
+        "description": "管理地点"
+      },
+      "settings": {
+        "title": "设置",
+        "description": "系统配置"
+      },
+      "today": "今天",
+      "available": "可用",
+      "active": "活跃",
+      "account": "账户"
+    },
+    "calendar": {
+      "title": "日历",
+      "selected": "已选择",
+      "selectDate": "选择日期",
+      "days": {
+        "sun": "日",
+        "mon": "一",
+        "tue": "二",
+        "wed": "三",
+        "thu": "四",
+        "fri": "五",
+        "sat": "六"
+      }
+    },
+    "emptyStates": {
+      "noAppointmentsForDate": "所选日期没有预约",
+      "clickDateToView": "点击日历中的日期以查看预约"
+    }
+  },
+  "services": {
+    "title": "服务",
+    "description": "管理您的服务并跟踪其性能",
+    "addService": "添加服务",
+    "searchPlaceholder": "搜索服务...",
+    "searchPlaceholderDesktop": "按服务名称搜索...",
+    "filters": "筛选",
+    "filterByName": "按服务名称筛选",
+    "clearFilters": "清除筛选",
+    "clear": "清除",
+    "noServicesFound": "未找到服务",
+    "createFirstService": "创建您的第一个服务",
+    "showing": "显示 {{total}} 个服务中的 {{count}} 个",
+    "stats": {
+      "totalServices": "总服务数",
+      "activeServices": "活跃服务",
+      "totalBookings": "总预订数",
+      "allTimeBookings": "全部预订",
+      "averageOccupancy": "平均占用率（本月）",
+      "capacityUtilization": "容量利用率"
+    },
+    "autoGeneratedSlots": {
+      "title": "自动生成时间段",
+      "description": "创建服务时，会自动生成1年的时间段。无需手动时间段管理 - 只需创建您的服务并开始预订！"
+    }
+  },
+  "settings": {
+    "title": "设置",
+    "description": "管理您的账户和系统偏好",
+    "profileTab": "个人资料",
+    "systemTab": "系统",
+    "accountStatus": "账户状态",
+    "securityLevel": "安全级别",
+    "memberSince": "注册时间",
+    "stats": {
+      "accountStatus": "账户状态",
+      "active": "活跃",
+      "sinceOct2023": "自2023年10月起",
+      "securityLevel": "安全级别",
+      "high": "高",
+      "twoFAEnabled": "已启用双因素认证",
+      "memberSince": "注册时间",
+      "activeUser": "活跃用户"
+    },
+    "tabs": {
+      "userProfile": "用户个人资料",
+      "systemSettings": "系统设置"
+    },
+    "profile": {
+      "title": "用户个人资料",
+      "description": "管理您的个人信息",
+      "updateTitle": "更新个人资料",
+      "updateDescription": "更新您的个人资料信息",
+      "updateButton": "更新个人资料",
+      "fields": {
+        "fullName": "全名",
+        "emailAddress": "电子邮件地址",
+        "role": "角色",
+        "organization": "组织",
+        "memberSince": "注册时间"
+      },
+      "placeholders": {
+        "fullName": "输入您的全名",
+        "email": "输入您的电子邮件"
+      },
+      "role": {
+        "manager": "经理"
+      }
+    },
+    "password": {
+      "title": "更改密码",
+      "description": "更新您的密码以保护账户安全",
+      "changeButton": "更改密码",
+      "fields": {
+        "currentPassword": "当前密码",
+        "newPassword": "新密码",
+        "confirmPassword": "确认密码"
+      },
+      "placeholders": {
+        "currentPassword": "输入当前密码",
+        "newPassword": "输入新密码",
+        "confirmPassword": "确认新密码"
+      },
+      "requirements": {
+        "title": "密码要求：",
+        "minLength": "至少8个字符",
+        "uppercaseLowercase": "包含大写和小写字母",
+        "number": "包含至少一个数字",
+        "specialCharacter": "包含至少一个特殊字符"
+      }
+    },
+    "system": {
+      "languageTheme": {
+        "title": "语言和主题",
+        "description": "配置系统偏好",
+        "language": "语言",
+        "theme": "主题",
+        "themeOptions": {
+          "light": "浅色主题",
+          "dark": "深色主题",
+          "auto": "自动（系统）"
+        }
+      },
+      "notifications": {
+        "title": "通知",
+        "description": "管理您接收通知的方式",
+        "emailNotifications": "电子邮件通知",
+        "emailNotificationsDescription": "通过电子邮件接收通知",
+        "pushNotifications": "推送通知",
+        "pushNotificationsDescription": "在浏览器中接收推送通知"
+      },
+      "preferences": {
+        "title": "系统偏好",
+        "description": "配置日期、时间和刷新设置",
+        "timezone": "时区",
+        "dateFormat": "日期格式",
+        "timeFormat": "时间格式",
+        "timeFormat12": "12小时制（上午/下午）",
+        "timeFormat24": "24小时制",
+        "refreshInterval": "刷新间隔（秒）",
+        "refreshInterval15": "15秒",
+        "refreshInterval30": "30秒",
+        "refreshInterval60": "1分钟",
+        "refreshInterval300": "5分钟",
+        "refreshIntervalManual": "仅手动"
+      },
+      "saveButton": "保存设置"
+    },
+    "errors": {
+      "fillAllRequiredFields": "请填写所有必填字段",
+      "fillAllPasswordFields": "请填写所有密码字段",
+      "passwordsDoNotMatch": "新密码不匹配",
+      "passwordMinLength": "密码必须至少8个字符"
+    },
+    "profileUpdatedSuccessfully": "个人资料更新成功",
+    "passwordChangedSuccessfully": "密码更改成功",
+    "systemSettingsSavedSuccessfully": "系统设置保存成功"
+  },
+  "dialogs": {
+    "save": "保存",
+    "cancel": "取消",
+    "close": "关闭",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "saving": "保存中...",
+    "service": {
+      "editTitle": "编辑服务",
+      "createTitle": "创建新服务",
+      "editDescription": "更新服务信息和设置。",
+      "createDescription": "按照以下步骤添加新服务",
+      "nameRequired": "服务名称是必填项",
+      "durationRequired": "有效时长是必填项",
+      "organizationIdRequired": "组织ID是必填项",
+      "updated": "服务更新成功",
+      "created": "服务创建成功",
+      "saveFailed": "保存服务失败",
+      "firstServiceMessage": "恭喜！您的服务已成功创建。您可以随时创建其他服务。现在让我们完成设置并连接您的Telegram机器人，这样您就可以立即开始接收预约。",
+      "connectBot": "连接机器人",
+      "serviceName": "服务名称",
+      "serviceNamePlaceholder": "例如：理发、按摩、咨询",
+      "description": "描述",
+      "descriptionPlaceholder": "描述服务...",
+      "duration": "时长（分钟）",
+      "price": "价格（可选）",
+      "currency": "货币",
+      "step1": {
+        "title": "基本信息",
+        "description": "服务名称和描述"
+      },
+      "step2": {
+        "title": "价格和时长",
+        "description": "设置价格和所需时间"
+      },
+      "step3": {
+        "title": "工作时间",
+        "description": "配置此服务的可用时间"
+      },
+      "startTime": "开始时间",
+      "endTime": "结束时间",
+      "lunchStart": "午休开始（可选）",
+      "lunchEnd": "午休结束（可选）",
+      "workingDays": "工作日",
+      "updateService": "更新服务",
+      "createService": "创建服务"
+    },
+    "organization": {
+      "viewTitle": "查看组织",
+      "editTitle": "编辑组织",
+      "createTitle": "创建新组织",
+      "viewDescription": "查看组织详情",
+      "editDescription": "更新组织信息",
+      "createDescription": "按照以下步骤添加新组织",
+      "nameRequired": "组织名称是必填项",
+      "updated": "组织更新成功",
+      "created": "组织创建成功",
+      "saveFailed": "保存组织失败",
+      "fields": {
+        "organizationName": "组织名称",
+        "description": "描述",
+        "email": "电子邮件地址",
+        "phone": "电话号码",
+        "address": "地址"
+      },
+      "placeholders": {
+        "name": "例如：Acme公司",
+        "description": "组织的简要描述...",
+        "email": "contact@example.com",
+        "phone": "+86 138 0013 8000",
+        "address": "北京市朝阳区某某街道123号"
+      },
+      "step1": {
+        "title": "基本信息",
+        "description": "组织名称和描述"
+      },
+      "step2": {
+        "title": "联系信息",
+        "description": "电子邮件、电话和地址"
+      },
+      "saveChanges": "保存更改",
+      "createOrganization": "创建组织"
+    },
+    "appointment": {
+      "title": "创建新预约",
+      "description": "按照以下步骤创建新预约",
+      "step1": {
+        "title": "客户信息",
+        "description": "输入客户详情"
+      },
+      "step2": {
+        "title": "服务和时间",
+        "description": "选择服务和时间段"
+      },
+      "clientId": "客户ID/电话",
+      "clientIdPlaceholder": "输入客户ID或电话号码",
+      "service": "服务",
+      "loadingServices": "加载服务中...",
+      "selectServicePlaceholder": "选择服务",
+      "selectService": "请选择服务",
+      "noServices": "无可用服务",
+      "date": "日期",
+      "pickDate": "选择日期",
+      "selectDate": "请选择日期",
+      "timeSlot": "时间段",
+      "selectSlot": "请选择时间段",
+      "selectDateFirst": "请先选择日期",
+      "selectServiceFirst": "请先选择服务",
+      "loadingSlots": "加载时间段中...",
+      "noSlots": "无可用时间段",
+      "selectSlotPlaceholder": "选择时间段",
+      "noSlotsForDate": "此日期无可用时间段",
+      "slotConflict": "冲突",
+      "loadingAvailableSlots": "加载可用时间段中...",
+      "created": "预约创建成功",
+      "createFailed": "创建预约失败",
+      "createButton": "创建预约",
+      "creating": "创建中..."
+    }
+  },
+  "aiAssistant": {
+    "title": "AI助手",
+    "description": "配置和管理您的智能聊天机器人助手",
+    "refreshed": "AI助手数据已刷新",
+    "configSaved": "配置保存成功",
+    "configSaveFailed": "保存配置失败",
+    "enableFirst": "请先启用AI助手",
+    "testSuccessful": "AI助手测试成功！",
+    "testResponse": "响应：{{response}}",
+    "testFailed": "AI助手测试失败",
+    "enterApiKey": "请输入API密钥",
+    "apiKeyVerified": "API密钥验证成功",
+    "configReset": "配置已重置为默认值",
+    "controls": {
+      "title": "AI助手控制",
+      "description": "启用和配置AI驱动的响应",
+      "enableAi": "启用AI助手",
+      "enableAiDescription": "为客户咨询开启AI驱动的响应",
+      "autoReply": "自动回复模式",
+      "autoReplyDescription": "自动回复所有Telegram消息",
+      "activeTitle": "AI助手已激活",
+      "activeDescription": "您的AI助手现在已准备好根据以下指示在Telegram机器人中帮助客户。"
+    },
+    "config": {
+      "title": "AI配置",
+      "description": "配置AI模型和行为",
+      "modelLabel": "LLM模型",
+      "modelHint": "更高级的模型提供更好的响应，但成本更高",
+      "models": {
+        "gpt4": "GPT-4（最智能）",
+        "gpt4Turbo": "GPT-4 Turbo（快速且智能）",
+        "gpt35Turbo": "GPT-3.5 Turbo（快速且经济）",
+        "claude3Opus": "Claude 3 Opus",
+        "claude3Sonnet": "Claude 3 Sonnet"
+      },
+      "temperatureLabel": "温度",
+      "temperaturePrecise": "精确（0）",
+      "temperatureBalanced": "平衡（1）",
+      "temperatureCreative": "创意（2）",
+      "temperatureHint": "较低 = 更专注和一致。较高 = 更有创意和多样。"
+    },
+    "instructions": {
+      "title": "自定义指示",
+      "description": "教AI如何沟通 - 定义个性、语调和风格",
+      "label": "提示/指示",
+      "placeholder": "示例：您是David，一位友好且专业的助手。您应该开朗、乐于助人，并以随意但尊重的语调回应。始终热情地迎接客户，并在可能时使用他们的名字...",
+      "characterCount": "{{count}} 个字符",
+      "hint": "将其视为培训新员工",
+      "tipsTitle": "指示提示",
+      "tip1": "定义AI的名称和个性",
+      "tip2": "指定语调：正式、随意、友好等",
+      "tip3": "设置语言和地区偏好",
+      "tip4": "提及任何特定政策或指南",
+      "tip5": "保持清晰简洁"
+    },
+    "test": {
+      "title": "测试AI助手",
+      "description": "发送测试消息以验证AI配置和响应",
+      "runTest": "运行测试"
+    }
+  },
+  "toasts": {
+    "success": "成功",
+    "error": "错误",
+    "warning": "警告",
+    "info": "信息",
+    "organizationsRefreshed": "组织已刷新",
+    "filtersCleared": "筛选已清除",
+    "appointmentsRefreshed": "预约已刷新",
+    "failedToLoadOrganizations": "加载组织数据失败",
+    "failedToSaveOrganization": "保存组织失败",
+    "failedToLoadAppointments": "加载预约数据失败",
+    "failedToLoadDashboard": "加载仪表板数据失败",
+    "settingsRefreshed": "设置已刷新",
+    "failedToLoadServices": "加载服务失败",
+    "failedToLoadStatistics": "加载统计失败",
+    "failedToRefreshServices": "刷新服务失败",
+    "failedToLoadSlots": "加载时间段数据失败"
+  },
+  "botManagement": {
+    "title": "机器人管理",
+    "description": "创建和配置Telegram机器人以自动处理客户预订",
+    "botActive": "机器人活跃",
+    "botInactive": "机器人非活跃",
+    "botWorking": "✓ 运行中",
+    "botNotWorking": "✗ 未运行",
+    "botReady": "Telegram机器人已准备就绪并正在接受预订",
+    "botNeedsActivation": "需要激活机器人才能开始工作",
+    "organization": "组织",
+    "botLink": "机器人链接",
+    "setupProgress": "机器人设置进度",
+    "setupComplete": "设置完成",
+    "completed": "已完成",
+    "inProgress": "进行中",
+    "instructions": "说明",
+    "activation": "激活",
+    "settings": "设置",
+    "howToCreateBot": "如何创建Telegram机器人",
+    "stepByStepGuide": "适合初学者的简单分步指南",
+    "step1Title": "打开Telegram并找到@BotFather",
+    "step1Description": "BotFather是用于创建新机器人的官方Telegram机器人。只需在搜索中输入@BotFather并打开聊天即可。",
+    "step1HowTo": "如何找到BotFather：",
+    "step1List1": "在手机或电脑上打开Telegram应用",
+    "step1List2": "在搜索中输入@BotFather",
+    "step1List3": "点击机器人并按\"开始\"按钮",
+    "step2Title": "发送/newbot命令",
+    "step2Description": "BotFather会要求您指定机器人名称和用户名。用户名必须以\"bot\"结尾（例如：MyAwesomeBot）。",
+    "step2HowTo": "创建机器人：",
+    "step2List1": "向BotFather聊天发送/newbot命令",
+    "step2List2": "输入您的机器人名称（例如：\"我的诊所\"）",
+    "step2List3": "输入机器人用户名（必须以\"bot\"结尾）",
+    "step2List4": "确保用户名唯一且可用",
+    "step3Title": "获取访问令牌",
+    "step3Description": "创建机器人后，BotFather会向您发送令牌。复制它并在\"激活\"标签页中使用以连接机器人。",
+    "step3Format": "令牌格式：",
+    "step3Important": "重要：必须完整复制令牌，包括所有字符",
+    "step3GoToActivation": "转到激活",
+    "securityWarning": "重要：令牌安全",
+    "securityWarning1": "切勿与他人分享令牌",
+    "securityWarning2": "不要在公共场合发布令牌",
+    "securityWarning3": "将令牌保存在安全的地方",
+    "activationTitle": "机器人激活",
+    "activationDescription": "输入您的Telegram机器人令牌以激活",
+    "botNotActiveAlert": "机器人未激活。请激活它以开始工作。",
+    "botToken": "机器人令牌 *",
+    "botTokenPlaceholder": "123456789:ABCdefGHijKlMNOpqrsTUVwxyz",
+    "dontKnowHowToActivate": "不知道如何激活？转到说明",
+    "tokenFormat": "令牌格式",
+    "tokenFormatDescription": "令牌必须具有以下格式：",
+    "tokenFormatGetFrom": "创建机器人后从@BotFather获取令牌",
+    "clear": "清除",
+    "validateToken": "验证令牌",
+    "validating": "验证中...",
+    "activateBot": "激活机器人",
+    "activating": "正在激活机器人...",
+    "botStatus": "机器人状态",
+    "loadingBotStatus": "加载机器人状态中...",
+    "botName": "机器人名称",
+    "botUsername": "用户名",
+    "botLinkLabel": "机器人链接",
+    "canJoinGroups": "可以加入群组",
+    "canReadAllGroupMessages": "可以读取所有群组消息",
+    "notSpecified": "未指定",
+    "botNotActivated": "机器人未激活",
+    "botNotActivatedDescription": "要使用机器人设置，您需要先在\"激活\"标签页中激活它。",
+    "goToActivation": "转到激活",
+    "basicSettings": "基本设置",
+    "basicSettingsDescription": "配置您的机器人名称和描述",
+    "botNameLabel": "机器人名称 *",
+    "botNamePlaceholder": "输入机器人名称",
+    "botDescription": "机器人描述",
+    "botDescriptionPlaceholder": "机器人功能的简要描述...",
+    "updating": "更新中...",
+    "updateSettings": "更新设置",
+    "shareBot": "分享机器人",
+    "shareBotDescription": "与客户分享您的机器人链接",
+    "scanQRCode": "扫描二维码快速访问机器人",
+    "hoverToCopy": "将鼠标悬停在二维码上以复制",
+    "generatingQR": "生成二维码中...",
+    "qrCodeAvailableAfterActivation": "二维码将在机器人激活后可用",
+    "open": "打开",
+    "downloadQR": "下载二维码",
+    "copyQR": "复制二维码",
+    "copyLink": "复制链接",
+    "shareBotLabel": "分享机器人",
+    "refreshStatus": "刷新状态",
+    "statusUpdated": "状态已更新",
+    "instructionsOpened": "机器人创建说明已打开",
+    "instructionsDescription": "按照分步指南操作",
+    "linkCopied": "链接已复制到剪贴板",
+    "openingBot": "正在Telegram中打开机器人",
+    "qrCodeDownloaded": "二维码下载成功",
+    "qrCodeDownloadedDescription": "图像已保存到下载文件夹",
+    "qrCodeCopied": "二维码已复制！",
+    "qrCodeCopiedDescription": "图像已准备好粘贴",
+    "qrCodeCopyFailed": "复制二维码失败",
+    "qrCodeCopyFailedDescription": "请尝试下载图像",
+    "shareToTelegram": "已打开分享到Telegram的窗口",
+    "shareToWhatsApp": "已打开分享到WhatsApp的窗口",
+    "shareToEmail": "已打开电子邮件客户端",
+    "botLinkNotAvailable": "机器人链接不可用",
+    "enterBotToken": "输入机器人令牌",
+    "tokenValid": "令牌有效！已找到机器人。",
+    "invalidToken": "无效的机器人令牌",
+    "tokenValidationError": "验证令牌时出错",
+    "botActivated": "机器人激活成功！",
+    "botActivationError": "激活机器人时出错",
+    "organizationIdError": "错误：未找到组织ID",
+    "botSettingsUpdated": "机器人设置已更新！",
+    "botSettingsUpdateError": "更新设置时出错",
+    "failedToLoadStatus": "加载机器人状态失败",
+    "failedToGenerateQR": "生成二维码失败",
+    "loadingUser": "加载用户中...",
+    "emptyState": {
+      "title": "开始机器人设置",
+      "description": "通过3个简单步骤创建Telegram机器人并开始接受客户预订",
+      "step1": {
+        "title": "创建机器人",
+        "description": "在Telegram中找到@BotFather"
+      },
+      "step2": {
+        "title": "获取令牌",
+        "description": "从BotFather复制令牌"
+      },
+      "step3": {
+        "title": "激活",
+        "description": "将令牌粘贴到系统中"
+      },
+      "startButton": "开始设置",
+      "footer": "按照以下说明获取分步指南"
+    },
+    "shareBotText": "查看我们的Telegram机器人：{{bot}}",
+    "shareEmailSubject": "预约用Telegram机器人",
+    "shareEmailBody": "您好！\n\n查看我们的预约用Telegram机器人：\n{{link}}\n\n使用二维码快速访问。",
+    "botMustBeActivated": "必须激活机器人才能生成管理员链接",
+    "yes": "是",
+    "no": "否",
+    "bot": "机器人",
+    "botNameDisplay": "机器人名称",
+    "usernameDisplay": "用户名",
+    "botLinkDisplay": "机器人链接"
+  },
+  "language": {
+    "switch": "语言切换",
+    "languageChanged": "语言已更改为{{lang}}",
+    "russian": "俄语",
+    "english": "英语",
+    "hebrew": "希伯来语",
+    "german": "德语",
+    "french": "法语",
+    "spanish": "西班牙语",
+    "portuguese": "葡萄牙语",
+    "japanese": "日语",
+    "chinese": "中文"
+  },
+  "login": {
+    "fillAllFields": "请填写所有字段",
+    "invalidEmail": "请输入有效的电子邮件地址",
+    "welcomeBack": "欢迎回来！",
+    "loginSuccess": "您已成功登录",
+    "backToLanding": "返回首页",
+    "branding": {
+      "title": "预约管理机器人",
+      "subtitle": "轻松管理您的预订"
+    },
+    "form": {
+      "title": "欢迎回来",
+      "subtitle": "登录以访问您的仪表板",
+      "emailLabel": "电子邮件地址",
+      "emailPlaceholder": "your@email.com",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "输入您的密码",
+      "rememberMe": "记住我",
+      "forgotPassword": "忘记密码？",
+      "forgotPasswordToast": "密码重置链接已发送到您的电子邮件",
+      "signIn": "登录",
+      "signingIn": "登录中...",
+      "newToApp": "首次使用预约管理机器人？",
+      "createAccount": "创建账户",
+      "demoCredentials": "演示凭据",
+      "demoEmail": "电子邮件",
+      "demoPassword": "密码"
+    },
+    "features": {
+      "fast": {
+        "title": "极速",
+        "description": "即时预订确认和实时更新"
+      },
+      "secure": {
+        "title": "安全且私密",
+        "description": "您的数据始终被加密和保护"
+      },
+      "easy": {
+        "title": "易于使用",
+        "description": "为效率而设计的直观界面"
+      }
+    },
+    "stats": {
+      "users": "用户",
+      "bookings": "预订",
+      "uptime": "运行时间"
+    }
+  },
+  "register": {
+    "fillAllFields": "请填写所有字段",
+    "invalidEmail": "请输入有效的电子邮件地址",
+    "passwordMinLength": "密码必须至少6个字符",
+    "passwordsDoNotMatch": "密码不匹配",
+    "agreeToTerms": "请同意条款和条件",
+    "accountCreated": "账户创建成功！",
+    "welcomeMessage": "欢迎使用预约管理机器人",
+    "branding": {
+      "title": "立即加入",
+      "subtitle": "轻松开始管理预约"
+    },
+    "form": {
+      "title": "创建账户",
+      "subtitle": "与数千名用户一起管理预约",
+      "fullNameLabel": "全名",
+      "fullNamePlaceholder": "张三",
+      "emailLabel": "电子邮件地址",
+      "emailPlaceholder": "your@email.com",
+      "organizationLabel": "组织名称",
+      "organizationPlaceholder": "输入组织名称",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "至少6个字符",
+      "confirmPasswordLabel": "确认密码",
+      "confirmPasswordPlaceholder": "重新输入密码",
+      "agreeToTerms": "我同意",
+      "termsAndConditions": "条款和条件",
+      "and": "和",
+      "privacyPolicy": "隐私政策",
+      "createAccount": "创建账户",
+      "creatingAccount": "创建账户中...",
+      "alreadyHaveAccount": "已有账户？",
+      "signInInstead": "改为登录"
+    },
+    "features": {
+      "free": {
+        "title": "免费开始",
+        "description": "创建您的账户并立即开始管理预订"
+      },
+      "setup": {
+        "title": "快速设置",
+        "description": "通过我们的引导式入门在几分钟内启动并运行"
+      },
+      "security": {
+        "title": "企业级安全",
+        "description": "银行级加密以保护您的数据安全"
+      }
+    }
+  },
+  "cards": {
+    "organization": {
+      "user": "用户",
+      "users": "用户",
+      "service": "服务",
+      "services": "服务",
+      "view": "查看",
+      "edit": "编辑"
+    },
+    "appointmentsSummary": {
+      "totalAppointments": "总预约数",
+      "allTimeRecords": "全部记录",
+      "confirmed": "已确认",
+      "pending": "待处理",
+      "rejected": "已拒绝",
+      "botStatus": "机器人状态",
+      "adminStatus": "管理员",
+      "active": "活跃",
+      "inactive": "非活跃",
+      "linked": "已关联",
+      "notLinked": "未关联",
+      "confirmation": "确认",
+      "rejectionRate": "/ {{rate}}%"
+    },
+    "service": {
+      "minuteAbbr": "分钟",
+      "hourAbbr": "小时",
+      "free": "免费",
+      "badge": "服务",
+      "bookings": "{{count}} 个预订",
+      "edit": "编辑服务",
+      "manageAppointments": "管理预约",
+      "delete": "删除服务",
+      "occupancyLabel": "占用率（本月）",
+      "occupancyTooltip": "本月预订的 {{total}} 个时间段中的 {{booked}} 个",
+      "noSlotsThisMonth": "本月无可用时间段",
+      "occupancyValue": "本月占用率{{occupancy}}%",
+      "slotsSummary": "{{booked}} / {{total}} 个时间段",
+      "totalSlotsSummary": "{{total}} 个总时间段中已预订 {{booked}} 个"
+    },
+    "appointment": {
+      "status": {
+        "confirmed": "已确认",
+        "cancelled": "已取消",
+        "pending": "待处理",
+        "unknown": "未知"
+      },
+      "chatIdDisplay": "聊天ID：{{chatId}}",
+      "unknown": "未知",
+      "notAvailable": "不可用",
+      "labels": {
+        "name": "姓名：",
+        "username": "用户名：",
+        "chatId": "聊天ID：",
+        "service": "服务：",
+        "date": "日期：",
+        "time": "时间："
+      }
+    },
+    "mobileAppointment": {
+      "viewDetails": "查看详情",
+      "edit": "编辑",
+      "confirm": "确认",
+      "cancel": "取消",
+      "clientLabel": "客户ID：{{client}}"
+    }
+  },
+  "notifications": {
+    "appointments": {
+      "created": "预约已创建",
+      "createdDescription": "新预约已成功创建",
+      "updated": "预约已更新",
+      "updatedDescription": "预约详情已更新",
+      "updatedForClient": "{clientName}的预约已更新",
+      "deleted": "预约已删除",
+      "deletedDescription": "预约已从系统中删除",
+      "confirmed": "预约已确认",
+      "confirmedDescription": "预约已确认",
+      "confirmedForClient": "{clientName}的预约已确认",
+      "cancelled": "预约已取消",
+      "cancelledDescription": "预约已取消",
+      "cancelledForClient": "{clientName}的预约已取消",
+      "rejected": "预约已拒绝",
+      "rejectedDescription": "预约已拒绝",
+      "rejectedForClient": "{clientName}的预约已拒绝",
+      "rejectedWithReason": "预约已拒绝：{reason}",
+      "rejectedForClientWithReason": "{clientName}的预约已拒绝：{reason}",
+      "pending": "预约待处理",
+      "pendingDescription": "等待确认"
+    },
+    "services": {
+      "created": "服务已创建",
+      "createdDescription": "服务已创建，包含1年的时间段",
+      "createdWithName": "{serviceName}已创建，包含自动生成的时间段",
+      "updated": "服务已更新",
+      "updatedDescription": "服务详情已更新",
+      "updatedWithName": "{serviceName}已更新",
+      "deleted": "服务已删除",
+      "deletedDescription": "服务已从系统中删除",
+      "deletedWithName": "{serviceName}已删除",
+      "slotsGenerated": "时间段已生成",
+      "slotsGeneratedDescription": "已自动生成1年的时间段",
+      "slotsGeneratedWithName": "{serviceName}的1年时间段已生成"
+    },
+    "organizations": {
+      "created": "组织已创建",
+      "createdDescription": "新组织已创建",
+      "createdWithName": "{orgName}已添加",
+      "updated": "组织已更新",
+      "updatedDescription": "组织详情已更新",
+      "updatedWithName": "{orgName}已更新",
+      "deleted": "组织已删除",
+      "deletedDescription": "组织已从系统中删除",
+      "deletedWithName": "{orgName}已删除"
+    },
+    "realtime": {
+      "newAppointment": "收到新预约",
+      "newAppointmentDescription": "已收到新预约",
+      "newAppointmentForClient": "{clientName}刚刚预订了预约",
+      "appointmentConfirmed": "预约已确认",
+      "appointmentConfirmedDescription": "客户已确认其预约",
+      "appointmentConfirmedForClient": "{clientName}已确认其预约",
+      "appointmentCancelled": "预约已取消",
+      "appointmentCancelledDescription": "客户已取消其预约",
+      "appointmentCancelledForClient": "{clientName}已取消其预约",
+      "appointmentRejected": "预约已拒绝",
+      "appointmentRejectedDescription": "预约已被拒绝",
+      "appointmentRejectedForClient": "{clientName}的预约已被拒绝",
+      "appointmentRejectedWithReason": "预约已被拒绝：{reason}",
+      "appointmentRescheduled": "预约已重新安排",
+      "appointmentRescheduledDescription": "客户已重新安排其预约",
+      "appointmentRescheduledForClient": "{clientName}已重新安排其预约"
+    },
+    "system": {
+      "refreshed": "数据已刷新",
+      "refreshedDescription": "最新数据已加载",
+      "refreshedForPage": "{page}数据已更新",
+      "exported": "导出已开始",
+      "exportedDescription": "您的文件将很快准备好",
+      "exportedForType": "{type}导出正在准备中",
+      "saved": "更改已保存",
+      "savedDescription": "您的更改已成功保存",
+      "autoSaved": "自动保存",
+      "autoSavedDescription": "更改已自动保存",
+      "connectionLost": "连接丢失",
+      "connectionLostDescription": "正在尝试重新连接...",
+      "connectionRestored": "连接已恢复",
+      "connectionRestoredDescription": "您已重新上线"
+    },
+    "errors": {
+      "general": "错误",
+      "generalDescription": "出了点问题。请重试。",
+      "network": "网络错误",
+      "networkDescription": "无法连接。请检查您的互联网连接。",
+      "validation": "验证错误",
+      "validationDescription": "请检查表单并重试。",
+      "unauthorized": "未授权",
+      "unauthorizedDescription": "请登录以继续。",
+      "notFound": "未找到",
+      "notFoundDescription": "未找到请求的项目。",
+      "notFoundForItem": "未找到{item}"
+    },
+    "warnings": {
+      "unsavedChanges": "未保存的更改",
+      "unsavedChangesDescription": "您有未保存的更改。离开前请保存。",
+      "limitReached": "已达到限制",
+      "limitReachedDescription": "您已达到此操作的限制。",
+      "deprecated": "功能已弃用",
+      "deprecatedDescription": "此功能已弃用",
+      "deprecatedForFeature": "{feature}将很快被删除"
+    },
+    "info": {
+      "loading": "加载中...",
+      "general": "信息"
+    },
+    "settings": {
+      "saved": "设置已保存",
+      "savedDescription": "您的偏好已更新",
+      "reset": "设置已重置",
+      "resetDescription": "所有设置已恢复为默认值"
+    },
+    "bot": {
+      "activated": "机器人已激活",
+      "activatedDescription": "您的Telegram机器人现在已激活并准备好接收预约",
+      "deactivated": "机器人已停用",
+      "deactivatedDescription": "您的Telegram机器人已停用",
+      "settingsUpdated": "机器人设置已更新",
+      "settingsUpdatedDescription": "机器人配置已保存",
+      "tokenValidated": "令牌已验证",
+      "tokenValidatedDescription": "机器人令牌有效且可以使用",
+      "adminLinked": "管理员已关联",
+      "adminLinkedDescription": "您的Telegram账户已关联到机器人",
+      "adminUnlinked": "管理员已取消关联",
+      "adminUnlinkedDescription": "您的Telegram账户已从机器人取消关联"
+    },
+    "notificationCenter": {
+      "allCleared": "所有通知已清除",
+      "clearFailed": "清除所有通知失败",
+      "newAppointment": "新预约",
+      "appointmentUpdated": "预约已更新",
+      "appointmentCancelled": "预约已取消",
+      "appointmentConfirmed": "预约已确认",
+      "newService": "新服务",
+      "serviceUpdated": "服务已更新",
+      "serviceDeleted": "服务已删除",
+      "botMessage": "机器人消息",
+      "bookingCompleted": "预订已完成",
+      "systemEvent": "系统事件"
+    }
+  }
+}

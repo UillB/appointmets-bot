@@ -1,0 +1,104 @@
+{
+  "start": { "welcome": "👋 Bienvenue !\n\nJe peux vous aider à réserver un rendez-vous. Choisissez la fonction dont vous avez besoin :" },
+  "book": {
+    "chooseService": "Choisissez un service :",
+    "openCalendar": "Ouvrir le calendrier :",
+    "chooseTime": "📅 Date : {date}\nChoisissez une heure :",
+    "noSlotsDay": "Aucun créneau disponible le {date}.",
+    "chooseSlot": "📅 Choisissez un créneau horaire disponible :",
+    "noSlotsAvailable": "❌ Aucun créneau disponible pour ce service."
+  },
+  "confirm": {
+    "ok": "✅ Réservation confirmée !",
+    "details": "Service : {service}\nHeure : {when}"
+  },
+  "errors": {
+    "generic": "⚠️ Quelque chose s'est mal passé. Veuillez réessayer.",
+    "webappDate": "⚠️ Impossible d'obtenir la date depuis l'application web.",
+    "webappService": "⚠️ serviceId manquant.",
+    "slotTaken": "❌ Ce créneau est déjà pris, choisissez-en un autre.",
+    "slotNotFound": "Créneau introuvable ou plus disponible.",
+    "telegramIdRequired": "L'ID Telegram est requis",
+    "invalidLinkToken": "❌ Lien invalide. Veuillez utiliser le lien correct.",
+    "linkTokenExpired": "❌ Le lien a expiré. Veuillez générer un nouveau lien.",
+    "linkFailed": "❌ Erreur lors de la liaison du compte. Veuillez réessayer plus tard."
+  },
+  "lang": {
+    "usage": "Utilisation : /lang ru|en|he|de|fr|es|pt",
+    "choose": "🌐 Choisissez la langue :",
+    "set": "Langue définie sur : {lang}."
+  },
+  "group": {
+    "openPm": "Le calendrier ne peut être utilisé que dans un chat privé. Cliquez pour continuer avec le bot :"
+  },
+  "admin": {
+    "notifyHeader": "🔔 Nouvelle réservation",
+    "notifyGroupHeader": "👥 Nouvelle réservation",
+    "cancelHeader": "❌ Réservation annulée",
+    "user": "Utilisateur",
+    "service": "Service",
+    "time": "Heure"
+  },
+  "progress": {
+    "confirming": "⏳ Confirmation de la réservation…",
+    "dateReceived": "✅ Date reçue. Recherche de créneaux…"
+  },
+  "my": {
+    "noAppointments": "Vous n'avez aucun rendez-vous actif.",
+    "time": "Heure",
+    "cancel": "Annuler",
+    "appointmentNotFound": "Ce rendez-vous n'a pas été trouvé ou ne vous appartient pas.",
+    "cancelled": "❎ Rendez-vous annulé :"
+  },
+  "slots": {
+    "noServices": "Aucun service disponible.",
+    "chooseService": "Choisissez un service pour voir les créneaux :",
+    "choosePeriod": "Choisissez la période :",
+    "today": "Aujourd'hui",
+    "tomorrow": "Demain",
+    "week": "Semaine",
+    "noSlotsDay": "Aucun créneau disponible le {date}.",
+    "noSlotsWeek": "Aucun créneau disponible cette semaine.",
+    "weekView": "Vue de la semaine :",
+    "available": "disponible",
+    "occupied": "occupé",
+    "bookNow": "Réserver maintenant"
+  },
+  "menu": {
+    "book": "Réserver un rendez-vous",
+    "viewSlots": "Voir les créneaux",
+    "myAppointments": "Mes rendez-vous",
+    "language": "Langue",
+    "adminPanel": "Panneau d'administration"
+  },
+  "help": {
+    "text": "📖 Aide des commandes :\n\n📅 /book - Réserver un rendez-vous\n👀 /slots - Voir les créneaux disponibles\n📋 /my - Mes rendez-vous\n🌐 /lang - Changer la langue\n❓ /help - Afficher cette aide\n\nOu utilisez les boutons ci-dessous :"
+  },
+  "commands": {
+    "start": "Commencer à travailler avec le bot",
+    "book": "Réserver un rendez-vous",
+    "my": "Mes rendez-vous",
+    "help": "Aide",
+    "cancel": "Annuler un rendez-vous"
+  },
+  "ai": {
+    "appointmentStatus": {
+      "confirmed": "Confirmé",
+      "pending": "En attente de confirmation"
+    },
+    "cancelHint": "💡 Pour annuler un rendez-vous, écrivez \"cancel\" ou \"J'ai changé d'avis\"",
+    "bookingCreated": "📅 Rendez-vous créé !\n\n",
+    "service": "Service",
+    "date": "Date",
+    "duration": "Durée",
+    "minutes": "minutes",
+    "confirmHint": "Pour confirmer le rendez-vous, écrivez \"confirm\" ou \"oui, je veux réserver\"\n",
+    "cancelHintShort": "Pour annuler, écrivez \"cancel\" ou \"J'ai changé d'avis\""
+  },
+  "admin": {
+    "openPanel": "Ouvrir le panneau d'administration",
+    "accessDenied": "Accès refusé. Privilèges d'administrateur requis.",
+    "linkSuccess": "✅ Votre compte Telegram a été lié avec succès ! Vous pouvez maintenant utiliser le bot pour gérer les rendez-vous."
+  }
+}
+

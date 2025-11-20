@@ -570,7 +570,7 @@ export function BotManagementPage() {
       toast.error(t('botManagement.botLinkNotAvailable'));
       return;
     }
-    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(botLink)}&text=${encodeURIComponent(`Проверьте нашего Telegram бота: ${botUsername || 'бот'}`)}`;
+    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(botLink)}&text=${encodeURIComponent(t('botManagement.shareBotText', { bot: botUsername || t('botManagement.bot') }))}`;
     window.open(telegramUrl, '_blank');
     toast.success(t('botManagement.shareToTelegram'));
   };
@@ -580,7 +580,7 @@ export function BotManagementPage() {
       toast.error(t('botManagement.botLinkNotAvailable'));
       return;
     }
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Проверьте нашего Telegram бота: ${botLink}`)}`;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(t('botManagement.shareBotText', { bot: botLink }))}`;
     window.open(whatsappUrl, '_blank');
     toast.success(t('botManagement.shareToWhatsApp'));
   };
@@ -590,15 +590,15 @@ export function BotManagementPage() {
       toast.error(t('botManagement.botLinkNotAvailable'));
       return;
     }
-    const subject = encodeURIComponent(`Telegram бот для записи`);
-    const body = encodeURIComponent(`Привет!\n\nПроверьте нашего Telegram бота для записи на прием:\n${botLink}\n\nИспользуйте QR-код для быстрого доступа.`);
+    const subject = encodeURIComponent(t('botManagement.shareEmailSubject'));
+    const body = encodeURIComponent(t('botManagement.shareEmailBody', { link: botLink }));
     window.location.href = `mailto:?subject=${subject}&body=${body}`;
     toast.success(t('botManagement.shareToEmail'));
   };
 
   const handleGenerateAdminLink = async () => {
     if (!botActive) {
-      toast.error("Бот должен быть активирован для генерации ссылки администратора");
+      toast.error(t('botManagement.botMustBeActivated'));
       return;
     }
 
@@ -1249,17 +1249,17 @@ export function BotManagementPage() {
                     <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
                       <h3 className="font-semibold text-amber-900 mb-2">
-                        Бот не активирован
+                        {t('botManagement.botNotActivated')}
                       </h3>
                       <p className="text-sm text-amber-800 mb-4">
-                        Для использования настроек бота необходимо сначала активировать его во вкладке "Активация".
+                        {t('botManagement.botNotActivatedDescription')}
                       </p>
                       <Button
                         onClick={() => setActiveTab("activation")}
                         variant="outline"
                         className="bg-white hover:bg-amber-100 border-amber-300 text-amber-900"
                       >
-                        Перейти к активации
+                        {t('botManagement.goToActivation')}
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     </div>
@@ -1272,11 +1272,11 @@ export function BotManagementPage() {
                   <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
                     <AlertCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Статус бота</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('botManagement.botStatus')}</h3>
                 </div>
 
                 {isLoading ? (
-                  <p className="text-gray-500 dark:text-gray-400">Загрузка статуса бота...</p>
+                  <p className="text-gray-500 dark:text-gray-400">{t('botManagement.loadingBotStatus')}</p>
                 ) : (
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
@@ -1284,7 +1284,7 @@ export function BotManagementPage() {
                         variant={botActive ? "default" : "destructive"}
                         className={`text-sm px-3 py-1 ${botActive ? "bg-green-500 dark:bg-green-600" : "bg-red-500 dark:bg-red-600"} text-white`}
                       >
-                        {botActive ? "Активен" : "Неактивен"}
+                        {botActive ? t('botManagement.botActive') : t('botManagement.botInactive')}
                       </Badge>
                       {botStatus?.error && (
                         <span className="text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
@@ -1298,16 +1298,16 @@ export function BotManagementPage() {
                           <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                             <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                             <div className="flex-1">
-                              <p className="text-sm text-gray-600 dark:text-gray-400">Имя бота</p>
-                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botName || "Не указано"}</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.botNameDisplay')}</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botName || t('botManagement.notSpecified')}</p>
                             </div>
                           </div>
 
                           <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                             <AtSign className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                             <div className="flex-1">
-                              <p className="text-sm text-gray-600 dark:text-gray-400">Username</p>
-                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botUsername || "Не указано"}</p>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.usernameDisplay')}</p>
+                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botUsername || t('botManagement.notSpecified')}</p>
                             </div>
                           </div>
                         </div>
@@ -1315,14 +1315,14 @@ export function BotManagementPage() {
                         <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                           <LinkIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                           <div className="flex-1">
-                            <p className="text-sm text-gray-600 dark:text-gray-400">Ссылка на бота</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.botLinkDisplay')}</p>
                             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                               {botLink ? (
                                 <a href={botLink} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 hover:underline">
                                   {botLink}
                                 </a>
                               ) : (
-                                "Не указано"
+                                t('botManagement.notSpecified')
                               )}
                             </p>
                           </div>
@@ -1333,9 +1333,9 @@ export function BotManagementPage() {
                             <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                               <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
                               <div className="flex-1">
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Может присоединяться к группам</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.canJoinGroups')}</p>
                                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                  {botStatus.canJoinGroups ? "Да" : "Нет"}
+                                  {botStatus.canJoinGroups ? t('botManagement.yes') : t('botManagement.no')}
                                 </p>
                               </div>
                             </div>
@@ -1343,9 +1343,9 @@ export function BotManagementPage() {
                             <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                               <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                               <div className="flex-1">
-                                <p className="text-sm text-gray-600 dark:text-gray-400">Может читать сообщения групп</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.canReadAllGroupMessages')}</p>
                                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                  {botStatus.canReadAllGroupMessages ? "Да" : "Нет"}
+                                  {botStatus.canReadAllGroupMessages ? t('botManagement.yes') : t('botManagement.no')}
                                 </p>
                               </div>
                             </div>

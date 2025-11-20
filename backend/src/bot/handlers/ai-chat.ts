@@ -394,15 +394,17 @@ export class AIChatHandler {
         });
 
         const statusEmoji = appointment.status === 'confirmed' ? '✅' : '⏳';
-        const statusText = appointment.status === 'confirmed' ? 'Подтверждена' : 'Ожидает подтверждения';
+        const statusText = appointment.status === 'confirmed' 
+          ? ctx.tt('ai.appointmentStatus.confirmed')
+          : ctx.tt('ai.appointmentStatus.pending');
 
         response += `${statusEmoji} **${appointment.service.nameRu || appointment.service.name}**\n`;
         response += `📅 ${formattedDate}\n`;
-        response += `⏱️ ${appointment.service.durationMin} минут\n`;
-        response += `📊 Статус: ${statusText}\n\n`;
+        response += `⏱️ ${appointment.service.durationMin} ${ctx.tt('ai.minutes')}\n`;
+        response += `📊 ${ctx.tt('my.time')}: ${statusText}\n\n`;
       });
 
-      response += '💡 Для отмены записи напишите "отменяю" или "передумал"';
+      response += ctx.tt('ai.cancelHint');
       
       await ctx.reply(response);
 
@@ -493,12 +495,12 @@ export class AIChatHandler {
       });
 
       await ctx.reply(
-        `📅 Запись создана!\n\n` +
-        `💅 Услуга: ${service.nameRu || service.name}\n` +
-        `📅 Дата: ${formattedDate}\n` +
-        `⏱️ Длительность: ${service.durationMin} минут\n\n` +
-        `Для подтверждения записи напишите "подтверждаю" или "да, записываюсь"\n` +
-        `Для отмены напишите "отменяю" или "передумал"`
+        ctx.tt('ai.bookingCreated') +
+        `💅 ${ctx.tt('ai.service')}: ${service.nameRu || service.name}\n` +
+        `📅 ${ctx.tt('ai.date')}: ${formattedDate}\n` +
+        `⏱️ ${ctx.tt('ai.duration')}: ${service.durationMin} ${ctx.tt('ai.minutes')}\n\n` +
+        ctx.tt('ai.confirmHint') +
+        ctx.tt('ai.cancelHintShort')
       );
 
     } catch (error) {

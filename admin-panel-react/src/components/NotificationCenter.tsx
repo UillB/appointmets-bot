@@ -3,6 +3,7 @@ import { Bell, Check, X, Trash2, AlertCircle, Clock, Calendar, Users, Sparkles, 
 import { useWebSocket } from '../hooks/useWebSocket';
 import { apiClient } from '../services/api';
 import { toast } from 'sonner';
+import { useLanguage } from '../i18n';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Badge } from './ui/badge';
 import { ScrollArea } from './ui/scroll-area';
@@ -47,6 +48,7 @@ interface NotificationStats {
 }
 
 export function NotificationCenter() {
+  const { t } = useLanguage();
   const { events } = useWebSocket();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [stats, setStats] = useState<NotificationStats | null>(null);
@@ -194,10 +196,10 @@ export function NotificationCenter() {
       setClearAllDialogOpen(false);
       // Reload stats to ensure consistency
       await loadStats();
-      toast.success('All notifications cleared');
+      toast.success(t('notifications.notificationCenter.allCleared'));
     } catch (error: any) {
       console.error('Failed to clear all notifications:', error);
-      const errorMessage = error?.message || 'Failed to clear all notifications';
+      const errorMessage = error?.message || t('notifications.notificationCenter.clearFailed');
       toast.error(errorMessage);
       setClearAllDialogOpen(false);
     }
@@ -211,33 +213,33 @@ export function NotificationCenter() {
     switch (normalizedType) {
       case 'appointment.created':
       case 'appointment_created':
-        return 'New Appointment';
+        return t('notifications.notificationCenter.newAppointment');
       case 'appointment.updated':
       case 'appointment_updated':
-        return 'Appointment Updated';
+        return t('notifications.notificationCenter.appointmentUpdated');
       case 'appointment.cancelled':
       case 'appointment_cancelled':
-        return 'Appointment Cancelled';
+        return t('notifications.notificationCenter.appointmentCancelled');
       case 'appointment.confirmed':
       case 'appointment_confirmed':
-        return 'Appointment Confirmed';
+        return t('notifications.notificationCenter.appointmentConfirmed');
       case 'service.created':
       case 'service_created':
-        return 'New Service';
+        return t('notifications.notificationCenter.newService');
       case 'service.updated':
       case 'service_updated':
-        return 'Service Updated';
+        return t('notifications.notificationCenter.serviceUpdated');
       case 'service.deleted':
       case 'service_deleted':
-        return 'Service Deleted';
+        return t('notifications.notificationCenter.serviceDeleted');
       case 'bot.message.received':
       case 'bot_message_received':
-        return 'Bot Message';
+        return t('notifications.notificationCenter.botMessage');
       case 'bot.booking.completed':
       case 'bot_booking_completed':
-        return 'Booking Completed';
+        return t('notifications.notificationCenter.bookingCompleted');
       default:
-        return 'System Event';
+        return t('notifications.notificationCenter.systemEvent');
     }
   };
 

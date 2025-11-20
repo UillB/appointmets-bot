@@ -23,6 +23,7 @@ import { PageHeader } from "../PageHeader";
 import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { apiClient, Organization } from "../../services/api";
+import { useLanguage } from "../../i18n";
 
 // Mock data
 const mockOrganizations = [
@@ -75,6 +76,7 @@ const mockOrganizations = [
 type SortOption = "name" | "users" | "services" | "date";
 
 export function OrganizationsPage() {
+  const { t } = useLanguage();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("name");
@@ -95,7 +97,7 @@ export function OrganizationsPage() {
       setOrganizations(organizationsData.organizations);
     } catch (error) {
       console.error('Failed to load organizations data:', error);
-      toast.error('Failed to load organizations data');
+      toast.error(t('toasts.failedToLoadOrganizations'));
     } finally {
       setIsLoading(false);
     }
@@ -131,14 +133,14 @@ export function OrganizationsPage() {
 
   const handleRefresh = () => {
     loadData();
-    toast.success("Organizations refreshed");
+    toast.success(t('toasts.organizationsRefreshed'));
   };
 
 
   const handleClearFilters = () => {
     setSearchQuery("");
     setSortBy("name");
-    toast.info("Filters cleared");
+    toast.info(t('toasts.filtersCleared'));
   };
 
   const handleView = (id: string) => {
@@ -167,7 +169,7 @@ export function OrganizationsPage() {
       setIsViewMode(false);
     } catch (error) {
       console.error('Failed to save organization:', error);
-      toast.error("Failed to save organization");
+      toast.error(t('toasts.failedToSaveOrganization'));
     }
   };
 
@@ -190,8 +192,8 @@ export function OrganizationsPage() {
           {/* Page Title */}
           <PageTitle
             icon={<Building2 className="w-6 h-6 text-white" />}
-            title="Organizations"
-            description="Manage your organizations and their settings"
+            title={t('organizations.title')}
+            description={t('organizations.description')}
             actions={
               <>
                 <Button
@@ -201,7 +203,7 @@ export function OrganizationsPage() {
                   className="hidden sm:flex"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
+                  {t('organizations.refresh')}
                 </Button>
                 <Button
                   onClick={() => {
@@ -213,7 +215,7 @@ export function OrganizationsPage() {
                   className="bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
-                  New Organization
+                  {t('organizations.newOrganization')}
                 </Button>
               </>
             }
@@ -226,7 +228,7 @@ export function OrganizationsPage() {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
             <Input
-              placeholder="Search organizations..."
+              placeholder={t('organizations.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
@@ -240,13 +242,13 @@ export function OrganizationsPage() {
               onValueChange={(value: SortOption) => setSortBy(value)}
             >
               <SelectTrigger className="w-full sm:w-[180px] bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100">
-                <SelectValue placeholder="Sort by..." />
+                <SelectValue placeholder={t('organizations.sortBy')} />
               </SelectTrigger>
               <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                <SelectItem value="name" className="text-gray-900 dark:text-gray-100">By Name</SelectItem>
-                <SelectItem value="users" className="text-gray-900 dark:text-gray-100">By Users</SelectItem>
-                <SelectItem value="services" className="text-gray-900 dark:text-gray-100">By Services</SelectItem>
-                <SelectItem value="date" className="text-gray-900 dark:text-gray-100">By Date</SelectItem>
+                <SelectItem value="name" className="text-gray-900 dark:text-gray-100">{t('organizations.sortByName')}</SelectItem>
+                <SelectItem value="users" className="text-gray-900 dark:text-gray-100">{t('organizations.sortByUsers')}</SelectItem>
+                <SelectItem value="services" className="text-gray-900 dark:text-gray-100">{t('organizations.sortByServices')}</SelectItem>
+                <SelectItem value="date" className="text-gray-900 dark:text-gray-100">{t('organizations.sortByDate')}</SelectItem>
               </SelectContent>
             </Select>
 
@@ -258,7 +260,7 @@ export function OrganizationsPage() {
                 className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
                 <X className="w-4 h-4 mr-2" />
-                Clear Filters
+                {t('organizations.clearFilters')}
               </Button>
             )}
           </div>
@@ -274,7 +276,7 @@ export function OrganizationsPage() {
           className="flex-1 border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
         >
           <RefreshCw className="w-4 h-4 mr-2" />
-          Refresh
+          {t('organizations.refresh')}
         </Button>
       </div>
 
@@ -285,11 +287,11 @@ export function OrganizationsPage() {
             <div className="w-16 h-16 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
               <Building2 className="w-8 h-8 text-gray-400 dark:text-gray-600" />
             </div>
-            <h3 className="text-gray-900 dark:text-gray-100 mb-2">No organizations found</h3>
+            <h3 className="text-gray-900 dark:text-gray-100 mb-2">{t('organizations.noOrganizationsFound')}</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
               {searchQuery
-                ? "Try adjusting your search or filters"
-                : "Get started by creating your first organization"}
+                ? t('organizations.tryAdjustingSearch')
+                : t('organizations.getStarted')}
             </p>
             {!searchQuery && (
               <Button
@@ -301,7 +303,7 @@ export function OrganizationsPage() {
                 className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white"
               >
                 <Plus className="w-4 h-4 mr-2" />
-                New Organization
+                {t('organizations.newOrganization')}
               </Button>
             )}
           </div>
@@ -329,8 +331,7 @@ export function OrganizationsPage() {
       {filteredOrganizations.length > 0 && (
         <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 px-4 sm:px-6 py-3">
           <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-            Showing {filteredOrganizations.length} of {organizations.length}{" "}
-            organizations
+            {t('organizations.showing', { count: filteredOrganizations.length.toString(), total: organizations.length.toString() })}
           </p>
         </div>
       )}

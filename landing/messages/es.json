@@ -1,0 +1,341 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "features": "Características",
+    "pricing": "Precios",
+    "about": "Acerca de",
+    "contact": "Contacto",
+    "login": "Iniciar sesión",
+    "register": "Registrarse",
+    "dashboard": "Panel"
+  },
+  "hero": {
+    "title": "Sistema de Reservas de Telegram Revolucionario",
+    "badge_new": "Nueva versión disponible",
+    "subtitle": "¡Crea tu bot en 10 minutos y comienza a aceptar citas hoy!",
+    "description": "Appointexo es un sistema moderno de gestión de citas con integración única de bot de Telegram. Perfecto para clínicas, salones de belleza, consultores y cualquier negocio de servicios.",
+    "cta_primary": "Comenzar gratis",
+    "cta_secondary": "Ver demo",
+    "stats": {
+      "users": "1000+ usuarios",
+      "appointments": "50,000+ citas",
+      "countries": "15 países"
+    },
+    "labels": {
+      "users": "usuarios",
+      "appointments": "citas",
+      "countries": "países"
+    },
+    "bot": {
+      "greeting": "¡Hola! 👋 Te ayudaré a reservar una cita. Elige un servicio:",
+      "service1": { "title": "Consulta", "price": "30 min • $20" },
+      "service2": { "title": "Tratamiento", "price": "60 min • $50" },
+      "userChoice": "Elegiré una consulta"
+    },
+    "calendar": {
+      "select": "Selecciona una fecha:",
+      "weekdays": { "mon": "Lun", "tue": "Mar", "wed": "Mié", "thu": "Jue", "fri": "Vie", "sat": "Sáb", "sun": "Dom" }
+    }
+  },
+  "features": {
+    "title": "¿Por qué elegir Appointexo?",
+    "subtitle": "Todo lo que necesitas para una gestión eficiente de citas",
+    "learn_more": "Saber más",
+    "telegram_integration": {
+      "title": "Integración con Telegram",
+      "description": "Tus clientes pueden reservar citas directamente en Telegram - el mensajero más popular"
+    },
+    "multilingual": {
+      "title": "Multilingüe",
+      "description": "Soporte para ruso, inglés, hebreo, alemán, francés, español y portugués desde el inicio"
+    },
+    "easy_setup": {
+      "title": "Configuración rápida",
+      "description": "Crea un bot y comienza a aceptar citas en 10 minutos"
+    },
+    "admin_panel": {
+      "title": "Hermoso panel de administración",
+      "description": "Interfaz moderna con Material Design 3"
+    },
+    "analytics": {
+      "title": "Análisis e informes",
+      "description": "Rastrea estadísticas y optimiza tu trabajo"
+    },
+    "security": {
+      "title": "Seguridad",
+      "description": "Autenticación JWT y control de acceso basado en roles"
+    },
+    "more": {
+      "title": "Y mucho más",
+      "description": "Appointexo proporciona un conjunto completo de herramientas para gestionar citas y hacer crecer tu negocio.",
+      "list": [
+        "Generación automática de horarios",
+        "Notificaciones en tiempo real",
+        "Integraciones con calendarios",
+        "Compatible con móviles",
+        "API para desarrolladores",
+        "Soporte 24/7"
+      ],
+      "dashboard_title": "Panel",
+      "today_appointments": "Citas de hoy",
+      "occupancy": "Ocupación",
+      "activity": {
+        "new_appointment": "Nueva cita: Consulta",
+        "cancel": "Cancelación: Tratamiento",
+        "schedule_update": "Horario actualizado"
+      }
+    }
+  },
+  "how_it_works": {
+    "title": "¿Cómo funciona?",
+    "subtitle": "Solo 3 pasos simples para lanzar",
+    "ready_in_5min": "Listo en 5 minutos",
+    "step1": {
+      "title": "Crear bot",
+      "description": "Sigue las instrucciones paso a paso para crear un bot de Telegram a través de @BotFather"
+    },
+    "step2": {
+      "title": "Configurar servicios",
+      "description": "Agrega tus servicios, precios y horarios de trabajo"
+    },
+    "step3": {
+      "title": "Comenzar a aceptar",
+      "description": "Comparte el enlace de tu bot con los clientes y comienza a aceptar citas"
+    },
+    "cta": {
+      "title": "¿Listo para comenzar?",
+      "subtitle": "¡Crea tu bot en 10 minutos y comienza a aceptar citas hoy!",
+      "primary": "Crear bot gratis",
+      "secondary": "Ver demo"
+    }
+  },
+  "benefits": {
+    "title": "Beneficios para tu negocio",
+    "subtitle": "Aumenta la eficiencia y la satisfacción del cliente",
+    "benefit1": {
+      "title": "Disponibilidad 24/7",
+      "description": "Los clientes pueden reservar citas en cualquier momento, incluso cuando estás durmiendo"
+    },
+    "benefit2": {
+      "title": "Automatización",
+      "description": "Menos llamadas, más tiempo para trabajar con clientes"
+    },
+    "benefit3": {
+      "title": "Conveniencia para el cliente",
+      "description": "Interfaz familiar de Telegram - no se requiere aprendizaje"
+    },
+    "benefit4": {
+      "title": "Movilidad",
+      "description": "Gestiona citas desde cualquier dispositivo"
+    },
+    "results": {
+      "title": "Resultados de clientes",
+      "subtitle": "Ve cómo Appointexo ayuda a las empresas a crecer y optimizar",
+      "stats": [
+        { "value": "95%", "label": "Satisfacción del cliente" },
+        { "value": "3x", "label": "Más reservas" },
+        { "value": "50%", "label": "Menos tiempo administrativo" },
+        { "value": "24/7", "label": "Siempre disponible" }
+      ]
+    },
+    "stories": {
+      "1": {"title": "Clínica Bright", "role": "Centro médico", "text": "En 3 meses triplicamos nuestras reservas. A los clientes les encanta la simplicidad de reservar.", "metric": "+150% reservas"},
+      "2": {"title": "Salón Glow", "role": "Salón de belleza", "text": "Ahora el 80% de las reservas vienen a través del bot. Más tiempo para clientes, menos tiempo contestando llamadas.", "metric": "+80% automatización"},
+      "3": {"title": "Dr. Smith", "role": "Práctica privada", "text": "La configuración tomó minutos. Los clientes reservan en cualquier momento y recibo notificaciones instantáneas.", "metric": "100% clientes satisfechos"}
+    }
+  },
+  "pricing": {
+    "title": "Precios simples y transparentes",
+    "subtitle": "Elige un plan que se ajuste a tu negocio",
+    "free": {
+      "name": "Gratis",
+      "price": "$0",
+      "period": "para siempre",
+      "description": "Perfecto para comenzar",
+      "features": ["Hasta 50 citas por mes","1 organización","Bot de Telegram","Análisis básicos","Soporte por correo"],
+      "cta": "Comenzar gratis"
+    },
+    "professional": {
+      "name": "Profesional",
+      "price": "$29",
+      "period": "por mes",
+      "description": "Para negocios en crecimiento",
+      "features": ["Hasta 500 citas por mes","3 organizaciones","Análisis avanzados","Notificaciones por correo","Soporte prioritario","Personalización del bot"],
+      "cta": "Elegir plan",
+      "popular": "Popular"
+    },
+    "business": {
+      "name": "Empresarial",
+      "price": "$99",
+      "period": "por mes",
+      "description": "Para grandes empresas",
+      "features": ["Citas ilimitadas","Organizaciones ilimitadas","Análisis completos","Notificaciones SMS","Integraciones CRM","Gerente personal","Acceso API"],
+      "cta": "Contáctanos"
+    },
+    "contact": {
+      "title": "¿Necesitas un plan personalizado?",
+      "text": "Contáctanos para discutir soluciones empresariales y términos especiales.",
+      "primary": "Contáctanos",
+      "secondary": "Solicitar demo"
+    },
+    "faq": {
+      "title": "Preguntas frecuentes sobre precios",
+      "q1": { "title": "¿Puedo cambiar mi plan?", "text": "Sí, puedes cambiar tu plan en cualquier momento. Los cambios surten efecto en el próximo ciclo de facturación."},
+      "q2": { "title": "¿Hay un período de prueba?", "text": "Sí, los planes de pago incluyen una prueba de 14 días sin compromiso."},
+      "q3": { "title": "¿Qué pasa si excedo los límites?", "text": "Te notificaremos con anticipación. Puedes actualizar o comprar citas adicionales."},
+      "q4": { "title": "¿Qué métodos de pago están disponibles?", "text": "Aceptamos tarjetas de crédito, PayPal y transferencias bancarias para clientes corporativos."}
+    }
+  },
+  "faq": {
+    "title": "Preguntas frecuentes sobre precios",
+    "q1": {"title": "¿Puedo cambiar mi plan?", "text": "Sí, puedes cambiar tu plan en cualquier momento. Los cambios surten efecto en el próximo ciclo de facturación."},
+    "q2": {"title": "¿Hay un período de prueba?", "text": "Sí, los planes de pago incluyen una prueba de 14 días sin compromiso."},
+    "q3": {"title": "¿Qué pasa si excedo los límites?", "text": "Te notificaremos con anticipación. Puedes actualizar o comprar citas adicionales."},
+    "q4": {"title": "¿Qué métodos de pago están disponibles?", "text": "Aceptamos tarjetas de crédito, PayPal y transferencias bancarias para clientes corporativos."}
+  },
+  "testimonials": {
+    "title": "Lo que dicen nuestros clientes",
+    "subtitle": "Más de 1000 usuarios satisfechos en todo el mundo",
+    "trusted_by": "Confiado por",
+    "badges": {
+      "security": "Seguridad",
+      "fast_setup": "Configuración rápida",
+      "multilingual": "Multilingüe",
+      "mobile": "Móvil"
+    },
+    "testimonial1": {
+      "text": "Appointexo ha cambiado completamente cómo funciona nuestra clínica. ¡Ahora el 80% de las citas vienen a través de nuestro bot de Telegram!",
+      "author": "Dra. Anna Petrova",
+      "role": "Propietaria de Clínica Dental"
+    },
+    "testimonial2": {
+      "text": "¡Muy conveniente! Los clientes se reservan solos y yo recibo notificaciones. Ahorra muchísimo tiempo.",
+      "author": "María Ivanova",
+      "role": "Artista de uñas"
+    },
+    "testimonial3": {
+      "text": "La configuración tomó literalmente 15 minutos. Ahora tengo un sistema profesional de reservas.",
+      "author": "Alexey Smirnov",
+      "role": "Consultor de negocios"
+    }
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "subtitle": "Respuestas a preguntas populares sobre Appointexo",
+    "contact": {
+      "title": "¿No encontraste una respuesta?",
+      "subtitle": "Nuestro equipo de soporte está aquí para ayudar 24/7",
+      "primary": "Contactar soporte",
+      "secondary": "Ver documentación"
+    },
+    "q1": {
+      "question": "¿Cuánto tiempo toma la configuración?",
+      "answer": "La configuración completa del sistema toma solo 10-15 minutos. Proporcionamos instrucciones paso a paso con imágenes."
+    },
+    "q2": {
+      "question": "¿Necesito conocimientos técnicos?",
+      "answer": "¡No! Nuestro sistema está diseñado para usuarios regulares. Todas las acciones son intuitivas."
+    },
+    "q3": {
+      "question": "¿Puedo usarlo en móvil?",
+      "answer": "¡Sí! Tenemos un panel de administración responsive y Telegram Web App para gestión móvil."
+    },
+    "q4": {
+      "question": "¿Hay límites de clientes?",
+      "answer": "El plan gratuito incluye hasta 50 citas por mes. Los planes de pago prácticamente no tienen límites."
+    },
+    "q5": {
+      "question": "¿Puedo integrar con otros sistemas?",
+      "answer": "Sí, tenemos API para integración con CRM, calendarios y otros sistemas."
+    }
+  },
+  "cta": {
+    "title": "¿Listo para comenzar?",
+    "subtitle": "Únete a miles de usuarios satisfechos de Appointexo",
+    "description": "¡Crea tu bot en 10 minutos y comienza a aceptar citas hoy!",
+    "button": "Comenzar gratis",
+    "guarantee": "30 días gratis • Sin tarjeta de crédito • Cancela en cualquier momento",
+    "guarantees": {
+      "free30days": "30 días gratis",
+      "noCard": "Sin tarjeta de crédito",
+      "cancelAnytime": "Cancela en cualquier momento"
+    },
+    "stats": {
+      "happyCustomers": "Clientes satisfechos",
+      "successfulBookings": "Reservas exitosas",
+      "uptime": "Tiempo activo"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "subtitle": "¡Bienvenido de nuevo!",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "remember": "Recordarme",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "button": "Iniciar sesión",
+      "no_account": "¿No tienes una cuenta?",
+      "register_link": "Registrarse",
+      "back_to_home": "Volver al inicio"
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "subtitle": "Comienza tu viaje con Appointexo",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirm_password": "Confirmar contraseña",
+      "organization": "Nombre de la organización",
+      "phone": "Teléfono",
+      "terms": "Acepto los",
+      "terms_link": "Términos de servicio",
+      "privacy": "y",
+      "privacy_link": "Política de privacidad",
+      "button": "Crear cuenta",
+      "has_account": "¿Ya tienes una cuenta?",
+      "login_link": "Iniciar sesión",
+      "back_to_home": "Volver al inicio"
+    },
+    "errors": {
+      "required": "Este campo es obligatorio",
+      "email_invalid": "Por favor, ingresa un correo electrónico válido",
+      "password_short": "La contraseña debe tener al menos 6 caracteres",
+      "passwords_not_match": "Las contraseñas no coinciden",
+      "login_failed": "Correo electrónico o contraseña inválidos",
+      "register_failed": "Error en el registro",
+      "network_error": "Error de red. Por favor, intenta más tarde"
+    },
+    "success": {
+      "login": "¡Bienvenido!",
+      "register": "¡Cuenta creada exitosamente!"
+    }
+  },
+  "footer": {
+    "description": "Appointexo - sistema revolucionario de gestión de citas con integración de bot de Telegram.",
+    "product": "Producto",
+    "company": "Empresa",
+    "support": "Soporte",
+    "legal": "Legal",
+    "features_link": "Características",
+    "pricing_link": "Precios",
+    "demo_link": "Demo",
+    "about_link": "Acerca de",
+    "contact_link": "Contacto",
+    "blog_link": "Blog",
+    "help_link": "Ayuda",
+    "docs_link": "Documentación",
+    "status_link": "Estado",
+    "terms_link": "Términos de servicio",
+    "privacy_link": "Política de privacidad",
+    "cookies_link": "Política de cookies",
+    "copyright": "© 2025 Appointexo. Todos los derechos reservados.",
+    "made_with": "Hecho con ❤️",
+    "newsletter": {
+      "title": "Suscríbete para actualizaciones",
+      "subtitle": "Recibe noticias sobre nuevas características y lanzamientos",
+      "placeholder": "Tu correo electrónico",
+      "button": "Suscribirse"
+    }
+  }
+}

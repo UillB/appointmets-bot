@@ -20,6 +20,7 @@ import { triggerSetupWizardModal } from "../../utils/setupWizardEvents";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { CurrencySelector, getCurrencySymbol } from "../CurrencySelector";
+import { useLanguage } from "../../i18n";
 
 interface ServiceDialogProps {
   open: boolean;
@@ -43,6 +44,7 @@ interface ServiceDialogProps {
 }
 
 export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: ServiceDialogProps) {
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<string>(service?.currency || 'USD');
   const navigate = useNavigate();
@@ -74,13 +76,13 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
       // Validate required fields
       if (!serviceName || typeof serviceName !== 'string' || !serviceName.trim()) {
-        toast.error("Service name is required");
+        toast.error(t('dialogs.service.nameRequired'));
         setIsLoading(false);
         return;
       }
 
       if (!duration || typeof duration !== 'string' || isNaN(parseInt(duration)) || parseInt(duration) <= 0) {
-        toast.error("Valid duration is required");
+        toast.error(t('dialogs.service.durationRequired'));
         setIsLoading(false);
         return;
       }
@@ -89,7 +91,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
       const organizationId = user?.organizationId || service?.organizationId;
       
       if (!organizationId) {
-        toast.error("Organization ID is required");
+        toast.error(t('dialogs.service.organizationIdRequired'));
         setIsLoading(false);
         return;
       }
@@ -111,7 +113,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
       if (service) {
         console.log('Updating service:', service.id);
         await apiClient.updateService(service.id, serviceData);
-        toast.success("Service updated successfully");
+        toast.success(t('dialogs.service.updated'));
       } else {
         console.log('Creating new service');
         
@@ -127,7 +129,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
         
         const result = await apiClient.createService(serviceData);
         console.log('Service created:', result);
-        toast.success("Service created successfully");
+        toast.success(t('dialogs.service.created'));
 
         // Show success modal if this was the first service (no services existed before)
         if (isFirstService) {
@@ -136,9 +138,9 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
           setTimeout(() => {
             triggerSetupWizardModal({
               step: 'service',
-              message: "Congratulations! Your service has been created successfully. You can create additional services at any time. Now let's complete the setup and connect your Telegram bot so you can start receiving appointments right away.",
+              message: t('dialogs.service.firstServiceMessage'),
               primaryAction: {
-                label: 'Connect Bot',
+                label: t('dialogs.service.connectBot'),
                 onClick: () => {
                   navigate('/bot-management', { state: { activeTab: 'instructions' } });
                 },
@@ -156,7 +158,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
       onOpenChange(false);
     } catch (error) {
       console.error('Service save error:', error);
-      toast.error("Failed to save service");
+      toast.error(t('dialogs.service.saveFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -175,12 +177,12 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               </div>
               <div>
                 <DrawerTitle className="text-xl text-gray-900 dark:text-gray-100">
-                  {isEdit ? "Edit Service" : "Create New Service"}
+                  {isEdit ? t('dialogs.service.editTitle') : t('dialogs.service.createTitle')}
                 </DrawerTitle>
                 <DrawerDescription className="text-gray-600 dark:text-gray-400">
                   {isEdit 
-                    ? "Update service information and settings."
-                    : "Follow the steps below to add a new service"}
+                    ? t('dialogs.service.editDescription')
+                    : t('dialogs.service.createDescription')}
                 </DrawerDescription>
               </div>
             </div>
@@ -204,18 +206,18 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               <>
                 <StepIndicator
                   stepNumber={1}
-                  title="Basic Information"
-                  description="Service name and description"
+                  title={t('dialogs.service.step1.title')}
+                  description={t('dialogs.service.step1.description')}
                 />
                 <div className="pl-14 space-y-4 pb-6">
                   <div className="space-y-2">
                     <Label htmlFor="serviceName" className="text-sm">
-                      Service Name <span className="text-red-500">*</span>
+                      {t('dialogs.service.serviceName')} <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="serviceName"
                       name="serviceName"
-                      placeholder="e.g., Haircut, Massage, Consultation"
+                      placeholder={t('dialogs.service.serviceNamePlaceholder')}
                       className="h-11"
                       required
                     />
@@ -223,12 +225,12 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
                   <div className="space-y-2">
                     <Label htmlFor="description" className="text-sm">
-                      Description
+                      {t('dialogs.service.description')}
                     </Label>
                     <Textarea
                       id="description"
                       name="description"
-                      placeholder="Describe the service..."
+                      placeholder={t('dialogs.service.descriptionPlaceholder')}
                       rows={3}
                       className="resize-none"
                     />
@@ -238,15 +240,15 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                 {/* Step 2: Pricing & Duration */}
                 <StepIndicator
                   stepNumber={2}
-                  title="Pricing & Duration"
-                  description="Set the price and time required"
+                  title={t('dialogs.service.step2.title')}
+                  description={t('dialogs.service.step2.description')}
                   isLast={false}
                 />
                 <div className="pl-14 space-y-4 pb-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="duration" className="text-sm">
-                        Duration (minutes) <span className="text-red-500">*</span>
+                        {t('dialogs.service.duration')} <span className="text-red-500">*</span>
                       </Label>
                       <div className="relative">
                         <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -264,7 +266,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
                     <div className="space-y-2">
                       <Label htmlFor="price" className="text-sm">
-                        Price (optional)
+                        {t('dialogs.service.price')}
                       </Label>
                       <div className="relative">
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">
@@ -283,7 +285,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="currency" className="text-sm">
-                        Currency
+                        {t('dialogs.service.currency')}
                       </Label>
                       <CurrencySelector
                         value={selectedCurrency}
@@ -308,15 +310,15 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               </>
             ) : (
             /* Edit mode - simple form without steps */
-              <div className="space-y-4">
+                <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="serviceName" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Service Name *
+                    {t('dialogs.service.serviceName')} *
                   </Label>
                   <Input
                     id="serviceName"
                     name="serviceName"
-                    placeholder="e.g., Haircut & Styling"
+                    placeholder={t('dialogs.service.serviceNamePlaceholder')}
                     defaultValue={service?.name}
                     required
                     className="h-12 text-base"
@@ -325,12 +327,12 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
                 <div className="space-y-2">
                   <Label htmlFor="description" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                    Description *
+                    {t('dialogs.service.description')} *
                   </Label>
                   <Textarea
                     id="description"
                     name="description"
-                    placeholder="Describe the service..."
+                    placeholder={t('dialogs.service.descriptionPlaceholder')}
                     defaultValue={service?.description}
                     rows={4}
                     className="text-base"
@@ -340,7 +342,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="duration" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Duration (minutes) *
+                      {t('dialogs.service.duration')} *
                     </Label>
                     <div className="relative">
                       <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500" />
@@ -359,7 +361,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
                   <div className="space-y-2">
                     <Label htmlFor="price" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                      Price (optional)
+                      {t('dialogs.service.price')}
                     </Label>
                     <div className="relative">
                       <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 font-medium">
@@ -379,7 +381,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="currency" className="text-sm font-semibold text-gray-700">
-                      Currency
+                      {t('dialogs.service.currency')}
                     </Label>
                     <CurrencySelector
                       value={selectedCurrency}
@@ -408,15 +410,15 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               <>
                 <StepIndicator
                   stepNumber={3}
-                  title="Working Hours"
-                  description="Configure when this service is available"
+                  title={t('dialogs.service.step3.title')}
+                  description={t('dialogs.service.step3.description')}
                   isLast={true}
                 />
                 <div className="pl-14 space-y-4 pb-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="workStart" className="text-sm">
-                        Start Time <span className="text-red-500">*</span>
+                        {t('dialogs.service.startTime')} <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="workStart"
@@ -430,7 +432,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
                     <div className="space-y-2">
                       <Label htmlFor="workEnd" className="text-sm">
-                        End Time <span className="text-red-500">*</span>
+                        {t('dialogs.service.endTime')} <span className="text-red-500">*</span>
                       </Label>
                       <Input
                         id="workEnd"
@@ -446,7 +448,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="lunchStart" className="text-sm">
-                        Lunch Break Start (optional)
+                        {t('dialogs.service.lunchStart')}
                       </Label>
                       <Input
                         id="lunchStart"
@@ -459,7 +461,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
 
                     <div className="space-y-2">
                       <Label htmlFor="lunchEnd" className="text-sm">
-                        Lunch Break End (optional)
+                        {t('dialogs.service.lunchEnd')}
                       </Label>
                       <Input
                         id="lunchEnd"
@@ -472,7 +474,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
                   </div>
 
                   <div className="space-y-3">
-                    <Label className="text-sm">Working Days</Label>
+                    <Label className="text-sm">{t('dialogs.service.workingDays')}</Label>
                     <div className="grid grid-cols-7 gap-2">
                       {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day, index) => (
                         <div key={day} className="flex flex-col items-center space-y-1">
@@ -509,7 +511,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               disabled={isLoading}
               className="flex-1 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white h-12 text-base font-semibold"
             >
-              {isLoading ? "Saving..." : (isEdit ? "Update Service" : "Create Service")}
+              {isLoading ? t('dialogs.saving') : (isEdit ? t('dialogs.service.updateService') : t('dialogs.service.createService'))}
             </Button>
             <Button
               type="button"
@@ -517,7 +519,7 @@ export function ServiceDialog({ open, onOpenChange, service, onServiceSaved }: S
               onClick={() => onOpenChange(false)}
               className="flex-1 h-12 text-base font-semibold border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
             >
-              Cancel
+              {t('dialogs.cancel')}
             </Button>
           </div>
         </DrawerFooter>

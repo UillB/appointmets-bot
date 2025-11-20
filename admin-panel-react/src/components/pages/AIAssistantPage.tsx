@@ -30,8 +30,10 @@ import { Slider } from "../ui/slider";
 import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { apiClient, AIConfig } from "../../services/api";
+import { useLanguage } from "../../i18n";
 
 export function AIAssistantPage() {
+  const { t } = useLanguage();
   const [aiEnabled, setAiEnabled] = useState(true);
   const [autoReply, setAutoReply] = useState(false);
   const [instructions, setInstructions] = useState("");
@@ -84,7 +86,7 @@ export function AIAssistantPage() {
   const selectedProvider = providers.find((p) => p.id === provider);
 
   const handleRefresh = () => {
-    toast.success("AI Assistant data refreshed");
+    toast.success(t('aiAssistant.refreshed'));
   };
 
   const handleSave = async () => {
@@ -98,42 +100,42 @@ export function AIAssistantPage() {
         instructions,
         isActive: aiEnabled
       });
-      toast.success("Configuration saved successfully");
+      toast.success(t('aiAssistant.configSaved'));
     } catch (error) {
       console.error('Failed to save AI config:', error);
-      toast.error("Failed to save configuration");
+      toast.error(t('aiAssistant.configSaveFailed'));
     }
   };
 
   const handleTest = async () => {
     if (!aiEnabled) {
-      toast.error("Please enable AI Assistant first");
+      toast.error(t('aiAssistant.enableFirst'));
       return;
     }
     try {
       const result = await apiClient.testAI("Hello, this is a test message");
       if (result.success) {
-        toast.success("AI Assistant test successful!", {
-          description: `Response: ${result.response}`,
+        toast.success(t('aiAssistant.testSuccessful'), {
+          description: t('aiAssistant.testResponse', { response: result.response }),
         });
       } else {
-        toast.error("AI Assistant test failed");
+        toast.error(t('aiAssistant.testFailed'));
       }
     } catch (error) {
       console.error('AI test failed:', error);
-      toast.error("AI Assistant test failed");
+      toast.error(t('aiAssistant.testFailed'));
     }
   };
 
   const handleVerifyKey = () => {
     if (!apiKey) {
-      toast.error("Please enter API key");
+      toast.error(t('aiAssistant.enterApiKey'));
       return;
     }
     // Simulate verification
     setTimeout(() => {
       setApiKeyVerified(true);
-      toast.success("API key verified successfully");
+      toast.success(t('aiAssistant.apiKeyVerified'));
     }, 1000);
   };
 
@@ -146,7 +148,7 @@ export function AIAssistantPage() {
     setInstructions("");
     setApiKey("");
     setApiKeyVerified(false);
-    toast.info("Configuration reset to defaults");
+    toast.info(t('aiAssistant.configReset'));
   };
 
   return (
@@ -156,8 +158,8 @@ export function AIAssistantPage() {
           {/* Page Title */}
           <PageTitle
             icon={<Sparkles className="w-6 h-6 text-white" />}
-            title="AI Assistant"
-            description="Configure and manage your intelligent chatbot assistant"
+            title={t('aiAssistant.title')}
+            description={t('aiAssistant.description')}
             actions={
               <>
                 <Button
@@ -167,13 +169,13 @@ export function AIAssistantPage() {
                   className="hidden sm:flex"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Refresh
+                  {t('common.refresh')}
                 </Button>
                 <Badge
                   variant="outline"
                   className="hidden sm:flex bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800"
                 >
-                  BETA
+                  {t('navigation.badges.beta')}
                 </Badge>
                 <Button
                   onClick={handleSave}
@@ -181,7 +183,7 @@ export function AIAssistantPage() {
                   className="bg-indigo-600 hover:bg-indigo-700 text-white"
                 >
                   <Save className="w-4 h-4 mr-2" />
-                  Save
+                  {t('common.save')}
                 </Button>
               </>
             }
@@ -195,10 +197,10 @@ export function AIAssistantPage() {
                   <div>
                     <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
                       <Zap className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                      AI Assistant Controls
+                      {t('aiAssistant.controls.title')}
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Enable and configure AI-powered responses
+                      {t('aiAssistant.controls.description')}
                     </p>
                   </div>
 
@@ -207,9 +209,9 @@ export function AIAssistantPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div className="flex-1">
-                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">Enable AI Assistant</Label>
+                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">{t('aiAssistant.controls.enableAi')}</Label>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          Turn on AI-powered responses for client inquiries
+                          {t('aiAssistant.controls.enableAiDescription')}
                         </p>
                       </div>
                       <Switch
@@ -221,9 +223,9 @@ export function AIAssistantPage() {
 
                     <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
                       <div className="flex-1">
-                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">Auto-Reply Mode</Label>
+                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">{t('aiAssistant.controls.autoReply')}</Label>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                          Automatically respond to all Telegram messages
+                          {t('aiAssistant.controls.autoReplyDescription')}
                         </p>
                       </div>
                       <Switch
@@ -239,9 +241,9 @@ export function AIAssistantPage() {
                       <div className="flex items-start gap-3">
                         <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                         <div className="text-sm text-emerald-700 dark:text-emerald-300">
-                          <p className="font-medium mb-1">AI Assistant is Active</p>
+                          <p className="font-medium mb-1">{t('aiAssistant.controls.activeTitle')}</p>
                           <p>
-                            Your AI assistant is now ready to help clients in your Telegram bot based on the instructions below.
+                            {t('aiAssistant.controls.activeDescription')}
                           </p>
                         </div>
                       </div>
@@ -256,10 +258,10 @@ export function AIAssistantPage() {
                 <div>
                   <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
                     <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                    AI Configuration
+                    {t('aiAssistant.config.title')}
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Configure AI model and behavior
+                    {t('aiAssistant.config.description')}
                   </p>
                 </div>
 
@@ -267,28 +269,28 @@ export function AIAssistantPage() {
 
                 {/* LLM Model */}
                 <div className="space-y-2">
-                  <Label htmlFor="model" className="text-gray-900 dark:text-gray-100">LLM Model</Label>
+                  <Label htmlFor="model" className="text-gray-900 dark:text-gray-100">{t('aiAssistant.config.modelLabel')}</Label>
                   <Select value={model} onValueChange={setModel}>
                     <SelectTrigger id="model" className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
-                      <SelectItem value="gpt-4">GPT-4 (Most Intelligent)</SelectItem>
-                      <SelectItem value="gpt-4-turbo">GPT-4 Turbo (Fast & Smart)</SelectItem>
-                      <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo (Fast & Economical)</SelectItem>
-                      <SelectItem value="claude-3-opus">Claude 3 Opus</SelectItem>
-                      <SelectItem value="claude-3-sonnet">Claude 3 Sonnet</SelectItem>
+                      <SelectItem value="gpt-4">{t('aiAssistant.config.models.gpt4')}</SelectItem>
+                      <SelectItem value="gpt-4-turbo">{t('aiAssistant.config.models.gpt4Turbo')}</SelectItem>
+                      <SelectItem value="gpt-3.5-turbo">{t('aiAssistant.config.models.gpt35Turbo')}</SelectItem>
+                      <SelectItem value="claude-3-opus">{t('aiAssistant.config.models.claude3Opus')}</SelectItem>
+                      <SelectItem value="claude-3-sonnet">{t('aiAssistant.config.models.claude3Sonnet')}</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    More advanced models provide better responses but cost more
+                    {t('aiAssistant.config.modelHint')}
                   </p>
                 </div>
 
                 {/* Temperature */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="temperature" className="text-gray-900 dark:text-gray-100">Temperature</Label>
+                    <Label htmlFor="temperature" className="text-gray-900 dark:text-gray-100">{t('aiAssistant.config.temperatureLabel')}</Label>
                     <Badge variant="outline" className="text-xs border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100">
                       {temperature[0]?.toFixed(1) || '0.0'}
                     </Badge>
@@ -303,12 +305,12 @@ export function AIAssistantPage() {
                     className="py-2"
                   />
                   <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                    <span>Precise (0)</span>
-                    <span>Balanced (1)</span>
-                    <span>Creative (2)</span>
+                    <span>{t('aiAssistant.config.temperaturePrecise')}</span>
+                    <span>{t('aiAssistant.config.temperatureBalanced')}</span>
+                    <span>{t('aiAssistant.config.temperatureCreative')}</span>
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Lower = more focused and consistent. Higher = more creative and varied.
+                    {t('aiAssistant.config.temperatureHint')}
                   </p>
                 </div>
               </div>
@@ -320,10 +322,10 @@ export function AIAssistantPage() {
                 <div>
                   <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
                     <MessageSquare className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                    Custom Instructions
+                    {t('aiAssistant.instructions.title')}
                   </h3>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Teach the AI how to communicate - define personality, tone, and style
+                    {t('aiAssistant.instructions.description')}
                   </p>
                 </div>
 
@@ -331,19 +333,19 @@ export function AIAssistantPage() {
 
                 <div className="space-y-2">
                   <Label htmlFor="instructions" className="text-gray-900 dark:text-gray-100">
-                    Prompt / Instructions
-                    <span className="text-gray-400 dark:text-gray-500 text-sm ml-2">(Optional)</span>
+                    {t('aiAssistant.instructions.label')}
+                    <span className="text-gray-400 dark:text-gray-500 text-sm ml-2">({t('common.optional')})</span>
                   </Label>
                   <Textarea
                     id="instructions"
-                    placeholder="Example: You are David, a friendly and professional assistant. You should be cheerful, helpful, and respond in a casual but respectful tone. Always greet clients warmly and use their name when possible..."
+                    placeholder={t('aiAssistant.instructions.placeholder')}
                     value={instructions}
                     onChange={(e) => setInstructions(e.target.value)}
                     rows={8}
                     className="resize-none border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {(instructions || "").length} characters • Think of this as training a new employee
+                    {t('aiAssistant.instructions.characterCount', { count: (instructions || "").length.toString() })} • {t('aiAssistant.instructions.hint')}
                   </p>
                 </div>
 
@@ -351,13 +353,13 @@ export function AIAssistantPage() {
                   <div className="flex items-start gap-3">
                     <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                     <div className="text-sm text-blue-700 dark:text-blue-300">
-                      <p className="font-medium mb-2">Instruction Tips</p>
+                      <p className="font-medium mb-2">{t('aiAssistant.instructions.tipsTitle')}</p>
                       <ul className="space-y-1.5 list-disc list-inside">
-                        <li>Define the AI's name and personality</li>
-                        <li>Specify tone: formal, casual, friendly, etc.</li>
-                        <li>Set language and regional preferences</li>
-                        <li>Mention any specific policies or guidelines</li>
-                        <li>Keep it clear and concise</li>
+                        <li>{t('aiAssistant.instructions.tip1')}</li>
+                        <li>{t('aiAssistant.instructions.tip2')}</li>
+                        <li>{t('aiAssistant.instructions.tip3')}</li>
+                        <li>{t('aiAssistant.instructions.tip4')}</li>
+                        <li>{t('aiAssistant.instructions.tip5')}</li>
                       </ul>
                     </div>
                   </div>
@@ -372,9 +374,9 @@ export function AIAssistantPage() {
                   <TestTube className="w-7 h-7 text-white" />
                 </div>
                 <div className="flex-1 text-center sm:text-left">
-                  <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">Test AI Assistant</h3>
+                  <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('aiAssistant.test.title')}</h3>
                   <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Send a test message to verify AI configuration and responses
+                    {t('aiAssistant.test.description')}
                   </p>
                 </div>
                 <Button
@@ -383,7 +385,7 @@ export function AIAssistantPage() {
                   disabled={!aiEnabled}
                 >
                   <TestTube className="w-4 h-4 mr-2" />
-                  Run Test
+                  {t('aiAssistant.test.runTest')}
                 </Button>
               </div>
             </Card>

@@ -16,6 +16,7 @@ import {
   XCircle,
 } from "lucide-react";
 import { Card } from "../ui/card";
+import { useLanguage } from "../../i18n";
 
 interface MobileAppointmentCardProps {
   id: number;
@@ -35,6 +36,7 @@ export function MobileAppointmentCard({
   client,
   status,
 }: MobileAppointmentCardProps) {
+  const { t } = useLanguage();
   const getStatusBadge = (status: "confirmed" | "cancelled" | "pending") => {
     const styles = {
       confirmed: "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border-0",
@@ -53,7 +55,7 @@ export function MobileAppointmentCard({
     return (
       <Badge className={`${styles[status]} flex items-center gap-1 w-fit`}>
         <Icon className="w-3 h-3" />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+        {t(`cards.appointment.status.${status}`)}
       </Badge>
     );
   };
@@ -78,11 +80,11 @@ export function MobileAppointmentCard({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">View Details</DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Edit</DropdownMenuItem>
-            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">Confirm</DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('cards.mobileAppointment.viewDetails')}</DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('cards.mobileAppointment.edit')}</DropdownMenuItem>
+            <DropdownMenuItem className="text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800">{t('cards.mobileAppointment.confirm')}</DropdownMenuItem>
             <DropdownMenuItem className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30">
-              Cancel
+              {t('cards.mobileAppointment.cancel')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -101,7 +103,7 @@ export function MobileAppointmentCard({
         
         <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
           <User className="w-3.5 h-3.5" />
-          <span>Client ID: {client}</span>
+          <span>{t('cards.mobileAppointment.clientLabel', { client })}</span>
         </div>
       </div>
     </Card>
