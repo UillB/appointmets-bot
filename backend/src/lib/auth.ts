@@ -26,5 +26,5 @@ export async function verifyToken(token: string): Promise<DecodedToken> {
 }
 
 export function generateToken(payload: any): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '2h' });
 }

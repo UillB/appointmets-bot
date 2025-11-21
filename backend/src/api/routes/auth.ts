@@ -35,7 +35,7 @@ const generateTokens = (userId: number, email: string, name: string, role: strin
     organization: organizationName ? { id: organizationId, name: organizationName } : undefined
   };
   
-  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '2h' });
   const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: '7d' });
   
   return { accessToken, refreshToken };

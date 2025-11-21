@@ -192,7 +192,8 @@ class ApiClient {
 
   private async request<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
+    retryOn401: boolean = true
   ): Promise<T> {
     // Always get fresh token from localStorage (in case it was updated)
     const currentToken = localStorage.getItem('accessToken');
@@ -215,6 +216,19 @@ class ApiClient {
       headers,
     });
 
+    // If 401 and we haven't retried yet, try to refresh token and retry once
+    if (response.status === 401 && retryOn401 && endpoint !== '/auth/refresh' && endpoint !== '/auth/login' && endpoint !== '/auth/register') {
+      try {
+        console.log('🔄 Access token expired, attempting to refresh...');
+        await this.refreshToken();
+        // Retry the request with new token (only once)
+        return this.request<T>(endpoint, options, false);
+      } catch (refreshError) {
+        console.error('❌ Token refresh failed:', refreshError);
+        // If refresh fails, throw the original 401 error
+      }
+    }
+
     if (!response.ok) {
       let errorMessage = `HTTP ${response.status}`;
       try {
@@ -225,12 +239,12 @@ class ApiClient {
         if (response.status === 401) {
           errorMessage = errorData.error === 'Invalid credentials' 
             ? 'Неверный email или пароль' 
-            : (errorData.error || errorData.message || 'Неверный email или пароль');
+            : (errorData.error || errorData.message || 'Сессия истекла. Пожалуйста, войдите снова.');
         }
       } catch (e) {
         // Если ответ не JSON, используем статус код
         if (response.status === 401) {
-          errorMessage = 'Неверный email или пароль';
+          errorMessage = 'Сессия истекла. Пожалуйста, войдите снова.';
         } else if (response.status === 400) {
           errorMessage = 'Неверные данные';
         }
@@ -314,19 +328,24 @@ class ApiClient {
     return response;
   }
 
-  async refreshToken(): Promise<{ accessToken: string }> {
+  async refreshToken(): Promise<{ accessToken: string; refreshToken?: string }> {
     const refreshToken = localStorage.getItem('refreshToken');
     if (!refreshToken) {
       throw new Error('No refresh token available');
     }
 
-    const response = await this.request<{ accessToken: string }>('/auth/refresh', {
+    const response = await this.request<{ accessToken: string; refreshToken?: string }>('/auth/refresh', {
       method: 'POST',
       body: JSON.stringify({ refreshToken }),
     });
 
     this.accessToken = response.accessToken;
     localStorage.setItem('accessToken', response.accessToken);
+    
+    // Update refresh token if provided (backend may return new refresh token)
+    if (response.refreshToken) {
+      localStorage.setItem('refreshToken', response.refreshToken);
+    }
 
     return response;
   }

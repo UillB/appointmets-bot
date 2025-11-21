@@ -374,20 +374,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     initializeAuth();
   }, []);
 
-  // Auto-refresh token every 5 minutes
+  // Auto-refresh token every 50 minutes (access token expires in 2h, refresh before expiration)
   useEffect(() => {
     if (!user) return;
 
     const interval = setInterval(async () => {
       try {
         await apiClient.refreshToken();
-        console.log('Token refreshed automatically');
+        console.log('✅ Token refreshed automatically');
       } catch (error) {
-        console.error('Auto token refresh failed:', error);
-        // If refresh fails, logout user
-        logout();
+        console.error('❌ Auto token refresh failed:', error);
+        // Only logout if refresh token is also expired (7 days)
+        // Don't logout on temporary network errors
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        if (errorMessage.includes('Invalid refresh token') || errorMessage.includes('expired')) {
+          console.log('🔄 Refresh token expired, logging out...');
+          logout();
+        } else {
+          console.log('⚠️ Token refresh failed but will retry on next interval');
+        }
       }
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 50 * 60 * 1000); // 50 minutes (refresh before 2h expiration)
 
     return () => clearInterval(interval);
   }, [user]);
@@ -455,7 +462,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Token refresh failed:', error);
-      logout();
+      // Only logout if refresh token is expired, not on temporary errors
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      if (errorMessage.includes('Invalid refresh token') || errorMessage.includes('expired') || errorMessage.includes('No refresh token')) {
+        console.log('🔄 Refresh token expired or missing, logging out...');
+        logout();
+      }
       throw error;
     }
   };
