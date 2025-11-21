@@ -59,7 +59,7 @@ router.post('/register', async (req: Request, res: Response) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    // Create organization and user in a transaction
+    // Create organization, user, and UserOrganization link in a transaction
     const result = await prisma.$transaction(async (tx) => {
       // Create organization
       const organization = await tx.organization.create({
@@ -68,17 +68,22 @@ router.post('/register', async (req: Request, res: Response) => {
         }
       });
 
-      // Create user
+      // Create user (without organizationId)
       const user = await tx.user.create({
         data: {
           email,
           password: hashedPassword,
           name,
-          role: 'OWNER', // First user in organization is owner
-          organizationId: organization.id
-        },
-        include: {
-          organization: true
+          role: 'OWNER' // User role (not organization role)
+        }
+      });
+
+      // Link user to organization as OWNER
+      await tx.userOrganization.create({
+        data: {
+          userId: user.id,
+          organizationId: organization.id,
+          role: 'OWNER'
         }
       });
 
@@ -91,7 +96,7 @@ router.post('/register', async (req: Request, res: Response) => {
       result.user.email,
       result.user.name,
       result.user.role,
-      result.user.organizationId,
+      result.organization.id,
       result.organization.name
     );
 
@@ -102,7 +107,7 @@ router.post('/register', async (req: Request, res: Response) => {
         email: result.user.email,
         name: result.user.name,
         role: result.user.role,
-        organizationId: result.user.organizationId,
+        organizationId: result.organization.id,
         organization: result.organization
       },
       accessToken,
@@ -124,12 +129,9 @@ router.post('/login', async (req: Request, res: Response) => {
     const validatedData = loginSchema.parse(req.body);
     const { email, password } = validatedData;
 
-    // Find user with organization
+    // Find user
     const user = await prisma.user.findUnique({
-      where: { email },
-      include: {
-        organization: true
-      }
+      where: { email }
     });
 
     if (!user) {
@@ -142,14 +144,29 @@ router.post('/login', async (req: Request, res: Response) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Generate tokens
+    // Get user's first organization (or most recent)
+    const userOrg = await prisma.userOrganization.findFirst({
+      where: { userId: user.id },
+      include: {
+        organization: true
+      },
+      orderBy: {
+        createdAt: 'asc' // Get first organization (or change to 'desc' for most recent)
+      }
+    });
+
+    if (!userOrg) {
+      return res.status(400).json({ error: 'User has no organizations. Please contact support.' });
+    }
+
+    // Generate tokens with the first organization
     const { accessToken, refreshToken } = generateTokens(
       user.id,
       user.email,
       user.name,
       user.role,
-      user.organizationId,
-      user.organization.name
+      userOrg.organization.id,
+      userOrg.organization.name
     );
 
     res.json({
@@ -159,8 +176,8 @@ router.post('/login', async (req: Request, res: Response) => {
         email: user.email,
         name: user.name,
         role: user.role,
-        organizationId: user.organizationId,
-        organization: user.organization
+        organizationId: userOrg.organization.id,
+        organization: userOrg.organization
       },
       accessToken,
       refreshToken
@@ -189,24 +206,41 @@ router.post('/refresh', async (req: Request, res: Response) => {
     
     // Find user
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
-      include: {
-        organization: true
-      }
+      where: { id: decoded.userId }
     });
 
     if (!user) {
       return res.status(401).json({ error: 'Invalid refresh token' });
     }
 
-    // Generate new tokens
+    // Use organizationId from token (current active organization)
+    // If not present, get first organization
+    let organizationId = decoded.organizationId;
+    let organizationName = decoded.organization?.name;
+
+    if (!organizationId) {
+      const userOrg = await prisma.userOrganization.findFirst({
+        where: { userId: user.id },
+        include: { organization: true },
+        orderBy: { createdAt: 'asc' }
+      });
+
+      if (!userOrg) {
+        return res.status(400).json({ error: 'User has no organizations' });
+      }
+
+      organizationId = userOrg.organization.id;
+      organizationName = userOrg.organization.name;
+    }
+
+    // Generate new tokens with same organization context
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(
       user.id,
       user.email,
       user.name,
       user.role,
-      user.organizationId,
-      user.organization.name
+      organizationId,
+      organizationName
     );
 
     res.json({
@@ -250,43 +284,11 @@ router.post('/telegram-login', async (req: any, res: any) => {
       return res.status(400).json({ error: 'Telegram ID is required' });
     }
 
-    // Attempt to find existing user first to determine organization context
+    // Attempt to find existing user first
     let user = await prisma.user.findFirst({
-      where: { telegramId: telegramId.toString() },
-      include: { organization: true }
+      where: { telegramId: telegramId.toString() }
     });
-    console.log('🔐 Found user by telegramId:', !!user, 'orgId:', user?.organizationId);
-
-    // Verify initData signature strictly against organization's bot token if available
-    if (initData) {
-      let tokenForVerification: string | undefined;
-      if (user?.organization?.botToken) {
-        tokenForVerification = user.organization.botToken;
-      } else if (process.env.TELEGRAM_BOT_TOKEN) {
-        // fallback only for legacy/global bot (single-tenant); discouraged
-        tokenForVerification = process.env.TELEGRAM_BOT_TOKEN;
-      }
-      if (tokenForVerification) {
-        const ok = verifyTelegramInitData(initData, tokenForVerification);
-        if (!ok) {
-          const allowInDev = (process.env.NODE_ENV || 'development') !== 'production';
-          console.warn('Telegram login: invalid initData signature', {
-            telegramId,
-            hasUser: !!user,
-            orgId: user?.organizationId,
-            allowInDev
-          });
-          if (!allowInDev) {
-            console.log('❌ Returning 401 - invalid signature');
-            return res.status(401).json({ error: 'Invalid Telegram initData signature' });
-          }
-        } else {
-          console.log('✅ InitData signature verified');
-        }
-      } else {
-        console.log('⚠️ No bot token for verification (skipping signature check)');
-      }
-    }
+    console.log('🔐 Found user by telegramId:', !!user, 'userId:', user?.id);
 
     // Если пользователь не найден, создаем нового (только для админов)
     if (!user) {
@@ -296,16 +298,78 @@ router.post('/telegram-login', async (req: any, res: any) => {
       return res.status(403).json({ error: 'User not found. Complete organization onboarding in web admin first.' });
     }
 
-    console.log('✅ User found, generating tokens...');
+    console.log('✅ User found, determining organization from bot...');
     
-    // Генерируем токены
+    // Get all organizations user belongs to
+    const userOrgs = await prisma.userOrganization.findMany({
+      where: { userId: user.id },
+      include: {
+        organization: {
+          select: {
+            id: true,
+            name: true,
+            botToken: true,
+            botUsername: true
+          }
+        }
+      }
+    });
+
+    if (userOrgs.length === 0) {
+      console.warn('⚠️ User has no organizations');
+      return res.status(400).json({ error: 'User has no organizations. Please contact support.' });
+    }
+
+    // Determine organization from bot token (if initData provided)
+    let targetOrg = null;
+    
+    if (initData) {
+      // Try to verify initData with each organization's bot token
+      // The bot token that successfully verifies initData is the bot the user came from
+      for (const userOrg of userOrgs) {
+        if (userOrg.organization.botToken) {
+          const isValid = verifyTelegramInitData(initData, userOrg.organization.botToken);
+          if (isValid) {
+            targetOrg = userOrg.organization;
+            console.log(`✅ InitData verified with bot token for organization: ${targetOrg.name} (ID: ${targetOrg.id})`);
+            break;
+          }
+        }
+      }
+
+      // If verification failed for all bots, check if we're in dev mode
+      if (!targetOrg) {
+        const allowInDev = (process.env.NODE_ENV || 'development') !== 'production';
+        if (allowInDev) {
+          console.warn('⚠️ InitData verification failed for all bots, but dev mode allows fallback');
+          // In dev mode, use first organization with bot as fallback
+          targetOrg = userOrgs.find(uo => uo.organization.botToken)?.organization || userOrgs[0].organization;
+        } else {
+          console.error('❌ InitData verification failed for all bots');
+          return res.status(401).json({ error: 'Invalid Telegram initData signature' });
+        }
+      }
+    } else {
+      // No initData provided - use first organization (fallback)
+      console.log('⚠️ No initData provided, using first organization');
+      targetOrg = userOrgs[0].organization;
+    }
+
+    if (!targetOrg) {
+      console.warn('⚠️ Could not determine target organization');
+      return res.status(400).json({ error: 'Could not determine organization. Please contact support.' });
+    }
+
+    console.log(`✅ Using organization: ${targetOrg.name} (ID: ${targetOrg.id})`);
+    
+    // Генерируем токены с правильной организацией
     const { accessToken, refreshToken } = generateTokens(
       user.id,
       user.email,
       user.name,
       user.role,
-      user.organizationId,
-      user.organization.name
+      targetOrg.id,
+      targetOrg.name
     );
 
     console.log('✅ Tokens generated, sending response...');
@@ -313,6 +377,7 @@ router.post('/telegram-login', async (req: any, res: any) => {
       id: user.id,
       email: user.email,
       role: user.role,
+      organizationId: targetOrg.id,
       hasAccessToken: !!accessToken,
       hasRefreshToken: !!refreshToken
     });
@@ -324,8 +389,11 @@ router.post('/telegram-login', async (req: any, res: any) => {
         email: user.email,
         name: user.name,
         role: user.role,
-        organizationId: user.organizationId,
-        organization: user.organization
+        organizationId: targetOrg.id,
+        organization: {
+          id: targetOrg.id,
+          name: targetOrg.name
+        }
       },
       accessToken,
       refreshToken
@@ -348,6 +416,84 @@ async function checkIfTelegramUserIsAdmin(telegramId: number, username?: string)
   return adminTelegramIds.includes(telegramId) || 
          (username && adminUsernames.includes(username));
 }
+
+// POST /auth/switch-organization - Switch active organization
+const switchOrganizationSchema = z.object({
+  organizationId: z.number()
+});
+
+router.post('/switch-organization', async (req: Request, res: Response) => {
+  try {
+    // Verify current token
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token) {
+      return res.status(401).json({ error: 'Access token required' });
+    }
+
+    let decoded: any;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET) as any;
+    } catch (error) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    const { userId } = decoded;
+    const validatedData = switchOrganizationSchema.parse(req.body);
+    const { organizationId } = validatedData;
+
+    // Verify user has access to this organization
+    const userOrg = await prisma.userOrganization.findUnique({
+      where: {
+        userId_organizationId: {
+          userId,
+          organizationId
+        }
+      },
+      include: {
+        organization: true,
+        user: true
+      }
+    });
+
+    if (!userOrg) {
+      return res.status(403).json({ 
+        error: 'ORGANIZATION_ACCESS_DENIED',
+        message: 'You do not have access to this organization' 
+      });
+    }
+
+    // Generate new tokens with new organization context
+    const { accessToken, refreshToken } = generateTokens(
+      userOrg.user.id,
+      userOrg.user.email,
+      userOrg.user.name,
+      userOrg.user.role,
+      userOrg.organization.id,
+      userOrg.organization.name
+    );
+
+    res.json({
+      message: 'Organization switched successfully',
+      user: {
+        id: userOrg.user.id,
+        email: userOrg.user.email,
+        name: userOrg.user.name,
+        role: userOrg.user.role,
+        organizationId: userOrg.organization.id,
+        organization: userOrg.organization
+      },
+      accessToken,
+      refreshToken
+    });
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Validation error', details: error.issues });
+    }
+    
+    console.error('Switch organization error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 // POST /auth/logout
 router.post('/logout', (req: any, res: any) => {

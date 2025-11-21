@@ -24,6 +24,17 @@ import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
 import { apiClient, Organization } from "../../services/api";
 import { useLanguage } from "../../i18n";
+import { useAuth } from "../../hooks/useAuth";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
 
 // Mock data
 const mockOrganizations = [
@@ -77,6 +88,7 @@ type SortOption = "name" | "users" | "services" | "date";
 
 export function OrganizationsPage() {
   const { t } = useLanguage();
+  const { currentOrganization, switchOrganization } = useAuth();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<SortOption>("name");
@@ -84,6 +96,8 @@ export function OrganizationsPage() {
   const [selectedOrg, setSelectedOrg] = useState<Organization | null>(null);
   const [isViewMode, setIsViewMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [switchDialogOpen, setSwitchDialogOpen] = useState(false);
+  const [orgToSwitch, setOrgToSwitch] = useState<Organization | null>(null);
 
   // Load data on component mount
   useEffect(() => {
@@ -170,6 +184,29 @@ export function OrganizationsPage() {
     } catch (error) {
       console.error('Failed to save organization:', error);
       toast.error(t('toasts.failedToSaveOrganization'));
+    }
+  };
+
+  const handleSwitchClick = (id: string) => {
+    const org = organizations.find((o) => o.id.toString() === id);
+    if (org) {
+      setOrgToSwitch(org);
+      setSwitchDialogOpen(true);
+    }
+  };
+
+  const handleConfirmSwitch = async () => {
+    if (!orgToSwitch) return;
+    
+    try {
+      await switchOrganization(orgToSwitch.id);
+      setSwitchDialogOpen(false);
+      setOrgToSwitch(null);
+      // Reload data to update active organization badges
+      await loadData();
+    } catch (error: any) {
+      console.error('Failed to switch organization:', error);
+      toast.error(error.message || t('organizations.switchError'));
     }
   };
 
@@ -309,20 +346,22 @@ export function OrganizationsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredOrganizations.map((org) => {
-                      const OrganizationCardComponent = () => (
+                    {filteredOrganizations.map((org) => (
                         <OrganizationCard
+                          key={org.id}
                           id={org.id.toString()}
                           name={org.name}
-                          usersCount={0} // TODO: Get actual user count
-                          servicesCount={0} // TODO: Get actual services count
+                          usersCount={org._count?.userOrganizations || org.usersCount || 0}
+                          servicesCount={org._count?.services || org.servicesCount || 0}
                           createdAt={new Date(org.createdAt).toLocaleDateString()}
+                          isActive={currentOrganization?.id === org.id}
+                          subscriptionPlan={org.subscriptionPlan}
+                          userRole={org.userRole}
                           onView={handleView}
                           onEdit={handleEdit}
+                          onSwitch={handleSwitchClick}
                         />
-                      );
-                      return <OrganizationCardComponent key={org.id} />;
-                    })}
+                    ))}
           </div>
         )}
       </div>
@@ -350,6 +389,26 @@ export function OrganizationsPage() {
             onSave={handleSave}
             readOnly={isViewMode}
           />
+
+          {/* Switch Organization Confirmation Dialog */}
+          <AlertDialog open={switchDialogOpen} onOpenChange={setSwitchDialogOpen}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>{t('organizations.switch')}</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {t('organizations.switchConfirm', { name: orgToSwitch?.name || '' })}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={() => setOrgToSwitch(null)}>
+                  {t('common.cancel')}
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={handleConfirmSwitch}>
+                  {t('organizations.switch')}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </div>

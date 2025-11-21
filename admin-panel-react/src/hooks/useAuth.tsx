@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { apiClient, User, AuthResponse } from '../services/api';
+import { apiClient, User, AuthResponse, Organization } from '../services/api';
 import { toast } from 'sonner';
 
 interface AuthContextType {
@@ -7,10 +7,14 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  organizations: Organization[];
+  currentOrganization: Organization | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string, organizationName: string) => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<void>;
+  switchOrganization: (organizationId: number) => Promise<void>;
+  loadOrganizations: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,6 +23,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [currentOrganization, setCurrentOrganization] = useState<Organization | null>(null);
 
   // Initialize auth state from localStorage and Telegram WebApp
   useEffect(() => {
@@ -472,6 +478,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const loadOrganizations = async () => {
+    try {
+      const response = await apiClient.getOrganizations();
+      const orgs = response.organizations || [];
+      setOrganizations(orgs);
+      
+      // Set current organization based on user's organizationId
+      if (user?.organizationId) {
+        const current = orgs.find(org => org.id === user.organizationId);
+        setCurrentOrganization(current || null);
+      } else if (orgs.length > 0) {
+        // If no organizationId in user, use first organization
+        setCurrentOrganization(orgs[0]);
+      }
+    } catch (error) {
+      console.error('Failed to load organizations:', error);
+    }
+  };
+
+  const switchOrganization = async (organizationId: number) => {
+    try {
+      setIsLoading(true);
+      const response: AuthResponse = await apiClient.switchOrganization(organizationId);
+      
+      // Update user and token
+      setUser(response.user);
+      setToken(response.accessToken);
+      
+      // Update organizations and current organization
+      await loadOrganizations();
+      
+      toast.success(`Switched to ${response.user.organization?.name || 'organization'}`);
+    } catch (error: any) {
+      console.error('Switch organization error:', error);
+      toast.error(error.message || 'Failed to switch organization');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Sync token from localStorage when it changes
   useEffect(() => {
     const handleStorageChange = () => {
@@ -496,15 +543,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, [token]);
 
+  // Load organizations when user is authenticated
+  useEffect(() => {
+    if (user && !isLoading) {
+      loadOrganizations();
+    }
+  }, [user, isLoading]);
+
   const value: AuthContextType = {
     user,
     token,
     isAuthenticated: !!user,
     isLoading,
+    organizations,
+    currentOrganization,
     login,
     register,
     logout,
     refreshToken,
+    switchOrganization,
+    loadOrganizations,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

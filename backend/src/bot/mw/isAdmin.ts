@@ -22,19 +22,26 @@ export async function isTelegramAdmin(
     return false;
   }
 
-  // Find user by Telegram ID
+  // Find user by Telegram ID and check if they belong to this organization
   const user = await prisma.user.findFirst({
     where: {
-      telegramId: String(telegramId),
-      organizationId: organizationId
+      telegramId: String(telegramId)
     },
     include: {
-      organization: true
+      userOrganizations: {
+        where: {
+          organizationId: organizationId
+        },
+        include: {
+          organization: true
+        }
+      }
     }
   });
 
-  // Check if user exists, has Telegram linked, and is admin role
-  if (!user || !user.telegramId || (user.role !== 'OWNER' && user.role !== 'MANAGER' && user.role !== 'SUPER_ADMIN')) {
+  // Check if user exists, has Telegram linked, belongs to this organization, and is admin role
+  const userOrg = user?.userOrganizations?.[0];
+  if (!user || !user.telegramId || !userOrg || (user.role !== 'OWNER' && user.role !== 'MANAGER' && user.role !== 'SUPER_ADMIN')) {
     const message = (ctx as any).tt 
       ? (ctx as any).tt("admin.accessDenied") 
       : "❌ Access denied. This command is only available for administrators. Please link your Telegram account first.";
@@ -44,7 +51,7 @@ export async function isTelegramAdmin(
 
   // Store admin user in context for later use
   (ctx as any).adminUser = user;
-  (ctx as any).adminOrganizationId = user.organizationId;
+  (ctx as any).adminOrganizationId = organizationId;
 
   // Call next if provided (for middleware pattern)
   if (next) {
@@ -64,18 +71,25 @@ export async function checkAdminStatus(
 ): Promise<{ user: any; organizationId: number } | null> {
   const user = await prisma.user.findFirst({
     where: {
-      telegramId: String(telegramId),
-      organizationId: organizationId
+      telegramId: String(telegramId)
     },
     include: {
-      organization: true
+      userOrganizations: {
+        where: {
+          organizationId: organizationId
+        },
+        include: {
+          organization: true
+        }
+      }
     }
   });
 
-  if (!user || !user.telegramId || (user.role !== 'OWNER' && user.role !== 'MANAGER' && user.role !== 'SUPER_ADMIN')) {
+  const userOrg = user?.userOrganizations?.[0];
+  if (!user || !user.telegramId || !userOrg || (user.role !== 'OWNER' && user.role !== 'MANAGER' && user.role !== 'SUPER_ADMIN')) {
     return null;
   }
 
-  return { user, organizationId: user.organizationId };
+  return { user, organizationId: organizationId };
 }
 

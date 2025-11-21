@@ -37,6 +37,7 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
+  HelpCircle,
 } from "lucide-react";
 import { StatCard } from "../cards/StatCard";
 import { PageHeader } from "../PageHeader";
@@ -68,7 +69,7 @@ export function SettingsPage() {
   const [activeTab, setActiveTab] = useState(tabParam || "profile");
   const { t, language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
-  const { user } = useAuth();
+  const { user, loadOrganizations } = useAuth();
 
   // Update active tab when URL param changes
   useEffect(() => {
@@ -141,6 +142,8 @@ export function SettingsPage() {
       toast.success(result.message);
       setLicenseKey("");
       await loadSubscription();
+      // Reload organizations to update plan badges in UI
+      await loadOrganizations();
     } catch (error: any) {
       console.error('Failed to activate license:', error);
       toast.error(error.message || t('settings.subscription.activationFailed'));

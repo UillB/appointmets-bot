@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
+import { botManager } from '../../bot/bot-manager';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -68,27 +69,30 @@ const requireSuperAdmin = (req: any, res: Response, next: NextFunction) => {
   next();
 };
 
-// GET /organizations - Get all organizations (super admin) or user's organization
+// GET /organizations - Get all organizations for the current user
 router.get('/', verifyToken, async (req: any, res: Response) => {
   try {
-    const { role, organizationId } = req.user;
+    const { role, userId } = req.user;
 
     if (role === 'SUPER_ADMIN') {
       // Super admin can see all organizations
       const organizations = await prisma.organization.findMany({
         include: {
-          users: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              role: true
+          userOrganizations: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true
+                }
+              }
             }
           },
           _count: {
             select: {
               services: true,
-              users: true
+              userOrganizations: true
             }
           }
         },
@@ -98,37 +102,44 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
       });
 
       return res.json({
-        organizations,
+        organizations: organizations.map(org => ({
+          ...org,
+          userRole: null, // Super admin doesn't have a role in organizations
+          users: org.userOrganizations.map(uo => ({
+            ...uo.user,
+            role: uo.role
+          }))
+        })),
         isSuperAdmin: true
       });
     } else {
-      // Regular users can only see their organization
-      const organization = await prisma.organization.findUnique({
-        where: { id: organizationId },
+      // Regular users see all organizations they belong to via UserOrganization
+      const userOrganizations = await prisma.userOrganization.findMany({
+        where: { userId },
         include: {
-          users: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              role: true
-            }
-          },
-          _count: {
-            select: {
-              services: true,
-              users: true
+          organization: {
+            include: {
+              _count: {
+                select: {
+                  services: true,
+                  userOrganizations: true
+                }
+              }
             }
           }
+        },
+        orderBy: {
+          createdAt: 'desc'
         }
       });
 
-      if (!organization) {
-        return res.status(404).json({ error: 'Organization not found' });
-      }
+      const organizations = userOrganizations.map(uo => ({
+        ...uo.organization,
+        userRole: uo.role // Role of the current user in this organization
+      }));
 
       return res.json({
-        organizations: [organization],
+        organizations,
         isSuperAdmin: false
       });
     }
@@ -142,23 +153,37 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
 router.get('/:id', verifyToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
-    const { role, organizationId } = req.user;
+    const { role, userId } = req.user;
+    const organizationId = parseInt(id);
 
     // Check if user has access to this organization
-    if (role !== 'SUPER_ADMIN' && parseInt(id) !== organizationId) {
-      return res.status(403).json({ error: 'Access denied' });
+    if (role !== 'SUPER_ADMIN') {
+      const userOrg = await prisma.userOrganization.findUnique({
+        where: {
+          userId_organizationId: {
+            userId,
+            organizationId
+          }
+        }
+      });
+
+      if (!userOrg) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
     }
 
     const organization = await prisma.organization.findUnique({
-      where: { id: parseInt(id) },
+      where: { id: organizationId },
       include: {
-        users: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            createdAt: true
+        userOrganizations: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
           }
         },
         services: {
@@ -174,7 +199,7 @@ router.get('/:id', verifyToken, async (req: any, res: Response) => {
         _count: {
           select: {
             services: true,
-            users: true
+            userOrganizations: true
           }
         }
       }
@@ -184,18 +209,41 @@ router.get('/:id', verifyToken, async (req: any, res: Response) => {
       return res.status(404).json({ error: 'Organization not found' });
     }
 
-    res.json(organization);
+    // Get current user's role in this organization
+    let userRole = null;
+    if (role !== 'SUPER_ADMIN') {
+      const userOrg = await prisma.userOrganization.findUnique({
+        where: {
+          userId_organizationId: {
+            userId,
+            organizationId
+          }
+        }
+      });
+      userRole = userOrg?.role || null;
+    }
+
+    res.json({
+      ...organization,
+      userRole,
+      users: organization.userOrganizations.map(uo => ({
+        ...uo.user,
+        role: uo.role
+      }))
+    });
   } catch (error) {
     console.error('Get organization error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// POST /organizations - Create new organization (super admin only)
-router.post('/', verifyToken, requireSuperAdmin, async (req: any, res: Response) => {
+// POST /organizations - Create new organization (any authenticated user)
+// TODO: Add check for max organizations per user limit (if needed in future)
+router.post('/', verifyToken, async (req: any, res: Response) => {
   try {
     const validatedData = createOrganizationSchema.parse(req.body);
     const { name, description, address, workingHours, phone, email, avatar } = validatedData;
+    const { userId } = req.user;
 
     // Check if organization with this name already exists
     const existingOrg = await prisma.organization.findFirst({
@@ -206,29 +254,68 @@ router.post('/', verifyToken, requireSuperAdmin, async (req: any, res: Response)
       return res.status(400).json({ error: 'Organization with this name already exists' });
     }
 
-    const organization = await prisma.organization.create({
-      data: {
-        name,
-        ...(description && { description }),
-        ...(address && { address }),
-        ...(workingHours && { workingHours }),
-        ...(phone && { phone }),
-        ...(email && { email }),
-        ...(avatar && { avatar })
-      },
-      include: {
-        _count: {
-          select: {
-            services: true,
-            users: true
+    // Create organization and link user as OWNER in a transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Create organization
+      const organization = await tx.organization.create({
+        data: {
+          name,
+          ...(description && { description }),
+          ...(address && { address }),
+          ...(workingHours && { workingHours }),
+          ...(phone && { phone }),
+          ...(email && { email }),
+          ...(avatar && { avatar })
+        }
+      });
+
+      // Link user to organization as OWNER
+      await tx.userOrganization.create({
+        data: {
+          userId,
+          organizationId: organization.id,
+          role: 'OWNER'
+        }
+      });
+
+      // Return organization with counts
+      return await tx.organization.findUnique({
+        where: { id: organization.id },
+        include: {
+          _count: {
+            select: {
+              services: true,
+              userOrganizations: true
+            }
           }
         }
-      }
+      });
     });
+
+    // Create notification for the user who created the organization
+    try {
+      await prisma.notification.create({
+        data: {
+          userId: userId,
+          organizationId: result.id,
+          type: 'organization.created',
+          title: 'Organization Created',
+          message: `Organization "${result.name}" has been created successfully`,
+          data: {
+            organizationId: result.id,
+            organizationName: result.name
+          }
+        }
+      });
+      console.log('✅ Notification created for organization creation');
+    } catch (error) {
+      console.error('⚠️  Failed to create notification for organization creation:', error);
+      // Don't fail the request if notification creation fails
+    }
 
     res.status(201).json({
       message: 'Organization created successfully',
-      organization
+      organization: result
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -244,17 +331,34 @@ router.post('/', verifyToken, requireSuperAdmin, async (req: any, res: Response)
 router.put('/:id', verifyToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
-    const { role, organizationId } = req.user;
+    const { role, userId } = req.user;
+    const organizationId = parseInt(id);
     const validatedData = updateOrganizationSchema.parse(req.body);
 
     // Check if user has access to this organization
-    if (role !== 'SUPER_ADMIN' && parseInt(id) !== organizationId) {
-      return res.status(403).json({ error: 'Access denied' });
+    if (role !== 'SUPER_ADMIN') {
+      const userOrg = await prisma.userOrganization.findUnique({
+        where: {
+          userId_organizationId: {
+            userId,
+            organizationId
+          }
+        }
+      });
+
+      if (!userOrg) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+
+      // Only OWNER and ADMIN can update organization (or check if user has permission)
+      if (userOrg.role !== 'OWNER' && userOrg.role !== 'ADMIN') {
+        return res.status(403).json({ error: 'Only organization owners and admins can update organization' });
+      }
     }
 
     // Check if organization exists
     const existingOrg = await prisma.organization.findUnique({
-      where: { id: parseInt(id) }
+      where: { id: organizationId }
     });
 
     if (!existingOrg) {
@@ -266,7 +370,7 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
       const nameExists = await prisma.organization.findFirst({
         where: {
           name: validatedData.name,
-          id: { not: parseInt(id) }
+          id: { not: organizationId }
         }
       });
 
@@ -275,22 +379,37 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
       }
     }
 
+    // If botToken is being removed, stop the bot
+    if (existingOrg.botToken && (validatedData.botToken === null || validatedData.botToken === undefined)) {
+      try {
+        console.log(`🛑 Stopping bot for organization ${organizationId} (${existingOrg.name}) - bot token being removed...`);
+        await botManager.removeBotByOrganizationId(organizationId);
+        console.log(`✅ Bot stopped for organization ${organizationId}`);
+      } catch (error) {
+        console.error(`⚠️  Error stopping bot for organization ${organizationId}:`, error);
+        // Continue with update even if bot stop fails
+      }
+    }
+
     const organization = await prisma.organization.update({
-      where: { id: parseInt(id) },
+      where: { id: organizationId },
       data: validatedData,
       include: {
-        users: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true
+        userOrganizations: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true
+              }
+            }
           }
         },
         _count: {
           select: {
             services: true,
-            users: true
+            userOrganizations: true
           }
         }
       }
@@ -298,7 +417,13 @@ router.put('/:id', verifyToken, async (req: any, res: Response) => {
 
     res.json({
       message: 'Organization updated successfully',
-      organization
+      organization: {
+        ...organization,
+        users: organization.userOrganizations.map(uo => ({
+          ...uo.user,
+          role: uo.role
+        }))
+      }
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -333,10 +458,22 @@ router.delete('/:id', verifyToken, requireSuperAdmin, async (req: any, res: Resp
     }
 
     // Check if organization has users or services
-    if (existingOrg._count.users > 0 || existingOrg._count.services > 0) {
+    if (existingOrg._count.userOrganizations > 0 || existingOrg._count.services > 0) {
       return res.status(400).json({ 
         error: 'Cannot delete organization with users or services. Please remove all users and services first.' 
       });
+    }
+
+    // Stop bot if organization has one
+    if (existingOrg.botToken) {
+      try {
+        console.log(`🛑 Stopping bot for organization ${existingOrg.id} (${existingOrg.name}) before deletion...`);
+        await botManager.removeBotByOrganizationId(parseInt(id));
+        console.log(`✅ Bot stopped for organization ${existingOrg.id}`);
+      } catch (error) {
+        console.error(`⚠️  Error stopping bot for organization ${existingOrg.id}:`, error);
+        // Continue with deletion even if bot stop fails
+      }
     }
 
     await prisma.organization.delete({
@@ -356,11 +493,23 @@ router.delete('/:id', verifyToken, requireSuperAdmin, async (req: any, res: Resp
 router.post('/:id/avatar', verifyToken, async (req: any, res: Response) => {
   try {
     const { id } = req.params;
-    const { role, organizationId } = req.user;
+    const { role, userId } = req.user;
+    const organizationId = parseInt(id);
 
     // Check if user has access to this organization
-    if (role !== 'SUPER_ADMIN' && parseInt(id) !== organizationId) {
-      return res.status(403).json({ error: 'Access denied' });
+    if (role !== 'SUPER_ADMIN') {
+      const userOrg = await prisma.userOrganization.findUnique({
+        where: {
+          userId_organizationId: {
+            userId,
+            organizationId
+          }
+        }
+      });
+
+      if (!userOrg) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
     }
 
     // For now, just return a placeholder URL

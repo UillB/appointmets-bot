@@ -84,15 +84,20 @@ export class ServiceEmitter {
 
   private async createNotification(event: WebSocketEvent) {
     try {
-      const users = await prisma.user.findMany({
+      // Get users via UserOrganization
+      const userOrganizations = await prisma.userOrganization.findMany({
         where: { organizationId: event.organizationId },
-        select: { id: true, role: true }
+        include: {
+          user: {
+            select: { id: true, role: true }
+          }
+        }
       });
 
-      for (const user of users) {
+      for (const userOrg of userOrganizations) {
         await prisma.notification.create({
           data: {
-            userId: user.id,
+            userId: userOrg.user.id,
             organizationId: event.organizationId,
             type: event.type,
             title: this.getNotificationTitle(event.type),

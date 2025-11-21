@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Moon, Sun, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User, Wifi, WifiOff, Mail } from "lucide-react";
+import { Moon, Sun, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User, Wifi, WifiOff, Mail, Building2 } from "lucide-react";
 import { AppointexoLogo } from "./AppointexoLogo";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -42,7 +42,7 @@ interface HeaderProps {
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const { logout, user } = useAuth();
+  const { logout, user, organizations, currentOrganization, switchOrganization } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const { theme, setTheme, resolvedTheme } = useTheme();
   const navigate = useNavigate();
@@ -382,7 +382,16 @@ export function Header({ onMenuClick }: HeaderProps) {
               <button className="flex items-center gap-2 ml-2 pl-2 border-l border-gray-200 dark:border-gray-800 hover:opacity-80 transition-opacity">
                 <div className="hidden sm:block text-right">
                   <p className="text-sm text-gray-900 dark:text-gray-100">{user?.name || t("common.user")}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{user?.organization?.name || t("common.organization")}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{currentOrganization?.name || user?.organization?.name || t("common.organization")}</p>
+                  {currentOrganization?.subscriptionPlan && (
+                    <span className={`text-xs px-1.5 py-0.5 rounded ${
+                      currentOrganization.subscriptionPlan === 'PRO' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300' :
+                      currentOrganization.subscriptionPlan === 'ENTERPRISE' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300' :
+                      'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+                    }`}>
+                      {currentOrganization.subscriptionPlan}
+                    </span>
+                  )}
                 </div>
                 <Avatar className="w-8 h-8 bg-indigo-600 dark:bg-indigo-500 cursor-pointer">
                   <AvatarFallback className="bg-indigo-600 dark:bg-indigo-500 text-white text-sm">
@@ -407,6 +416,52 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <Settings className="w-4 h-4 mr-2" />
                 {t("header.profile.settings")}
               </DropdownMenuItem>
+              {organizations.length > 1 && (
+                <>
+                  <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-800" />
+                  <DropdownMenuLabel className="text-gray-900 dark:text-gray-100 text-xs">
+                    {t("organizations.switch")}
+                  </DropdownMenuLabel>
+                  {organizations.map((org) => (
+                    <DropdownMenuItem
+                      key={org.id}
+                      className={`cursor-pointer text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 ${
+                        currentOrganization?.id === org.id ? 'bg-indigo-50 dark:bg-indigo-950/30' : ''
+                      }`}
+                      onClick={async () => {
+                        if (org.id !== currentOrganization?.id) {
+                          try {
+                            await switchOrganization(org.id);
+                            // Reload page to refresh all data
+                            window.location.reload();
+                          } catch (error) {
+                            // Error is already handled in switchOrganization
+                          }
+                        }
+                      }}
+                    >
+                      <Building2 className="w-4 h-4 mr-2" />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span>{org.name}</span>
+                          {org.id === currentOrganization?.id && (
+                            <span className="text-xs text-indigo-600 dark:text-indigo-400">({t("organizations.active")})</span>
+                          )}
+                        </div>
+                        {org.subscriptionPlan && (
+                          <span className={`text-xs px-1.5 py-0.5 rounded mt-1 inline-block ${
+                            org.subscriptionPlan === 'PRO' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300' :
+                            org.subscriptionPlan === 'ENTERPRISE' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300' :
+                            'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+                          }`}>
+                            {org.subscriptionPlan}
+                          </span>
+                        )}
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+                </>
+              )}
               <DropdownMenuSeparator className="bg-gray-200 dark:bg-gray-800" />
               <DropdownMenuItem className="cursor-pointer text-red-600 dark:text-red-400 focus:text-red-600 dark:focus:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />

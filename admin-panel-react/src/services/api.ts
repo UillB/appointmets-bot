@@ -117,6 +117,13 @@ export interface Organization {
   botUsername?: string;
   subscriptionPlan?: 'FREE' | 'PRO' | 'ENTERPRISE';
   subscriptionStatus?: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
+  userRole?: 'OWNER' | 'ADMIN' | 'MEMBER'; // User's role in this organization
+  usersCount?: number; // Number of users in the organization
+  servicesCount?: number; // Number of services in the organization
+  _count?: {
+    services: number;
+    userOrganizations: number;
+  };
   createdAt: string;
   updatedAt: string;
 }
@@ -350,6 +357,20 @@ class ApiClient {
     return response;
   }
 
+  async switchOrganization(organizationId: number): Promise<AuthResponse> {
+    const response = await this.request<AuthResponse>('/auth/switch-organization', {
+      method: 'POST',
+      body: JSON.stringify({ organizationId }),
+    });
+
+    this.accessToken = response.accessToken;
+    localStorage.setItem('accessToken', response.accessToken);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    localStorage.setItem('user', JSON.stringify(response.user));
+
+    return response;
+  }
+
 
   // Appointments methods
   async getAppointments(params?: {
@@ -451,7 +472,7 @@ class ApiClient {
   async getOrganizations(params?: {
     page?: number;
     limit?: number;
-  }): Promise<{ organizations: Organization[]; total: number; page: number; limit: number }> {
+  }): Promise<{ organizations: Organization[]; isSuperAdmin?: boolean }> {
     const searchParams = new URLSearchParams();
     if (params?.page) searchParams.set('page', params.page.toString());
     if (params?.limit) searchParams.set('limit', params.limit.toString());

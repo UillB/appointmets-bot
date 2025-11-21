@@ -82,7 +82,18 @@
     "noOrganizationsFound": "No organizations found",
     "tryAdjustingSearch": "Try adjusting your search or filters",
     "getStarted": "Get started by creating your first organization",
-    "showing": "Showing {{count}} of {{total}} organizations"
+    "showing": "Showing {{count}} of {{total}} organizations",
+    "switch": "Switch Organization",
+    "currentOrganization": "Current Organization",
+    "selectOrganization": "Select Organization",
+    "createNew": "Create New Organization",
+    "active": "Active",
+    "owner": "Owner",
+    "admin": "Admin",
+    "member": "Member",
+    "switchSuccess": "Switched to {{name}}",
+    "switchError": "Failed to switch organization",
+    "switchConfirm": "Are you sure you want to switch to organization \"{{name}}\"? All your current work will be saved and you will be working in the context of this organization."
   },
   "appointments": {
     "title": "Appointments",

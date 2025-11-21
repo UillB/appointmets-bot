@@ -31,7 +31,7 @@ model Organization {
   subscriptionStartedAt      DateTime? // When subscription was activated
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  users       User[]
+  userOrganizations UserOrganization[]
   services    Service[]
   aiConfig    OrganizationAIConfig?
   aiUsageLogs AIUsageLog[]
@@ -48,20 +48,18 @@ model Organization {
 }
 
 model User {
-  id             Int          @id @default(autoincrement())
-  email          String       @unique
-  password       String
-  name           String
-  role           UserRole     @default(MANAGER)
-  organizationId Int
-  telegramId     String?      @unique // Telegram user ID for Web App auth
-  organization   Organization @relation(fields: [organizationId], references: [id])
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  notifications  Notification[]
-  eventLogs      EventLog[]
+  id                Int               @id @default(autoincrement())
+  email             String             @unique
+  password          String
+  name              String
+  role              UserRole          @default(MANAGER)
+  telegramId        String?           @unique // Telegram user ID for Web App auth
+  userOrganizations UserOrganization[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  notifications     Notification[]
+  eventLogs         EventLog[]
 
-  @@index([organizationId, role])
   @@index([email])
   @@index([telegramId])
   @@index([createdAt])
@@ -71,6 +69,12 @@ enum UserRole {
   SUPER_ADMIN
   OWNER
   MANAGER
+}
+
+enum OrganizationRole {
+  OWNER
+  ADMIN
+  MEMBER
 }
 
 enum SubscriptionPlan {
@@ -223,4 +227,22 @@ model EventLog {
   @@index([organizationId, timestamp])
   @@index([type, timestamp])
   @@index([source, timestamp])
+}
+
+// Many-to-many relationship between User and Organization
+model UserOrganization {
+  id             Int              @id @default(autoincrement())
+  userId         Int
+  organizationId Int
+  role           OrganizationRole @default(OWNER)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization  Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, organizationId])
+  @@index([userId])
+  @@index([organizationId])
+  @@index([role])
 }

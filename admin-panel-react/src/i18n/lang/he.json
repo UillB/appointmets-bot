@@ -82,7 +82,18 @@
     "noOrganizationsFound": "לא נמצאו ארגונים",
     "tryAdjustingSearch": "נסה להתאים את החיפוש או המסננים",
     "getStarted": "התחל על ידי יצירת הארגון הראשון שלך",
-    "showing": "מציג {{count}} מתוך {{total}} ארגונים"
+    "showing": "מציג {{count}} מתוך {{total}} ארגונים",
+    "switch": "החלף ארגון",
+    "currentOrganization": "ארגון נוכחי",
+    "selectOrganization": "בחר ארגון",
+    "createNew": "צור ארגון חדש",
+    "active": "פעיל",
+    "owner": "בעלים",
+    "admin": "מנהל",
+    "member": "חבר",
+    "switchSuccess": "הוחלף ל-{{name}}",
+    "switchError": "נכשל בהחלפת ארגון",
+    "switchConfirm": "האם אתה בטוח שברצונך לעבור לארגון \"{{name}}\"? כל העבודה הנוכחית שלך תישמר ותעבוד בהקשר של ארגון זה."
   },
   "appointments": {
     "title": "תורים",
