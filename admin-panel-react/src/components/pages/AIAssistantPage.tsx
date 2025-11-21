@@ -22,6 +22,9 @@ import {
   Info,
   CheckCircle2,
   MessageSquare,
+  Crown,
+  Lock,
+  ArrowRight,
 } from "lucide-react";
 import { PageTitle } from "../PageTitle";
 import { toast } from "sonner";
@@ -31,13 +34,17 @@ import { Badge } from "../ui/badge";
 import { Separator } from "../ui/separator";
 import { apiClient, AIConfig } from "../../services/api";
 import { useLanguage } from "../../i18n";
+import { useNavigate } from "react-router-dom";
 
 export function AIAssistantPage() {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [aiEnabled, setAiEnabled] = useState(true);
   const [autoReply, setAutoReply] = useState(false);
   const [instructions, setInstructions] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [subscriptionPlan, setSubscriptionPlan] = useState<'FREE' | 'PRO' | 'ENTERPRISE' | null>(null);
+  const [isLoadingPlan, setIsLoadingPlan] = useState(true);
 
   // Configuration state
   const [provider, setProvider] = useState("openai");
@@ -47,10 +54,26 @@ export function AIAssistantPage() {
   const [temperature, setTemperature] = useState([0.7]);
   const [apiKeyVerified, setApiKeyVerified] = useState(false);
 
-  // Load AI config on component mount
+  // Load subscription plan and AI config on component mount
   useEffect(() => {
+    loadSubscriptionPlan();
     loadAIConfig();
   }, []);
+
+  const loadSubscriptionPlan = async () => {
+    try {
+      setIsLoadingPlan(true);
+      const subscriptionData = await apiClient.getSubscription();
+      setSubscriptionPlan(subscriptionData.subscription.plan);
+    } catch (error) {
+      console.error('Failed to load subscription plan:', error);
+      // Default to FREE if error - show error toast but don't block UI
+      toast.error(t('settings.subscription.loadError') || 'Failed to load subscription plan');
+      setSubscriptionPlan('FREE');
+    } finally {
+      setIsLoadingPlan(false);
+    }
+  };
 
   const loadAIConfig = async () => {
     try {
@@ -151,6 +174,91 @@ export function AIAssistantPage() {
     toast.info(t('aiAssistant.configReset'));
   };
 
+  // Show placeholder for FREE plan users
+  if (isLoadingPlan) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-400" />
+          <p className="text-gray-500 dark:text-gray-400">{t('common.loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (subscriptionPlan === 'FREE') {
+    return (
+      <div className="space-y-6">
+        <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+          <div className="max-w-7xl mx-auto space-y-6">
+            <PageTitle
+              icon={<Sparkles className="w-6 h-6 text-white" />}
+              title={t('aiAssistant.title')}
+              description={t('aiAssistant.description')}
+            />
+
+            {/* Free Plan Placeholder */}
+            <div className="max-w-3xl mx-auto">
+              <Card className="p-6 sm:p-8 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-900">
+                <div className="text-center space-y-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                    <Lock className="w-10 h-10 text-white" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                      {t('aiAssistant.freePlan.title')}
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-300 text-sm sm:text-base">
+                      {t('aiAssistant.freePlan.description')}
+                    </p>
+                  </div>
+
+                  <div className="bg-white dark:bg-gray-900 rounded-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-800 space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                      {t('aiAssistant.freePlan.featuresTitle')}
+                    </h3>
+                    <ul className="space-y-3 text-left">
+                      <li className="flex items-start gap-3">
+                        <Crown className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
+                          {t('aiAssistant.freePlan.feature1')}
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <Crown className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
+                          {t('aiAssistant.freePlan.feature2')}
+                        </span>
+                      </li>
+                      <li className="flex items-start gap-3">
+                        <Crown className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-700 dark:text-gray-300 text-sm sm:text-base">
+                          {t('aiAssistant.freePlan.feature3')}
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Button
+                      onClick={() => navigate('/settings?tab=subscription')}
+                      className="bg-indigo-600 hover:bg-indigo-700 text-white w-full sm:w-auto"
+                      size="lg"
+                    >
+                      {t('aiAssistant.freePlan.upgradeButton')}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
@@ -189,10 +297,10 @@ export function AIAssistantPage() {
             }
           />
 
-          {/* Main Content - Like in Figma (no tabs, no stats) */}
-          <div className="max-w-5xl mx-auto space-y-6">
+            {/* Main Content - Like in Figma (no tabs, no stats) */}
+            <div className="max-w-5xl mx-auto space-y-4 sm:space-y-6">
             {/* Activation Card - Like in Figma */}
-            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+            <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
@@ -207,31 +315,31 @@ export function AIAssistantPage() {
                   <Separator className="bg-gray-200 dark:bg-gray-700" />
 
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="flex-1">
-                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">{t('aiAssistant.controls.enableAi')}</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <div className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="flex-1 pr-3">
+                        <Label className="text-sm sm:text-base cursor-pointer text-gray-900 dark:text-gray-100">{t('aiAssistant.controls.enableAi')}</Label>
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                           {t('aiAssistant.controls.enableAiDescription')}
                         </p>
                       </div>
                       <Switch
                         checked={aiEnabled}
                         onCheckedChange={setAiEnabled}
-                        className="ml-4"
+                        className="flex-shrink-0"
                       />
                     </div>
 
-                    <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                      <div className="flex-1">
-                        <Label className="text-base cursor-pointer text-gray-900 dark:text-gray-100">{t('aiAssistant.controls.autoReply')}</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    <div className="flex items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <div className="flex-1 pr-3">
+                        <Label className="text-sm sm:text-base cursor-pointer text-gray-900 dark:text-gray-100">{t('aiAssistant.controls.autoReply')}</Label>
+                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                           {t('aiAssistant.controls.autoReplyDescription')}
                         </p>
                       </div>
                       <Switch
                         checked={autoReply}
                         onCheckedChange={setAutoReply}
-                        className="ml-4"
+                        className="flex-shrink-0"
                       />
                     </div>
                   </div>
@@ -253,7 +361,7 @@ export function AIAssistantPage() {
               </Card>
 
             {/* AI Configuration - Like in Figma */}
-            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+            <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="space-y-6">
                 <div>
                   <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
@@ -317,7 +425,7 @@ export function AIAssistantPage() {
             </Card>
 
             {/* Custom Instructions - Like in Figma */}
-            <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+            <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg mb-2 flex items-center gap-2 text-gray-900 dark:text-gray-100">
@@ -368,21 +476,22 @@ export function AIAssistantPage() {
             </Card>
 
             {/* Test AI - Like in Figma */}
-            <Card className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-900">
-              <div className="flex flex-col sm:flex-row items-center gap-4">
-                <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
-                  <TestTube className="w-7 h-7 text-white" />
+            <Card className="p-4 sm:p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-900">
+              <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <TestTube className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                 </div>
                 <div className="flex-1 text-center sm:text-left">
-                  <h3 className="text-lg mb-1 text-gray-900 dark:text-gray-100">{t('aiAssistant.test.title')}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <h3 className="text-base sm:text-lg mb-1 text-gray-900 dark:text-gray-100">{t('aiAssistant.test.title')}</h3>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                     {t('aiAssistant.test.description')}
                   </p>
                 </div>
                 <Button
                   onClick={handleTest}
-                  className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white"
+                  className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white"
                   disabled={!aiEnabled}
+                  size="sm"
                 >
                   <TestTube className="w-4 h-4 mr-2" />
                   {t('aiAssistant.test.runTest')}

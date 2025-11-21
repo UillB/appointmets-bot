@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Moon, Sun, Globe, Bell, HelpCircle, Menu, LogOut, Check, Settings, User, Wifi, WifiOff, Mail } from "lucide-react";
 import { AppointexoLogo } from "./AppointexoLogo";
 import { Button } from "./ui/button";
@@ -24,6 +24,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { NotificationCenter } from "./NotificationCenter";
 import { useWebSocket } from "../hooks/useWebSocket";
+import { apiClient } from "../services/api";
+import { Crown } from "lucide-react";
 import ru from "../i18n/lang/ru.json";
 import en from "../i18n/lang/en.json";
 import he from "../i18n/lang/he.json";
@@ -47,6 +49,21 @@ export function Header({ onMenuClick }: HeaderProps) {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const { isConnected } = useWebSocket();
+  const [subscriptionPlan, setSubscriptionPlan] = useState<'FREE' | 'PRO' | 'ENTERPRISE' | null>(null);
+
+  // Load subscription plan
+  useEffect(() => {
+    const loadPlan = async () => {
+      try {
+        const data = await apiClient.getSubscription();
+        setSubscriptionPlan(data.subscription.plan);
+      } catch (error) {
+        console.error('Failed to load subscription plan:', error);
+        setSubscriptionPlan('FREE');
+      }
+    };
+    loadPlan();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -118,6 +135,27 @@ export function Header({ onMenuClick }: HeaderProps) {
             </div>
             <span className="font-bold text-gray-900 dark:text-gray-100 text-base sm:text-lg">Appointexo</span>
           </div>
+
+          {/* Subscription Plan Badge - Mobile */}
+          {subscriptionPlan && (
+            <button
+              onClick={() => navigate('/settings?tab=subscription')}
+              className="ml-2 sm:hidden"
+            >
+              <Badge 
+                className={`cursor-pointer hover:opacity-80 transition-opacity ${
+                  subscriptionPlan === 'FREE'
+                    ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700'
+                    : subscriptionPlan === 'PRO' 
+                    ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800'
+                    : 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800'
+                }`}
+              >
+                {subscriptionPlan !== 'FREE' && <Crown className="w-3 h-3 mr-1" />}
+                {subscriptionPlan}
+              </Badge>
+            </button>
+          )}
           
             <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
@@ -142,6 +180,27 @@ export function Header({ onMenuClick }: HeaderProps) {
 
         {/* Right side */}
         <div className="flex items-center gap-1">
+          {/* Subscription Plan Badge - Desktop */}
+          {subscriptionPlan && (
+            <button
+              onClick={() => navigate('/settings?tab=subscription')}
+              className="hidden sm:block"
+            >
+              <Badge 
+                className={`flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity ${
+                  subscriptionPlan === 'FREE'
+                    ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    : subscriptionPlan === 'PRO' 
+                    ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800 hover:bg-indigo-200 dark:hover:bg-indigo-800'
+                    : 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800 hover:bg-purple-200 dark:hover:bg-purple-800'
+                }`}
+              >
+                {subscriptionPlan !== 'FREE' && <Crown className="w-3.5 h-3.5" />}
+                <span className="text-xs font-medium">{subscriptionPlan}</span>
+              </Badge>
+            </button>
+          )}
+
           {/* Theme Toggle Dropdown - Visible on all screens including mobile */}
           <DropdownMenu open={themeMenuOpen} onOpenChange={setThemeMenuOpen}>
             <DropdownMenuTrigger asChild>

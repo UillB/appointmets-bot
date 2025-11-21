@@ -20,6 +20,15 @@ model Organization {
   avatar      String?  // URL to avatar image
   botToken    String?  // Telegram bot token
   botUsername String?  // Telegram bot username
+  // Subscription fields
+  subscriptionPlan     SubscriptionPlan @default(FREE)
+  subscriptionStatus   SubscriptionStatus? @default(ACTIVE)
+  licenseKey           String?  // Manual license key input (fallback)
+  lemonSqueezySubscriptionId String? @unique // Lemon Squeezy subscription ID
+  lemonSqueezyCustomerId      String? // Lemon Squeezy customer ID
+  lemonSqueezyOrderId        String? // Lemon Squeezy order ID
+  subscriptionExpiresAt      DateTime? // Subscription expiration date
+  subscriptionStartedAt      DateTime? // When subscription was activated
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   users       User[]
@@ -33,6 +42,9 @@ model Organization {
   @@index([botToken])
   @@index([botUsername])
   @@index([createdAt])
+  @@index([subscriptionPlan])
+  @@index([subscriptionStatus])
+  @@index([lemonSqueezySubscriptionId])
 }
 
 model User {
@@ -59,6 +71,20 @@ enum UserRole {
   SUPER_ADMIN
   OWNER
   MANAGER
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+  PAST_DUE
+  TRIALING
 }
 
 model Service {

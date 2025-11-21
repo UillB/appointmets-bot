@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
+  Crown,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
@@ -33,6 +34,7 @@ import { SetupBanner } from "../SetupBanner";
 import { SetupSuccessModal } from "../SetupSuccessModal";
 import { listenToSetupWizardModal, SetupWizardModalData } from "../../utils/setupWizardEvents";
 import { useLanguage } from "../../i18n";
+import { SubscriptionLimitsAlert } from "../SubscriptionLimitsAlert";
 
 interface DashboardStats {
   totalAppointments: number;
@@ -296,6 +298,15 @@ export function Dashboard() {
       description: t('dashboard.quickActions.settings.description'),
       badge: { text: t('dashboard.quickActions.account') },
       onClick: () => navigate("/settings")
+    },
+    {
+      icon: Crown,
+      iconBg: "bg-amber-50 dark:bg-amber-900/50",
+      iconColor: "text-amber-600 dark:text-amber-400",
+      title: t('dashboard.quickActions.subscription.title'),
+      description: t('dashboard.quickActions.subscription.description'),
+      badge: { text: t('dashboard.quickActions.subscription.manage') },
+      onClick: () => navigate("/settings?tab=subscription")
     }
   ];
 
@@ -394,6 +405,9 @@ export function Dashboard() {
       {/* Main Content */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
         <div className="max-w-7xl mx-auto space-y-6">
+
+          {/* Subscription Limits Alert */}
+          <SubscriptionLimitsAlert />
 
           {/* Appointments Summary - Highlighted (FIRST, like in Figma) */}
           {stats && (

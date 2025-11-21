@@ -305,6 +305,14 @@
     "welcome": "ברוך שובך, {{name}}!",
     "statisticsOverview": "סטטיסטיקה וסקירה",
     "viewAll": "הצג הכל",
+    "subscriptionLimits": {
+      "title": "אזהרת מגבלות מנוי",
+      "warning": "חרגת ממגבלות התוכנית שלך. פריטים קיימים יישארו, אך לא תוכל ליצור חדשים.",
+      "services": "שירותים: {current}/{limit} (המגבלה חרגה)",
+      "appointments": "תורים החודש: {current}/{limit} (המגבלה חרגה)",
+      "upgradeButton": "שדרג תוכנית",
+      "viewDetails": "פרטים"
+    },
     "setupBanners": {
       "services": {
         "message": "אין לך שירותים כרגע (מה שאתה מוכר). צור את השירות הראשון שלך עכשיו - זה נחוץ כדי להתחיל לעבוד ולוקח רק דקה אחת.",
@@ -345,6 +353,11 @@
       "settings": {
         "title": "הגדרות",
         "description": "תצורת מערכת"
+      },
+      "subscription": {
+        "title": "מנוי",
+        "description": "נהל את תוכנית המנוי",
+        "manage": "נהל"
       },
       "today": "היום",
       "available": "זמין",
@@ -390,7 +403,11 @@
     },
     "tabs": {
       "userProfile": "פרופיל משתמש",
-      "systemSettings": "הגדרות מערכת"
+      "systemSettings": "הגדרות מערכת",
+      "subscription": "מנוי",
+      "profile": "פרופיל",
+      "system": "מערכת",
+      "subscriptionShort": "תוכנית"
     },
     "profile": {
       "title": "פרופיל משתמש",
@@ -480,7 +497,102 @@
     },
     "profileUpdatedSuccessfully": "הפרופיל עודכן בהצלחה",
     "passwordChangedSuccessfully": "הסיסמה שונתה בהצלחה",
-    "systemSettingsSavedSuccessfully": "הגדרות המערכת נשמרו בהצלחה"
+    "systemSettingsSavedSuccessfully": "הגדרות המערכת נשמרו בהצלחה",
+    "subscription": {
+      "title": "ניהול מנוי",
+      "description": "צפה ונהל את תוכנית המנוי שלך",
+      "currentPlan": "תוכנית נוכחית",
+      "status": "סטטוס",
+      "expiresAt": "תפוגה",
+      "loadError": "נכשל בטעינת מידע המנוי",
+      "plans": {
+        "free": "חינם",
+        "pro": "מקצועי",
+        "enterprise": "ארגוני"
+      },
+      "statuses": {
+        "active": "פעיל",
+        "cancelled": "בוטל",
+        "expired": "פג תוקף",
+        "past_due": "בפיגור",
+        "trialing": "ניסיון"
+      },
+      "manageTitle": "נהל מנוי",
+      "manageDescription": "נהל את המנוי שלך דרך פורטל הלקוחות של Lemon Squeezy",
+      "manageButton": "נהל מנוי",
+      "activateLicenseTitle": "הפעל מפתח רישיון",
+      "activateLicenseDescription": "הזן את מפתח הרישיון שלך כדי להפעיל את המנוי",
+      "licenseKeyLabel": "מפתח רישיון",
+      "licenseKeyPlaceholder": "הזן את מפתח הרישיון שלך",
+      "licenseKeyHint": "תוכל למצוא את מפתח הרישיון בדוא\"ל אישור הרכישה",
+      "licenseKeyRequired": "מפתח רישיון נדרש",
+      "activateButton": "הפעל רישיון",
+      "activating": "מפעיל...",
+      "activationFailed": "נכשל בהפעלת מפתח הרישיון",
+      "upgradeTitle": "שדרג את התוכנית שלך",
+      "upgradeDescription": "פתח תכונות מתקדמות עם תוכניות Pro או Enterprise",
+      "viewPlans": "צפה בתוכניות",
+      "monthlyPrice": "מחיר חודשי",
+      "nextPayment": "תאריך תשלום הבא",
+      "purchaseButton": "קנה מנוי",
+      "purchaseHint": "תועבר לדף התשלום של Lemon Squeezy. המנוי שלך יופעל אוטומטית לאחר התשלום.",
+      "cancelButton": "בטל מנוי",
+      "downgradeButton": "הורד ל-Free",
+      "cancelling": "מבטל...",
+      "downgrading": "מוריד...",
+      "confirmCancel": "כן, בטל מנוי",
+      "confirmDowngrade": "כן, הורד ל-Free",
+      "cancelFailed": "נכשל בביטול המנוי",
+      "downgradeFailed": "נכשל בהורדת המנוי",
+      "cancelDialog": {
+        "title": "בטל מנוי?",
+        "description": "האם אתה בטוח שברצונך לבטל את המנוי?",
+        "impactTitle": "זה ישפיע על:",
+        "impact1": "המנוי שלך יישאר פעיל עד סוף תקופת החיוב הנוכחית",
+        "impact2": "תאבד גישה לתכונות פרימיום לאחר התפוגה",
+        "impact3": "כל הנתונים שלך יישמרו",
+        "note": "תוכל להפעיל מחדש את המנוי בכל עת לפני התפוגה."
+      },
+      "downgradeDialog": {
+        "title": "הורד לתוכנית Free?",
+        "description": "האם אתה בטוח שברצונך להוריד לתוכנית Free?",
+        "impactTitle": "זה ישפיע על:",
+        "impact1": "תאבד מיד גישה לתכונות עוזר AI",
+        "impact2": "כמה תכונות מתקדמות יהיו מוגבלות",
+        "impact3": "המנוי שלך יבוטל ולא תחויב",
+        "note": "תוכל לשדרג שוב בכל עת."
+      },
+      "cancelledTitle": "מנוי בוטל",
+      "cancelledDescription": "המנוי שלך בוטל אך נשאר פעיל עד תאריך התפוגה.",
+      "cancelledBadge": "בוטל - פעיל עד תפוגה",
+      "willDowngradeToFree": "יורד אוטומטית לתוכנית Free לאחר התפוגה",
+      "reactivateButton": "הפעל מחדש מנוי",
+      "reactivating": "מפעיל מחדש...",
+      "reactivateFailed": "נכשל בהפעלה מחדש של המנוי",
+      "currentStatus": "סטטוס נוכחי:",
+      "statusInfo": {
+        "activeUntil": "פעיל עד {date}",
+        "willDowngrade": "יורד לתוכנית Free לאחר התפוגה",
+        "reactivateAnytime": "תוכל להפעיל מחדש בכל עת לפני התפוגה"
+      },
+      "cancelledPlanInfo": "תוכנית קודמת: {plan}",
+      "downgradedTitle": "מנוי הורד",
+      "downgradedDescription": "המנוי שלך הורד לתוכנית Free",
+      "downgradedInfo": "תוכל לשחזר את התוכנית הקודמת עד {date}",
+      "restoreButton": "שחזר תוכנית קודמת",
+      "downgradeLimitWarning": "חרגת מהמגבלות של תוכנית Free. פריטים קיימים יישארו, אך לא תוכל ליצור חדשים עד שתשדרג או תסיר פריטים עודפים.",
+      "actionsExplanation": {
+        "title": "מה ההבדל?",
+        "cancel": "בטל מנוי - שומר על התוכנית הנוכחית פעילה עד התפוגה, ואז מוריד אוטומטית ל-Free",
+        "downgrade": "הורד ל-Free - מעביר מיד לתוכנית Free ומבטל את המנוי"
+      },
+      "activationInstructions": {
+        "title": "איך עובדת הפעלת מנוי",
+        "method1": "1. קנה מנוי - לחץ על הכפתור למעלה לרכישה. המנוי שלך יופעל אוטומטית דרך webhook לאחר התשלום.",
+        "method2": "2. מפתח רישיון ידני - אם קיבלת מפתח רישיון באימייל, תוכל להזין אותו למטה. זה אופציונלי מכיוון שההפעלה מתרחשת אוטומטית.",
+        "note": "הערה: הזנת מפתח ידנית נדרשת רק אם ההפעלה האוטומטית לא עבדה. ברוב המקרים לא תצטרך להזין מפתח ידנית."
+      }
+    }
   },
   "dialogs": {
     "save": "שמור",
@@ -662,6 +774,15 @@
       "title": "בדוק עוזר AI",
       "description": "שלח הודעת בדיקה לאימות הגדרות ותגובות AI",
       "runTest": "הרץ בדיקה"
+    },
+    "freePlan": {
+      "title": "עוזר AI זמין בתוכנית Pro",
+      "description": "שדרג לתוכנית Pro או Enterprise כדי לפתוח את תכונות עוזר AI",
+      "featuresTitle": "מה תקבל:",
+      "feature1": "תגובות צ'אטבוט חכמות",
+      "feature2": "הוראות ופקודות AI מותאמות אישית",
+      "feature3": "אנליטיקה ותובנות מתקדמות",
+      "upgradeButton": "שדרג תוכנית"
     }
   },
   "toasts": {

@@ -11,7 +11,8 @@ import {
   LogOut,
   Clock,
   Shield,
-  CheckCircle2
+  CheckCircle2,
+  Crown
 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -42,15 +43,17 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isAdminLinked, setIsAdminLinked] = useState(false);
+  const [subscriptionPlan, setSubscriptionPlan] = useState<'FREE' | 'PRO' | 'ENTERPRISE' | null>(null);
 
   // Load sidebar statistics and admin status
   useEffect(() => {
     const loadStats = async () => {
       try {
         setIsLoading(true);
-        const [dashboardStats, botStatusData] = await Promise.all([
+        const [dashboardStats, botStatusData, subscriptionData] = await Promise.all([
           apiClient.getDashboardStats(),
-          user?.organizationId ? apiClient.getBotStatus(user.organizationId).catch(() => null) : Promise.resolve(null)
+          user?.organizationId ? apiClient.getBotStatus(user.organizationId).catch(() => null) : Promise.resolve(null),
+          apiClient.getSubscription().catch(() => null)
         ]);
         
         setStats({
@@ -66,10 +69,16 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
         } else {
           setIsAdminLinked(!!user?.telegramId);
         }
+
+        // Load subscription plan
+        if (subscriptionData) {
+          setSubscriptionPlan(subscriptionData.subscription.plan);
+        }
       } catch (error) {
         console.error('Failed to load sidebar stats:', error);
         // Fallback to user telegramId
         setIsAdminLinked(!!user?.telegramId);
+        setSubscriptionPlan('FREE');
       } finally {
         setIsLoading(false);
       }
@@ -206,11 +215,34 @@ export function Sidebar({ isOpen, onClose, activePage, onNavigate }: SidebarProp
               <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-500/30 to-purple-600/30 dark:from-indigo-400/20 dark:to-purple-500/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/10 shadow-lg">
                 <AppointexoLogo size={32} className="sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
+              <div className="flex-1">
                 <h1 className="font-bold text-base sm:text-lg text-white">Appointexo</h1>
                 <p className="text-[10px] sm:text-xs text-white/70 dark:text-white/60">{t("navigation.appSubtitle")}</p>
               </div>
             </div>
+            {/* Subscription Plan Badge */}
+            {subscriptionPlan && (
+              <button
+                onClick={() => {
+                  navigate('/settings?tab=subscription');
+                  onClose();
+                }}
+                className="mt-3 w-full"
+              >
+                <Badge 
+                  className={`w-full justify-center cursor-pointer hover:opacity-80 transition-opacity ${
+                    subscriptionPlan === 'FREE'
+                      ? 'bg-gray-400/90 dark:bg-gray-500/90 text-white border-0'
+                      : subscriptionPlan === 'PRO' 
+                      ? 'bg-indigo-400/90 dark:bg-indigo-500/90 text-white border-0'
+                      : 'bg-purple-400/90 dark:bg-purple-500/90 text-white border-0'
+                  }`}
+                >
+                  {subscriptionPlan !== 'FREE' && <Crown className="w-3 h-3 mr-1.5" />}
+                  <span className="text-xs font-medium">{subscriptionPlan}</span>
+                </Badge>
+              </button>
+            )}
           </div>
 
           {/* Navigation */}

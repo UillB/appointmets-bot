@@ -312,6 +312,14 @@
     "welcome": "Welcome back, {{name}}!",
     "statisticsOverview": "Statistics & Overview",
     "viewAll": "View All",
+    "subscriptionLimits": {
+      "title": "Subscription Limit Warning",
+      "warning": "You have exceeded your plan limits. Existing items will remain, but you won't be able to create new ones.",
+      "services": "Services: {current}/{limit} (limit exceeded)",
+      "appointments": "Appointments this month: {current}/{limit} (limit exceeded)",
+      "upgradeButton": "Upgrade Plan",
+      "viewDetails": "View Details"
+    },
     "setupBanners": {
       "services": {
         "message": "You currently have no services (what you sell). Create your first service now - this is necessary to start working and takes just one minute.",
@@ -352,6 +360,11 @@
       "settings": {
         "title": "Settings",
         "description": "System configuration"
+      },
+      "subscription": {
+        "title": "Subscription",
+        "description": "Manage your subscription plan",
+        "manage": "Manage"
       },
       "today": "today",
       "available": "available",
@@ -423,7 +436,11 @@
     },
     "tabs": {
       "userProfile": "User Profile",
-      "systemSettings": "System Settings"
+      "systemSettings": "System Settings",
+      "subscription": "Subscription",
+      "profile": "Profile",
+      "system": "System",
+      "subscriptionShort": "Plan"
     },
     "profile": {
       "title": "User Profile",
@@ -513,7 +530,102 @@
     },
     "profileUpdatedSuccessfully": "Profile updated successfully",
     "passwordChangedSuccessfully": "Password changed successfully",
-    "systemSettingsSavedSuccessfully": "System settings saved successfully"
+    "systemSettingsSavedSuccessfully": "System settings saved successfully",
+    "subscription": {
+      "title": "Subscription Management",
+      "description": "View and manage your subscription plan",
+      "currentPlan": "Current Plan",
+      "status": "Status",
+      "expiresAt": "Expires At",
+      "loadError": "Failed to load subscription information",
+      "plans": {
+        "free": "Free",
+        "pro": "Professional",
+        "enterprise": "Enterprise"
+      },
+      "statuses": {
+        "active": "Active",
+        "cancelled": "Cancelled",
+        "expired": "Expired",
+        "past_due": "Past Due",
+        "trialing": "Trial"
+      },
+      "manageTitle": "Manage Subscription",
+      "manageDescription": "Manage your subscription through Lemon Squeezy customer portal",
+      "manageButton": "Manage Subscription",
+      "activateLicenseTitle": "Activate License Key",
+      "activateLicenseDescription": "Enter your license key to activate your subscription",
+      "licenseKeyLabel": "License Key",
+      "licenseKeyPlaceholder": "Enter your license key",
+      "licenseKeyHint": "You can find your license key in your purchase confirmation email",
+      "licenseKeyRequired": "License key is required",
+      "activateButton": "Activate License",
+      "activating": "Activating...",
+      "activationFailed": "Failed to activate license key",
+      "upgradeTitle": "Upgrade Your Plan",
+      "upgradeDescription": "Unlock advanced features with Pro or Enterprise plans",
+      "viewPlans": "View Plans",
+      "monthlyPrice": "Monthly Price",
+      "nextPayment": "Next Payment Date",
+      "purchaseButton": "Purchase Subscription",
+      "purchaseHint": "You will be redirected to Lemon Squeezy checkout. Your subscription will be activated automatically after payment.",
+      "cancelButton": "Cancel Subscription",
+      "downgradeButton": "Downgrade to Free",
+      "cancelling": "Cancelling...",
+      "downgrading": "Downgrading...",
+      "confirmCancel": "Yes, Cancel Subscription",
+      "confirmDowngrade": "Yes, Downgrade to Free",
+      "cancelFailed": "Failed to cancel subscription",
+      "downgradeFailed": "Failed to downgrade subscription",
+      "cancelDialog": {
+        "title": "Cancel Subscription?",
+        "description": "Are you sure you want to cancel your subscription?",
+        "impactTitle": "This will affect:",
+        "impact1": "Your subscription will remain active until the end of the current billing period",
+        "impact2": "You will lose access to premium features after expiration",
+        "impact3": "All your data will be preserved",
+        "note": "You can reactivate your subscription at any time before it expires."
+      },
+      "downgradeDialog": {
+        "title": "Downgrade to Free Plan?",
+        "description": "Are you sure you want to downgrade to the Free plan?",
+        "impactTitle": "This will affect:",
+        "impact1": "You will immediately lose access to AI Assistant features",
+        "impact2": "Some advanced features will be limited",
+        "impact3": "Your subscription will be cancelled and you won't be charged",
+        "note": "You can upgrade again at any time."
+      },
+      "cancelledTitle": "Subscription Cancelled",
+      "cancelledDescription": "Your subscription has been cancelled but remains active until the expiration date.",
+      "cancelledBadge": "Cancelled - Active until expiration",
+      "willDowngradeToFree": "Will automatically downgrade to Free plan after expiration",
+      "reactivateButton": "Reactivate Subscription",
+      "reactivating": "Reactivating...",
+      "reactivateFailed": "Failed to reactivate subscription",
+      "currentStatus": "Current Status:",
+      "statusInfo": {
+        "activeUntil": "Active until {date}",
+        "willDowngrade": "Will downgrade to Free plan after expiration",
+        "reactivateAnytime": "You can reactivate anytime before expiration"
+      },
+      "cancelledPlanInfo": "Previous plan: {plan}",
+      "downgradedTitle": "Subscription Downgraded",
+      "downgradedDescription": "Your subscription has been downgraded to Free plan",
+      "downgradedInfo": "You can restore your previous plan until {date}",
+      "restoreButton": "Restore Previous Plan",
+      "downgradeLimitWarning": "You have exceeded Free plan limits. Existing items will remain, but you won't be able to create new ones until you upgrade or remove excess items.",
+      "actionsExplanation": {
+        "title": "What's the difference?",
+        "cancel": "Cancel Subscription - Keeps your current plan active until expiration, then automatically downgrades to Free",
+        "downgrade": "Downgrade to Free - Immediately switches to Free plan and cancels subscription"
+      },
+      "activationInstructions": {
+        "title": "How Subscription Activation Works",
+        "method1": "1. Purchase Subscription - Click the button above to purchase. Your subscription will be activated automatically via webhook after payment.",
+        "method2": "2. Manual License Key - If you received a license key via email, you can enter it below. This is optional as activation happens automatically.",
+        "note": "Note: Manual key entry is only needed if automatic activation didn't work. In most cases, you won't need to enter a key manually."
+      }
+    }
   },
   "dialogs": {
     "save": "Save",
@@ -695,6 +807,15 @@
       "title": "Test AI Assistant",
       "description": "Send a test message to verify AI configuration and responses",
       "runTest": "Run Test"
+    },
+    "freePlan": {
+      "title": "AI Assistant Available in Pro Plan",
+      "description": "Upgrade to Pro or Enterprise plan to unlock AI Assistant features",
+      "featuresTitle": "What you'll get:",
+      "feature1": "Intelligent chatbot responses",
+      "feature2": "Custom AI instructions and prompts",
+      "feature3": "Advanced analytics and insights",
+      "upgradeButton": "Upgrade Plan"
     }
   },
   "toasts": {

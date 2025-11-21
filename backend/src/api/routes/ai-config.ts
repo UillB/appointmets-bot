@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
+import { requireSubscriptionFeature } from '../../lib/subscription-limits';
 import { AIService } from '../../lib/ai/ai-service';
 
 const router = Router();
@@ -90,6 +91,15 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
   try {
     const { organizationId } = req.user;
 
+    // Check subscription for AI Assistant feature
+    const subscriptionCheck = await requireSubscriptionFeature(organizationId, 'aiAssistant');
+    if (!subscriptionCheck.allowed) {
+      return res.status(403).json({ 
+        error: subscriptionCheck.error || 'AI Assistant is not available in your current plan',
+        code: 'SUBSCRIPTION_REQUIRED'
+      });
+    }
+
     const config = await aiService.getOrganizationAIConfig(organizationId);
     
     if (!config) {
@@ -116,6 +126,15 @@ router.get('/', verifyToken, async (req: any, res: Response) => {
 router.post('/', verifyToken, async (req: any, res: Response) => {
   try {
     const { organizationId } = req.user;
+
+    // Check subscription for AI Assistant feature
+    const subscriptionCheck = await requireSubscriptionFeature(organizationId, 'aiAssistant');
+    if (!subscriptionCheck.allowed) {
+      return res.status(403).json({ 
+        error: subscriptionCheck.error || 'AI Assistant is not available in your current plan',
+        code: 'SUBSCRIPTION_REQUIRED'
+      });
+    }
     const validatedData = aiConfigSchema.parse(req.body);
 
     // Проверяем валидность API ключа

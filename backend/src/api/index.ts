@@ -14,6 +14,7 @@ import aiConfig from "./routes/ai-config";
 import notifications from "./routes/notifications";
 import performance from "./routes/performance";
 import analytics from "./routes/analytics";
+import subscription from "./routes/subscription";
 
 
 export function createApi() {
@@ -48,8 +49,10 @@ app.use("/api/ai-config", aiConfig);
 app.use("/api/notifications", notifications);
 app.use("/api/performance", performance);
 app.use("/api/analytics", analytics);
+app.use("/api/subscription", subscription);
 console.log("✅ AI Config routes registered at /api/ai-config");
 console.log("✅ Notifications routes registered at /api/notifications");
+console.log("✅ Subscription routes registered at /api/subscription");
 app.use("/webapp", webapp);
 
 // Serve prebuilt React admin panel for Telegram WebApp from build (same origin for mobile TG)

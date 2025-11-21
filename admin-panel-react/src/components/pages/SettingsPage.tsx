@@ -30,6 +30,13 @@ import {
   Eye,
   EyeOff,
   CheckCircle2,
+  Crown,
+  CreditCard,
+  Key,
+  ExternalLink,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
 } from "lucide-react";
 import { StatCard } from "../cards/StatCard";
 import { PageHeader } from "../PageHeader";
@@ -43,6 +50,17 @@ import { Badge } from "../ui/badge";
 import { useLanguage } from "../../i18n";
 import { useSearchParams } from "react-router-dom";
 import { useTheme } from "../../hooks/useTheme";
+import { apiClient } from "../../services/api";
+import { useAuth } from "../../hooks/useAuth";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { AlertTriangle } from "lucide-react";
 
 export function SettingsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,13 +68,146 @@ export function SettingsPage() {
   const [activeTab, setActiveTab] = useState(tabParam || "profile");
   const { t, language, setLanguage } = useLanguage();
   const { theme, setTheme } = useTheme();
+  const { user } = useAuth();
 
   // Update active tab when URL param changes
   useEffect(() => {
-    if (tabParam && (tabParam === 'profile' || tabParam === 'system')) {
+    if (tabParam && (tabParam === 'profile' || tabParam === 'system' || tabParam === 'subscription')) {
       setActiveTab(tabParam);
     }
   }, [tabParam]);
+
+  // Load subscription when subscription tab is active
+  useEffect(() => {
+    if (activeTab === 'subscription') {
+      loadSubscription();
+    }
+  }, [activeTab]);
+
+  const loadSubscription = async () => {
+    try {
+      setIsLoadingSubscription(true);
+      const data = await apiClient.getSubscription();
+      setSubscription(data.subscription);
+    } catch (error) {
+      console.error('Failed to load subscription:', error);
+      toast.error(t('settings.subscription.loadError'));
+    } finally {
+      setIsLoadingSubscription(false);
+    }
+  };
+
+  const handleActivateLicense = async () => {
+    if (!licenseKey.trim()) {
+      toast.error(t('settings.subscription.licenseKeyRequired'));
+      return;
+    }
+
+    try {
+      setIsActivatingLicense(true);
+      const result = await apiClient.activateLicenseKey(licenseKey.trim());
+      toast.success(result.message);
+      setLicenseKey("");
+      await loadSubscription();
+    } catch (error: any) {
+      console.error('Failed to activate license:', error);
+      toast.error(error.message || t('settings.subscription.activationFailed'));
+    } finally {
+      setIsActivatingLicense(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    try {
+      setIsCancelling(true);
+      const result = await apiClient.cancelSubscription();
+      toast.success(result.message);
+      setShowCancelDialog(false);
+      await loadSubscription();
+    } catch (error: any) {
+      console.error('Failed to cancel subscription:', error);
+      toast.error(error.message || t('settings.subscription.cancelFailed'));
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
+  const handleDowngradeSubscription = async () => {
+    try {
+      setIsDowngrading(true);
+      const result = await apiClient.downgradeSubscription('FREE');
+      
+      // Show warning if there are limit violations
+      if (result.violations && result.violations.length > 0) {
+        toast.warning(result.warning || t('settings.subscription.downgradeLimitWarning'), {
+          duration: 8000,
+        });
+      } else {
+        toast.success(result.message);
+      }
+      
+      setShowDowngradeDialog(false);
+      await loadSubscription();
+    } catch (error: any) {
+      console.error('Failed to downgrade subscription:', error);
+      toast.error(error.message || t('settings.subscription.downgradeFailed'));
+    } finally {
+      setIsDowngrading(false);
+    }
+  };
+
+  const handleReactivateSubscription = async () => {
+    try {
+      setIsReactivating(true);
+      const result = await apiClient.reactivateSubscription();
+      toast.success(result.message);
+      await loadSubscription();
+    } catch (error: any) {
+      console.error('Failed to reactivate subscription:', error);
+      toast.error(error.message || t('settings.subscription.reactivateFailed'));
+    } finally {
+      setIsReactivating(false);
+    }
+  };
+
+  // Calculate next payment date (1 month from start or expiresAt)
+  const getNextPaymentDate = () => {
+    if (!subscription?.expiresAt) return null;
+    return new Date(subscription.expiresAt);
+  };
+
+  // Check if subscription will downgrade to FREE after expiration
+  const willDowngradeToFree = () => {
+    if (!subscription) return false;
+    if (subscription.plan === 'FREE') return false;
+    if (subscription.status === 'CANCELLED' && subscription.expiresAt) {
+      const expiresAt = new Date(subscription.expiresAt);
+      return expiresAt > new Date(); // Still active until expiration
+    }
+    return false;
+  };
+
+  // Check if subscription is expired and should be downgraded
+  const isExpiredAndShouldDowngrade = () => {
+    if (!subscription || subscription.plan === 'FREE') return false;
+    if (subscription.expiresAt) {
+      const expiresAt = new Date(subscription.expiresAt);
+      return expiresAt <= new Date();
+    }
+    return false;
+  };
+
+  // Get plan price
+  const getPlanPrice = (plan: 'FREE' | 'PRO' | 'ENTERPRISE') => {
+    switch (plan) {
+      case 'PRO':
+        return '$29';
+      case 'ENTERPRISE':
+        return 'Custom';
+      default:
+        return '$0';
+    }
+  };
   
   // User Profile State
   const [fullName, setFullName] = useState("Vladi");
@@ -73,6 +224,29 @@ export function SettingsPage() {
   const [dateFormat, setDateFormat] = useState("MM/DD/YYYY");
   const [timeFormat, setTimeFormat] = useState("12");
   const [refreshInterval, setRefreshInterval] = useState("30");
+  
+  // Subscription state
+  const [subscription, setSubscription] = useState<{
+    plan: 'FREE' | 'PRO' | 'ENTERPRISE';
+    status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
+    expiresAt?: string;
+    startedAt?: string;
+    hasLicenseKey: boolean;
+    hasLemonSqueezySubscription: boolean;
+  } | null>(null);
+  const [isLoadingSubscription, setIsLoadingSubscription] = useState(false);
+  const [licenseKey, setLicenseKey] = useState("");
+  const [isActivatingLicense, setIsActivatingLicense] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showDowngradeDialog, setShowDowngradeDialog] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [isDowngrading, setIsDowngrading] = useState(false);
+  const [isReactivating, setIsReactivating] = useState(false);
+  
+  // Lemon Squeezy product URL (will be provided by user)
+  // In Vite, use import.meta.env instead of process.env
+  // Variable name should start with VITE_ prefix
+  const LEMON_SQUEEZY_PRODUCT_URL = import.meta.env.VITE_LEMON_SQUEEZY_PRODUCT_URL || 'https://your-store.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_ID';
 
   const stats = [
     {
@@ -178,14 +352,21 @@ export function SettingsPage() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 dark:bg-gray-800">
-              <TabsTrigger value="profile" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400">
+            <TabsList className="grid w-full grid-cols-3 mb-6 bg-gray-100 dark:bg-gray-800">
+              <TabsTrigger value="profile" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                 <User className="w-4 h-4" />
-                {t('settings.tabs.userProfile')}
+                <span className="hidden sm:inline">{t('settings.tabs.userProfile')}</span>
+                <span className="sm:hidden">{t('settings.tabs.profile')}</span>
               </TabsTrigger>
-              <TabsTrigger value="system" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400">
+              <TabsTrigger value="system" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
                 <SettingsIcon className="w-4 h-4" />
-                {t('settings.tabs.systemSettings')}
+                <span className="hidden sm:inline">{t('settings.tabs.systemSettings')}</span>
+                <span className="sm:hidden">{t('settings.tabs.system')}</span>
+              </TabsTrigger>
+              <TabsTrigger value="subscription" className="gap-2 data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-gray-100 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
+                <Crown className="w-4 h-4" />
+                <span className="hidden sm:inline">{t('settings.tabs.subscription')}</span>
+                <span className="sm:hidden">{t('settings.tabs.subscriptionShort')}</span>
               </TabsTrigger>
             </TabsList>
 
@@ -701,6 +882,577 @@ export function SettingsPage() {
                   </div>
                 </div>
               </Card>
+            </TabsContent>
+
+            {/* Subscription Tab */}
+            <TabsContent value="subscription" className="mt-0 space-y-6">
+              {isLoadingSubscription ? (
+                <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center justify-center py-12">
+                    <RefreshCw className="w-6 h-6 animate-spin text-gray-400" />
+                  </div>
+                </Card>
+              ) : subscription ? (
+                <>
+                  {/* Current Plan Card */}
+                  <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                          <Crown className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.subscription.title')}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">
+                            {t('settings.subscription.description')}
+                          </p>
+                        </div>
+                      </div>
+
+                      <Separator />
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-4 bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900 rounded-lg">
+                          <div className="flex items-center gap-3 mb-2">
+                            <Crown className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase">
+                              {t('settings.subscription.currentPlan')}
+                            </span>
+                          </div>
+                          <div className="space-y-2">
+                          <div className="space-y-2">
+                            <Badge 
+                              className={`text-base px-3 py-1 ${
+                                subscription.plan === 'FREE' 
+                                  ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
+                                  : subscription.plan === 'PRO'
+                                  ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300'
+                                  : 'bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300'
+                              }`}
+                            >
+                              {t(`settings.subscription.plans.${subscription.plan.toLowerCase()}`)}
+                            </Badge>
+                            {subscription.status === 'CANCELLED' && (
+                              <div className="space-y-1">
+                                <p className="text-xs font-medium text-amber-600 dark:text-amber-400">
+                                  {t('settings.subscription.cancelledBadge')}
+                                </p>
+                                {subscription.plan === 'FREE' && subscription.previousPlan ? (
+                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                    {t('settings.subscription.cancelledPlanInfo', { 
+                                      plan: t(`settings.subscription.plans.${subscription.previousPlan.toLowerCase()}`)
+                                    })}
+                                  </p>
+                                ) : subscription.plan !== 'FREE' ? (
+                                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                                    {t('settings.subscription.cancelledPlanInfo', { 
+                                      plan: t(`settings.subscription.plans.${subscription.plan.toLowerCase()}`)
+                                    })}
+                                  </p>
+                                ) : null}
+                              </div>
+                            )}
+                          </div>
+                          </div>
+                        </div>
+
+                        <div className="p-4 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900 rounded-lg">
+                          <div className="flex items-center gap-3 mb-2">
+                            {subscription.status === 'ACTIVE' ? (
+                              <CheckCircle className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                            ) : subscription.status === 'EXPIRED' || subscription.status === 'CANCELLED' ? (
+                              <XCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                            ) : (
+                              <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                            )}
+                            <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium uppercase">
+                              {t('settings.subscription.status')}
+                            </span>
+                          </div>
+                          <Badge 
+                            className={`${
+                              subscription.status === 'ACTIVE'
+                                ? 'bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300'
+                                : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
+                            }`}
+                          >
+                            {t(`settings.subscription.statuses.${subscription.status.toLowerCase()}`)}
+                          </Badge>
+                        </div>
+
+                        {subscription.expiresAt && (
+                          <div className="p-4 bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 rounded-lg sm:col-span-2">
+                            <div className="flex items-center gap-3 mb-2">
+                              <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                              <span className="text-xs text-blue-600 dark:text-blue-400 font-medium uppercase">
+                                {t('settings.subscription.expiresAt')}
+                              </span>
+                            </div>
+                            <p className="text-gray-900 dark:text-gray-100">
+                              {subscription.expiresAt ? new Date(subscription.expiresAt).toLocaleDateString() : t('common.notAvailable')}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Subscription Details & Management */}
+                  {subscription.plan !== 'FREE' && subscription.status === 'ACTIVE' ? (
+                    // Active subscription
+                    <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                            <CreditCard className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.subscription.manageTitle')}</h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {t('settings.subscription.manageDescription')}
+                            </p>
+                          </div>
+                        </div>
+
+                        <Separator />
+
+                        {/* Subscription Details */}
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <span className="text-sm text-gray-600 dark:text-gray-400">{t('settings.subscription.monthlyPrice')}</span>
+                            <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                              {getPlanPrice(subscription.plan)}
+                              {subscription.plan !== 'ENTERPRISE' && <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">/month</span>}
+                            </span>
+                          </div>
+
+                          {getNextPaymentDate() && (
+                            <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                              <span className="text-sm text-gray-600 dark:text-gray-400">{t('settings.subscription.nextPayment')}</span>
+                              <span className="text-base font-semibold text-gray-900 dark:text-gray-100">
+                                {getNextPaymentDate()?.toLocaleDateString()}
+                              </span>
+                            </div>
+                          )}
+
+                          {subscription.hasLemonSqueezySubscription && (
+                            <Button
+                              onClick={() => {
+                                window.open('https://app.lemonsqueezy.com/my-account/orders', '_blank');
+                              }}
+                              variant="outline"
+                              className="w-full sm:w-auto"
+                            >
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              {t('settings.subscription.manageButton')}
+                            </Button>
+                          )}
+                        </div>
+
+                        <Separator />
+
+                        {/* Actions */}
+                        <div className="space-y-3">
+                          {/* Explanation of Cancel vs Downgrade */}
+                          <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 space-y-2">
+                            <p className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+                              {t('settings.subscription.actionsExplanation.title')}
+                            </p>
+                            <div className="space-y-1.5 text-xs text-gray-600 dark:text-gray-400">
+                              <div className="flex items-start gap-2">
+                                <span className="font-medium text-red-600 dark:text-red-400">• {t('settings.subscription.actionsExplanation.cancel')}</span>
+                              </div>
+                              <div className="flex items-start gap-2">
+                                <span className="font-medium text-amber-600 dark:text-amber-400">• {t('settings.subscription.actionsExplanation.downgrade')}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            {subscription.plan === 'PRO' && (
+                              <Button
+                                onClick={() => setShowDowngradeDialog(true)}
+                                variant="outline"
+                                className="flex-1 border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950"
+                              >
+                                {t('settings.subscription.downgradeButton')}
+                              </Button>
+                            )}
+                            <Button
+                              onClick={() => setShowCancelDialog(true)}
+                              variant="outline"
+                              className="flex-1 border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-950"
+                            >
+                              {t('settings.subscription.cancelButton')}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  ) : subscription.plan !== 'FREE' && subscription.status === 'CANCELLED' ? (
+                    // Cancelled subscription - show reactivate option
+                    <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                            <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg text-gray-900 dark:text-gray-100">
+                              {t('settings.subscription.cancelledTitle')} - {subscription.plan !== 'FREE' ? t(`settings.subscription.plans.${subscription.plan.toLowerCase()}`) : subscription.previousPlan ? t(`settings.subscription.plans.${subscription.previousPlan.toLowerCase()}`) : 'Previous Plan'}
+                            </h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {t('settings.subscription.cancelledDescription')}
+                            </p>
+                          </div>
+                        </div>
+
+                        <Separator />
+
+                        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium text-amber-900 dark:text-amber-200">
+                              {t('settings.subscription.currentStatus')}
+                            </p>
+                            <ul className="space-y-1.5 text-sm text-amber-800 dark:text-amber-300 list-disc list-inside">
+                              <li>{t('settings.subscription.statusInfo.activeUntil', { date: subscription.expiresAt ? new Date(subscription.expiresAt).toLocaleDateString() : t('common.notAvailable') })}</li>
+                              <li>{t('settings.subscription.statusInfo.willDowngrade', { plan: t(`settings.subscription.plans.${subscription.plan.toLowerCase()}`) })}</li>
+                              <li>{t('settings.subscription.statusInfo.reactivateAnytime')}</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row gap-3">
+                          <Button
+                            onClick={handleReactivateSubscription}
+                            disabled={isReactivating || (subscription.expiresAt && new Date(subscription.expiresAt) < new Date())}
+                            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white"
+                          >
+                            {isReactivating ? (
+                              <>
+                                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                                {t('settings.subscription.reactivating')}
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle2 className="w-4 h-4 mr-2" />
+                                {t('settings.subscription.reactivateButton')}
+                              </>
+                            )}
+                          </Button>
+                          {subscription.hasLemonSqueezySubscription && (
+                            <Button
+                              onClick={() => {
+                                window.open('https://app.lemonsqueezy.com/my-account/orders', '_blank');
+                              }}
+                              variant="outline"
+                              className="flex-1"
+                            >
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              {t('settings.subscription.manageButton')}
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  ) : subscription.plan === 'FREE' && subscription.status === 'CANCELLED' && (subscription.hasLicenseKey || subscription.hasLemonSqueezySubscription) ? (
+                    // Downgraded to FREE - show restore option
+                    <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                      <div className="space-y-4">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                            <AlertCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg text-gray-900 dark:text-gray-100">
+                              {t('settings.subscription.downgradedTitle')} - {subscription.previousPlan ? t(`settings.subscription.plans.${subscription.previousPlan.toLowerCase()}`) : 'PRO'}
+                            </h3>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              {t('settings.subscription.downgradedDescription')}
+                            </p>
+                          </div>
+                        </div>
+
+                        <Separator />
+
+                        <div className="bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium text-blue-900 dark:text-blue-200">
+                              {t('settings.subscription.currentStatus')}
+                            </p>
+                            <ul className="space-y-1.5 text-sm text-blue-800 dark:text-blue-300 list-disc list-inside">
+                              <li>{t('settings.subscription.statusInfo.willDowngrade', { plan: subscription.previousPlan ? t(`settings.subscription.plans.${subscription.previousPlan.toLowerCase()}`) : 'PRO' })}</li>
+                              <li>{t('settings.subscription.statusInfo.reactivateAnytime')}</li>
+                            </ul>
+                          </div>
+                        </div>
+
+                        <Button
+                          onClick={handleReactivateSubscription}
+                          disabled={isReactivating}
+                          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                        >
+                          {isReactivating ? (
+                            <>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              {t('settings.subscription.reactivating')}
+                            </>
+                          ) : (
+                            <>
+                              <CheckCircle2 className="w-4 h-4 mr-2" />
+                              {t('settings.subscription.restoreButton')}
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </Card>
+                  ) : subscription.plan === 'FREE' ? (
+                    <>
+                      {/* Purchase Subscription */}
+                      <Card className="p-4 sm:p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-indigo-200 dark:border-indigo-900">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                              <Crown className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                              <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.subscription.upgradeTitle')}</h3>
+                              <p className="text-sm text-gray-600 dark:text-gray-300">
+                                {t('settings.subscription.upgradeDescription')}
+                              </p>
+                            </div>
+                          </div>
+
+                          <Separator className="bg-indigo-200 dark:bg-indigo-800" />
+
+                          <div className="space-y-3">
+                            <Button
+                              onClick={() => {
+                                // Add user email to URL for automatic activation via webhook
+                                const checkoutUrl = userEmail 
+                                  ? `${LEMON_SQUEEZY_PRODUCT_URL}?checkout[email]=${encodeURIComponent(userEmail)}`
+                                  : LEMON_SQUEEZY_PRODUCT_URL;
+                                window.open(checkoutUrl, '_blank');
+                              }}
+                              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                              size="lg"
+                            >
+                              <Crown className="w-4 h-4 mr-2" />
+                              {t('settings.subscription.purchaseButton')}
+                            </Button>
+                            <p className="text-xs text-center text-gray-600 dark:text-gray-300">
+                              {t('settings.subscription.purchaseHint')}
+                            </p>
+                          </div>
+                        </div>
+                      </Card>
+
+                      {/* Subscription Activation Instructions */}
+                      <Card className="p-4 sm:p-6 bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
+                        <div className="space-y-3">
+                          <div className="flex items-start gap-3">
+                            <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <HelpCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <div className="flex-1 space-y-2">
+                              <h4 className="text-sm font-semibold text-blue-900 dark:text-blue-200">
+                                {t('settings.subscription.activationInstructions.title')}
+                              </h4>
+                              <div className="space-y-2 text-sm text-blue-800 dark:text-blue-300">
+                                <p>{t('settings.subscription.activationInstructions.method1')}</p>
+                                <p className="font-medium">{t('settings.subscription.activationInstructions.method2')}</p>
+                                <p className="text-xs text-blue-700 dark:text-blue-400">
+                                  {t('settings.subscription.activationInstructions.note')}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Card>
+
+                      {/* Manual License Key Activation (Fallback) */}
+                      <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                        <div className="space-y-4">
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                              <Key className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                            </div>
+                            <div>
+                              <h3 className="text-lg text-gray-900 dark:text-gray-100">{t('settings.subscription.activateLicenseTitle')}</h3>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">
+                                {t('settings.subscription.activateLicenseDescription')}
+                              </p>
+                            </div>
+                          </div>
+
+                          <Separator />
+
+                          <div className="space-y-4">
+                            <div className="space-y-2">
+                              <Label htmlFor="licenseKey" className="text-gray-900 dark:text-gray-100">
+                                {t('settings.subscription.licenseKeyLabel')}
+                              </Label>
+                              <div className="relative">
+                                <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 z-10 pointer-events-none" />
+                                <Input
+                                  id="licenseKey"
+                                  value={licenseKey}
+                                  onChange={(e) => setLicenseKey(e.target.value)}
+                                  placeholder={t('settings.subscription.licenseKeyPlaceholder')}
+                                  className="pl-10 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100"
+                                  disabled={isActivatingLicense}
+                                />
+                              </div>
+                              <p className="text-xs text-gray-500 dark:text-gray-400">
+                                {t('settings.subscription.licenseKeyHint')}
+                              </p>
+                            </div>
+
+                            <Button
+                              onClick={handleActivateLicense}
+                              disabled={isActivatingLicense || !licenseKey.trim()}
+                              className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white"
+                            >
+                              {isActivatingLicense ? (
+                                <>
+                                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                                  {t('settings.subscription.activating')}
+                                </>
+                              ) : (
+                                <>
+                                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                                  {t('settings.subscription.activateButton')}
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        </div>
+                      </Card>
+                    </>
+                  ) : null}
+
+                  {/* Cancel Subscription Dialog */}
+                  <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+                    <DialogContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                          <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                          {t('settings.subscription.cancelDialog.title')}
+                        </DialogTitle>
+                        <DialogDescription className="text-gray-600 dark:text-gray-400">
+                          {t('settings.subscription.cancelDialog.description')}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-3 py-4">
+                        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                          <p className="text-sm font-medium text-amber-900 dark:text-amber-200 mb-2">
+                            {t('settings.subscription.cancelDialog.impactTitle')}
+                          </p>
+                          <ul className="space-y-1.5 text-sm text-amber-800 dark:text-amber-300 list-disc list-inside">
+                            <li>{t('settings.subscription.cancelDialog.impact1')}</li>
+                            <li>{t('settings.subscription.cancelDialog.impact2')}</li>
+                            <li>{t('settings.subscription.cancelDialog.impact3')}</li>
+                          </ul>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {t('settings.subscription.cancelDialog.note')}
+                        </p>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowCancelDialog(false)}
+                          disabled={isCancelling}
+                        >
+                          {t('common.cancel')}
+                        </Button>
+                        <Button
+                          onClick={handleCancelSubscription}
+                          disabled={isCancelling}
+                          className="bg-red-600 hover:bg-red-700 text-white"
+                        >
+                          {isCancelling ? (
+                            <>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              {t('settings.subscription.cancelling')}
+                            </>
+                          ) : (
+                            t('settings.subscription.confirmCancel')
+                          )}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+
+                  {/* Downgrade Subscription Dialog */}
+                  <Dialog open={showDowngradeDialog} onOpenChange={setShowDowngradeDialog}>
+                    <DialogContent className="bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
+                          <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                          {t('settings.subscription.downgradeDialog.title')}
+                        </DialogTitle>
+                        <DialogDescription className="text-gray-600 dark:text-gray-400">
+                          {t('settings.subscription.downgradeDialog.description')}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-3 py-4">
+                        <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                          <p className="text-sm font-medium text-amber-900 dark:text-amber-200 mb-2">
+                            {t('settings.subscription.downgradeDialog.impactTitle')}
+                          </p>
+                          <ul className="space-y-1.5 text-sm text-amber-800 dark:text-amber-300 list-disc list-inside">
+                            <li>{t('settings.subscription.downgradeDialog.impact1')}</li>
+                            <li>{t('settings.subscription.downgradeDialog.impact2')}</li>
+                            <li>{t('settings.subscription.downgradeDialog.impact3')}</li>
+                          </ul>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {t('settings.subscription.downgradeDialog.note')}
+                        </p>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowDowngradeDialog(false)}
+                          disabled={isDowngrading}
+                        >
+                          {t('common.cancel')}
+                        </Button>
+                        <Button
+                          onClick={handleDowngradeSubscription}
+                          disabled={isDowngrading}
+                          className="bg-amber-600 hover:bg-amber-700 text-white"
+                        >
+                          {isDowngrading ? (
+                            <>
+                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                              {t('settings.subscription.downgrading')}
+                            </>
+                          ) : (
+                            t('settings.subscription.confirmDowngrade')
+                          )}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </>
+              ) : (
+                <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                  <div className="text-center py-12">
+                    <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500 dark:text-gray-400">{t('settings.subscription.loadError')}</p>
+                    <Button
+                      onClick={loadSubscription}
+                      variant="outline"
+                      className="mt-4"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      {t('common.retry')}
+                    </Button>
+                  </div>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
         </div>

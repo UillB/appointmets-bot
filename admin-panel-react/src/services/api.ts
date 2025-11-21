@@ -115,8 +115,20 @@ export interface Organization {
   avatar?: string;
   botToken?: string;
   botUsername?: string;
+  subscriptionPlan?: 'FREE' | 'PRO' | 'ENTERPRISE';
+  subscriptionStatus?: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
   createdAt: string;
   updatedAt: string;
+}
+
+export interface Subscription {
+  plan: 'FREE' | 'PRO' | 'ENTERPRISE';
+  status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
+  expiresAt?: string;
+  startedAt?: string;
+  hasLicenseKey: boolean;
+  hasLemonSqueezySubscription: boolean;
+  previousPlan?: 'FREE' | 'PRO' | 'ENTERPRISE'; // For downgraded subscriptions
 }
 
 export interface Slot {
@@ -781,6 +793,78 @@ class ApiClient {
     rejectedAppointments: number;
   }> {
     return this.request('/appointments/summary-stats');
+  }
+
+  // Subscription methods
+  async getSubscription(): Promise<{
+    subscription: Subscription;
+    organization: {
+      id: number;
+      name: string;
+    };
+  }> {
+    return this.request('/subscription');
+  }
+
+  async activateLicenseKey(licenseKey: string): Promise<{
+    message: string;
+    subscription: {
+      plan: 'FREE' | 'PRO' | 'ENTERPRISE';
+      status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
+      expiresAt?: string;
+    };
+  }> {
+    return this.request('/subscription/activate-license', {
+      method: 'POST',
+      body: JSON.stringify({ licenseKey }),
+    });
+  }
+
+  async cancelSubscription(reason?: string): Promise<{
+    message: string;
+    subscription: {
+      plan: 'FREE' | 'PRO' | 'ENTERPRISE';
+      status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
+      expiresAt?: string;
+    };
+  }> {
+    return this.request('/subscription/cancel', {
+      method: 'POST',
+      body: JSON.stringify({ reason }),
+    });
+  }
+
+  async downgradeSubscription(targetPlan: 'FREE', reason?: string): Promise<{
+    message: string;
+    subscription: {
+      plan: 'FREE' | 'PRO' | 'ENTERPRISE';
+      status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
+      expiresAt?: string | null;
+    };
+    violations?: Array<{
+      type: 'services' | 'appointments';
+      current: number;
+      limit: number;
+    }>;
+    warning?: string;
+  }> {
+    return this.request('/subscription/downgrade', {
+      method: 'POST',
+      body: JSON.stringify({ targetPlan, reason }),
+    });
+  }
+
+  async reactivateSubscription(): Promise<{
+    message: string;
+    subscription: {
+      plan: 'FREE' | 'PRO' | 'ENTERPRISE';
+      status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAST_DUE' | 'TRIALING';
+      expiresAt?: string;
+    };
+  }> {
+    return this.request('/subscription/reactivate', {
+      method: 'POST',
+    });
   }
 
   // Analytics data
