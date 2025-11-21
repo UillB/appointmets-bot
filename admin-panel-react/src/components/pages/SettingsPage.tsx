@@ -77,6 +77,38 @@ export function SettingsPage() {
     }
   }, [tabParam]);
 
+  // Subscription config state
+  const [subscriptionConfig, setSubscriptionConfig] = useState<{
+    plans: Array<{
+      id: 'FREE' | 'PRO' | 'ENTERPRISE';
+      displayName: string;
+      monthlyPriceUSD: number | null;
+      limits: {
+        maxAppointmentsPerMonth: number;
+        maxServices: number;
+        maxOrganizations: number;
+        aiAssistantEnabled: boolean;
+        advancedAnalytics: boolean;
+        apiAccess: boolean;
+        prioritySupport: boolean;
+      };
+    }>;
+    lemonSqueezyProductUrl: string;
+  } | null>(null);
+
+  // Load subscription config on mount
+  useEffect(() => {
+    const loadConfig = async () => {
+      try {
+        const config = await apiClient.getSubscriptionConfig();
+        setSubscriptionConfig(config);
+      } catch (error) {
+        console.error('Failed to load subscription config:', error);
+      }
+    };
+    loadConfig();
+  }, []);
+
   // Load subscription when subscription tab is active
   useEffect(() => {
     if (activeTab === 'subscription') {
@@ -197,16 +229,32 @@ export function SettingsPage() {
     return false;
   };
 
-  // Get plan price
+  // Get plan price from config
   const getPlanPrice = (plan: 'FREE' | 'PRO' | 'ENTERPRISE') => {
-    switch (plan) {
-      case 'PRO':
-        return '$29';
-      case 'ENTERPRISE':
-        return 'Custom';
-      default:
-        return '$0';
+    if (!subscriptionConfig) {
+      // Fallback while loading
+      switch (plan) {
+        case 'PRO':
+          return '$29';
+        case 'ENTERPRISE':
+          return 'Custom';
+        default:
+          return '$0';
+      }
     }
+    const planConfig = subscriptionConfig.plans.find(p => p.id === plan);
+    if (!planConfig) return '$0';
+    if (planConfig.monthlyPriceUSD === null) return 'Custom';
+    return `$${planConfig.monthlyPriceUSD}`;
+  };
+
+  // Get Lemon Squeezy product URL from config
+  const getLemonSqueezyProductUrl = () => {
+    if (!subscriptionConfig) {
+      // Fallback while loading
+      return import.meta.env.VITE_LEMON_SQUEEZY_PRODUCT_URL || 'https://your-store.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_ID';
+    }
+    return subscriptionConfig.lemonSqueezyProductUrl || import.meta.env.VITE_LEMON_SQUEEZY_PRODUCT_URL || 'https://your-store.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_ID';
   };
   
   // User Profile State
@@ -243,10 +291,6 @@ export function SettingsPage() {
   const [isDowngrading, setIsDowngrading] = useState(false);
   const [isReactivating, setIsReactivating] = useState(false);
   
-  // Lemon Squeezy product URL (will be provided by user)
-  // In Vite, use import.meta.env instead of process.env
-  // Variable name should start with VITE_ prefix
-  const LEMON_SQUEEZY_PRODUCT_URL = import.meta.env.VITE_LEMON_SQUEEZY_PRODUCT_URL || 'https://your-store.lemonsqueezy.com/checkout/buy/YOUR_PRODUCT_ID';
 
   const stats = [
     {
@@ -1229,9 +1273,10 @@ export function SettingsPage() {
                             <Button
                               onClick={() => {
                                 // Add user email to URL for automatic activation via webhook
+                                const productUrl = getLemonSqueezyProductUrl();
                                 const checkoutUrl = userEmail 
-                                  ? `${LEMON_SQUEEZY_PRODUCT_URL}?checkout[email]=${encodeURIComponent(userEmail)}`
-                                  : LEMON_SQUEEZY_PRODUCT_URL;
+                                  ? `${productUrl}?checkout[email]=${encodeURIComponent(userEmail)}`
+                                  : productUrl;
                                 window.open(checkoutUrl, '_blank');
                               }}
                               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"

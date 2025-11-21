@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 import { z } from 'zod';
 import jwt from 'jsonwebtoken';
 import { validate as uuidValidate } from 'uuid';
+import { PLAN_CONFIG, getPlanConfig } from '../../lib/subscription-config';
+import { getLemonSqueezyConfig, getLemonSqueezyProductUrl } from '../../lib/lemon-squeezy-config';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -58,6 +60,30 @@ const cancelSubscriptionSchema = z.object({
 const downgradeSubscriptionSchema = z.object({
   targetPlan: z.enum(['FREE']),
   reason: z.string().optional(),
+});
+
+// GET /subscription/config - Get subscription plan configuration (public endpoint)
+router.get('/config', async (req: Request, res: Response) => {
+  try {
+    // Return plan configurations for frontend
+    const plans = Object.values(PLAN_CONFIG).map((config) => ({
+      id: config.id,
+      displayName: config.displayName,
+      monthlyPriceUSD: config.monthlyPriceUSD,
+      limits: config.limits,
+    }));
+
+    // Also return Lemon Squeezy product URL based on current mode
+    const lemonSqueezyProductUrl = getLemonSqueezyProductUrl();
+
+    res.json({
+      plans,
+      lemonSqueezyProductUrl,
+    });
+  } catch (error) {
+    console.error('Get subscription config error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // GET /subscription - Get current organization subscription
@@ -130,13 +156,25 @@ router.post('/activate-license', verifyToken, async (req: AuthenticatedRequest, 
     const { licenseKey } = validatedData;
     const { organizationId } = req.user;
 
+    // Check if fake licenses are allowed
+    const allowFakeLicenses = process.env.ALLOW_FAKE_LICENSES === 'true' || 
+                               process.env.ALLOW_FAKE_LICENSES === undefined; // Default to true for backward compatibility
+
+    if (!allowFakeLicenses) {
+      return res.status(403).json({ 
+        error: 'Manual license activation is disabled',
+        code: 'SUBSCRIPTION_MANUAL_ACTIVATION_DISABLED',
+      });
+    }
+
     // Validate UUID format (Lemon Squeezy license keys are UUIDs)
     if (!uuidValidate(licenseKey)) {
       return res.status(400).json({ error: 'Invalid license key format. License key must be a valid UUID.' });
     }
 
-    // TODO: Validate license key with Lemon Squeezy API
-    // For now, we'll do basic UUID validation
+    // TODO: Replace this early-alpha behavior with real Lemon Squeezy API validation
+    // Currently, any valid UUID can activate PRO subscription when ALLOW_FAKE_LICENSES=true
+    // This is acceptable for development but MUST be replaced with proper validation before public launch
     // In production, you should verify the license key with Lemon Squeezy API
     
     // Check if license key is already used by another organization
@@ -189,9 +227,12 @@ router.post('/activate-license', verifyToken, async (req: AuthenticatedRequest, 
 // POST /subscription/webhook/lemon-squeezy - Webhook handler for Lemon Squeezy
 router.post('/webhook/lemon-squeezy', async (req: Request, res: Response) => {
   try {
+    // Get Lemon Squeezy config based on environment mode
+    const lemonConfig = getLemonSqueezyConfig();
+    
     // Verify webhook signature (Lemon Squeezy sends a signature header)
     const signature = req.headers['x-signature'] as string;
-    const webhookSecret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET;
+    const webhookSecret = lemonConfig.webhookSecret;
     
     if (webhookSecret && signature) {
       // TODO: Verify webhook signature
@@ -262,15 +303,12 @@ async function handleSubscriptionActivated(event: any) {
     const variantId = subscription.attributes?.variant_id;
     let plan: 'FREE' | 'PRO' | 'ENTERPRISE' = 'PRO'; // Default to PRO
     
-    // Map Lemon Squeezy variant IDs to plans (configure these)
-    // You can store this mapping in env vars or database
+    // Map Lemon Squeezy variant IDs to plans using centralized config
+    const lemonConfig = getLemonSqueezyConfig();
     if (variantId) {
-      const proVariantId = process.env.LEMON_SQUEEZY_PRO_VARIANT_ID;
-      const enterpriseVariantId = process.env.LEMON_SQUEEZY_ENTERPRISE_VARIANT_ID;
-      
-      if (variantId.toString() === enterpriseVariantId) {
+      if (variantId.toString() === lemonConfig.variantIds.enterprise) {
         plan = 'ENTERPRISE';
-      } else if (variantId.toString() === proVariantId) {
+      } else if (variantId.toString() === lemonConfig.variantIds.pro) {
         plan = 'PRO';
       }
     }

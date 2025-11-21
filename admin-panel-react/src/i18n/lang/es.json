@@ -513,7 +513,102 @@
     },
     "profileUpdatedSuccessfully": "Perfil actualizado exitosamente",
     "passwordChangedSuccessfully": "Contraseña cambiada exitosamente",
-    "systemSettingsSavedSuccessfully": "Configuración del sistema guardada exitosamente"
+    "systemSettingsSavedSuccessfully": "Configuración del sistema guardada exitosamente",
+    "subscription": {
+      "title": "Gestión de Suscripción",
+      "description": "Ver y gestionar tu plan de suscripción",
+      "currentPlan": "Plan Actual",
+      "status": "Estado",
+      "expiresAt": "Expira el",
+      "loadError": "Error al cargar información de suscripción",
+      "plans": {
+        "free": "Gratis",
+        "pro": "Profesional",
+        "enterprise": "Empresarial"
+      },
+      "statuses": {
+        "active": "Activo",
+        "cancelled": "Cancelado",
+        "expired": "Expirado",
+        "past_due": "Vencido",
+        "trialing": "Prueba"
+      },
+      "manageTitle": "Gestionar Suscripción",
+      "manageDescription": "Gestiona tu suscripción a través del portal de clientes de Lemon Squeezy",
+      "manageButton": "Gestionar Suscripción",
+      "activateLicenseTitle": "Activar Clave de Licencia",
+      "activateLicenseDescription": "Ingresa tu clave de licencia para activar tu suscripción",
+      "licenseKeyLabel": "Clave de Licencia",
+      "licenseKeyPlaceholder": "Ingresa tu clave de licencia",
+      "licenseKeyHint": "Puedes encontrar tu clave de licencia en el correo de confirmación de compra",
+      "licenseKeyRequired": "La clave de licencia es requerida",
+      "activateButton": "Activar Licencia",
+      "activating": "Activando...",
+      "activationFailed": "Error al activar la clave de licencia",
+      "upgradeTitle": "Actualiza tu Plan",
+      "upgradeDescription": "Desbloquea funciones avanzadas con planes Pro o Enterprise",
+      "viewPlans": "Ver Planes",
+      "monthlyPrice": "Precio Mensual",
+      "nextPayment": "Fecha del Próximo Pago",
+      "purchaseButton": "Comprar Suscripción",
+      "purchaseHint": "Serás redirigido a la página de pago de Lemon Squeezy. Tu suscripción se activará automáticamente después del pago.",
+      "cancelButton": "Cancelar Suscripción",
+      "downgradeButton": "Degradar a Gratis",
+      "cancelling": "Cancelando...",
+      "downgrading": "Degradando...",
+      "confirmCancel": "Sí, Cancelar Suscripción",
+      "confirmDowngrade": "Sí, Degradar a Gratis",
+      "cancelFailed": "Error al cancelar la suscripción",
+      "downgradeFailed": "Error al degradar la suscripción",
+      "cancelDialog": {
+        "title": "¿Cancelar Suscripción?",
+        "description": "¿Estás seguro de que quieres cancelar tu suscripción?",
+        "impactTitle": "Esto afectará:",
+        "impact1": "Tu suscripción permanecerá activa hasta el final del período de facturación actual",
+        "impact2": "Perderás acceso a funciones premium después de la expiración",
+        "impact3": "Todos tus datos se conservarán",
+        "note": "Puedes reactivar tu suscripción en cualquier momento antes de que expire."
+      },
+      "downgradeDialog": {
+        "title": "¿Degradar al Plan Gratis?",
+        "description": "¿Estás seguro de que quieres degradar al plan Gratis?",
+        "impactTitle": "Esto afectará:",
+        "impact1": "Perderás inmediatamente el acceso a las funciones del Asistente IA",
+        "impact2": "Algunas funciones avanzadas estarán limitadas",
+        "impact3": "Tu suscripción será cancelada y no se te cobrará",
+        "note": "Puedes actualizar nuevamente en cualquier momento."
+      },
+      "cancelledTitle": "Suscripción Cancelada",
+      "cancelledDescription": "Tu suscripción ha sido cancelada pero permanece activa hasta la fecha de expiración.",
+      "cancelledBadge": "Cancelada - Activa hasta expiración",
+      "willDowngradeToFree": "Se degradará automáticamente al plan Gratis después de la expiración",
+      "reactivateButton": "Reactivar Suscripción",
+      "reactivating": "Reactivando...",
+      "reactivateFailed": "Error al reactivar la suscripción",
+      "currentStatus": "Estado Actual:",
+      "statusInfo": {
+        "activeUntil": "Activo hasta {date}",
+        "willDowngrade": "Se degradará al plan Gratis después de la expiración",
+        "reactivateAnytime": "Puedes reactivar en cualquier momento antes de la expiración"
+      },
+      "cancelledPlanInfo": "Plan anterior: {plan}",
+      "downgradedTitle": "Suscripción Degradada",
+      "downgradedDescription": "Tu suscripción ha sido degradada al plan Gratis",
+      "downgradedInfo": "Puedes restaurar tu plan anterior hasta {date}",
+      "restoreButton": "Restaurar Plan Anterior",
+      "downgradeLimitWarning": "Has excedido los límites del plan Gratis. Los elementos existentes permanecerán, pero no podrás crear nuevos hasta que actualices o elimines elementos excesivos.",
+      "actionsExplanation": {
+        "title": "¿Cuál es la diferencia?",
+        "cancel": "Cancelar Suscripción - Mantiene tu plan actual activo hasta la expiración, luego degrada automáticamente a Gratis",
+        "downgrade": "Degradar a Gratis - Cambia inmediatamente al plan Gratis y cancela la suscripción"
+      },
+      "activationInstructions": {
+        "title": "Cómo Funciona la Activación de Suscripción",
+        "method1": "1. Comprar Suscripción - Haz clic en el botón de arriba para comprar. Tu suscripción se activará automáticamente vía webhook después del pago.",
+        "method2": "2. Clave de Licencia Manual - Si recibiste una clave de licencia por correo, puedes ingresarla abajo. Esto es opcional ya que la activación ocurre automáticamente.",
+        "note": "Nota: La entrada manual de clave solo es necesaria si la activación automática no funcionó. En la mayoría de los casos, no necesitarás ingresar una clave manualmente."
+      }
+    }
   },
   "dialogs": {
     "save": "Guardar",

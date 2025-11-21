@@ -1,55 +1,21 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, SubscriptionPlan } from '@prisma/client';
+import { getPlanLimits, PlanLimits } from './subscription-config';
 
 const prisma = new PrismaClient();
 
-export interface SubscriptionLimits {
-  maxAppointmentsPerMonth: number;
-  maxServices: number;
-  maxOrganizations: number;
-  aiAssistantEnabled: boolean;
-  advancedAnalytics: boolean;
-  apiAccess: boolean;
-  prioritySupport: boolean;
-}
+/**
+ * @deprecated Use PlanLimits from subscription-config.ts instead
+ * Kept for backward compatibility
+ */
+export interface SubscriptionLimits extends PlanLimits {}
 
 /**
  * Get subscription limits based on plan
+ * 
+ * Now uses centralized configuration from subscription-config.ts
  */
-export function getSubscriptionLimits(plan: 'FREE' | 'PRO' | 'ENTERPRISE'): SubscriptionLimits {
-  switch (plan) {
-    case 'FREE':
-      return {
-        maxAppointmentsPerMonth: 50,
-        maxServices: 15,
-        maxOrganizations: 1,
-        aiAssistantEnabled: false,
-        advancedAnalytics: false,
-        apiAccess: false,
-        prioritySupport: false,
-      };
-    case 'PRO':
-      return {
-        maxAppointmentsPerMonth: 500,
-        maxServices: 50,
-        maxOrganizations: 3,
-        aiAssistantEnabled: true,
-        advancedAnalytics: true,
-        apiAccess: true,
-        prioritySupport: true,
-      };
-    case 'ENTERPRISE':
-      return {
-        maxAppointmentsPerMonth: -1, // Unlimited
-        maxServices: -1, // Unlimited
-        maxOrganizations: -1, // Unlimited
-        aiAssistantEnabled: true,
-        advancedAnalytics: true,
-        apiAccess: true,
-        prioritySupport: true,
-      };
-    default:
-      return getSubscriptionLimits('FREE');
-  }
+export function getSubscriptionLimits(plan: SubscriptionPlan): SubscriptionLimits {
+  return getPlanLimits(plan);
 }
 
 /**

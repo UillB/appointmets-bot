@@ -796,6 +796,26 @@ class ApiClient {
   }
 
   // Subscription methods
+  async getSubscriptionConfig(): Promise<{
+    plans: Array<{
+      id: 'FREE' | 'PRO' | 'ENTERPRISE';
+      displayName: string;
+      monthlyPriceUSD: number | null;
+      limits: {
+        maxAppointmentsPerMonth: number;
+        maxServices: number;
+        maxOrganizations: number;
+        aiAssistantEnabled: boolean;
+        advancedAnalytics: boolean;
+        apiAccess: boolean;
+        prioritySupport: boolean;
+      };
+    }>;
+    lemonSqueezyProductUrl: string;
+  }> {
+    return this.request('/subscription/config');
+  }
+
   async getSubscription(): Promise<{
     subscription: Subscription;
     organization: {

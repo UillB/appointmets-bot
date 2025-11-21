@@ -513,7 +513,102 @@
     },
     "profileUpdatedSuccessfully": "プロフィールが正常に更新されました",
     "passwordChangedSuccessfully": "パスワードが正常に変更されました",
-    "systemSettingsSavedSuccessfully": "システム設定が正常に保存されました"
+    "systemSettingsSavedSuccessfully": "システム設定が正常に保存されました",
+    "subscription": {
+      "title": "サブスクリプション管理",
+      "description": "サブスクリプションプランを表示・管理",
+      "currentPlan": "現在のプラン",
+      "status": "ステータス",
+      "expiresAt": "有効期限",
+      "loadError": "サブスクリプション情報の読み込みに失敗しました",
+      "plans": {
+        "free": "無料",
+        "pro": "プロフェッショナル",
+        "enterprise": "エンタープライズ"
+      },
+      "statuses": {
+        "active": "アクティブ",
+        "cancelled": "キャンセル済み",
+        "expired": "期限切れ",
+        "past_due": "支払い遅延",
+        "trialing": "トライアル"
+      },
+      "manageTitle": "サブスクリプション管理",
+      "manageDescription": "Lemon Squeezyカスタマーポータルでサブスクリプションを管理",
+      "manageButton": "サブスクリプション管理",
+      "activateLicenseTitle": "ライセンスキーを有効化",
+      "activateLicenseDescription": "ライセンスキーを入力してサブスクリプションを有効化",
+      "licenseKeyLabel": "ライセンスキー",
+      "licenseKeyPlaceholder": "ライセンスキーを入力",
+      "licenseKeyHint": "購入確認メールにライセンスキーが記載されています",
+      "licenseKeyRequired": "ライセンスキーは必須です",
+      "activateButton": "ライセンスを有効化",
+      "activating": "有効化中...",
+      "activationFailed": "ライセンスキーの有効化に失敗しました",
+      "upgradeTitle": "プランをアップグレード",
+      "upgradeDescription": "ProまたはEnterpriseプランで高度な機能を利用",
+      "viewPlans": "プランを表示",
+      "monthlyPrice": "月額料金",
+      "nextPayment": "次回支払い日",
+      "purchaseButton": "サブスクリプションを購入",
+      "purchaseHint": "Lemon Squeezyのチェックアウトページにリダイレクトされます。支払い後、サブスクリプションは自動的に有効化されます。",
+      "cancelButton": "サブスクリプションをキャンセル",
+      "downgradeButton": "無料プランにダウングレード",
+      "cancelling": "キャンセル中...",
+      "downgrading": "ダウングレード中...",
+      "confirmCancel": "はい、サブスクリプションをキャンセル",
+      "confirmDowngrade": "はい、無料プランにダウングレード",
+      "cancelFailed": "サブスクリプションのキャンセルに失敗しました",
+      "downgradeFailed": "サブスクリプションのダウングレードに失敗しました",
+      "cancelDialog": {
+        "title": "サブスクリプションをキャンセルしますか？",
+        "description": "サブスクリプションをキャンセルしてもよろしいですか？",
+        "impactTitle": "これにより影響を受ける内容:",
+        "impact1": "現在の請求期間の終了までサブスクリプションはアクティブのままです",
+        "impact2": "有効期限後、プレミアム機能へのアクセスが失われます",
+        "impact3": "すべてのデータは保持されます",
+        "note": "有効期限前であれば、いつでもサブスクリプションを再有効化できます。"
+      },
+      "downgradeDialog": {
+        "title": "無料プランにダウングレードしますか？",
+        "description": "無料プランにダウングレードしてもよろしいですか？",
+        "impactTitle": "これにより影響を受ける内容:",
+        "impact1": "AIアシスタント機能へのアクセスが即座に失われます",
+        "impact2": "一部の高度な機能が制限されます",
+        "impact3": "サブスクリプションがキャンセルされ、請求されません",
+        "note": "いつでも再度アップグレードできます。"
+      },
+      "cancelledTitle": "サブスクリプションがキャンセルされました",
+      "cancelledDescription": "サブスクリプションはキャンセルされましたが、有効期限までアクティブのままです。",
+      "cancelledBadge": "キャンセル済み - 有効期限までアクティブ",
+      "willDowngradeToFree": "有効期限後、自動的に無料プランにダウングレードされます",
+      "reactivateButton": "サブスクリプションを再有効化",
+      "reactivating": "再有効化中...",
+      "reactivateFailed": "サブスクリプションの再有効化に失敗しました",
+      "currentStatus": "現在のステータス:",
+      "statusInfo": {
+        "activeUntil": "{date}までアクティブ",
+        "willDowngrade": "有効期限後、無料プランにダウングレードされます",
+        "reactivateAnytime": "有効期限前であれば、いつでも再有効化できます"
+      },
+      "cancelledPlanInfo": "以前のプラン: {plan}",
+      "downgradedTitle": "サブスクリプションがダウングレードされました",
+      "downgradedDescription": "サブスクリプションが無料プランにダウングレードされました",
+      "downgradedInfo": "{date}まで以前のプランを復元できます",
+      "restoreButton": "以前のプランを復元",
+      "downgradeLimitWarning": "無料プランの制限を超えています。既存のアイテムは残りますが、アップグレードするか余分なアイテムを削除するまで、新しいアイテムを作成できません。",
+      "actionsExplanation": {
+        "title": "違いは何ですか？",
+        "cancel": "サブスクリプションをキャンセル - 有効期限まで現在のプランをアクティブに保ち、その後自動的に無料プランにダウングレード",
+        "downgrade": "無料プランにダウングレード - 即座に無料プランに切り替え、サブスクリプションをキャンセル"
+      },
+      "activationInstructions": {
+        "title": "サブスクリプション有効化の仕組み",
+        "method1": "1. サブスクリプションを購入 - 上記のボタンをクリックして購入。支払い後、webhook経由でサブスクリプションが自動的に有効化されます。",
+        "method2": "2. 手動ライセンスキー - メールでライセンスキーを受け取った場合、以下に入力できます。これはオプションです。有効化は自動的に行われます。",
+        "note": "注意: 手動キー入力は、自動有効化が機能しなかった場合にのみ必要です。ほとんどの場合、手動でキーを入力する必要はありません。"
+      }
+    }
   },
   "dialogs": {
     "save": "保存",

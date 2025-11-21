@@ -27,9 +27,18 @@ export function SubscriptionLimitsAlert() {
         const subData = await apiClient.getSubscription();
         setSubscription(subData.subscription);
 
-        // Check for limit violations
-        const limits = await import('../lib/subscription-limits');
-        const planLimits = limits.getSubscriptionLimits(subData.subscription.plan);
+        // Get plan limits from API config
+        const config = await apiClient.getSubscriptionConfig();
+        const planConfig = config.plans.find(p => p.id === subData.subscription.plan);
+        const planLimits = planConfig?.limits || {
+          maxAppointmentsPerMonth: 50,
+          maxServices: 15,
+          maxOrganizations: 1,
+          aiAssistantEnabled: false,
+          advancedAnalytics: false,
+          apiAccess: false,
+          prioritySupport: false,
+        };
         
         // Get current usage
         const [servicesData, appointmentsData] = await Promise.all([

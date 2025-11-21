@@ -513,7 +513,102 @@
     },
     "profileUpdatedSuccessfully": "Perfil atualizado com sucesso",
     "passwordChangedSuccessfully": "Senha alterada com sucesso",
-    "systemSettingsSavedSuccessfully": "Configurações do sistema salvas com sucesso"
+    "systemSettingsSavedSuccessfully": "Configurações do sistema salvas com sucesso",
+    "subscription": {
+      "title": "Gerenciamento de Assinatura",
+      "description": "Visualizar e gerenciar seu plano de assinatura",
+      "currentPlan": "Plano Atual",
+      "status": "Status",
+      "expiresAt": "Expira em",
+      "loadError": "Falha ao carregar informações da assinatura",
+      "plans": {
+        "free": "Gratuito",
+        "pro": "Profissional",
+        "enterprise": "Empresarial"
+      },
+      "statuses": {
+        "active": "Ativo",
+        "cancelled": "Cancelado",
+        "expired": "Expirado",
+        "past_due": "Atrasado",
+        "trialing": "Teste"
+      },
+      "manageTitle": "Gerenciar Assinatura",
+      "manageDescription": "Gerencie sua assinatura através do portal do cliente Lemon Squeezy",
+      "manageButton": "Gerenciar Assinatura",
+      "activateLicenseTitle": "Ativar Chave de Licença",
+      "activateLicenseDescription": "Digite sua chave de licença para ativar sua assinatura",
+      "licenseKeyLabel": "Chave de Licença",
+      "licenseKeyPlaceholder": "Digite sua chave de licença",
+      "licenseKeyHint": "Você pode encontrar sua chave de licença no e-mail de confirmação de compra",
+      "licenseKeyRequired": "A chave de licença é obrigatória",
+      "activateButton": "Ativar Licença",
+      "activating": "Ativando...",
+      "activationFailed": "Falha ao ativar a chave de licença",
+      "upgradeTitle": "Atualize seu Plano",
+      "upgradeDescription": "Desbloqueie recursos avançados com planos Pro ou Enterprise",
+      "viewPlans": "Ver Planos",
+      "monthlyPrice": "Preço Mensal",
+      "nextPayment": "Data do Próximo Pagamento",
+      "purchaseButton": "Comprar Assinatura",
+      "purchaseHint": "Você será redirecionado para a página de checkout do Lemon Squeezy. Sua assinatura será ativada automaticamente após o pagamento.",
+      "cancelButton": "Cancelar Assinatura",
+      "downgradeButton": "Rebaixar para Gratuito",
+      "cancelling": "Cancelando...",
+      "downgrading": "Rebaixando...",
+      "confirmCancel": "Sim, Cancelar Assinatura",
+      "confirmDowngrade": "Sim, Rebaixar para Gratuito",
+      "cancelFailed": "Falha ao cancelar a assinatura",
+      "downgradeFailed": "Falha ao rebaixar a assinatura",
+      "cancelDialog": {
+        "title": "Cancelar Assinatura?",
+        "description": "Tem certeza de que deseja cancelar sua assinatura?",
+        "impactTitle": "Isso afetará:",
+        "impact1": "Sua assinatura permanecerá ativa até o final do período de cobrança atual",
+        "impact2": "Você perderá o acesso a recursos premium após o vencimento",
+        "impact3": "Todos os seus dados serão preservados",
+        "note": "Você pode reativar sua assinatura a qualquer momento antes do vencimento."
+      },
+      "downgradeDialog": {
+        "title": "Rebaixar para o Plano Gratuito?",
+        "description": "Tem certeza de que deseja rebaixar para o plano Gratuito?",
+        "impactTitle": "Isso afetará:",
+        "impact1": "Você perderá imediatamente o acesso aos recursos do Assistente IA",
+        "impact2": "Alguns recursos avançados serão limitados",
+        "impact3": "Sua assinatura será cancelada e você não será cobrado",
+        "note": "Você pode atualizar novamente a qualquer momento."
+      },
+      "cancelledTitle": "Assinatura Cancelada",
+      "cancelledDescription": "Sua assinatura foi cancelada, mas permanece ativa até a data de vencimento.",
+      "cancelledBadge": "Cancelada - Ativa até vencimento",
+      "willDowngradeToFree": "Rebaixará automaticamente para o plano Gratuito após o vencimento",
+      "reactivateButton": "Reativar Assinatura",
+      "reactivating": "Reativando...",
+      "reactivateFailed": "Falha ao reativar a assinatura",
+      "currentStatus": "Status Atual:",
+      "statusInfo": {
+        "activeUntil": "Ativo até {date}",
+        "willDowngrade": "Rebaixará para o plano Gratuito após o vencimento",
+        "reactivateAnytime": "Você pode reativar a qualquer momento antes do vencimento"
+      },
+      "cancelledPlanInfo": "Plano anterior: {plan}",
+      "downgradedTitle": "Assinatura Rebaixada",
+      "downgradedDescription": "Sua assinatura foi rebaixada para o plano Gratuito",
+      "downgradedInfo": "Você pode restaurar seu plano anterior até {date}",
+      "restoreButton": "Restaurar Plano Anterior",
+      "downgradeLimitWarning": "Você excedeu os limites do plano Gratuito. Os itens existentes permanecerão, mas você não poderá criar novos até atualizar ou remover itens excessivos.",
+      "actionsExplanation": {
+        "title": "Qual é a diferença?",
+        "cancel": "Cancelar Assinatura - Mantém seu plano atual ativo até o vencimento, depois rebaixa automaticamente para Gratuito",
+        "downgrade": "Rebaixar para Gratuito - Muda imediatamente para o plano Gratuito e cancela a assinatura"
+      },
+      "activationInstructions": {
+        "title": "Como Funciona a Ativação da Assinatura",
+        "method1": "1. Comprar Assinatura - Clique no botão acima para comprar. Sua assinatura será ativada automaticamente via webhook após o pagamento.",
+        "method2": "2. Chave de Licença Manual - Se você recebeu uma chave de licença por e-mail, pode digitá-la abaixo. Isso é opcional, pois a ativação ocorre automaticamente.",
+        "note": "Nota: A entrada manual da chave é necessária apenas se a ativação automática não funcionou. Na maioria dos casos, você não precisará digitar uma chave manualmente."
+      }
+    }
   },
   "dialogs": {
     "save": "Salvar",

@@ -513,7 +513,102 @@
     },
     "profileUpdatedSuccessfully": "Profil mis à jour avec succès",
     "passwordChangedSuccessfully": "Mot de passe changé avec succès",
-    "systemSettingsSavedSuccessfully": "Paramètres système enregistrés avec succès"
+    "systemSettingsSavedSuccessfully": "Paramètres système enregistrés avec succès",
+    "subscription": {
+      "title": "Gestion de l'Abonnement",
+      "description": "Voir et gérer votre plan d'abonnement",
+      "currentPlan": "Plan Actuel",
+      "status": "Statut",
+      "expiresAt": "Expire le",
+      "loadError": "Échec du chargement des informations d'abonnement",
+      "plans": {
+        "free": "Gratuit",
+        "pro": "Professionnel",
+        "enterprise": "Entreprise"
+      },
+      "statuses": {
+        "active": "Actif",
+        "cancelled": "Annulé",
+        "expired": "Expiré",
+        "past_due": "En retard",
+        "trialing": "Essai"
+      },
+      "manageTitle": "Gérer l'Abonnement",
+      "manageDescription": "Gérez votre abonnement via le portail client Lemon Squeezy",
+      "manageButton": "Gérer l'Abonnement",
+      "activateLicenseTitle": "Activer la Clé de Licence",
+      "activateLicenseDescription": "Entrez votre clé de licence pour activer votre abonnement",
+      "licenseKeyLabel": "Clé de Licence",
+      "licenseKeyPlaceholder": "Entrez votre clé de licence",
+      "licenseKeyHint": "Vous pouvez trouver votre clé de licence dans l'e-mail de confirmation d'achat",
+      "licenseKeyRequired": "La clé de licence est requise",
+      "activateButton": "Activer la Licence",
+      "activating": "Activation...",
+      "activationFailed": "Échec de l'activation de la clé de licence",
+      "upgradeTitle": "Mettre à Niveau votre Plan",
+      "upgradeDescription": "Débloquez des fonctionnalités avancées avec les plans Pro ou Enterprise",
+      "viewPlans": "Voir les Plans",
+      "monthlyPrice": "Prix Mensuel",
+      "nextPayment": "Date du Prochain Paiement",
+      "purchaseButton": "Acheter un Abonnement",
+      "purchaseHint": "Vous serez redirigé vers la page de paiement Lemon Squeezy. Votre abonnement sera activé automatiquement après le paiement.",
+      "cancelButton": "Annuler l'Abonnement",
+      "downgradeButton": "Rétrograder vers Gratuit",
+      "cancelling": "Annulation...",
+      "downgrading": "Rétrogradation...",
+      "confirmCancel": "Oui, Annuler l'Abonnement",
+      "confirmDowngrade": "Oui, Rétrograder vers Gratuit",
+      "cancelFailed": "Échec de l'annulation de l'abonnement",
+      "downgradeFailed": "Échec de la rétrogradation de l'abonnement",
+      "cancelDialog": {
+        "title": "Annuler l'Abonnement?",
+        "description": "Êtes-vous sûr de vouloir annuler votre abonnement?",
+        "impactTitle": "Cela affectera:",
+        "impact1": "Votre abonnement restera actif jusqu'à la fin de la période de facturation actuelle",
+        "impact2": "Vous perdrez l'accès aux fonctionnalités premium après expiration",
+        "impact3": "Toutes vos données seront préservées",
+        "note": "Vous pouvez réactiver votre abonnement à tout moment avant expiration."
+      },
+      "downgradeDialog": {
+        "title": "Rétrograder vers le Plan Gratuit?",
+        "description": "Êtes-vous sûr de vouloir rétrograder vers le plan Gratuit?",
+        "impactTitle": "Cela affectera:",
+        "impact1": "Vous perdrez immédiatement l'accès aux fonctionnalités de l'Assistant IA",
+        "impact2": "Certaines fonctionnalités avancées seront limitées",
+        "impact3": "Votre abonnement sera annulé et vous ne serez pas facturé",
+        "note": "Vous pouvez mettre à niveau à nouveau à tout moment."
+      },
+      "cancelledTitle": "Abonnement Annulé",
+      "cancelledDescription": "Votre abonnement a été annulé mais reste actif jusqu'à la date d'expiration.",
+      "cancelledBadge": "Annulé - Actif jusqu'à expiration",
+      "willDowngradeToFree": "Rétrogradera automatiquement vers le plan Gratuit après expiration",
+      "reactivateButton": "Réactiver l'Abonnement",
+      "reactivating": "Réactivation...",
+      "reactivateFailed": "Échec de la réactivation de l'abonnement",
+      "currentStatus": "Statut Actuel:",
+      "statusInfo": {
+        "activeUntil": "Actif jusqu'au {date}",
+        "willDowngrade": "Rétrogradera vers le plan Gratuit après expiration",
+        "reactivateAnytime": "Vous pouvez réactiver à tout moment avant expiration"
+      },
+      "cancelledPlanInfo": "Plan précédent: {plan}",
+      "downgradedTitle": "Abonnement Rétrogradé",
+      "downgradedDescription": "Votre abonnement a été rétrogradé vers le plan Gratuit",
+      "downgradedInfo": "Vous pouvez restaurer votre plan précédent jusqu'au {date}",
+      "restoreButton": "Restaurer le Plan Précédent",
+      "downgradeLimitWarning": "Vous avez dépassé les limites du plan Gratuit. Les éléments existants resteront, mais vous ne pourrez pas en créer de nouveaux jusqu'à ce que vous mettiez à niveau ou supprimiez les éléments excédentaires.",
+      "actionsExplanation": {
+        "title": "Quelle est la différence?",
+        "cancel": "Annuler l'Abonnement - Maintient votre plan actuel actif jusqu'à expiration, puis rétrograde automatiquement vers Gratuit",
+        "downgrade": "Rétrograder vers Gratuit - Passe immédiatement au plan Gratuit et annule l'abonnement"
+      },
+      "activationInstructions": {
+        "title": "Comment Fonctionne l'Activation de l'Abonnement",
+        "method1": "1. Acheter un Abonnement - Cliquez sur le bouton ci-dessus pour acheter. Votre abonnement sera activé automatiquement via webhook après le paiement.",
+        "method2": "2. Clé de Licence Manuelle - Si vous avez reçu une clé de licence par e-mail, vous pouvez l'entrer ci-dessous. C'est optionnel car l'activation se fait automatiquement.",
+        "note": "Note: L'entrée manuelle de clé n'est nécessaire que si l'activation automatique n'a pas fonctionné. Dans la plupart des cas, vous n'aurez pas besoin d'entrer une clé manuellement."
+      }
+    }
   },
   "dialogs": {
     "save": "Enregistrer",

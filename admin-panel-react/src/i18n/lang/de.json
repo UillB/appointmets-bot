@@ -513,7 +513,102 @@
     },
     "profileUpdatedSuccessfully": "Profil erfolgreich aktualisiert",
     "passwordChangedSuccessfully": "Passwort erfolgreich geändert",
-    "systemSettingsSavedSuccessfully": "Systemeinstellungen erfolgreich gespeichert"
+    "systemSettingsSavedSuccessfully": "Systemeinstellungen erfolgreich gespeichert",
+    "subscription": {
+      "title": "Abonnement-Verwaltung",
+      "description": "Ihren Abonnement-Plan anzeigen und verwalten",
+      "currentPlan": "Aktueller Plan",
+      "status": "Status",
+      "expiresAt": "Läuft ab am",
+      "loadError": "Fehler beim Laden der Abonnement-Informationen",
+      "plans": {
+        "free": "Kostenlos",
+        "pro": "Professional",
+        "enterprise": "Enterprise"
+      },
+      "statuses": {
+        "active": "Aktiv",
+        "cancelled": "Gekündigt",
+        "expired": "Abgelaufen",
+        "past_due": "Überfällig",
+        "trialing": "Testphase"
+      },
+      "manageTitle": "Abonnement verwalten",
+      "manageDescription": "Verwalten Sie Ihr Abonnement über das Lemon Squeezy Kundenportal",
+      "manageButton": "Abonnement verwalten",
+      "activateLicenseTitle": "Lizenzschlüssel aktivieren",
+      "activateLicenseDescription": "Geben Sie Ihren Lizenzschlüssel ein, um Ihr Abonnement zu aktivieren",
+      "licenseKeyLabel": "Lizenzschlüssel",
+      "licenseKeyPlaceholder": "Geben Sie Ihren Lizenzschlüssel ein",
+      "licenseKeyHint": "Sie finden Ihren Lizenzschlüssel in der Kaufbestätigungs-E-Mail",
+      "licenseKeyRequired": "Lizenzschlüssel ist erforderlich",
+      "activateButton": "Lizenz aktivieren",
+      "activating": "Wird aktiviert...",
+      "activationFailed": "Aktivierung des Lizenzschlüssels fehlgeschlagen",
+      "upgradeTitle": "Plan upgraden",
+      "upgradeDescription": "Erschließen Sie erweiterte Funktionen mit Pro- oder Enterprise-Plänen",
+      "viewPlans": "Pläne anzeigen",
+      "monthlyPrice": "Monatlicher Preis",
+      "nextPayment": "Nächstes Zahlungsdatum",
+      "purchaseButton": "Abonnement kaufen",
+      "purchaseHint": "Sie werden zur Lemon Squeezy Checkout-Seite weitergeleitet. Ihr Abonnement wird nach der Zahlung automatisch aktiviert.",
+      "cancelButton": "Abonnement kündigen",
+      "downgradeButton": "Auf Free downgraden",
+      "cancelling": "Wird gekündigt...",
+      "downgrading": "Wird downgraded...",
+      "confirmCancel": "Ja, Abonnement kündigen",
+      "confirmDowngrade": "Ja, auf Free downgraden",
+      "cancelFailed": "Kündigung des Abonnements fehlgeschlagen",
+      "downgradeFailed": "Downgrade fehlgeschlagen",
+      "cancelDialog": {
+        "title": "Abonnement kündigen?",
+        "description": "Sind Sie sicher, dass Sie Ihr Abonnement kündigen möchten?",
+        "impactTitle": "Dies wird sich auswirken auf:",
+        "impact1": "Ihr Abonnement bleibt bis zum Ende der aktuellen Abrechnungsperiode aktiv",
+        "impact2": "Sie verlieren nach Ablauf den Zugang zu Premium-Funktionen",
+        "impact3": "Alle Ihre Daten bleiben erhalten",
+        "note": "Sie können Ihr Abonnement jederzeit vor Ablauf reaktivieren."
+      },
+      "downgradeDialog": {
+        "title": "Auf Free-Plan downgraden?",
+        "description": "Sind Sie sicher, dass Sie auf den Free-Plan downgraden möchten?",
+        "impactTitle": "Dies wird sich auswirken auf:",
+        "impact1": "Sie verlieren sofort den Zugang zu KI-Assistent-Funktionen",
+        "impact2": "Einige erweiterte Funktionen werden eingeschränkt",
+        "impact3": "Ihr Abonnement wird gekündigt und Sie werden nicht belastet",
+        "note": "Sie können jederzeit wieder upgraden."
+      },
+      "cancelledTitle": "Abonnement gekündigt",
+      "cancelledDescription": "Ihr Abonnement wurde gekündigt, bleibt aber bis zum Ablaufdatum aktiv.",
+      "cancelledBadge": "Gekündigt - Aktiv bis Ablauf",
+      "willDowngradeToFree": "Wird automatisch nach Ablauf auf Free-Plan downgraded",
+      "reactivateButton": "Abonnement reaktivieren",
+      "reactivating": "Wird reaktiviert...",
+      "reactivateFailed": "Reaktivierung des Abonnements fehlgeschlagen",
+      "currentStatus": "Aktueller Status:",
+      "statusInfo": {
+        "activeUntil": "Aktiv bis {date}",
+        "willDowngrade": "Wird nach Ablauf auf Free-Plan downgraded",
+        "reactivateAnytime": "Sie können jederzeit vor Ablauf reaktivieren"
+      },
+      "cancelledPlanInfo": "Vorheriger Plan: {plan}",
+      "downgradedTitle": "Abonnement downgraded",
+      "downgradedDescription": "Ihr Abonnement wurde auf Free-Plan downgraded",
+      "downgradedInfo": "Sie können Ihren vorherigen Plan bis {date} wiederherstellen",
+      "restoreButton": "Vorherigen Plan wiederherstellen",
+      "downgradeLimitWarning": "Sie haben die Free-Plan-Limits überschritten. Bestehende Elemente bleiben erhalten, aber Sie können keine neuen erstellen, bis Sie upgraden oder überschüssige Elemente entfernen.",
+      "actionsExplanation": {
+        "title": "Was ist der Unterschied?",
+        "cancel": "Abonnement kündigen - Hält Ihren aktuellen Plan bis zum Ablauf aktiv, dann automatisches Downgrade auf Free",
+        "downgrade": "Auf Free downgraden - Wechselt sofort auf Free-Plan und kündigt das Abonnement"
+      },
+      "activationInstructions": {
+        "title": "Wie funktioniert die Abonnement-Aktivierung",
+        "method1": "1. Abonnement kaufen - Klicken Sie auf die Schaltfläche oben zum Kaufen. Ihr Abonnement wird nach der Zahlung automatisch über Webhook aktiviert.",
+        "method2": "2. Manueller Lizenzschlüssel - Wenn Sie einen Lizenzschlüssel per E-Mail erhalten haben, können Sie ihn unten eingeben. Dies ist optional, da die Aktivierung automatisch erfolgt.",
+        "note": "Hinweis: Manuelle Schlüsseleingabe ist nur erforderlich, wenn die automatische Aktivierung nicht funktioniert hat. In den meisten Fällen müssen Sie keinen Schlüssel manuell eingeben."
+      }
+    }
   },
   "dialogs": {
     "save": "Speichern",

@@ -513,7 +513,102 @@
     },
     "profileUpdatedSuccessfully": "个人资料更新成功",
     "passwordChangedSuccessfully": "密码更改成功",
-    "systemSettingsSavedSuccessfully": "系统设置保存成功"
+    "systemSettingsSavedSuccessfully": "系统设置保存成功",
+    "subscription": {
+      "title": "订阅管理",
+      "description": "查看和管理您的订阅计划",
+      "currentPlan": "当前计划",
+      "status": "状态",
+      "expiresAt": "到期时间",
+      "loadError": "加载订阅信息失败",
+      "plans": {
+        "free": "免费",
+        "pro": "专业版",
+        "enterprise": "企业版"
+      },
+      "statuses": {
+        "active": "活跃",
+        "cancelled": "已取消",
+        "expired": "已过期",
+        "past_due": "逾期",
+        "trialing": "试用"
+      },
+      "manageTitle": "管理订阅",
+      "manageDescription": "通过Lemon Squeezy客户门户管理您的订阅",
+      "manageButton": "管理订阅",
+      "activateLicenseTitle": "激活许可证密钥",
+      "activateLicenseDescription": "输入您的许可证密钥以激活订阅",
+      "licenseKeyLabel": "许可证密钥",
+      "licenseKeyPlaceholder": "输入您的许可证密钥",
+      "licenseKeyHint": "您可以在购买确认邮件中找到许可证密钥",
+      "licenseKeyRequired": "许可证密钥是必需的",
+      "activateButton": "激活许可证",
+      "activating": "激活中...",
+      "activationFailed": "激活许可证密钥失败",
+      "upgradeTitle": "升级您的计划",
+      "upgradeDescription": "使用Pro或Enterprise计划解锁高级功能",
+      "viewPlans": "查看计划",
+      "monthlyPrice": "月价格",
+      "nextPayment": "下次付款日期",
+      "purchaseButton": "购买订阅",
+      "purchaseHint": "您将被重定向到Lemon Squeezy结账页面。付款后，您的订阅将自动激活。",
+      "cancelButton": "取消订阅",
+      "downgradeButton": "降级到免费版",
+      "cancelling": "取消中...",
+      "downgrading": "降级中...",
+      "confirmCancel": "是，取消订阅",
+      "confirmDowngrade": "是，降级到免费版",
+      "cancelFailed": "取消订阅失败",
+      "downgradeFailed": "降级订阅失败",
+      "cancelDialog": {
+        "title": "取消订阅？",
+        "description": "您确定要取消订阅吗？",
+        "impactTitle": "这将影响：",
+        "impact1": "您的订阅将保持活跃直到当前计费周期结束",
+        "impact2": "到期后您将失去对高级功能的访问权限",
+        "impact3": "您的所有数据将被保留",
+        "note": "您可以在到期前的任何时间重新激活订阅。"
+      },
+      "downgradeDialog": {
+        "title": "降级到免费计划？",
+        "description": "您确定要降级到免费计划吗？",
+        "impactTitle": "这将影响：",
+        "impact1": "您将立即失去对AI助手功能的访问权限",
+        "impact2": "某些高级功能将受到限制",
+        "impact3": "您的订阅将被取消，您不会被收费",
+        "note": "您可以随时再次升级。"
+      },
+      "cancelledTitle": "订阅已取消",
+      "cancelledDescription": "您的订阅已被取消，但在到期日期之前仍保持活跃。",
+      "cancelledBadge": "已取消 - 到期前保持活跃",
+      "willDowngradeToFree": "到期后将自动降级到免费计划",
+      "reactivateButton": "重新激活订阅",
+      "reactivating": "重新激活中...",
+      "reactivateFailed": "重新激活订阅失败",
+      "currentStatus": "当前状态：",
+      "statusInfo": {
+        "activeUntil": "活跃至 {date}",
+        "willDowngrade": "到期后将降级到免费计划",
+        "reactivateAnytime": "您可以在到期前的任何时间重新激活"
+      },
+      "cancelledPlanInfo": "之前的计划：{plan}",
+      "downgradedTitle": "订阅已降级",
+      "downgradedDescription": "您的订阅已降级到免费计划",
+      "downgradedInfo": "您可以在 {date} 之前恢复之前的计划",
+      "restoreButton": "恢复之前的计划",
+      "downgradeLimitWarning": "您已超过免费计划的限制。现有项目将保留，但在您升级或删除多余项目之前，您将无法创建新项目。",
+      "actionsExplanation": {
+        "title": "有什么区别？",
+        "cancel": "取消订阅 - 在到期前保持当前计划活跃，然后自动降级到免费版",
+        "downgrade": "降级到免费版 - 立即切换到免费计划并取消订阅"
+      },
+      "activationInstructions": {
+        "title": "订阅激活的工作原理",
+        "method1": "1. 购买订阅 - 点击上面的按钮购买。付款后，您的订阅将通过webhook自动激活。",
+        "method2": "2. 手动许可证密钥 - 如果您通过电子邮件收到了许可证密钥，可以在下面输入。这是可选的，因为激活会自动进行。",
+        "note": "注意：只有在自动激活不起作用时才需要手动输入密钥。在大多数情况下，您不需要手动输入密钥。"
+      }
+    }
   },
   "dialogs": {
     "save": "保存",
