@@ -734,16 +734,16 @@ export function BotManagementPage() {
         />
         <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
           <div className="max-w-5xl mx-auto">
-            <Card className="p-8 sm:p-12">
+            <Card className="p-4 sm:p-6 md:p-8 lg:p-12">
               <div className="text-center max-w-2xl mx-auto">
-                <div className="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <Bot className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                  <Bot className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 
-                <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-100 mb-2 sm:mb-3 px-2">
                   {t('botManagement.emptyState.title')}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400 mb-8">
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-6 sm:mb-8 px-2">
                   {t('botManagement.emptyState.description')}
                 </p>
 
@@ -811,7 +811,7 @@ export function BotManagementPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 px-4 sm:px-6 py-6" style={{ animation: 'none', transition: 'none' }}>
+    <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 px-3 sm:px-4 md:px-6 py-4 sm:py-6" style={{ animation: 'none', transition: 'none' }}>
           {/* Page Title */}
           <PageTitle
             icon={<Bot className="w-6 h-6 text-white" />}
@@ -841,8 +841,8 @@ export function BotManagementPage() {
             }
           />
           {/* Status Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="p-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
+            <Card className="p-4 sm:p-5">
               <div className="flex items-start gap-3">
                 <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                   botActive ? 'bg-emerald-100 dark:bg-emerald-900/50' : 'bg-gray-100 dark:bg-gray-800'
@@ -915,12 +915,12 @@ export function BotManagementPage() {
 
           {/* Main Tabs - Step-by-Step Setup */}
           <Tabs value={activeTab || "instructions"} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 h-auto p-1 bg-gray-100 dark:bg-gray-800">
-              <TabsTrigger value="instructions" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+            <TabsList className="grid w-full grid-cols-4 h-auto p-0.5 sm:p-1 bg-gray-100 dark:bg-gray-800 gap-0.5 sm:gap-1">
+              <TabsTrigger value="instructions" className="flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-1 sm:px-2 text-xs sm:text-sm data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white">
                 {botName ? (
-                  <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2Icon className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600" />
                 ) : (
-                  <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400 data-[state=active]:border-white data-[state=active]:text-white">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-[10px] sm:text-xs text-gray-400 data-[state=active]:border-white data-[state=active]:text-white">
                     1
                   </div>
                 )}
@@ -928,11 +928,11 @@ export function BotManagementPage() {
                 <span className="sm:hidden">1</span>
               </TabsTrigger>
               
-              <TabsTrigger value="activation" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+              <TabsTrigger value="activation" className="flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-1 sm:px-2 text-xs sm:text-sm data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white">
                 {botActive ? (
-                  <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2Icon className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600" />
                 ) : (
-                  <div className="w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-xs text-gray-400 data-[state=active]:border-white data-[state=active]:text-white">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-gray-400 flex items-center justify-center text-[10px] sm:text-xs text-gray-400 data-[state=active]:border-white data-[state=active]:text-white">
                     2
                   </div>
                 )}
@@ -940,11 +940,11 @@ export function BotManagementPage() {
                 <span className="sm:hidden">2</span>
               </TabsTrigger>
               
-              <TabsTrigger value="admin-link" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
+              <TabsTrigger value="admin-link" className="flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-1 sm:px-2 text-xs sm:text-sm data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white">
                 {adminLinked ? (
-                  <CheckCircle2Icon className="w-4 h-4 text-emerald-600" />
+                  <CheckCircle2Icon className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600" />
                 ) : (
-                  <div className="w-5 h-5 rounded-full border-2 border-amber-500 flex items-center justify-center text-xs text-amber-500 data-[state=active]:border-white data-[state=active]:text-white">
+                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 border-amber-500 flex items-center justify-center text-[10px] sm:text-xs text-amber-500 data-[state=active]:border-white data-[state=active]:text-white">
                     3
                   </div>
                 )}
@@ -952,48 +952,47 @@ export function BotManagementPage() {
                 <span className="sm:hidden">3</span>
               </TabsTrigger>
 
-              <TabsTrigger value="settings" className="flex items-center gap-2 py-3 data-[state=active]:bg-indigo-600 data-[state=active]:text-white">
-                <SettingsIcon className="w-4 h-4" />
+              <TabsTrigger value="settings" className="flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-1 sm:px-2 text-xs sm:text-sm data-[state=active]:bg-indigo-600 dark:data-[state=active]:bg-indigo-500 data-[state=active]:text-white">
+                <SettingsIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">{t('botManagement.settings')}</span>
-                <span className="sm:hidden">Settings</span>
               </TabsTrigger>
             </TabsList>
 
             {/* Instructions Tab */}
             <TabsContent value="instructions" className="mt-6">
-              <Card className="p-8 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+              <Card className="p-4 sm:p-6 md:p-8 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
                 <div className="max-w-4xl mx-auto">
-                  <div className="text-center mb-8">
-                    <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <BookOpen className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
+                  <div className="text-center mb-6 sm:mb-8">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-600 dark:text-indigo-400" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">
                       {t('botManagement.howToCreateBot')}
                     </h2>
-                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg">
                       {t('botManagement.stepByStepGuide')}
                     </p>
                   </div>
 
                   <div className="space-y-6">
                     {/* Step 1 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-xl border border-indigo-100 dark:border-indigo-900 hover:shadow-md transition-shadow">
-                      <div className="w-12 h-12 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
+                    <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-xl border border-indigo-100 dark:border-indigo-900 hover:shadow-md transition-shadow">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center font-bold text-base sm:text-lg flex-shrink-0 shadow-lg">
                         1
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <h4 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100 break-words">
                             {t('botManagement.step1Title')}
                           </h4>
-                          <CheckCircle2Icon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                          <CheckCircle2Icon className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                        <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3 break-words">
                           {t('botManagement.step1Description')}
                         </p>
                         <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-indigo-200 dark:border-indigo-900">
-                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{t('botManagement.step1HowTo')}</p>
-                          <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1 list-disc list-inside">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1 break-words">{t('botManagement.step1HowTo')}</p>
+                          <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1 list-disc list-inside break-words">
                             <li>{t('botManagement.step1List1')}</li>
                             <li>{t('botManagement.step1List2')}</li>
                             <li>{t('botManagement.step1List3')}</li>
@@ -1003,23 +1002,23 @@ export function BotManagementPage() {
                     </div>
 
                     {/* Step 2 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 rounded-xl border border-blue-100 dark:border-blue-900 hover:shadow-md transition-shadow">
-                      <div className="w-12 h-12 rounded-full bg-blue-600 dark:bg-blue-500 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
+                    <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950/50 dark:to-indigo-950/50 rounded-xl border border-blue-100 dark:border-blue-900 hover:shadow-md transition-shadow">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-600 dark:bg-blue-500 text-white flex items-center justify-center font-bold text-base sm:text-lg flex-shrink-0 shadow-lg">
                         2
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <h4 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100 break-words">
                             {t('botManagement.step2Title')}
                           </h4>
-                          <CheckCircle2Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                          <CheckCircle2Icon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                        <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3 break-words">
                           {t('botManagement.step2Description')}
                         </p>
                         <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-blue-200 dark:border-blue-900">
-                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{t('botManagement.step2HowTo')}</p>
-                          <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1 list-disc list-inside">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1 break-words">{t('botManagement.step2HowTo')}</p>
+                          <ul className="text-xs text-gray-700 dark:text-gray-300 space-y-1 list-disc list-inside break-words">
                             <li>{t('botManagement.step2List1')}</li>
                             <li>{t('botManagement.step2List2')}</li>
                             <li>{t('botManagement.step2List3')}</li>
@@ -1030,34 +1029,34 @@ export function BotManagementPage() {
                     </div>
 
                     {/* Step 3 */}
-                    <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 rounded-xl border border-purple-100 dark:border-purple-900 hover:shadow-md transition-shadow">
-                      <div className="w-12 h-12 rounded-full bg-purple-600 dark:bg-purple-500 text-white flex items-center justify-center font-bold text-lg flex-shrink-0 shadow-lg">
+                    <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-4 sm:p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/50 dark:to-pink-950/50 rounded-xl border border-purple-100 dark:border-purple-900 hover:shadow-md transition-shadow">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-purple-600 dark:bg-purple-500 text-white flex items-center justify-center font-bold text-base sm:text-lg flex-shrink-0 shadow-lg">
                         3
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="font-semibold text-gray-900 dark:text-gray-100">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2 flex-wrap">
+                          <h4 className="font-semibold text-sm sm:text-base text-gray-900 dark:text-gray-100 break-words">
                             {t('botManagement.step3Title')}
                           </h4>
-                          <CheckCircle2Icon className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                          <CheckCircle2Icon className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 dark:text-purple-400 flex-shrink-0" />
                         </div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3">
+                        <p className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-3 break-words">
                           {t('botManagement.step3Description')}
                         </p>
                         <div className="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-purple-200 dark:border-purple-900">
-                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">{t('botManagement.step3Format')}</p>
-                          <code className="block text-xs bg-gray-900 dark:bg-gray-950 text-green-400 dark:text-green-500 px-3 py-2 rounded font-mono mt-2">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1 break-words">{t('botManagement.step3Format')}</p>
+                          <code className="block text-xs bg-gray-900 dark:bg-gray-950 text-green-400 dark:text-green-500 px-2 sm:px-3 py-2 rounded font-mono mt-2 break-all overflow-x-auto">
                             123456789:ABCdefGHijKlMNOpqrsTUVwxyz
                           </code>
                           <div className="flex items-start gap-2 mt-2">
                             <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                            <p className="text-xs text-gray-600 dark:text-gray-400">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 break-words">
                               <span className="font-semibold text-red-600 dark:text-red-400">{t('common.error')}:</span> {t('botManagement.step3Important')}
                             </p>
                           </div>
                         </div>
-                        <div className="mt-3 flex items-center gap-2">
-                          <ArrowRight className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+                        <div className="mt-3 flex items-center gap-2 flex-wrap">
+                          <ArrowRight className="w-4 h-4 text-purple-600 dark:text-purple-400 flex-shrink-0" />
                           <Button
                             onClick={() => setActiveTab("activation")}
                             variant="outline"
@@ -1072,28 +1071,28 @@ export function BotManagementPage() {
                   </div>
 
                   {/* Warning Alert */}
-                  <div className="mt-8 p-5 bg-amber-50 dark:bg-amber-950/50 border-2 border-amber-200 dark:border-amber-900 rounded-xl">
-                    <div className="flex gap-3">
-                      <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <AlertCircle className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                  <div className="mt-6 sm:mt-8 p-4 sm:p-5 bg-amber-50 dark:bg-amber-950/50 border-2 border-amber-200 dark:border-amber-900 rounded-xl">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-amber-100 dark:bg-amber-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 dark:text-amber-400" />
                       </div>
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-amber-900 dark:text-amber-100 mb-2 flex items-center gap-2">
-                          <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-                          {t('botManagement.securityWarning')}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-sm sm:text-base text-amber-900 dark:text-amber-100 mb-2 flex items-center gap-2 flex-wrap">
+                          <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                          <span className="break-words">{t('botManagement.securityWarning')}</span>
                         </h4>
-                        <ul className="text-sm text-amber-800 dark:text-amber-200 space-y-1.5">
+                        <ul className="text-xs sm:text-sm text-amber-800 dark:text-amber-200 space-y-1.5">
                           <li className="flex items-start gap-2">
-                            <span className="text-amber-600 dark:text-amber-400 mt-0.5">•</span>
-                            <span>{t('botManagement.securityWarning1')}</span>
+                            <span className="text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0">•</span>
+                            <span className="break-words">{t('botManagement.securityWarning1')}</span>
                           </li>
                           <li className="flex items-start gap-2">
-                            <span className="text-amber-600 dark:text-amber-400 mt-0.5">•</span>
-                            <span>{t('botManagement.securityWarning2')}</span>
+                            <span className="text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0">•</span>
+                            <span className="break-words">{t('botManagement.securityWarning2')}</span>
                           </li>
                           <li className="flex items-start gap-2">
-                            <span className="text-amber-600 dark:text-amber-400 mt-0.5">•</span>
-                            <span>{t('botManagement.securityWarning3')}</span>
+                            <span className="text-amber-600 dark:text-amber-400 mt-0.5 flex-shrink-0">•</span>
+                            <span className="break-words">{t('botManagement.securityWarning3')}</span>
                           </li>
                         </ul>
                       </div>
@@ -1104,15 +1103,15 @@ export function BotManagementPage() {
             </TabsContent>
 
             {/* Activation Tab */}
-            <TabsContent value="activation" className="mt-6">
-              <Card className="p-8 bg-white dark:bg-gray-900 border-2 border-indigo-100 dark:border-indigo-900 shadow-lg">
+            <TabsContent value="activation" className="mt-4 sm:mt-6">
+              <Card className="p-4 sm:p-6 md:p-8 bg-white dark:bg-gray-900 border-2 border-indigo-100 dark:border-indigo-900 shadow-lg">
                 <div className="max-w-2xl mx-auto">
-                  <div className="text-center mb-8">
-                    <div className="w-20 h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Key className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
+                  <div className="text-center mb-6 sm:mb-8">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Key className="w-8 h-8 sm:w-10 sm:h-10 text-indigo-600 dark:text-indigo-400" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">{t('botManagement.activationTitle')}</h2>
-                    <p className="text-gray-600 dark:text-gray-400 text-lg">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 mb-3">{t('botManagement.activationTitle')}</h2>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base md:text-lg">
                       {t('botManagement.activationDescription')}
                     </p>
                     {!botActive && (
@@ -1127,7 +1126,7 @@ export function BotManagementPage() {
 
                   <div className="space-y-6">
                     <div>
-                      <Label htmlFor="bot-token" className="text-base mb-3 block">
+                      <Label htmlFor="bot-token" className="text-sm sm:text-base mb-3 block">
                         {t('botManagement.botToken')}
                       </Label>
                       <div className="relative">
@@ -1137,14 +1136,14 @@ export function BotManagementPage() {
                           value={token}
                           onChange={(e) => setToken(e.target.value)}
                           placeholder={t('botManagement.botTokenPlaceholder')}
-                          className="pr-12 h-12 font-mono text-sm"
+                          className="pr-12 h-12 font-mono text-[10px] sm:text-xs md:text-sm overflow-x-auto break-all min-w-0"
                         />
                         <Button
                           type="button"
                           variant="ghost"
                           size="sm"
                           onClick={() => setShowToken(!showToken)}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 flex-shrink-0"
                         >
                           {showToken ? (
                             <EyeOff className="w-4 h-4 text-gray-500" />
@@ -1160,31 +1159,31 @@ export function BotManagementPage() {
                       <Button
                         variant="ghost"
                         onClick={() => setActiveTab("instructions")}
-                        className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                        className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 text-[11px] sm:text-xs md:text-sm whitespace-normal h-auto py-2 px-2 sm:px-3 max-w-full flex-wrap justify-center"
                       >
-                        <HelpCircle className="w-4 h-4 mr-2" />
-                        {t('botManagement.dontKnowHowToActivate')}
-                        <ArrowRight className="w-4 h-4 ml-2" />
+                        <HelpCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 flex-shrink-0" />
+                        <span className="break-words text-center leading-tight">{t('botManagement.dontKnowHowToActivate')}</span>
+                        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1 sm:ml-1.5 flex-shrink-0" />
                       </Button>
                     </div>
 
                     {/* Info Card */}
-                    <div className="p-5 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900 rounded-xl">
-                      <div className="flex gap-3">
+                    <div className="p-4 sm:p-5 bg-blue-50 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900 rounded-xl">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         <div className="w-8 h-8 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
                           <HelpCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-sm sm:text-base text-blue-900 dark:text-blue-100 mb-2 break-words">
                             {t('botManagement.tokenFormat')}
                           </h4>
-                          <p className="text-sm text-blue-800 dark:text-blue-200 mb-2">
+                          <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-200 mb-2 break-words">
                             {t('botManagement.tokenFormatDescription')}
                           </p>
-                          <code className="block text-xs bg-white dark:bg-gray-800 px-3 py-2 rounded border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 font-mono">
+                          <code className="block text-[10px] sm:text-xs bg-white dark:bg-gray-800 px-2 sm:px-3 py-2 rounded border border-blue-200 dark:border-blue-900 text-blue-700 dark:text-blue-300 font-mono break-all overflow-x-auto max-w-full min-w-0">
                             123456789:ABCdefGHijKlMNOpqrsTUVwxyz
                           </code>
-                          <p className="text-sm text-blue-800 dark:text-blue-200 mt-3">
+                          <p className="text-xs sm:text-sm text-blue-800 dark:text-blue-200 mt-3 break-words">
                             {t('botManagement.tokenFormatGetFrom')}
                           </p>
                         </div>
@@ -1193,48 +1192,50 @@ export function BotManagementPage() {
 
                     {/* Action Buttons */}
                     <div className="space-y-3 pt-2">
-                      <div className="flex gap-3">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                         <Button
                           variant="outline"
                           onClick={() => setToken("")}
                           disabled={!token}
-                          className="flex-1 h-12"
+                          className="flex-1 h-11 sm:h-12 text-sm"
                         >
                           {t('botManagement.clear')}
                         </Button>
                         <Button
                           onClick={handleValidateToken}
                           disabled={!token || isValidating}
-                          className="flex-1 h-12 bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg transition-shadow"
+                          className="flex-1 min-w-0 h-11 sm:h-12 bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg transition-shadow text-[11px] sm:text-xs md:text-sm"
                         >
+                          <span className="flex items-center justify-center min-w-0 flex-1 px-1">
                           {isValidating ? (
                             <>
-                              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                              {t('botManagement.validating')}
+                                <RefreshCw className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 animate-spin flex-shrink-0" />
+                                <span className="truncate">{t('botManagement.validating')}</span>
                             </>
                           ) : (
                             <>
-                              <Sparkles className="w-4 h-4 mr-2" />
-                              {t('botManagement.validateToken')}
+                                <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5 flex-shrink-0" />
+                                <span className="truncate">{t('botManagement.validateToken')}</span>
                             </>
                           )}
+                          </span>
                         </Button>
                       </div>
                       {botName && botUsername && !botActive && (
                         <Button
                           onClick={handleActivateBot}
                           disabled={!token || isActivating || isValidating}
-                          className="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-shadow font-semibold"
+                          className="w-full h-11 sm:h-12 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md hover:shadow-lg transition-shadow font-semibold text-sm"
                         >
                           {isActivating ? (
                             <>
-                              <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
-                              {t('botManagement.activating')}
+                              <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 mr-2 animate-spin flex-shrink-0" />
+                              <span className="truncate">{t('botManagement.activating')}</span>
                             </>
                           ) : (
                             <>
-                              <Power className="w-5 h-5 mr-2" />
-                              {t('botManagement.activateBot')}
+                              <Power className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                              <span className="truncate">{t('botManagement.activateBot')}</span>
                             </>
                           )}
                         </Button>
@@ -1246,16 +1247,16 @@ export function BotManagementPage() {
             </TabsContent>
 
             {/* Settings Tab */}
-            <TabsContent value="settings" className="mt-6 space-y-6">
+            <TabsContent value="settings" className="mt-4 sm:mt-6 space-y-4 sm:space-y-6">
               {!botActive && (
-                <Card className="p-6 bg-amber-50 border-2 border-amber-200">
+                <Card className="p-4 sm:p-6 bg-amber-50 border-2 border-amber-200">
                   <div className="flex items-start gap-3">
-                    <AlertCircle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-amber-900 mb-2">
+                    <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm sm:text-base font-semibold text-amber-900 mb-2 break-words">
                         {t('botManagement.botNotActivated')}
                       </h3>
-                      <p className="text-sm text-amber-800 mb-4">
+                      <p className="text-xs sm:text-sm text-amber-800 mb-4 break-words">
                         {t('botManagement.botNotActivatedDescription')}
                       </p>
                       <Button
@@ -1271,12 +1272,12 @@ export function BotManagementPage() {
                 </Card>
               )}
               {/* Bot Status Section */}
-              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
-                    <AlertCircle className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                <div className="flex items-center gap-3 mb-4 sm:mb-6">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t('botManagement.botStatus')}</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 break-words">{t('botManagement.botStatus')}</h3>
                 </div>
 
                 {isLoading ? (
@@ -1298,31 +1299,31 @@ export function BotManagementPage() {
                     </div>
                     {botActive && (
                       <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                            <Users className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                            <div className="flex-1">
-                              <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.botNameDisplay')}</p>
-                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botName || t('botManagement.notSpecified')}</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <Users className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{t('botManagement.botNameDisplay')}</p>
+                              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 break-words">{botName || t('botManagement.notSpecified')}</p>
                             </div>
                           </div>
 
-                          <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                            <AtSign className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                            <div className="flex-1">
-                              <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.usernameDisplay')}</p>
-                              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{botUsername || t('botManagement.notSpecified')}</p>
+                          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                            <AtSign className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400 flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{t('botManagement.usernameDisplay')}</p>
+                              <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 break-words">{botUsername || t('botManagement.notSpecified')}</p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                          <LinkIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-                          <div className="flex-1">
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.botLinkDisplay')}</p>
-                            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          <div className="flex items-start sm:items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                          <LinkIcon className="w-5 h-5 text-gray-600 dark:text-gray-400 flex-shrink-0 mt-0.5 sm:mt-0" />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{t('botManagement.botLinkDisplay')}</p>
+                            <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 break-all">
                               {botLink ? (
-                                <a href={botLink} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 hover:underline">
+                                <a href={botLink} target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 hover:underline break-all">
                                   {botLink}
                                 </a>
                               ) : (
@@ -1333,22 +1334,22 @@ export function BotManagementPage() {
                         </div>
 
                         {botStatus && (
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                              <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-                              <div className="flex-1">
-                                <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.canJoinGroups')}</p>
-                                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{t('botManagement.canJoinGroups')}</p>
+                                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 break-words">
                                   {botStatus.canJoinGroups ? t('botManagement.yes') : t('botManagement.no')}
                                 </p>
                               </div>
                             </div>
 
-                            <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                              <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                              <div className="flex-1">
-                                <p className="text-sm text-gray-600 dark:text-gray-400">{t('botManagement.canReadAllGroupMessages')}</p>
-                                <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                            <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                              <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">{t('botManagement.canReadAllGroupMessages')}</p>
+                                <p className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100 break-words">
                                   {botStatus.canReadAllGroupMessages ? t('botManagement.yes') : t('botManagement.no')}
                                 </p>
                               </div>
@@ -1367,12 +1368,12 @@ export function BotManagementPage() {
               </Card>
 
               {/* Basic Settings Section */}
-              <Card className="p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center">
-                    <SettingsIcon className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+              <Card className="p-4 sm:p-6 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                <div className="flex items-center gap-3 mb-4 sm:mb-6">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-100 dark:bg-indigo-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <SettingsIcon className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Основные настройки</h3>
+                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 break-words">Основные настройки</h3>
                 </div>
 
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
@@ -1485,7 +1486,7 @@ export function BotManagementPage() {
                   <div className="flex flex-col items-center py-8 bg-gray-50 dark:bg-gray-800 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700">
                     {qrCodeDataUrl ? (
                       <>
-                        <div className="relative w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3 mb-4 group">
+                        <div className="relative w-40 h-40 sm:w-48 sm:h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-2 sm:p-3 mb-4 group mx-auto">
                           <img 
                             src={qrCodeDataUrl} 
                             alt="QR Code" 
@@ -1521,8 +1522,8 @@ export function BotManagementPage() {
                       </div>
                     ) : (
                       <>
-                        <div className="w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3 mb-4 flex items-center justify-center">
-                          <QrCode className="w-24 h-24 text-gray-300 dark:text-gray-600" />
+                        <div className="w-40 h-40 sm:w-48 sm:h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-2 sm:p-3 mb-4 flex items-center justify-center mx-auto">
+                          <QrCode className="w-20 h-20 sm:w-24 sm:h-24 text-gray-300 dark:text-gray-600" />
                         </div>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 text-center">
                           QR-код будет доступен после активации бота
@@ -1532,42 +1533,46 @@ export function BotManagementPage() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3">
                     <Button
                       variant="outline"
                       onClick={handleOpenBot}
-                      className="h-11"
+                      className="h-10 sm:h-11 text-xs sm:text-sm"
                       disabled={!botLink || botLink === "https://t.me/"}
                     >
                       <ExternalLink className="w-4 h-4 sm:mr-2" />
                       <span className="hidden sm:inline">Открыть</span>
+                      <span className="sm:hidden">Open</span>
                     </Button>
                     <Button
                       variant="outline"
                       onClick={handleDownloadQR}
-                      className="h-11"
+                      className="h-10 sm:h-11 text-xs sm:text-sm"
                       disabled={!qrCodeDataUrl}
                     >
                       <Download className="w-4 h-4 sm:mr-2" />
                       <span className="hidden sm:inline">Скачать QR</span>
+                      <span className="sm:hidden">QR</span>
                     </Button>
                     <Button
                       variant="outline"
                       onClick={handleCopyQRCode}
-                      className="h-11"
+                      className="h-10 sm:h-11 text-xs sm:text-sm"
                       disabled={!qrCodeDataUrl}
                     >
                       <Copy className="w-4 h-4 sm:mr-2" />
                       <span className="hidden sm:inline">Копировать QR</span>
+                      <span className="sm:hidden">Copy</span>
                     </Button>
                     <Button
                       variant="outline"
                       onClick={handleCopyLink}
-                      className="h-11"
+                      className="h-10 sm:h-11 text-xs sm:text-sm"
                       disabled={!botLink || botLink === "https://t.me/"}
                     >
                       <LinkIcon className="w-4 h-4 sm:mr-2" />
                       <span className="hidden sm:inline">Копировать ссылку</span>
+                      <span className="sm:hidden">Link</span>
                     </Button>
                   </div>
 
@@ -1614,15 +1619,15 @@ export function BotManagementPage() {
             </TabsContent>
 
             {/* Step 3: Link Admin Account Tab */}
-            <TabsContent value="admin-link" className="mt-6">
-              <Card className="p-8 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center font-semibold text-lg">
+            <TabsContent value="admin-link" className="mt-4 sm:mt-6">
+              <Card className="p-4 sm:p-6 md:p-8 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
+                <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center font-semibold text-base sm:text-lg flex-shrink-0">
                     3
                   </div>
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">Link Admin Account</h2>
-                    <p className="text-gray-600 dark:text-gray-400">Authorize your Telegram account as administrator</p>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100 break-words">Link Admin Account</h2>
+                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">Authorize your Telegram account as administrator</p>
                   </div>
                 </div>
 
@@ -1652,66 +1657,66 @@ export function BotManagementPage() {
                       </AlertDescription>
                     </Alert>
 
-                    <div className="p-6 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 rounded-lg border border-emerald-200 dark:border-emerald-900 text-center">
-                      <div className="w-16 h-16 bg-emerald-600 dark:bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <CheckCircle2 className="w-8 h-8 text-white" />
+                    <div className="p-4 sm:p-6 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-950/50 dark:to-teal-950/50 rounded-lg border border-emerald-200 dark:border-emerald-900 text-center">
+                      <div className="w-12 h-12 sm:w-16 sm:h-16 bg-emerald-600 dark:bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                        <CheckCircle2 className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                       </div>
-                      <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Setup Complete!</h3>
-                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 px-2 break-words">Setup Complete!</h3>
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 px-2 break-words">
                         Your Telegram bot is fully configured and ready to use.
                       </p>
                       
-                      <div className="grid grid-cols-2 gap-3 max-w-md mx-auto mt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto mt-6">
                         <Button
                           variant="outline"
                           onClick={handleOpenBot}
-                          className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-white dark:hover:bg-indigo-900/50 hover:border-indigo-400 dark:hover:border-indigo-600 hover:text-indigo-800 dark:hover:text-indigo-200 hover:shadow-md dark:hover:shadow-md text-gray-900 dark:text-gray-100 font-medium h-11 transition-all"
+                          className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:bg-white dark:hover:bg-indigo-900/50 hover:border-indigo-400 dark:hover:border-indigo-600 hover:text-indigo-800 dark:hover:text-indigo-200 hover:shadow-md dark:hover:shadow-md text-gray-900 dark:text-gray-100 font-medium h-10 sm:h-11 transition-all text-sm"
                         >
                           <ExternalLink className="w-4 h-4 mr-2" />
                           Open Bot
                         </Button>
                         <Button
                           onClick={handleCopyLink}
-                          className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium h-11 shadow-md hover:shadow-lg transition-all"
+                          className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium h-10 sm:h-11 shadow-md hover:shadow-lg transition-all text-sm"
                         >
                           <Copy className="w-4 h-4 mr-2" />
                           Share Bot
                         </Button>
                       </div>
                       
-                      <div className="mt-6 pt-6 border-t-2 border-emerald-200 dark:border-emerald-800">
-                        <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-lg border border-red-200 dark:border-red-900/50 mb-3">
-                          <p className="text-sm text-red-800 dark:text-red-200 text-center font-medium mb-1">
+                      <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t-2 border-emerald-200 dark:border-emerald-800">
+                        <div className="p-3 sm:p-4 bg-red-50 dark:bg-red-950/30 rounded-lg border border-red-200 dark:border-red-900/50 mb-3">
+                          <p className="text-xs sm:text-sm text-red-800 dark:text-red-200 text-center font-medium mb-1 px-2 break-words">
                             Need to unlink your account?
                           </p>
-                          <p className="text-xs text-red-700 dark:text-red-300 text-center">
+                          <p className="text-xs text-red-700 dark:text-red-300 text-center px-2 break-words">
                             Unlink your Telegram account to remove admin access from the bot
                           </p>
                         </div>
-                        <div className="flex justify-center">
-                          <Button
-                            variant="outline"
-                            onClick={() => setShowUnlinkDialog(true)}
-                            className="!px-11 text-red-700 dark:text-red-500 hover:text-white dark:hover:text-white hover:bg-red-700 dark:hover:bg-red-800 border-2 border-red-400 dark:border-red-800 hover:border-red-700 dark:hover:border-red-800 font-medium h-11 transition-all shadow-sm hover:shadow-md"
-                          >
-                            <Unlink className="w-4 h-4 mr-2" />
-                            Unlink Telegram Account
-                          </Button>
+                        <div className="flex justify-center px-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => setShowUnlinkDialog(true)}
+                            className="w-full sm:w-auto !px-6 sm:!px-11 text-red-700 dark:text-red-500 hover:text-white dark:hover:text-white hover:bg-red-700 dark:hover:bg-red-800 border-2 border-red-400 dark:border-red-800 hover:border-red-700 dark:hover:border-red-800 font-medium h-10 sm:h-11 transition-all shadow-sm hover:shadow-md text-xs sm:text-sm"
+                        >
+                          <Unlink className="w-4 h-4 mr-2" />
+                            <span className="break-words">Unlink Telegram Account</span>
+                        </Button>
                         </div>
                       </div>
                     </div>
 
                     {/* Admin Commands Reference */}
-                    <Card className="p-6 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-                      <div className="flex items-center gap-3 mb-4">
-                        <Terminal className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                        <h3 className="font-medium text-gray-900 dark:text-gray-100">Available Admin Commands</h3>
+                    <Card className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700">
+                      <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                        <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0" />
+                        <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-gray-100 break-words">Available Admin Commands</h3>
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                      <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-4 break-words">
                         These commands are only available when your Telegram account is linked and the bot is active:
                       </p>
                       
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                         {[
                           { cmd: "/admin", desc: "Open admin panel (Web App)" },
                           { cmd: "/stats", desc: "View appointment statistics" },
@@ -1725,11 +1730,11 @@ export function BotManagementPage() {
                               navigator.clipboard.writeText(cmd);
                               toast.success(`Copied: ${cmd}`);
                             }}
-                            className="flex items-center justify-between p-3 bg-white dark:bg-gray-900 rounded-lg border border-transparent group hover:bg-indigo-50 dark:hover:bg-indigo-950/50 hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-sm transition-all cursor-pointer"
+                            className="flex items-center justify-between p-2 sm:p-3 bg-white dark:bg-gray-900 rounded-lg border border-transparent group hover:bg-indigo-50 dark:hover:bg-indigo-950/50 hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-sm transition-all cursor-pointer"
                           >
-                            <div>
-                              <code className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{cmd}</code>
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">{desc}</p>
+                            <div className="flex-1 min-w-0 pr-2">
+                              <code className="text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 break-all">{cmd}</code>
+                              <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5 break-words">{desc}</p>
                             </div>
                             <Button
                               variant="ghost"
@@ -1749,37 +1754,37 @@ export function BotManagementPage() {
                     </Card>
                   </div>
                 ) : (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <Alert className="border-amber-200 dark:border-amber-900 bg-amber-50 dark:bg-amber-950/50">
-                      <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                      <AlertDescription className="text-amber-900 dark:text-amber-100 text-sm">
+                      <AlertCircle className="h-4 w-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                      <AlertDescription className="text-amber-900 dark:text-amber-100 text-xs sm:text-sm break-words">
                         <strong>Important:</strong> Only authorized admins can access this management panel. Complete this step to enable admin access.
                       </AlertDescription>
                     </Alert>
 
-                    <div className="p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-lg border-2 border-dashed border-indigo-200 dark:border-indigo-900">
-                      <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-4 text-center">Scan QR Code or Click Button</h3>
+                    <div className="p-4 sm:p-6 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/50 dark:to-purple-950/50 rounded-lg border-2 border-dashed border-indigo-200 dark:border-indigo-900">
+                      <h3 className="text-sm sm:text-base font-medium text-gray-900 dark:text-gray-100 mb-4 text-center px-2">Scan QR Code or Click Button</h3>
                       
                       {/* QR Code */}
                       {adminLinkQRCode ? (
                         <div className="flex flex-col items-center mb-4">
-                          <div className="w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3">
+                          <div className="w-40 h-40 sm:w-48 sm:h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-2 sm:p-3 mx-auto">
                             <img 
                               src={adminLinkQRCode} 
                               alt="Admin Link QR Code" 
                               className="w-full h-full object-contain"
                             />
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-3">
+                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-3 px-2">
                             Scan with Telegram mobile app
                           </p>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center mb-4">
-                          <div className="w-48 h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-3 flex items-center justify-center">
-                            <QrCode className="w-24 h-24 text-gray-300 dark:text-gray-600" />
+                          <div className="w-40 h-40 sm:w-48 sm:h-48 bg-white dark:bg-gray-900 rounded-lg shadow-md p-2 sm:p-3 flex items-center justify-center mx-auto">
+                            <QrCode className="w-20 h-20 sm:w-24 sm:h-24 text-gray-300 dark:text-gray-600" />
                           </div>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 text-center mt-3">
+                          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-center mt-3 px-2">
                             QR code will appear after generating link
                           </p>
                         </div>
@@ -1800,17 +1805,17 @@ export function BotManagementPage() {
                           <Button
                             onClick={handleGenerateAdminLink}
                             disabled={isGeneratingAdminLink}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium h-12 shadow-md hover:shadow-lg transition-all"
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white font-medium h-11 sm:h-12 shadow-md hover:shadow-lg transition-all text-sm"
                           >
                             {isGeneratingAdminLink ? (
                               <>
-                                <RefreshCw className="w-5 h-5 mr-2 animate-spin" />
-                                Generating link...
+                                <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 mr-2 animate-spin" />
+                                <span className="text-xs sm:text-sm">Generating link...</span>
                               </>
                             ) : (
                               <>
-                                <UserPlus className="w-5 h-5 mr-2" />
-                                Generate Admin Link
+                                <UserPlus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                                <span className="text-xs sm:text-sm">Generate Admin Link</span>
                               </>
                             )}
                           </Button>

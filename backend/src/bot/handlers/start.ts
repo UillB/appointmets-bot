@@ -149,6 +149,7 @@ export const handleStart = (organizationId?: number) => async (ctx: Context) => 
         select: { 
           id: true,
           role: true,
+          telegramId: true,
           userOrganizations: {
             where: {
               organizationId: tokenOrgId
@@ -176,6 +177,42 @@ export const handleStart = (organizationId?: number) => async (ctx: Context) => 
       // Если organizationId передан в контексте бота, проверяем что он совпадает
       if (organizationId && organizationId !== tokenOrgId) {
         await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Invalid organization for this bot");
+        return;
+      }
+
+      // Check if this telegramId is already linked to another user
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          telegramId: String(telegramId),
+          id: { not: userId }
+        }
+      });
+
+      if (existingUser) {
+        console.error(`❌ [Org ${organizationId || tokenOrgId}] Telegram ID ${telegramId} is already linked to user ${existingUser.id}`);
+        const errorMsg = ctx.tt("errors.telegramIdAlreadyLinked");
+        // If translation returns the key itself (missing translation), use fallback
+        const message = errorMsg === "errors.telegramIdAlreadyLinked" 
+          ? (ctx.lang === "ru" 
+            ? "❌ Этот Telegram аккаунт уже привязан к другому пользователю. Пожалуйста, сначала отвяжите его от другого аккаунта."
+            : "❌ This Telegram account is already linked to another user. Please unlink it from the other account first.")
+          : errorMsg;
+        await ctx.reply(message);
+        adminLinkTokens.delete(shortToken);
+        return;
+      }
+
+      // Check if user already has this telegramId linked (skip update if already linked)
+      if (user.telegramId === String(telegramId)) {
+        console.log(`✅ [Org ${organizationId || tokenOrgId}] User ${userId} already has this Telegram ID linked`);
+        adminLinkTokens.delete(shortToken);
+        await ctx.reply(
+          ctx.tt("admin.alreadyLinked") || "✅ Ваш Telegram аккаунт уже привязан!",
+          Markup.inlineKeyboard([
+            [Markup.button.callback("📅 " + (ctx.tt("menu.book") || "Записаться"), "main_book")],
+            [Markup.button.callback("⚙️ " + (ctx.tt("menu.admin") || "Админ панель"), "main_admin")]
+          ])
+        );
         return;
       }
 

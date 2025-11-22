@@ -21,7 +21,8 @@
     "telegramIdRequired": "Telegram ID is required",
     "invalidLinkToken": "❌ Invalid link. Please use the correct link.",
     "linkTokenExpired": "❌ The link has expired. Please generate a new link.",
-    "linkFailed": "❌ Error linking account. Please try again later."
+    "linkFailed": "❌ Error linking account. Please try again later.",
+    "telegramIdAlreadyLinked": "❌ This Telegram account is already linked to another user. Please unlink it from the other account first."
   },
   "lang": {
     "usage": "Usage: /lang ru|en|he|de|fr|es|pt|ja|zh|ar",
@@ -37,7 +38,10 @@
     "cancelHeader": "❌ Booking cancelled",
     "user": "User",
     "service": "Service",
-    "time": "Time"
+    "time": "Time",
+    "openPanel": "Open admin panel",
+    "accessDenied": "Access denied. Admin privileges required.",
+    "linkSuccess": "✅ Your Telegram account has been successfully linked! You can now use the bot to manage appointments."
   },
   "progress": {
     "confirming": "⏳ Confirming booking…",
@@ -94,10 +98,5 @@
     "minutes": "minutes",
     "confirmHint": "To confirm the appointment, write \"confirm\" or \"yes, I want to book\"\n",
     "cancelHintShort": "To cancel, write \"cancel\" or \"I changed my mind\""
-  },
-  "admin": {
-    "openPanel": "Open admin panel",
-    "accessDenied": "Access denied. Admin privileges required.",
-    "linkSuccess": "✅ Your Telegram account has been successfully linked! You can now use the bot to manage appointments."
   }
 }
