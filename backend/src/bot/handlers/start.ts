@@ -146,7 +146,19 @@ export const handleStart = (organizationId?: number) => async (ctx: Context) => 
       // Проверяем что пользователь существует и принадлежит правильной организации
       const user = await prisma.user.findUnique({
         where: { id: userId },
-        select: { organizationId: true, role: true }
+        select: { 
+          id: true,
+          role: true,
+          userOrganizations: {
+            where: {
+              organizationId: tokenOrgId
+            },
+            select: {
+              organizationId: true,
+              role: true
+            }
+          }
+        }
       });
 
       if (!user) {
@@ -154,8 +166,9 @@ export const handleStart = (organizationId?: number) => async (ctx: Context) => 
         return;
       }
 
-      // Проверяем что organizationId из токена совпадает с organizationId пользователя
-      if (user.organizationId !== tokenOrgId) {
+      // Проверяем что пользователь принадлежит организации из токена
+      const userOrg = user.userOrganizations.find(uo => uo.organizationId === tokenOrgId);
+      if (!userOrg) {
         await ctx.reply(ctx.tt("errors.invalidLinkToken") || "❌ Invalid organization");
         return;
       }
@@ -364,26 +377,41 @@ export function registerLangCallbacks(bot: Telegraf, organizationId?: number) {
     // Если organizationId не передан, ищем пользователя по telegramId (для совместимости)
     let user;
     if (organizationId) {
+      // Find user by telegramId and check if they belong to the organization through UserOrganization
       user = await prisma.user.findFirst({
         where: {
           telegramId: String(telegramId),
-          organizationId: organizationId
+          userOrganizations: {
+            some: {
+              organizationId: organizationId
+            }
+          }
+        },
+        include: {
+          userOrganizations: {
+            where: {
+              organizationId: organizationId
+            }
+          }
         }
       });
+      
+      // Проверяем что пользователь принадлежит организации
+      if (user && user.userOrganizations.length === 0) {
+        await ctx.reply(ctx.tt("admin.accessDenied"));
+        return;
+      }
     } else {
       user = await prisma.user.findFirst({
-        where: { telegramId: String(telegramId) }
+        where: { telegramId: String(telegramId) },
+        include: {
+          userOrganizations: true
+        }
       });
     }
 
     // Проверяем что пользователь существует, имеет telegramId и админскую роль
     if (!user || !user.telegramId || (user.role !== 'SUPER_ADMIN' && user.role !== 'OWNER' && user.role !== 'MANAGER')) {
-      await ctx.reply(ctx.tt("admin.accessDenied"));
-      return;
-    }
-
-    // Если organizationId передан, проверяем что пользователь принадлежит этой организации
-    if (organizationId && user.organizationId !== organizationId) {
       await ctx.reply(ctx.tt("admin.accessDenied"));
       return;
     }

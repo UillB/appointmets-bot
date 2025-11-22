@@ -414,8 +414,12 @@ export function BotManagementPage() {
             primaryAction: {
               label: 'Link Admin',
               onClick: () => {
-                // Switch to link-admin tab
-                setActiveTab('link-admin');
+                // Switch to admin-link tab
+                setActiveTab('admin-link');
+                // Scroll to top to ensure the tabs are visible
+                setTimeout(() => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 100);
               },
             },
             secondaryAction: {
@@ -1892,7 +1896,7 @@ export function BotManagementPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <Unlink className="h-5 w-5 text-red-600" />
+              <Unlink className="h-5 w-5 text-red-600 dark:text-red-400" />
               Unlink Telegram Account
             </AlertDialogTitle>
             <AlertDialogDescription className="pt-2">

@@ -76,7 +76,10 @@ export function SetupSuccessModal({
             <Button
               onClick={() => {
                 primaryAction.onClick();
-                onOpenChange(false);
+                // Delay modal closing slightly to ensure navigation/tab switch is visible
+                setTimeout(() => {
+                  onOpenChange(false);
+                }, 150);
               }}
               className="w-full bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-700 dark:hover:bg-emerald-800"
             >
